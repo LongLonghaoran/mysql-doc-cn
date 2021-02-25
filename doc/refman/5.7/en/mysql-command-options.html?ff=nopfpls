@@ -1,0 +1,2205 @@
+<!DOCTYPE html>
+<html lang="en" class="svg no-js">
+<head>
+    <meta charset="utf-8" />
+    <!--[if IE ]>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="Language" content="en">
+
+    <title>MySQL :: MySQL 5.7 Reference Manual :: 4.5.1.1 mysql Client Options</title>
+    <link rel="stylesheet" media="all" href="https://labs.mysql.com/common/css/main-20201221.min.css" />
+            <link rel="stylesheet" media="all" href="https://labs.mysql.com/common/css/docs-20201221.min.css" />
+    
+    
+    <link rel="stylesheet" media="print" href="https://labs.mysql.com/common/css/print-20201221.min.css" />
+
+    
+    
+    
+    
+            <link rel="contents" href="index.html" title="MySQL 5.7 Reference Manual" />
+<link rel="start" href="index.html" title="MySQL 5.7 Reference Manual" />
+<link rel="prev" href="mysql.html" title="4.5.1 mysql &mdash; The MySQL Command-Line Client" />
+<link rel="next" href="mysql-commands.html?ff=nopfpls" title="4.5.1.2 mysql Client Commands" />
+<link rel="up" href="mysql.html" title="4.5.1 mysql &mdash; The MySQL Command-Line Client" />
+
+    
+    <link rel="shortcut icon" href="https://labs.mysql.com/common/themes/sakila/favicon.ico" />
+    <script async="async" type="text/javascript" src='https://consent.truste.com/notice?domain=oracle.com&c=teconsent&js=bb&noticeType=bb&text=true&cdn=1&pcookie&gtm=1' crossorigin></script>
+    <script src="https://www.oracle.com/assets/truste-oraclelib.js"></script>
+    <script>(function(H){ H.className=H.className.replace(/\bno-js\b/,'js') })(document.documentElement)</script>
+    <script src="https://labs.mysql.com/common/js/site-20200928.min.js"></script>
+
+    
+    
+    <!--[if lt IE 9]>
+        <script src="https://labs.mysql.com/common/js/polyfills/html5shiv-printshiv-3.7.2.min.js"></script>
+        <script src="https://labs.mysql.com/common/js/polyfills/respond-1.4.2.min.js"></script>
+    <![endif]-->
+        <!--[if IE 9]>
+        <style>#docs-sidebar-toc { box-sizing: content-box; }</style>
+    <![endif]-->
+    </head>
+
+<body class="no-sidebar full-page dev">
+<div class="page-wrapper">
+    <header>
+
+                        <a href="https://dev.mysql.com/" aria-label="Home" title="MySQL" id="l1-home-link"></a>
+        
+        <div id="l1-nav-container">
+            <div id="l1-line1">
+                <div id="l1-auth-links">
+                    <a href="https://www.mysql.com/about/contact/"><b>Contact MySQL</b></a>
+                    <span id="l1-contact-separator">&nbsp;|&nbsp;</span>
+                    <span id="l1-contact-separator-br"><br /></span>
+                                             <a href="https://dev.mysql.com/auth/login/?dest=https%3A%2F%2Fdev.mysql.com%2Fdoc%2Frefman%2F5.7%2Fen%2Fmysql-command-options.html%3Fff%3Dnopfpls">Login</a> &nbsp;|&nbsp;
+                         <a href="https://dev.mysql.com/auth/register/">Register</a>
+                                    </div>
+                <div id="l1-lhs">
+                    <div id="l1-slogan">
+                        The world's most popular open source database
+                    </div>
+                    <div id="l1-search-box">
+                        <form id="l1-search-form" method="get" action="https://www.oracle.com/search/results">
+                        <input type="hidden" name="cat" value="mysql" />
+                        <input type="hidden" name="Ntk" value="SI-ALL5" />
+                        <input id="l1-search-input" type="search" class="icon-search" placeholder="Search" aria-label="Search" name="Ntt" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div id="l1-line2">
+                <div class="social-icons">
+                    <a aria-label="Join us on Facebook" title="Join us on Facebook" href="http://www.facebook.com/mysql"><span class="icon-facebook"></span></a>
+                    <a aria-label="Follow us on Twitter" title="Follow us on Twitter" href="https://twitter.com/mysql"><span class="icon-twitter"></span></a>
+                    <a aria-label="Follow us on LinkedIn" title="Follow us on LinkedIn" href="https://www.linkedin.com/company/mysql"><span class="icon-linkedin"></span></a>
+                    <a aria-label="Visit our YouTube channel" title="Visit our YouTube channel" href="http://www.youtube.com/mysqlchannel"><span class="icon-youtube"></span></a>
+                </div>
+                <ul id="l1-nav">
+                    <li>
+                        <a href="https://www.mysql.com/"><!-- <span class="icon-sakila"></span>  -->MySQL.com</a>
+                    </li><li>
+                        <a href="https://www.mysql.com/downloads/"><!-- <span class="icon-download-thin"></span>  -->Downloads</a>
+                    </li><li class="active">
+                        <a href="https://dev.mysql.com/doc/"><!-- <span class="icon-books"></span>  -->Documentation</a>
+                    </li><li>
+                        <a href="https://dev.mysql.com/"><!-- <span class="icon-code"></span>  -->Developer Zone</a>
+                    </li>                </ul>
+            </div>
+        </div>
+        <div id="sub-header">
+            <div id="l2-nav-container">
+                <div id="l2-nav-toggle">
+                    <span class="icon-three-bars"></span>
+                </div>
+                                                                                        <a class="button nav-button-3" href="https://dev.mysql.com/"><span class="icon-code"></span> Developer Zone</a>
+                                                                                                                                    <a class="button nav-button-2" href="https://www.mysql.com/downloads/"><span class="icon-download-thin"></span> Downloads</a>
+                                                                                                <a class="button nav-button-1" href="https://www.mysql.com/"><span class="icon-sakila"></span> MySQL.com</a>
+                                                                        <div id="l2-search-toggle">
+                    <span class="icon-search"></span>
+                </div>
+                <div id="l2-site-icon">
+                                                                                                                                                                                                    <span class="icon-books"></span>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </div>
+                <div id="l1-section-title">
+                    <span id="l1-section-label">
+                        <a href="https://dev.mysql.com/doc/">Documentation</a>
+                    </span>
+                </div>
+                <nav>
+                    
+
+<ul id="l2-nav">
+            	<li class="active"><a class="active " href="https://dev.mysql.com/doc/refman/en/">MySQL Server</a>
+    			</li>
+	        	<li class=""><a  href="https://dev.mysql.com/doc/index-enterprise.html">MySQL Enterprise</a>
+    			</li>
+	        	<li class=""><a  href="https://dev.mysql.com/doc/workbench/en/">Workbench</a>
+    			</li>
+	        	<li class=""><a  href="https://dev.mysql.com/doc/mysql-shell/en/mysql-innodb-cluster.html">InnoDB Cluster</a>
+    			</li>
+	        	<li class=""><a  href="https://dev.mysql.com/doc/index-cluster.html">MySQL NDB Cluster</a>
+    			</li>
+	        	<li class=""><a  href="https://dev.mysql.com/doc/index-connectors.html">Connectors</a>
+    			</li>
+	        	<li class=" last"><a  href="https://dev.mysql.com/doc/index-other.html">More</a>
+    			</li>
+	                        <li class="other-section"><a href="https://www.mysql.com/">MySQL.com</a></li>
+                            <li class="other-section"><a href="https://www.mysql.com/downloads/">Downloads</a></li>
+                                        <li class="other-section"><a href="https://dev.mysql.com/">Developer Zone</a></li>
+            </ul>
+                </nav>
+            </div>
+            <div id="l3-search-container"></div>
+            <div id="top-orange"><span id="section-nav">Section Menu: &nbsp; </span></div>
+        </div>
+    </header>
+        <div id="page">
+                        <div role="main" id="main">
+
+            
+                
+            
+<div>
+    <div id="docs-sidebar-toc" class="">
+    <div id="docs-toc-inner">
+        <div class="docs-sidebar-header" id="docs-nav-header">
+            <a class="docs-show-hide-nav" id="docs-hide-nav" href="mysql-command-options.html?ff=nopfpls" title="Hide Sidebar" aria-label="Hide Sidebar"><span class="icon-arrow-small-left"></span></a>
+            <div class="docs-nav-links">
+                                    
+    <a href="mysql.html"
+        aria-label="Previous" title="Previous: mysql — The MySQL Command-Line Client"><span
+        class="icon-chevron-left"></span></a>
+<a href="index.html" aria-label="Start" title="Start"><span class="icon-book-open"></span></a>
+        <a aria-label="Up" href="mysql.html" title="Up: mysql — The MySQL Command-Line Client"><span class="icon-chevron-up"></span></a>
+    <a href="mysql-commands.html" aria-label="Next"
+        title="Next: mysql Client Commands"><span
+        class="icon-chevron-right"></span></a>
+                            </div>
+        </div>
+                    
+<div id="docs-sidebar-search-container">
+    <div id="docs-sidebar-search-box">
+        <form method="get" action="https://dev.mysql.com/doc/search/">
+            <input type="hidden" name="d" id="d" value="12" />
+            <input type="hidden" name="p" id="p" value="1" />
+            <input type="text" name="q" id="q" title="Search this Manual"
+                value="Search this Manual"
+                style="color: #bbb;"
+                onfocus="if(this.value == 'Search this Manual') {this.value='';this.style.color='#555';}"
+                onblur="if(this.value == '') {this.value='Search this Manual';this.style.color='#bbb';}" />
+
+            <button class="docs-sidebar-search-btn" aria-label="Search" title="Search" type="submit">
+                <span class="icon-search"></span>
+            </button>
+        </form>
+    </div>
+</div>
+                <div class="docs-sidebar-nav">
+            <a class="docs-icon-home" href="https://dev.mysql.com/doc/"><span class="icon-home"></span>Documentation Home</a><hr />
+            <div class="docs-sidebar-mtitle">MySQL 5.7 Reference Manual</div>
+            <nav class="doctoc" id="doc-12">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="preface.html">Preface and Legal Notices</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="mysql-command-options.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="introduction.html">General Information</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="mysql-command-options.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="installing.html">Installing and Upgrading MySQL</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="mysql-command-options.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="tutorial.html">Tutorial</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="mysql-command-options.html?ff=nopfpls"><span class="icon-chevron-down"></span></a></div><div class="docs-sidebar-nav-link"><a href="programs.html">MySQL Programs</a></div></div>                        <div class="docs-submenu">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="programs-overview.html">Overview of MySQL Programs</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="mysql-command-options.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="programs-using.html">Using MySQL Programs</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="invoking-programs.html">Invoking MySQL Programs</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="mysql-command-options.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="program-options.html">Specifying Program Options</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="command-line-options.html">Using Options on the Command Line</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="option-files.html">Using Option Files</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="option-file-options.html">Command-Line Options that Affect Option-File Handling</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="option-modifiers.html">Program Option Modifiers</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="program-variables.html">Using Options to Set Program Variables</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="option-defaults-equals.html">Option Defaults, Options Expecting Values, and the = Sign</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="connection-options.html">Command Options for Connecting to the Server</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="connecting.html">Connecting to the MySQL Server Using Command Options</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="transport-protocols.html">Connection Transport Protocols</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="connection-compression-control.html">Connection Compression Control</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="setting-environment-variables.html">Setting Environment Variables</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="mysql-command-options.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="programs-server.html">Server and Server-Startup Programs</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysqld.html">mysqld — The MySQL Server</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysqld-safe.html">mysqld_safe — MySQL Server Startup Script</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysql-server.html">mysql.server — MySQL Server Startup Script</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysqld-multi.html">mysqld_multi — Manage Multiple MySQL Servers</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="mysql-command-options.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="programs-installation.html">Installation-Related Programs</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="comp-err.html">comp_err — Compile MySQL Error Message File</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysql-install-db.html">mysql_install_db — Initialize MySQL Data Directory</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysql-plugin.html">mysql_plugin — Configure MySQL Server Plugins</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysql-secure-installation.html">mysql_secure_installation — Improve MySQL Installation Security</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysql-ssl-rsa-setup.html">mysql_ssl_rsa_setup — Create SSL/RSA Files</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysql-tzinfo-to-sql.html">mysql_tzinfo_to_sql — Load the Time Zone Tables</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysql-upgrade.html">mysql_upgrade — Check and Upgrade MySQL Tables</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="mysql-command-options.html?ff=nopfpls"><span class="icon-chevron-down"></span></a></div><div class="docs-sidebar-nav-link"><a href="programs-client.html">Client Programs</a></div></div>                        <div class="docs-submenu">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="mysql-command-options.html?ff=nopfpls"><span class="icon-chevron-down"></span></a></div><div class="docs-sidebar-nav-link"><a href="mysql.html">mysql — The MySQL Command-Line Client</a></div></div>                        <div class="docs-submenu">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link current"><a href="mysql-command-options.html">mysql Client Options</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysql-commands.html">mysql Client Commands</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysql-logging.html">mysql Client Logging</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysql-server-side-help.html">mysql Client Server-Side Help</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysql-batch-commands.html">Executing SQL Statements from a Text File</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysql-tips.html">mysql Client Tips</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysqladmin.html">mysqladmin — A MySQL Server Administration Program</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysqlcheck.html">mysqlcheck — A Table Maintenance Program</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysqldump.html">mysqldump — A Database Backup Program</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysqlimport.html">mysqlimport — A Data Import Program</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysqlpump.html">mysqlpump — A Database Backup Program</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysqlshow.html">mysqlshow — Display Database, Table, and Column Information</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysqlslap.html">mysqlslap — A Load Emulation Client</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="mysql-command-options.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="programs-admin-utils.html">Administrative and Utility Programs</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innochecksum.html">innochecksum — Offline InnoDB File Checksum Utility</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="myisam-ftdump.html">myisam_ftdump — Display Full-Text Index information</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="mysql-command-options.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="myisamchk.html">myisamchk — MyISAM Table-Maintenance Utility</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="myisamchk-general-options.html">myisamchk General Options</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="myisamchk-check-options.html">myisamchk Check Options</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="myisamchk-repair-options.html">myisamchk Repair Options</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="myisamchk-other-options.html">Other myisamchk Options</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="myisamchk-table-info.html">Obtaining Table Information with myisamchk</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="myisamchk-memory.html">myisamchk Memory Usage</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="myisamlog.html">myisamlog — Display MyISAM Log File Contents</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="myisampack.html">myisampack — Generate Compressed, Read-Only MyISAM Tables</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysql-config-editor.html">mysql_config_editor — MySQL Configuration Utility</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="mysql-command-options.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="mysqlbinlog.html">mysqlbinlog — Utility for Processing Binary Log Files</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysqlbinlog-hexdump.html">mysqlbinlog Hex Dump Format</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysqlbinlog-row-events.html">mysqlbinlog Row Event Display</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysqlbinlog-backup.html">Using mysqlbinlog to Back Up Binary Log Files</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysqlbinlog-server-id.html">Specifying the mysqlbinlog Server ID</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysqldumpslow.html">mysqldumpslow — Summarize Slow Query Log Files</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="mysql-command-options.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="programs-development.html">Program Development Utilities</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysql-config.html">mysql_config — Display Options for Compiling Clients</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="my-print-defaults.html">my_print_defaults — Display Options from Option Files</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="resolve-stack-dump.html">resolve_stack_dump — Resolve Numeric Stack Trace Dump to Symbols</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="mysql-command-options.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="programs-miscellaneous.html">Miscellaneous Programs</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="lz4-decompress.html">lz4_decompress — Decompress mysqlpump LZ4-Compressed Output</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="perror.html">perror — Display MySQL Error Message Information</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="replace-utility.html">replace — A String-Replacement Utility</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="resolveip.html">resolveip — Resolve Host name to IP Address or Vice
+Versa</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="zlib-decompress.html">zlib_decompress — Decompress mysqlpump ZLIB-Compressed Output</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="environment-variables.html">Environment Variables</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="unix-signal-response.html">Unix Signal Handling in MySQL</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="mysql-command-options.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="server-administration.html">MySQL Server Administration</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="mysql-command-options.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="security.html">Security</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="mysql-command-options.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="backup-and-recovery.html">Backup and Recovery</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="mysql-command-options.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="optimization.html">Optimization</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="mysql-command-options.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="language-structure.html">Language Structure</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="mysql-command-options.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="charset.html">Character Sets, Collations, Unicode</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="mysql-command-options.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="data-types.html">Data Types</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="mysql-command-options.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="functions.html">Functions and Operators</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="mysql-command-options.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="sql-statements.html">SQL Statements</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="mysql-command-options.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="innodb-storage-engine.html">The InnoDB Storage Engine</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="mysql-command-options.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="storage-engines.html">Alternative Storage Engines</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="mysql-command-options.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="replication.html">Replication</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="mysql-command-options.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="group-replication.html">Group Replication</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysql-shell-userguide.html">MySQL Shell</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="mysql-command-options.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="document-store.html">Using MySQL as a Document Store</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysql-innodb-cluster-introduction.html">InnoDB Cluster</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="mysql-command-options.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="mysql-cluster.html">MySQL NDB Cluster 7.5 and NDB Cluster 7.6</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="mysql-command-options.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="partitioning.html">Partitioning</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="mysql-command-options.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="stored-objects.html">Stored Objects</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="mysql-command-options.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="information-schema.html">INFORMATION_SCHEMA Tables</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="mysql-command-options.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="performance-schema.html">MySQL Performance Schema</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="mysql-command-options.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="sys-schema.html">MySQL sys Schema</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="mysql-command-options.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="connectors-apis.html">Connectors and APIs</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="mysql-command-options.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="mysql-enterprise.html">MySQL Enterprise Edition</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="workbench.html">MySQL Workbench</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="mysql-command-options.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="faqs.html">MySQL 5.7 Frequently Asked Questions</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="mysql-command-options.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="error-handling.html">Error Messages and Common Problems</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="mysql-command-options.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="indexes.html">Indexes</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="glossary.html">MySQL Glossary</a></div></div>                    </li>
+        </ul>
+                            </nav>
+        </div>
+
+        
+<a class="docs-sidebar-section" href="mysql-command-options.html?ff=nopfpls"><span class="icon-related"></span>
+    <span class="text">Related Documentation</span></a>
+<div class="docs-sidebar-accordian open">
+    <div class="text">
+        <a href="https://dev.mysql.com/doc/relnotes/mysql/5.7/en/">MySQL 5.7 Release Notes</a><br />
+        </div>
+</div>
+
+    <a class="docs-sidebar-section" href="mysql-command-options.html?ff=nopfpls"><span class="icon-download-thin"></span>
+        <span class="text">
+            Download
+                            this Manual
+                    </span>
+    </a>
+    <div class="docs-sidebar-accordian open">
+        <div class="text">
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.pdf">PDF (US Ltr)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.a4.pdf">PDF (A4)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-ref-manual-5.7-en-pdf-1-20210225.noarch.rpm">PDF (RPM)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.html-chapter.tar.gz">HTML Download (TGZ)</a>
+            - 10.1Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.html-chapter.zip">HTML Download (Zip)</a>
+            - 10.2Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-ref-manual-5.7-en-html-chapter-1-20210225.noarch.rpm">HTML Download (RPM)</a>
+            - 8.9Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.man-gpl.tar.gz">Man Pages (TGZ)</a>
+            - 224.7Kb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.man-gpl.zip">Man Pages (Zip)</a>
+            - 332.6Kb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-5.7.info.gz">Info (Gzip)</a>
+            - 3.3Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-5.7.info.zip">Info (Zip)</a>
+            - 3.3Mb<br />
+                    </div>
+    </div>
+
+<a class="docs-sidebar-section" href="mysql-command-options.html?ff=nopfpls"><span class="icon-book"></span>
+    <span class="text">Excerpts from this Manual</span></a>
+<div class="docs-sidebar-accordian">
+    <div class="text">
+                <a href="https://dev.mysql.com/doc/mysql-backup-excerpt/5.7/en/">MySQL Backup and Recovery</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-g11n-excerpt/5.7/en/">MySQL Globalization</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-infoschema-excerpt/5.7/en/">MySQL Information Schema</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-installation-excerpt/5.7/en/">MySQL Installation Guide</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-linuxunix-excerpt/5.7/en/">MySQL and Linux/Unix</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-osx-excerpt/5.7/en/">MySQL and OS X</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-partitioning-excerpt/5.7/en/">MySQL Partitioning</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-perfschema-excerpt/5.7/en/">MySQL Performance Schema</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-replication-excerpt/5.7/en/">MySQL Replication</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-repo-excerpt/5.7/en/">Using the MySQL Yum Repository</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-reslimits-excerpt/5.7/en/">MySQL Restrictions and Limitations</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-security-excerpt/5.7/en/">Security in MySQL</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-solaris-excerpt/5.7/en/">MySQL and Solaris</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-sourcebuild-excerpt/5.7/en/">Building MySQL from Source</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-startstop-excerpt/5.7/en/">Starting and Stopping MySQL</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-tutorial-excerpt/5.7/en/">MySQL Tutorial</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-windows-excerpt/5.7/en/">MySQL and Windows</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-cluster-excerpt/5.7/en/">MySQL NDB Cluster 7.5</a><br />
+            </div>
+</div>
+
+        <br /><span id="wkr"><br /></span>
+    </div>
+    </div>
+
+    <div id="docs-main" class="has-toc">
+    <div id="docs-main-inner">
+
+                <div class="right" id="docs-version-nav">
+            <a href="mysql-command-options.html?ff=nopfpls" id="docs-version-nav-toggle">version 5.7
+            <span class="icon-chevron-down"></span></a>
+            <div id="docs-version-list">
+                                                        <a                         href="https://dev.mysql.com/doc/refman/8.0/en/mysql-command-options.html">
+                        8.0
+                                                &nbsp;current
+                                            </a><br />
+                                                                                                                <a                         href="https://dev.mysql.com/doc/refman/5.6/en/mysql-command-options.html">
+                        5.6
+                                            </a><br />
+                                                                        <div id="docs-version-nav-lang">
+                                                                                                                                                    <a                                     href="https://dev.mysql.com/doc/refman/5.6/ja/mysql-command-options.html">
+                                    5.6&nbsp;
+                                                                            Japanese
+                                                                    </a><br />
+                                                                                            </div>
+                            </div>
+        </div>
+        
+        <div id="docs-show-nav" class="left hidden" style="margin-right: 15px;">
+            <a class="docs-show-hide-nav" href="mysql-command-options.html?ff=nopfpls" aria-label="Show Sidebar"
+                title="Show Sidebar"><span class="icon-arrow-small-right"></span></a>
+        </div>
+
+                        <div id="docs-breadcrumbs">
+            <a href="index.html">MySQL 5.7 Reference Manual</a> &nbsp;/&nbsp;
+                            <span id="breadcrumbs-link"><a href="mysql-command-options.html?ff=nopfpls" id="show-breadcrumbs">...</a> &nbsp;/&nbsp;</span>
+                <span class="hidden" id="hidden-breadcrumbs">
+                                                        <a href="programs.html">MySQL Programs</a> &nbsp;/&nbsp;
+                                                            <a href="programs-client.html">Client Programs</a> &nbsp;/&nbsp;
+                                                            <a href="mysql.html">mysql — The MySQL Command-Line Client</a> &nbsp;/&nbsp;
+                                                                                        </span>
+                                        mysql Client Options
+                                    </div>
+        
+        <div id="docs-body">
+        
+<div class="section">
+
+<div class="titlepage">
+<div>
+<div>
+<h4 class="title"><a name="mysql-command-options"></a>4.5.1.1 mysql Client Options</h4>
+</div>
+</div>
+</div>
+<a class="indexterm" name="idm44933629116320"></a><a class="indexterm" name="idm44933629115248"></a><a class="indexterm" name="idm44933629113760"></a><a class="indexterm" name="idm44933629111856"></a><p>
+        <a class="link" href="mysql.html" title="4.5.1 mysql — The MySQL Command-Line Client"><span class="command"><strong>mysql</strong></span></a> supports the following options, which
+        can be specified on the command line or in the
+        <code class="literal">[mysql]</code> and <code class="literal">[client]</code>
+        groups of an option file. For information about option files
+        used by MySQL programs, see <a class="xref" href="option-files.html" title="4.2.2.2 Using Option Files">Section 4.2.2.2, “Using Option Files”</a>.
+</p>
+<div class="table">
+<a name="idm44933629106464"></a><p class="title"><b>Table 4.12 mysql Client Options</b></p>
+<div class="table-contents">
+<table frame="box" rules="all" summary="Command-line options available for the mysql client."><col width="27%"><col width="50%"><col width="11%"><col width="11%"><thead><tr><th scope="col">Option Name</th>
+<th scope="col">Description</th>
+<th scope="col">Introduced</th>
+<th scope="col">Deprecated</th>
+</tr></thead><tbody><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_auto-rehash">--auto-rehash</a></th>
+<td>Enable automatic rehashing</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_auto-vertical-output">--auto-vertical-output</a></th>
+<td>Enable automatic vertical result set display</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_batch">--batch</a></th>
+<td>Do not use history file</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_binary-as-hex">--binary-as-hex</a></th>
+<td>Display binary values in hexadecimal notation</td>
+<td>5.7.19</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_binary-mode">--binary-mode</a></th>
+<td>Disable \r\n - to - \n translation and treatment of \0 as end-of-query</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_bind-address">--bind-address</a></th>
+<td>Use specified network interface to connect to MySQL Server</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_character-sets-dir">--character-sets-dir</a></th>
+<td>Directory where character sets are installed</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_column-names">--column-names</a></th>
+<td>Write column names in results</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_column-type-info">--column-type-info</a></th>
+<td>Display result set metadata</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_comments">--comments</a></th>
+<td>Whether to retain or strip comments in statements sent to the server</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_compress">--compress</a></th>
+<td>Compress all information sent between client and server</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_connect-expired-password">--connect-expired-password</a></th>
+<td>Indicate to server that client can handle expired-password sandbox mode</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_connect-timeout">--connect-timeout</a></th>
+<td>Number of seconds before connection timeout</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_database">--database</a></th>
+<td>The database to use</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_debug">--debug</a></th>
+<td>Write debugging log; supported only if MySQL was built with debugging support</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_debug-check">--debug-check</a></th>
+<td>Print debugging information when program exits</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_debug-info">--debug-info</a></th>
+<td>Print debugging information, memory, and CPU statistics when program exits</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_default-auth">--default-auth</a></th>
+<td>Authentication plugin to use</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_default-character-set">--default-character-set</a></th>
+<td>Specify default character set</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_defaults-extra-file">--defaults-extra-file</a></th>
+<td>Read named option file in addition to usual option files</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_defaults-file">--defaults-file</a></th>
+<td>Read only named option file</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_defaults-group-suffix">--defaults-group-suffix</a></th>
+<td>Option group suffix value</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_delimiter">--delimiter</a></th>
+<td>Set the statement delimiter</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_enable-cleartext-plugin">--enable-cleartext-plugin</a></th>
+<td>Enable cleartext authentication plugin</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_execute">--execute</a></th>
+<td>Execute the statement and quit</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_force">--force</a></th>
+<td>Continue even if an SQL error occurs</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_get-server-public-key">--get-server-public-key</a></th>
+<td>Request RSA public key from server</td>
+<td>5.7.23</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_help">--help</a></th>
+<td>Display help message and exit</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_histignore">--histignore</a></th>
+<td>Patterns specifying which statements to ignore for logging</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_host">--host</a></th>
+<td>Host on which MySQL server is located</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_html">--html</a></th>
+<td>Produce HTML output</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_ignore-spaces">--ignore-spaces</a></th>
+<td>Ignore spaces after function names</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_init-command">--init-command</a></th>
+<td>SQL statement to execute after connecting</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_line-numbers">--line-numbers</a></th>
+<td>Write line numbers for errors</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_local-infile">--local-infile</a></th>
+<td>Enable or disable for LOCAL capability for LOAD DATA</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_login-path">--login-path</a></th>
+<td>Read login path options from .mylogin.cnf</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_max-allowed-packet">--max-allowed-packet</a></th>
+<td>Maximum packet length to send to or receive from server</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_max-join-size">--max-join-size</a></th>
+<td>The automatic limit for rows in a join when using --safe-updates</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_named-commands">--named-commands</a></th>
+<td>Enable named mysql commands</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_net-buffer-length">--net-buffer-length</a></th>
+<td>Buffer size for TCP/IP and socket communication</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_no-auto-rehash">--no-auto-rehash</a></th>
+<td>Disable automatic rehashing</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_no-beep">--no-beep</a></th>
+<td>Do not beep when errors occur</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_no-defaults">--no-defaults</a></th>
+<td>Read no option files</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_one-database">--one-database</a></th>
+<td>Ignore statements except those for the default database named on the command line</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_pager">--pager</a></th>
+<td>Use the given command for paging query output</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_password">--password</a></th>
+<td>Password to use when connecting to server</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_pipe">--pipe</a></th>
+<td>Connect to server using named pipe (Windows only)</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_plugin-dir">--plugin-dir</a></th>
+<td>Directory where plugins are installed</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_port">--port</a></th>
+<td>TCP/IP port number for connection</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_print-defaults">--print-defaults</a></th>
+<td>Print default options</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_prompt">--prompt</a></th>
+<td>Set the prompt to the specified format</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_protocol">--protocol</a></th>
+<td>Transport protocol to use</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_quick">--quick</a></th>
+<td>Do not cache each query result</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_raw">--raw</a></th>
+<td>Write column values without escape conversion</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_reconnect">--reconnect</a></th>
+<td>If the connection to the server is lost, automatically try to reconnect</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_safe-updates">--safe-updates</a>, <a class="link" href="mysql-command-options.html#option_mysql_safe-updates">--i-am-a-dummy</a></th>
+<td>Allow only UPDATE and DELETE statements that specify key values</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_secure-auth">--secure-auth</a></th>
+<td>Do not send passwords to server in old (pre-4.1) format</td>
+<td></td>
+<td>Yes</td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_select-limit">--select-limit</a></th>
+<td>The automatic limit for SELECT statements when using --safe-updates</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_server-public-key-path">--server-public-key-path</a></th>
+<td>Path name to file containing RSA public key</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_shared-memory-base-name">--shared-memory-base-name</a></th>
+<td>Shared-memory name for shared-memory connections (Windows only)</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_show-warnings">--show-warnings</a></th>
+<td>Show warnings after each statement if there are any</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_sigint-ignore">--sigint-ignore</a></th>
+<td>Ignore SIGINT signals (typically the result of typing Control+C)</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_silent">--silent</a></th>
+<td>Silent mode</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_auto-rehash">--skip-auto-rehash</a></th>
+<td>Disable automatic rehashing</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_skip-column-names">--skip-column-names</a></th>
+<td>Do not write column names in results</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_skip-line-numbers">--skip-line-numbers</a></th>
+<td>Skip line numbers for errors</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_named-commands">--skip-named-commands</a></th>
+<td>Disable named mysql commands</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_pager">--skip-pager</a></th>
+<td>Disable paging</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_reconnect">--skip-reconnect</a></th>
+<td>Disable reconnecting</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_socket">--socket</a></th>
+<td>Unix socket file or Windows named pipe to use</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_ssl">--ssl</a></th>
+<td>Enable connection encryption</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_ssl">--ssl-ca</a></th>
+<td>File that contains list of trusted SSL Certificate Authorities</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_ssl">--ssl-capath</a></th>
+<td>Directory that contains trusted SSL Certificate Authority certificate files</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_ssl">--ssl-cert</a></th>
+<td>File that contains X.509 certificate</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_ssl">--ssl-cipher</a></th>
+<td>Permissible ciphers for connection encryption</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_ssl">--ssl-crl</a></th>
+<td>File that contains certificate revocation lists</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_ssl">--ssl-crlpath</a></th>
+<td>Directory that contains certificate revocation-list files</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_ssl">--ssl-key</a></th>
+<td>File that contains X.509 key</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_ssl">--ssl-mode</a></th>
+<td>Desired security state of connection to server</td>
+<td>5.7.11</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_ssl">--ssl-verify-server-cert</a></th>
+<td>Verify host name against server certificate Common Name identity</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_syslog">--syslog</a></th>
+<td>Log interactive statements to syslog</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_table">--table</a></th>
+<td>Display output in tabular format</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_tee">--tee</a></th>
+<td>Append a copy of output to named file</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_tls-version">--tls-version</a></th>
+<td>Permissible TLS protocols for encrypted connections</td>
+<td>5.7.10</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_unbuffered">--unbuffered</a></th>
+<td>Flush the buffer after each query</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_user">--user</a></th>
+<td>MySQL user name to use when connecting to server</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_verbose">--verbose</a></th>
+<td>Verbose mode</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_version">--version</a></th>
+<td>Display version information and exit</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_vertical">--vertical</a></th>
+<td>Print query output rows vertically (one line per column value)</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_wait">--wait</a></th>
+<td>If the connection cannot be established, wait and retry instead of aborting</td>
+<td></td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysql-command-options.html#option_mysql_xml">--xml</a></th>
+<td>Produce XML output</td>
+<td></td>
+<td></td>
+</tr></tbody></table>
+</div>
+
+</div>
+<br class="table-break">
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><a name="option_mysql_help"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_help"><code class="option">--help</code></a>, <code class="option">-?</code>
+          </p><a class="indexterm" name="idm44933628690608"></a><a class="indexterm" name="idm44933628689120"></a><p>
+            Display a help message and exit.
+          </p></li><li class="listitem"><p><a name="option_mysql_auto-rehash"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_auto-rehash"><code class="option">--auto-rehash</code></a>
+          </p><a class="indexterm" name="idm44933628684928"></a><a class="indexterm" name="idm44933628683440"></a><p>
+            Enable automatic rehashing. This option is on by default,
+            which enables database, table, and column name completion.
+            Use
+            <a class="link" href="mysql-command-options.html#option_mysql_auto-rehash"><code class="option">--disable-auto-rehash</code></a>
+            to disable rehashing. That causes <a class="link" href="mysql.html" title="4.5.1 mysql — The MySQL Command-Line Client"><span class="command"><strong>mysql</strong></span></a>
+            to start faster, but you must issue the
+            <code class="literal">rehash</code> command or its
+            <code class="literal">\#</code> shortcut if you want to use name
+            completion.
+          </p><p>
+            To complete a name, enter the first part and press Tab. If
+            the name is unambiguous, <a class="link" href="mysql.html" title="4.5.1 mysql — The MySQL Command-Line Client"><span class="command"><strong>mysql</strong></span></a> completes
+            it. Otherwise, you can press Tab again to see the possible
+            names that begin with what you have typed so far. Completion
+            does not occur if there is no default database.
+</p>
+<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+
+<div class="admon-title">
+Note
+</div>
+<p>
+              This feature requires a MySQL client that is compiled with
+              the <span class="bold"><strong>readline</strong></span> library.
+              Typically, the <span class="bold"><strong>readline</strong></span>
+              library is not available on Windows.
+</p>
+</div>
+</li><li class="listitem"><p><a name="option_mysql_auto-vertical-output"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_auto-vertical-output"><code class="option">--auto-vertical-output</code></a>
+          </p><a class="indexterm" name="idm44933628671024"></a><a class="indexterm" name="idm44933628669568"></a><p>
+            Cause result sets to be displayed vertically if they are too
+            wide for the current window, and using normal tabular format
+            otherwise. (This applies to statements terminated by
+            <code class="literal">;</code> or <code class="literal">\G</code>.)
+          </p></li><li class="listitem"><p><a name="option_mysql_batch"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_batch"><code class="option">--batch</code></a>, <code class="option">-B</code>
+          </p><a class="indexterm" name="idm44933628663504"></a><a class="indexterm" name="idm44933628662016"></a><p>
+            Print results using tab as the column separator, with each
+            row on a new line. With this option,
+            <a class="link" href="mysql.html" title="4.5.1 mysql — The MySQL Command-Line Client"><span class="command"><strong>mysql</strong></span></a> does not use the history file.
+          </p><p>
+            Batch mode results in nontabular output format and escaping
+            of special characters. Escaping may be disabled by using raw
+            mode; see the description for the
+            <a class="link" href="mysql-command-options.html#option_mysql_raw"><code class="option">--raw</code></a> option.
+          </p></li><li class="listitem"><p><a name="option_mysql_binary-as-hex"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_binary-as-hex"><code class="option">--binary-as-hex</code></a>
+          </p><a class="indexterm" name="idm44933628654928"></a><a class="indexterm" name="idm44933628653440"></a><p>
+            When this option is given, <a class="link" href="mysql.html" title="4.5.1 mysql — The MySQL Command-Line Client"><span class="command"><strong>mysql</strong></span></a> displays
+            binary data using hexadecimal notation
+            (<code class="literal">0x<em class="replaceable"><code>value</code></em></code>).
+            This occurs whether the overall output display format is
+            tabular, vertical, HTML, or XML.
+          </p><p>
+            <a class="link" href="mysql-command-options.html#option_mysql_binary-as-hex"><code class="option">--binary-as-hex</code></a> when enabled
+            affects display of all binary strings, including those
+            returned by functions such as
+            <a class="link" href="string-functions.html#function_char"><code class="literal">CHAR()</code></a> and
+            <a class="link" href="string-functions.html#function_unhex"><code class="literal">UNHEX()</code></a>. The following
+            example demonistrates this using the ASCII code for
+            <code class="literal">A</code> (65 decimal, 41 hexadecimal):
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p>
+                <a class="link" href="mysql-command-options.html#option_mysql_binary-as-hex"><code class="option">--binary-as-hex</code></a> disabled:
+              </p><pre class="programlisting copytoclipboard line-numbers language-sql"><code class="language-sql">mysql&gt; SELECT CHAR(0x41), UNHEX('41');
++------------+-------------+
+| CHAR(0x41) | UNHEX('41') |
++------------+-------------+
+| A          | A           |
++------------+-------------+</code></pre></li><li class="listitem"><p>
+                <a class="link" href="mysql-command-options.html#option_mysql_binary-as-hex"><code class="option">--binary-as-hex</code></a> enabled:
+              </p><pre class="programlisting copytoclipboard line-numbers language-sql"><code class="language-sql">mysql&gt; SELECT CHAR(0x41), UNHEX('41');
++------------------------+--------------------------+
+| CHAR(0x41)             | UNHEX('41')              |
++------------------------+--------------------------+
+| 0x41                   | 0x41                     |
++------------------------+--------------------------+</code></pre></li></ul>
+</div>
+<p>
+            To write a binary string expression so that it displays as a
+            character string regardless of whether
+            <a class="link" href="mysql-command-options.html#option_mysql_binary-as-hex"><code class="option">--binary-as-hex</code></a> is enabled,
+            use these techniques:
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p>
+                The <a class="link" href="string-functions.html#function_char"><code class="literal">CHAR()</code></a> function has a
+                <code class="literal">USING
+                <em class="replaceable"><code>charset</code></em></code> clause:
+              </p><pre class="programlisting copytoclipboard line-numbers language-sql"><code class="language-sql">mysql&gt; SELECT CHAR(0x41 USING utf8mb4);
++--------------------------+
+| CHAR(0x41 USING utf8mb4) |
++--------------------------+
+| A                        |
++--------------------------+</code></pre></li><li class="listitem"><p>
+                More generally, use
+                <a class="link" href="cast-functions.html#function_convert"><code class="literal">CONVERT()</code></a> to convert an
+                expression to a given character set:
+              </p><pre class="programlisting copytoclipboard line-numbers language-sql"><code class="language-sql">mysql&gt; SELECT CONVERT(UNHEX('41') USING utf8mb4);
++------------------------------------+
+| CONVERT(UNHEX('41') USING utf8mb4) |
++------------------------------------+
+| A                                  |
++------------------------------------+</code></pre></li></ul>
+</div>
+<p>
+            This option was added in MySQL 5.7.19.
+          </p></li><li class="listitem"><p><a name="option_mysql_binary-mode"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_binary-mode"><code class="option">--binary-mode</code></a>
+          </p><a class="indexterm" name="idm44933628622928"></a><a class="indexterm" name="idm44933628621440"></a><p>
+            This option helps when processing
+            <a class="link" href="mysqlbinlog.html" title="4.6.7 mysqlbinlog — Utility for Processing Binary Log Files"><span class="command"><strong>mysqlbinlog</strong></span></a> output that may contain
+            <a class="link" href="blob.html" title="11.3.4 The BLOB and TEXT Types"><code class="literal">BLOB</code></a> values. By default,
+            <a class="link" href="mysql.html" title="4.5.1 mysql — The MySQL Command-Line Client"><span class="command"><strong>mysql</strong></span></a> translates <code class="literal">\r\n</code>
+            in statement strings to <code class="literal">\n</code> and interprets
+            <code class="literal">\0</code> as the statement terminator.
+            <a class="link" href="mysql-command-options.html#option_mysql_binary-mode"><code class="option">--binary-mode</code></a> disables both
+            features. It also disables all <a class="link" href="mysql.html" title="4.5.1 mysql — The MySQL Command-Line Client"><span class="command"><strong>mysql</strong></span></a>
+            commands except <code class="literal">charset</code> and
+            <code class="literal">delimiter</code> in noninteractive mode (for
+            input piped to <a class="link" href="mysql.html" title="4.5.1 mysql — The MySQL Command-Line Client"><span class="command"><strong>mysql</strong></span></a> or loaded using the
+            <code class="literal">source</code> command).
+          </p></li><li class="listitem"><p><a name="option_mysql_bind-address"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_bind-address"><code class="option">--bind-address=<em class="replaceable"><code>ip_address</code></em></code></a>
+          </p><a class="indexterm" name="idm44933628605376"></a><a class="indexterm" name="idm44933628603888"></a><p>
+            On a computer having multiple network interfaces, use this
+            option to select which interface to use for connecting to
+            the MySQL server.
+          </p></li><li class="listitem"><p><a name="option_mysql_character-sets-dir"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_character-sets-dir"><code class="option">--character-sets-dir=<em class="replaceable"><code>dir_name</code></em></code></a>
+          </p><a class="indexterm" name="idm44933628599344"></a><a class="indexterm" name="idm44933628597888"></a><p>
+            The directory where character sets are installed. See
+            <a class="xref" href="charset-configuration.html" title="10.15 Character Set Configuration">Section 10.15, “Character Set Configuration”</a>.
+          </p></li><li class="listitem"><p><a name="option_mysql_column-names"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_column-names"><code class="option">--column-names</code></a>
+          </p><a class="indexterm" name="idm44933628592992"></a><a class="indexterm" name="idm44933628591504"></a><p>
+            Write column names in results.
+          </p></li><li class="listitem"><p><a name="option_mysql_column-type-info"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_column-type-info"><code class="option">--column-type-info</code></a>
+          </p><a class="indexterm" name="idm44933628587376"></a><a class="indexterm" name="idm44933628585888"></a><p>
+            Display result set metadata. This information corresponds to
+            the contents of C API <code class="literal">MYSQL_FIELD</code> data
+            structures. See <a class="ulink" href="https://dev.mysql.com/doc/c-api/5.7/en/c-api-data-structures.html" target="_top">C API Data Structures</a>.
+          </p></li><li class="listitem"><p><a name="option_mysql_comments"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_comments"><code class="option">--comments</code></a>,
+            <code class="option">-c</code>
+          </p><a class="indexterm" name="idm44933628579840"></a><a class="indexterm" name="idm44933628578352"></a><p>
+            Whether to strip or preserve comments in statements sent to
+            the server. The default is
+            <a class="link" href="mysql-command-options.html#option_mysql_comments"><code class="option">--skip-comments</code></a>
+            (strip comments), enable with
+            <a class="link" href="mysql-command-options.html#option_mysql_comments"><code class="option">--comments</code></a> (preserve
+            comments).
+</p>
+<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+
+<div class="admon-title">
+Note
+</div>
+<p>
+              In MySQL 5.7, the <a class="link" href="mysql.html" title="4.5.1 mysql — The MySQL Command-Line Client"><span class="command"><strong>mysql</strong></span></a>
+              client always passes optimizer hints to the server,
+              regardless of whether this option is given. To ensure that
+              optimizer hints are not stripped if you are using an older
+              version of the <a class="link" href="mysql.html" title="4.5.1 mysql — The MySQL Command-Line Client"><span class="command"><strong>mysql</strong></span></a> client with a
+              version of the server that understands optimizer hints,
+              invoke <a class="link" href="mysql.html" title="4.5.1 mysql — The MySQL Command-Line Client"><span class="command"><strong>mysql</strong></span></a> with the
+              <a class="link" href="mysql-command-options.html#option_mysql_comments"><code class="option">--comments</code></a> option.
+            </p><p>
+              Comment stripping is deprecated as of MySQL 5.7.20. You
+              should expect this feature and the options to control it
+              to be removed in a future MySQL release.
+</p>
+</div>
+</li><li class="listitem"><p><a name="option_mysql_compress"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_compress"><code class="option">--compress</code></a>,
+            <code class="option">-C</code>
+          </p><a class="indexterm" name="idm44933628565392"></a><a class="indexterm" name="idm44933628563904"></a><p>
+            Compress all information sent between the client and the
+            server if possible. See
+            <a class="xref" href="connection-compression-control.html" title="4.2.6 Connection Compression Control">Section 4.2.6, “Connection Compression Control”</a>.
+          </p></li><li class="listitem"><p><a name="option_mysql_connect-expired-password"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_connect-expired-password"><code class="option">--connect-expired-password</code></a>
+          </p><a class="indexterm" name="idm44933628558992"></a><a class="indexterm" name="idm44933628557488"></a><p>
+            Indicate to the server that the client can handle sandbox
+            mode if the account used to connect has an expired password.
+            This can be useful for noninteractive invocations of
+            <a class="link" href="mysql.html" title="4.5.1 mysql — The MySQL Command-Line Client"><span class="command"><strong>mysql</strong></span></a> because normally the server
+            disconnects noninteractive clients that attempt to connect
+            using an account with an expired password. (See
+            <a class="xref" href="expired-password-handling.html" title="6.2.12 Server Handling of Expired Passwords">Section 6.2.12, “Server Handling of Expired Passwords”</a>.)
+          </p></li><li class="listitem"><p><a name="option_mysql_connect-timeout"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_connect-timeout"><code class="option">--connect-timeout=<em class="replaceable"><code>value</code></em></code></a>
+          </p><a class="indexterm" name="idm44933628550624"></a><a class="indexterm" name="idm44933628549136"></a><p>
+            The number of seconds before connection timeout. (Default
+            value is <code class="literal">0</code>.)
+          </p></li><li class="listitem"><p><a name="option_mysql_database"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_database"><code class="option">--database=<em class="replaceable"><code>db_name</code></em></code></a>,
+            <code class="option">-D <em class="replaceable"><code>db_name</code></em></code>
+          </p><a class="indexterm" name="idm44933628543392"></a><a class="indexterm" name="idm44933628541904"></a><p>
+            The database to use. This is useful primarily in an option
+            file.
+          </p></li><li class="listitem"><p><a name="option_mysql_debug"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_debug"><code class="option">--debug[=<em class="replaceable"><code>debug_options</code></em>]</code></a>,
+            <code class="option">-#
+            [<em class="replaceable"><code>debug_options</code></em>]</code>
+          </p><a class="indexterm" name="idm44933628536576"></a><a class="indexterm" name="idm44933628535088"></a><p>
+            Write a debugging log. A typical
+            <em class="replaceable"><code>debug_options</code></em> string is
+            <code class="literal">d:t:o,<em class="replaceable"><code>file_name</code></em></code>.
+            The default is <code class="literal">d:t:o,/tmp/mysql.trace</code>.
+          </p><p>
+            This option is available only if MySQL was built using
+            <a class="link" href="source-configuration-options.html#option_cmake_with_debug"><code class="option">WITH_DEBUG</code></a>. MySQL release
+            binaries provided by Oracle are <span class="emphasis"><em>not</em></span>
+            built using this option.
+          </p></li><li class="listitem"><p><a name="option_mysql_debug-check"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_debug-check"><code class="option">--debug-check</code></a>
+          </p><a class="indexterm" name="idm44933628526768"></a><a class="indexterm" name="idm44933628525280"></a><p>
+            Print some debugging information when the program exits.
+          </p><p>
+            This option is available only if MySQL was built using
+            <a class="link" href="source-configuration-options.html#option_cmake_with_debug"><code class="option">WITH_DEBUG</code></a>. MySQL release
+            binaries provided by Oracle are <span class="emphasis"><em>not</em></span>
+            built using this option.
+          </p></li><li class="listitem"><p><a name="option_mysql_debug-info"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_debug-info"><code class="option">--debug-info</code></a>,
+            <code class="option">-T</code>
+          </p><a class="indexterm" name="idm44933628518880"></a><a class="indexterm" name="idm44933628517392"></a><p>
+            Print debugging information and memory and CPU usage
+            statistics when the program exits.
+          </p><p>
+            This option is available only if MySQL was built using
+            <a class="link" href="source-configuration-options.html#option_cmake_with_debug"><code class="option">WITH_DEBUG</code></a>. MySQL release
+            binaries provided by Oracle are <span class="emphasis"><em>not</em></span>
+            built using this option.
+          </p></li><li class="listitem"><p><a name="option_mysql_default-auth"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_default-auth"><code class="option">--default-auth=<em class="replaceable"><code>plugin</code></em></code></a>
+          </p><a class="indexterm" name="idm44933628510912"></a><a class="indexterm" name="idm44933628509424"></a><p>
+            A hint about which client-side authentication plugin to use.
+            See <a class="xref" href="pluggable-authentication.html" title="6.2.13 Pluggable Authentication">Section 6.2.13, “Pluggable Authentication”</a>.
+          </p></li><li class="listitem"><p><a name="option_mysql_default-character-set"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_default-character-set"><code class="option">--default-character-set=<em class="replaceable"><code>charset_name</code></em></code></a>
+          </p><a class="indexterm" name="idm44933628504288"></a><a class="indexterm" name="idm44933628502784"></a><p>
+            Use <em class="replaceable"><code>charset_name</code></em> as the default
+            character set for the client and connection.
+          </p><p>
+            This option can be useful if the operating system uses one
+            character set and the <a class="link" href="mysql.html" title="4.5.1 mysql — The MySQL Command-Line Client"><span class="command"><strong>mysql</strong></span></a> client by
+            default uses another. In this case, output may be formatted
+            incorrectly. You can usually fix such issues by using this
+            option to force the client to use the system character set
+            instead.
+          </p><p>
+            For more information, see
+            <a class="xref" href="charset-connection.html" title="10.4 Connection Character Sets and Collations">Section 10.4, “Connection Character Sets and Collations”</a>, and
+            <a class="xref" href="charset-configuration.html" title="10.15 Character Set Configuration">Section 10.15, “Character Set Configuration”</a>.
+          </p></li><li class="listitem"><p><a name="option_mysql_defaults-extra-file"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_defaults-extra-file"><code class="option">--defaults-extra-file=<em class="replaceable"><code>file_name</code></em></code></a>
+          </p><a class="indexterm" name="idm44933628493872"></a><a class="indexterm" name="idm44933628492416"></a><p>
+            Read this option file after the global option file but (on
+            Unix) before the user option file. If the file does not
+            exist or is otherwise inaccessible, an error occurs. If
+            <em class="replaceable"><code>file_name</code></em> is not an absolute path
+            name, it is interpreted relative to the current directory.
+          </p><p>
+            For additional information about this and other option-file
+            options, see <a class="xref" href="option-file-options.html" title="4.2.2.3 Command-Line Options that Affect Option-File Handling">Section 4.2.2.3, “Command-Line Options that Affect Option-File Handling”</a>.
+          </p></li><li class="listitem"><p><a name="option_mysql_defaults-file"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_defaults-file"><code class="option">--defaults-file=<em class="replaceable"><code>file_name</code></em></code></a>
+          </p><a class="indexterm" name="idm44933628486048"></a><a class="indexterm" name="idm44933628484560"></a><p>
+            Use only the given option file. If the file does not exist
+            or is otherwise inaccessible, an error occurs. If
+            <em class="replaceable"><code>file_name</code></em> is not an absolute path
+            name, it is interpreted relative to the current directory.
+          </p><p>
+            Exception: Even with
+            <a class="link" href="option-file-options.html#option_general_defaults-file"><code class="option">--defaults-file</code></a>, client
+            programs read <code class="filename">.mylogin.cnf</code>.
+          </p><p>
+            For additional information about this and other option-file
+            options, see <a class="xref" href="option-file-options.html" title="4.2.2.3 Command-Line Options that Affect Option-File Handling">Section 4.2.2.3, “Command-Line Options that Affect Option-File Handling”</a>.
+          </p></li><li class="listitem"><p><a name="option_mysql_defaults-group-suffix"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_defaults-group-suffix"><code class="option">--defaults-group-suffix=<em class="replaceable"><code>str</code></em></code></a>
+          </p><a class="indexterm" name="idm44933628476224"></a><a class="indexterm" name="idm44933628474720"></a><p>
+            Read not only the usual option groups, but also groups with
+            the usual names and a suffix of
+            <em class="replaceable"><code>str</code></em>. For example,
+            <a class="link" href="mysql.html" title="4.5.1 mysql — The MySQL Command-Line Client"><span class="command"><strong>mysql</strong></span></a> normally reads the
+            <code class="literal">[client]</code> and <code class="literal">[mysql]</code>
+            groups. If this option is given as
+            <a class="link" href="mysql-command-options.html#option_mysql_defaults-group-suffix"><code class="option">--defaults-group-suffix=_other</code></a>,
+            <a class="link" href="mysql.html" title="4.5.1 mysql — The MySQL Command-Line Client"><span class="command"><strong>mysql</strong></span></a> also reads the
+            <code class="literal">[client_other]</code> and
+            <code class="literal">[mysql_other]</code> groups.
+          </p><p>
+            For additional information about this and other option-file
+            options, see <a class="xref" href="option-file-options.html" title="4.2.2.3 Command-Line Options that Affect Option-File Handling">Section 4.2.2.3, “Command-Line Options that Affect Option-File Handling”</a>.
+          </p></li><li class="listitem"><p><a name="option_mysql_delimiter"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_delimiter"><code class="option">--delimiter=<em class="replaceable"><code>str</code></em></code></a>
+          </p><a class="indexterm" name="idm44933628462272"></a><a class="indexterm" name="idm44933628460784"></a><p>
+            Set the statement delimiter. The default is the semicolon
+            character (<code class="literal">;</code>).
+          </p></li><li class="listitem"><p><a name="option_mysql_disable-named-commands"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_disable-named-commands"><code class="option">--disable-named-commands</code></a>
+          </p><a class="indexterm" name="idm44933628455776"></a><a class="indexterm" name="idm44933628454288"></a><p>
+            Disable named commands. Use the <code class="literal">\*</code> form
+            only, or use named commands only at the beginning of a line
+            ending with a semicolon (<code class="literal">;</code>).
+            <a class="link" href="mysql.html" title="4.5.1 mysql — The MySQL Command-Line Client"><span class="command"><strong>mysql</strong></span></a> starts with this option
+            <span class="emphasis"><em>enabled</em></span> by default. However, even with
+            this option, long-format commands still work from the first
+            line. See <a class="xref" href="mysql-commands.html" title="4.5.1.2 mysql Client Commands">Section 4.5.1.2, “mysql Client Commands”</a>.
+          </p></li><li class="listitem"><p><a name="option_mysql_enable-cleartext-plugin"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_enable-cleartext-plugin"><code class="option">--enable-cleartext-plugin</code></a>
+          </p><a class="indexterm" name="idm44933628445968"></a><a class="indexterm" name="idm44933628444464"></a><p>
+            Enable the <code class="literal">mysql_clear_password</code> cleartext
+            authentication plugin. (See
+            <a class="xref" href="cleartext-pluggable-authentication.html" title="6.4.1.6 Client-Side Cleartext Pluggable Authentication">Section 6.4.1.6, “Client-Side Cleartext Pluggable Authentication”</a>.)
+          </p></li><li class="listitem"><p><a name="option_mysql_execute"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_execute"><code class="option">--execute=<em class="replaceable"><code>statement</code></em></code></a>,
+            <code class="option">-e <em class="replaceable"><code>statement</code></em></code>
+          </p><a class="indexterm" name="idm44933628437712"></a><a class="indexterm" name="idm44933628436224"></a><p>
+            Execute the statement and quit. The default output format is
+            like that produced with
+            <a class="link" href="mysql-command-options.html#option_mysql_batch"><code class="option">--batch</code></a>. See
+            <a class="xref" href="command-line-options.html" title="4.2.2.1 Using Options on the Command Line">Section 4.2.2.1, “Using Options on the Command Line”</a>, for some examples.
+            With this option, <a class="link" href="mysql.html" title="4.5.1 mysql — The MySQL Command-Line Client"><span class="command"><strong>mysql</strong></span></a> does not use the
+            history file.
+          </p></li><li class="listitem"><p><a name="option_mysql_force"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_force"><code class="option">--force</code></a>, <code class="option">-f</code>
+          </p><a class="indexterm" name="idm44933628428720"></a><a class="indexterm" name="idm44933628427232"></a><p>
+            Continue even if an SQL error occurs.
+          </p></li><li class="listitem"><p><a name="option_mysql_get-server-public-key"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_get-server-public-key"><code class="option">--get-server-public-key</code></a>
+          </p><a class="indexterm" name="idm44933628423040"></a><a class="indexterm" name="idm44933628421584"></a><p>
+            Request from the server the public key required for RSA key
+            pair-based password exchange. This option applies to clients
+            that authenticate with the
+            <code class="literal">caching_sha2_password</code> authentication
+            plugin. For that plugin, the server does not send the public
+            key unless requested. This option is ignored for accounts
+            that do not authenticate with that plugin. It is also
+            ignored if RSA-based password exchange is not used, as is
+            the case when the client connects to the server using a
+            secure connection.
+          </p><p>
+            If
+            <a class="link" href="mysql-command-options.html#option_mysql_server-public-key-path"><code class="option">--server-public-key-path=<em class="replaceable"><code>file_name</code></em></code></a>
+            is given and specifies a valid public key file, it takes
+            precedence over
+            <a class="link" href="mysql-command-options.html#option_mysql_get-server-public-key"><code class="option">--get-server-public-key</code></a>.
+          </p><p>
+            For information about the
+            <code class="literal">caching_sha2_password</code> plugin, see
+            <a class="xref" href="caching-sha2-pluggable-authentication.html" title="6.4.1.4 Caching SHA-2 Pluggable Authentication">Section 6.4.1.4, “Caching SHA-2 Pluggable Authentication”</a>.
+          </p><p>
+            The <a class="link" href="mysql-command-options.html#option_mysql_get-server-public-key"><code class="option">--get-server-public-key</code></a>
+            option was added in MySQL 5.7.23.
+          </p></li><li class="listitem"><p><a name="option_mysql_histignore"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_histignore"><code class="option">--histignore</code></a>
+          </p><a class="indexterm" name="idm44933628410096"></a><a class="indexterm" name="idm44933628408608"></a><p>
+            A list of one or more colon-separated patterns specifying
+            statements to ignore for logging purposes. These patterns
+            are added to the default pattern list
+            (<code class="literal">"*IDENTIFIED*:*PASSWORD*"</code>). The value
+            specified for this option affects logging of statements
+            written to the history file, and to
+            <code class="literal">syslog</code> if the
+            <a class="link" href="mysql-command-options.html#option_mysql_syslog"><code class="option">--syslog</code></a> option is given. For
+            more information, see <a class="xref" href="mysql-logging.html" title="4.5.1.3 mysql Client Logging">Section 4.5.1.3, “mysql Client Logging”</a>.
+          </p></li><li class="listitem"><p><a name="option_mysql_host"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_host"><code class="option">--host=<em class="replaceable"><code>host_name</code></em></code></a>,
+            <code class="option">-h <em class="replaceable"><code>host_name</code></em></code>
+          </p><a class="indexterm" name="idm44933628400128"></a><a class="indexterm" name="idm44933628398640"></a><p>
+            Connect to the MySQL server on the given host.
+          </p></li><li class="listitem"><p><a name="option_mysql_html"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_html"><code class="option">--html</code></a>, <code class="option">-H</code>
+          </p><a class="indexterm" name="idm44933628394128"></a><a class="indexterm" name="idm44933628392640"></a><p>
+            Produce HTML output.
+          </p></li><li class="listitem"><p><a name="option_mysql_ignore-spaces"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_ignore-spaces"><code class="option">--ignore-spaces</code></a>,
+            <code class="option">-i</code>
+          </p><a class="indexterm" name="idm44933628388048"></a><a class="indexterm" name="idm44933628386560"></a><p>
+            Ignore spaces after function names. The effect of this is
+            described in the discussion for the
+            <a class="link" href="sql-mode.html#sqlmode_ignore_space"><code class="literal">IGNORE_SPACE</code></a> SQL mode (see
+            <a class="xref" href="sql-mode.html" title="5.1.10 Server SQL Modes">Section 5.1.10, “Server SQL Modes”</a>).
+          </p></li><li class="listitem"><p><a name="option_mysql_init-command"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_init-command"><code class="option">--init-command=str</code></a>
+          </p><a class="indexterm" name="idm44933628380256"></a><a class="indexterm" name="idm44933628378768"></a><p>
+            SQL statement to execute after connecting to the server. If
+            auto-reconnect is enabled, the statement is executed again
+            after reconnection occurs.
+          </p></li><li class="listitem"><p><a name="option_mysql_line-numbers"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_line-numbers"><code class="option">--line-numbers</code></a>
+          </p><a class="indexterm" name="idm44933628374496"></a><a class="indexterm" name="idm44933628373008"></a><p>
+            Write line numbers for errors. Disable this with
+            <a class="link" href="mysql-command-options.html#option_mysql_skip-line-numbers"><code class="option">--skip-line-numbers</code></a>.
+          </p></li><li class="listitem"><p><a name="option_mysql_local-infile"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_local-infile"><code class="option">--local-infile[={0|1}]</code></a>
+          </p><a class="indexterm" name="idm44933628367920"></a><a class="indexterm" name="idm44933628366432"></a><p>
+            By default, <code class="literal">LOCAL</code> capability for
+            <a class="link" href="load-data.html" title="13.2.6 LOAD DATA Statement"><code class="literal">LOAD DATA</code></a> is determined by
+            the default compiled into the MySQL client library. To
+            enable or disable <code class="literal">LOCAL</code> data loading
+            explicitly, use the
+            <a class="link" href="mysql-command-options.html#option_mysql_local-infile"><code class="option">--local-infile</code></a> option. When
+            given with no value, the option enables
+            <code class="literal">LOCAL</code> data loading. When given as
+            <a class="link" href="mysql-command-options.html#option_mysql_local-infile"><code class="option">--local-infile=0</code></a> or
+            <a class="link" href="mysql-command-options.html#option_mysql_local-infile"><code class="option">--local-infile=1</code></a>, the option
+            disables or enables <code class="literal">LOCAL</code> data loading.
+          </p><p>
+            Successful use of <code class="literal">LOCAL</code> load operations
+            within <a class="link" href="mysql.html" title="4.5.1 mysql — The MySQL Command-Line Client"><span class="command"><strong>mysql</strong></span></a> also requires that the
+            server permits local loading; see
+            <a class="xref" href="load-data-local-security.html" title="6.1.6 Security Considerations for LOAD DATA LOCAL">Section 6.1.6, “Security Considerations for LOAD DATA LOCAL”</a>
+          </p></li><li class="listitem"><p><a name="option_mysql_login-path"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_login-path"><code class="option">--login-path=<em class="replaceable"><code>name</code></em></code></a>
+          </p><a class="indexterm" name="idm44933628351680"></a><a class="indexterm" name="idm44933628350192"></a><p>
+            Read options from the named login path in the
+            <code class="filename">.mylogin.cnf</code> login path file. A
+            <span class="quote">“<span class="quote">login path</span>”</span> is an option group containing
+            options that specify which MySQL server to connect to and
+            which account to authenticate as. To create or modify a
+            login path file, use the
+            <a class="link" href="mysql-config-editor.html" title="4.6.6 mysql_config_editor — MySQL Configuration Utility"><span class="command"><strong>mysql_config_editor</strong></span></a> utility. See
+            <a class="xref" href="mysql-config-editor.html" title="4.6.6 mysql_config_editor — MySQL Configuration Utility">Section 4.6.6, “<span class="command"><strong>mysql_config_editor</strong></span> — MySQL Configuration Utility”</a>.
+          </p><p>
+            For additional information about this and other option-file
+            options, see <a class="xref" href="option-file-options.html" title="4.2.2.3 Command-Line Options that Affect Option-File Handling">Section 4.2.2.3, “Command-Line Options that Affect Option-File Handling”</a>.
+          </p></li><li class="listitem"><p><a name="option_mysql_max-allowed-packet"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_max-allowed-packet"><code class="option">--max-allowed-packet=<em class="replaceable"><code>value</code></em></code></a>
+          </p><a class="indexterm" name="idm44933628341232"></a><a class="indexterm" name="idm44933628339776"></a><p>
+            The maximum size of the buffer for client/server
+            communication. The default is 16MB, the maximum is 1GB.
+          </p></li><li class="listitem"><p><a name="option_mysql_max-join-size"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_max-join-size"><code class="option">--max-join-size=<em class="replaceable"><code>value</code></em></code></a>
+          </p><a class="indexterm" name="idm44933628335200"></a><a class="indexterm" name="idm44933628333712"></a><p>
+            The automatic limit for rows in a join when using
+            <a class="link" href="mysql-command-options.html#option_mysql_safe-updates"><code class="option">--safe-updates</code></a>. (Default value
+            is 1,000,000.)
+          </p></li><li class="listitem"><p><a name="option_mysql_named-commands"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_named-commands"><code class="option">--named-commands</code></a>,
+            <code class="option">-G</code>
+          </p><a class="indexterm" name="idm44933628328112"></a><a class="indexterm" name="idm44933628326624"></a><p>
+            Enable named <a class="link" href="mysql.html" title="4.5.1 mysql — The MySQL Command-Line Client"><span class="command"><strong>mysql</strong></span></a> commands. Long-format
+            commands are permitted, not just short-format commands. For
+            example, <code class="literal">quit</code> and <code class="literal">\q</code>
+            both are recognized. Use
+            <a class="link" href="mysql-command-options.html#option_mysql_named-commands"><code class="option">--skip-named-commands</code></a>
+            to disable named commands. See
+            <a class="xref" href="mysql-commands.html" title="4.5.1.2 mysql Client Commands">Section 4.5.1.2, “mysql Client Commands”</a>.
+          </p></li><li class="listitem"><p><a name="option_mysql_net-buffer-length"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_net-buffer-length"><code class="option">--net-buffer-length=<em class="replaceable"><code>value</code></em></code></a>
+          </p><a class="indexterm" name="idm44933628317696"></a><a class="indexterm" name="idm44933628316240"></a><p>
+            The buffer size for TCP/IP and socket communication.
+            (Default value is 16KB.)
+          </p></li><li class="listitem"><p><a name="option_mysql_no-auto-rehash"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_auto-rehash"><code class="option">--no-auto-rehash</code></a>,
+            <code class="option">-A</code>
+          </p><a class="indexterm" name="idm44933628311568"></a><a class="indexterm" name="idm44933628310080"></a><p>
+            This has the same effect as
+            <code class="option">--skip-auto-rehash</code>.
+            See the description for
+            <a class="link" href="mysql-command-options.html#option_mysql_auto-rehash"><code class="option">--auto-rehash</code></a>.
+          </p></li><li class="listitem"><p><a name="option_mysql_no-beep"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_no-beep"><code class="option">--no-beep</code></a>, <code class="option">-b</code>
+          </p><a class="indexterm" name="idm44933628303888"></a><a class="indexterm" name="idm44933628302400"></a><p>
+            Do not beep when errors occur.
+          </p></li><li class="listitem"><p><a name="option_mysql_no-defaults"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_no-defaults"><code class="option">--no-defaults</code></a>
+          </p><a class="indexterm" name="idm44933628298224"></a><a class="indexterm" name="idm44933628296736"></a><p>
+            Do not read any option files. If program startup fails due
+            to reading unknown options from an option file,
+            <a class="link" href="mysql-command-options.html#option_mysql_no-defaults"><code class="option">--no-defaults</code></a> can be used to
+            prevent them from being read.
+          </p><p>
+            The exception is that the <code class="filename">.mylogin.cnf</code>
+            file is read in all cases, if it exists. This permits
+            passwords to be specified in a safer way than on the command
+            line even when <a class="link" href="mysql-command-options.html#option_mysql_no-defaults"><code class="option">--no-defaults</code></a>
+            is used. To create <code class="filename">.mylogin.cnf</code>, use
+            the <a class="link" href="mysql-config-editor.html" title="4.6.6 mysql_config_editor — MySQL Configuration Utility"><span class="command"><strong>mysql_config_editor</strong></span></a> utility. See
+            <a class="xref" href="mysql-config-editor.html" title="4.6.6 mysql_config_editor — MySQL Configuration Utility">Section 4.6.6, “<span class="command"><strong>mysql_config_editor</strong></span> — MySQL Configuration Utility”</a>.
+          </p><p>
+            For additional information about this and other option-file
+            options, see <a class="xref" href="option-file-options.html" title="4.2.2.3 Command-Line Options that Affect Option-File Handling">Section 4.2.2.3, “Command-Line Options that Affect Option-File Handling”</a>.
+          </p></li><li class="listitem"><p><a name="option_mysql_one-database"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_one-database"><code class="option">--one-database</code></a>,
+            <code class="option">-o</code>
+          </p><a class="indexterm" name="idm44933628284944"></a><a class="indexterm" name="idm44933628283456"></a><p>
+            Ignore statements except those that occur while the default
+            database is the one named on the command line. This option
+            is rudimentary and should be used with care. Statement
+            filtering is based only on
+            <a class="link" href="use.html" title="13.8.4 USE Statement"><code class="literal">USE</code></a> statements.
+          </p><p>
+            Initially, <a class="link" href="mysql.html" title="4.5.1 mysql — The MySQL Command-Line Client"><span class="command"><strong>mysql</strong></span></a> executes statements in
+            the input because specifying a database
+            <em class="replaceable"><code>db_name</code></em> on the command line is
+            equivalent to inserting
+            <a class="link" href="use.html" title="13.8.4 USE Statement"><code class="literal">USE
+            <em class="replaceable"><code>db_name</code></em></code></a> at the
+            beginning of the input. Then, for each
+            <a class="link" href="use.html" title="13.8.4 USE Statement"><code class="literal">USE</code></a> statement encountered,
+            <a class="link" href="mysql.html" title="4.5.1 mysql — The MySQL Command-Line Client"><span class="command"><strong>mysql</strong></span></a> accepts or rejects following
+            statements depending on whether the database named is the
+            one on the command line. The content of the statements is
+            immaterial.
+          </p><p>
+            Suppose that <a class="link" href="mysql.html" title="4.5.1 mysql — The MySQL Command-Line Client"><span class="command"><strong>mysql</strong></span></a> is invoked to process
+            this set of statements:
+          </p><pre class="programlisting copytoclipboard line-numbers language-sql"><code class="language-sql">DELETE FROM db2.t2;
+USE db2;
+DROP TABLE db1.t1;
+CREATE TABLE db1.t1 (i INT);
+USE db1;
+INSERT INTO t1 (i) VALUES(1);
+CREATE TABLE db2.t1 (j INT);</code></pre><p>
+            If the command line is <a class="link" href="mysql.html" title="4.5.1 mysql — The MySQL Command-Line Client"><span class="command"><strong>mysql --force --one-database
+            db1</strong></span></a>, <a class="link" href="mysql.html" title="4.5.1 mysql — The MySQL Command-Line Client"><span class="command"><strong>mysql</strong></span></a> handles the input as
+            follows:
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p>
+                The <a class="link" href="delete.html" title="13.2.2 DELETE Statement"><code class="literal">DELETE</code></a> statement is
+                executed because the default database is
+                <code class="literal">db1</code>, even though the statement names
+                a table in a different database.
+              </p></li><li class="listitem"><p>
+                The <a class="link" href="drop-table.html" title="13.1.29 DROP TABLE Statement"><code class="literal">DROP TABLE</code></a> and
+                <a class="link" href="create-table.html" title="13.1.18 CREATE TABLE Statement"><code class="literal">CREATE TABLE</code></a> statements
+                are not executed because the default database is not
+                <code class="literal">db1</code>, even though the statements name
+                a table in <code class="literal">db1</code>.
+              </p></li><li class="listitem"><p>
+                The <a class="link" href="insert.html" title="13.2.5 INSERT Statement"><code class="literal">INSERT</code></a> and
+                <a class="link" href="create-table.html" title="13.1.18 CREATE TABLE Statement"><code class="literal">CREATE TABLE</code></a> statements
+                are executed because the default database is
+                <code class="literal">db1</code>, even though the
+                <a class="link" href="create-table.html" title="13.1.18 CREATE TABLE Statement"><code class="literal">CREATE TABLE</code></a> statement
+                names a table in a different database.
+</p></li></ul>
+</div>
+</li><li class="listitem"><p><a name="option_mysql_pager"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_pager"><code class="option">--pager[=<em class="replaceable"><code>command</code></em>]</code></a>
+          </p><a class="indexterm" name="idm44933628252144"></a><a class="indexterm" name="idm44933628250656"></a><p>
+            Use the given command for paging query output. If the
+            command is omitted, the default pager is the value of your
+            <code class="literal">PAGER</code> environment variable. Valid pagers
+            are <span class="command"><strong>less</strong></span>, <span class="command"><strong>more</strong></span>,
+            <span class="command"><strong>cat [&gt; filename]</strong></span>, and so forth. This
+            option works only on Unix and only in interactive mode. To
+            disable paging, use
+            <a class="link" href="mysql-command-options.html#option_mysql_pager"><code class="option">--skip-pager</code></a>.
+            <a class="xref" href="mysql-commands.html" title="4.5.1.2 mysql Client Commands">Section 4.5.1.2, “mysql Client Commands”</a>, discusses output paging
+            further.
+          </p></li><li class="listitem"><p><a name="option_mysql_password"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_password"><code class="option">--password[=<em class="replaceable"><code>password</code></em>]</code></a>,
+            <code class="option">-p[<em class="replaceable"><code>password</code></em>]</code>
+          </p><a class="indexterm" name="idm44933628240528"></a><a class="indexterm" name="idm44933628239040"></a><p>
+            The password of the MySQL account used for connecting to the
+            server. The password value is optional. If not given,
+            <a class="link" href="mysql.html" title="4.5.1 mysql — The MySQL Command-Line Client"><span class="command"><strong>mysql</strong></span></a> prompts for one. If given, there
+            must be <span class="emphasis"><em>no space</em></span> between
+            <a class="link" href="mysql-command-options.html#option_mysql_password"><code class="option">--password=</code></a> or
+            <code class="option">-p</code> and the password following it. If no
+            password option is specified, the default is to send no
+            password.
+          </p><p>
+            Specifying a password on the command line should be
+            considered insecure. To avoid giving the password on the
+            command line, use an option file. See
+            <a class="xref" href="password-security-user.html" title="6.1.2.1 End-User Guidelines for Password Security">Section 6.1.2.1, “End-User Guidelines for Password Security”</a>.
+          </p><p>
+            To explicitly specify that there is no password and that
+            <a class="link" href="mysql.html" title="4.5.1 mysql — The MySQL Command-Line Client"><span class="command"><strong>mysql</strong></span></a> should not prompt for one, use the
+            <a class="link" href="mysql-command-options.html#option_mysql_password"><code class="option">--skip-password</code></a>
+            option.
+          </p></li><li class="listitem"><p><a name="option_mysql_pipe"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_pipe"><code class="option">--pipe</code></a>, <code class="option">-W</code>
+          </p><a class="indexterm" name="idm44933628227280"></a><a class="indexterm" name="idm44933628225792"></a><p>
+            On Windows, connect to the server using a named pipe. This
+            option applies only if the server was started with the
+            <a class="link" href="server-system-variables.html#sysvar_named_pipe"><code class="literal">named_pipe</code></a> system variable
+            enabled to support named-pipe connections. In addition, the
+            user making the connection must be a member of the Windows
+            group specified by the
+            <a class="link" href="server-system-variables.html#sysvar_named_pipe_full_access_group"><code class="literal">named_pipe_full_access_group</code></a>
+            system variable.
+          </p></li><li class="listitem"><p><a name="option_mysql_plugin-dir"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_plugin-dir"><code class="option">--plugin-dir=<em class="replaceable"><code>dir_name</code></em></code></a>
+          </p><a class="indexterm" name="idm44933628218608"></a><a class="indexterm" name="idm44933628217120"></a><p>
+            The directory in which to look for plugins. Specify this
+            option if the <a class="link" href="mysql-command-options.html#option_mysql_default-auth"><code class="option">--default-auth</code></a>
+            option is used to specify an authentication plugin but
+            <a class="link" href="mysql.html" title="4.5.1 mysql — The MySQL Command-Line Client"><span class="command"><strong>mysql</strong></span></a> does not find it. See
+            <a class="xref" href="pluggable-authentication.html" title="6.2.13 Pluggable Authentication">Section 6.2.13, “Pluggable Authentication”</a>.
+          </p></li><li class="listitem"><p><a name="option_mysql_port"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_port"><code class="option">--port=<em class="replaceable"><code>port_num</code></em></code></a>,
+            <code class="option">-P <em class="replaceable"><code>port_num</code></em></code>
+          </p><a class="indexterm" name="idm44933628209008"></a><a class="indexterm" name="idm44933628207520"></a><a class="indexterm" name="idm44933628206032"></a><p>
+            For TCP/IP connections, the port number to use.
+          </p></li><li class="listitem"><p><a name="option_mysql_print-defaults"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_print-defaults"><code class="option">--print-defaults</code></a>
+          </p><a class="indexterm" name="idm44933628202256"></a><a class="indexterm" name="idm44933628200768"></a><p>
+            Print the program name and all options that it gets from
+            option files.
+          </p><p>
+            For additional information about this and other option-file
+            options, see <a class="xref" href="option-file-options.html" title="4.2.2.3 Command-Line Options that Affect Option-File Handling">Section 4.2.2.3, “Command-Line Options that Affect Option-File Handling”</a>.
+          </p></li><li class="listitem"><p><a name="option_mysql_prompt"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_prompt"><code class="option">--prompt=<em class="replaceable"><code>format_str</code></em></code></a>
+          </p><a class="indexterm" name="idm44933628195232"></a><a class="indexterm" name="idm44933628193744"></a><p>
+            Set the prompt to the specified format. The default is
+            <code class="literal">mysql&gt;</code>. The special sequences that the
+            prompt can contain are described in
+            <a class="xref" href="mysql-commands.html" title="4.5.1.2 mysql Client Commands">Section 4.5.1.2, “mysql Client Commands”</a>.
+          </p></li><li class="listitem"><p><a name="option_mysql_protocol"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_protocol"><code class="option">--protocol={TCP|SOCKET|PIPE|MEMORY}</code></a>
+          </p><a class="indexterm" name="idm44933628188128"></a><a class="indexterm" name="idm44933628186672"></a><p>
+            The transport protocol to use for connecting to the server.
+            It is useful when the other connection parameters normally
+            result in use of a protocol other than the one you want. For
+            details on the permissible values, see
+            <a class="xref" href="transport-protocols.html" title="4.2.5 Connection Transport Protocols">Section 4.2.5, “Connection Transport Protocols”</a>.
+          </p></li><li class="listitem"><p><a name="option_mysql_quick"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_quick"><code class="option">--quick</code></a>, <code class="option">-q</code>
+          </p><a class="indexterm" name="idm44933628181312"></a><a class="indexterm" name="idm44933628179824"></a><p>
+            Do not cache each query result, print each row as it is
+            received. This may slow down the server if the output is
+            suspended. With this option, <a class="link" href="mysql.html" title="4.5.1 mysql — The MySQL Command-Line Client"><span class="command"><strong>mysql</strong></span></a> does
+            not use the history file.
+          </p></li><li class="listitem"><p><a name="option_mysql_raw"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_raw"><code class="option">--raw</code></a>, <code class="option">-r</code>
+          </p><a class="indexterm" name="idm44933628173984"></a><a class="indexterm" name="idm44933628172496"></a><p>
+            For tabular output, the <span class="quote">“<span class="quote">boxing</span>”</span> around columns
+            enables one column value to be distinguished from another.
+            For nontabular output (such as is produced in batch mode or
+            when the <a class="link" href="mysql-command-options.html#option_mysql_batch"><code class="option">--batch</code></a> or
+            <a class="link" href="mysql-command-options.html#option_mysql_silent"><code class="option">--silent</code></a> option is given),
+            special characters are escaped in the output so they can be
+            identified easily. Newline, tab, <code class="literal">NUL</code>, and
+            backslash are written as <code class="literal">\n</code>,
+            <code class="literal">\t</code>, <code class="literal">\0</code>, and
+            <code class="literal">\\</code>. The
+            <a class="link" href="mysql-command-options.html#option_mysql_raw"><code class="option">--raw</code></a> option disables this
+            character escaping.
+          </p><p>
+            The following example demonstrates tabular versus nontabular
+            output and the use of raw mode to disable escaping:
+          </p><pre class="programlisting copytoclipboard line-numbers language-sql"><code class="language-sql">% mysql
+mysql&gt; SELECT CHAR(92);
++----------+
+| CHAR(92) |
++----------+
+| \        |
++----------+
+
+% mysql -s
+mysql&gt; SELECT CHAR(92);
+CHAR(92)
+\\
+
+% mysql -s -r
+mysql&gt; SELECT CHAR(92);
+CHAR(92)
+\</code></pre></li><li class="listitem"><p><a name="option_mysql_reconnect"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_reconnect"><code class="option">--reconnect</code></a>
+          </p><a class="indexterm" name="idm44933628157344"></a><a class="indexterm" name="idm44933628155856"></a><p>
+            If the connection to the server is lost, automatically try
+            to reconnect. A single reconnect attempt is made each time
+            the connection is lost. To suppress reconnection behavior,
+            use
+            <a class="link" href="mysql-command-options.html#option_mysql_reconnect"><code class="option">--skip-reconnect</code></a>.
+          </p></li><li class="listitem"><p><a name="option_mysql_safe-updates"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_safe-updates"><code class="option">--safe-updates</code></a>,
+            <a class="link" href="mysql-command-options.html#option_mysql_safe-updates"><code class="option">--i-am-a-dummy</code></a>,
+            <code class="option">-U</code>
+          </p><a class="indexterm" name="idm44933628149120"></a><a class="indexterm" name="idm44933628147632"></a><a class="indexterm" name="idm44933628146144"></a><a class="indexterm" name="idm44933628144656"></a><p>
+            If this option is enabled,
+            <a class="link" href="update.html" title="13.2.11 UPDATE Statement"><code class="literal">UPDATE</code></a> and
+            <a class="link" href="delete.html" title="13.2.2 DELETE Statement"><code class="literal">DELETE</code></a> statements that do not
+            use a key in the <code class="literal">WHERE</code> clause or a
+            <code class="literal">LIMIT</code> clause produce an error. In
+            addition, restrictions are placed on
+            <a class="link" href="select.html" title="13.2.9 SELECT Statement"><code class="literal">SELECT</code></a> statements that
+            produce (or are estimated to produce) very large result
+            sets. If you have set this option in an option file, you can
+            use
+            <a class="link" href="mysql-command-options.html#option_mysql_safe-updates"><code class="option">--skip-safe-updates</code></a>
+            on the command line to override it. For more information
+            about this option, see <a class="xref" href="mysql-tips.html#safe-updates" title="Using Safe-Updates Mode (--safe-updates)">Using Safe-Updates Mode (--safe-updates)</a>.
+          </p></li><li class="listitem"><p><a name="option_mysql_secure-auth"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_secure-auth"><code class="option">--secure-auth</code></a>
+          </p><a class="indexterm" name="idm44933628133104"></a><a class="indexterm" name="idm44933628131616"></a><p>
+            Do not send passwords to the server in old (pre-4.1) format.
+            This prevents connections except for servers that use the
+            newer password format.
+          </p><p>
+            As of MySQL 5.7.5, this option is deprecated; expect it to
+            be removed in a future MySQL release. It is always enabled
+            and attempting to disable it
+            (<a class="link" href="mysql-command-options.html#option_mysql_secure-auth"><code class="option">--skip-secure-auth</code></a>,
+            <a class="link" href="mysql-command-options.html#option_mysql_secure-auth"><code class="option">--secure-auth=0</code></a>) produces an
+            error. Before MySQL 5.7.5, this option is enabled by default
+            but can be disabled.
+</p>
+<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+
+<div class="admon-title">
+Note
+</div>
+<p>
+              Passwords that use the pre-4.1 hashing method are less
+              secure than passwords that use the native password hashing
+              method and should be avoided. Pre-4.1 passwords are
+              deprecated and support for them was removed in MySQL
+              5.7.5. For account upgrade instructions, see
+              <a class="xref" href="account-upgrades.html" title="6.4.1.3 Migrating Away from Pre-4.1 Password Hashing and the mysql_old_password Plugin">Section 6.4.1.3, “Migrating Away from Pre-4.1 Password Hashing and the mysql_old_password
+        Plugin”</a>.
+</p>
+</div>
+</li><li class="listitem"><p><a name="option_mysql_select-limit"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_select-limit"><code class="option">--select-limit=<em class="replaceable"><code>value</code></em></code></a>
+          </p><a class="indexterm" name="idm44933628122560"></a><a class="indexterm" name="idm44933628121072"></a><p>
+            The automatic limit for
+            <a class="link" href="select.html" title="13.2.9 SELECT Statement"><code class="literal">SELECT</code></a> statements when using
+            <a class="link" href="mysql-command-options.html#option_mysql_safe-updates"><code class="option">--safe-updates</code></a>. (Default value
+            is 1,000.)
+          </p></li><li class="listitem"><p><a name="option_mysql_server-public-key-path"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_server-public-key-path"><code class="option">--server-public-key-path=<em class="replaceable"><code>file_name</code></em></code></a>
+          </p><a class="indexterm" name="idm44933628114416"></a><a class="indexterm" name="idm44933628112912"></a><p>
+            The path name to a file in PEM format containing a
+            client-side copy of the public key required by the server
+            for RSA key pair-based password exchange. This option
+            applies to clients that authenticate with the
+            <code class="literal">sha256_password</code> or
+            <code class="literal">caching_sha2_password</code> authentication
+            plugin. This option is ignored for accounts that do not
+            authenticate with one of those plugins. It is also ignored
+            if RSA-based password exchange is not used, as is the case
+            when the client connects to the server using a secure
+            connection.
+          </p><p>
+            If
+            <a class="link" href="mysql-command-options.html#option_mysql_server-public-key-path"><code class="option">--server-public-key-path=<em class="replaceable"><code>file_name</code></em></code></a>
+            is given and specifies a valid public key file, it takes
+            precedence over
+            <a class="link" href="mysqlslap.html#option_mysqlslap_get-server-public-key"><code class="option">--get-server-public-key</code></a>.
+          </p><p>
+            For <code class="literal">sha256_password</code>, this option applies
+            only if MySQL was built using OpenSSL.
+          </p><p>
+            For information about the <code class="literal">sha256_password</code>
+            and <code class="literal">caching_sha2_password</code> plugins, see
+            <a class="xref" href="sha256-pluggable-authentication.html" title="6.4.1.5 SHA-256 Pluggable Authentication">Section 6.4.1.5, “SHA-256 Pluggable Authentication”</a>, and
+            <a class="xref" href="caching-sha2-pluggable-authentication.html" title="6.4.1.4 Caching SHA-2 Pluggable Authentication">Section 6.4.1.4, “Caching SHA-2 Pluggable Authentication”</a>.
+          </p></li><li class="listitem"><p><a name="option_mysql_shared-memory-base-name"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_shared-memory-base-name"><code class="option">--shared-memory-base-name=<em class="replaceable"><code>name</code></em></code></a>
+          </p><a class="indexterm" name="idm44933628099120"></a><a class="indexterm" name="idm44933628097616"></a><p>
+            On Windows, the shared-memory name to use for connections
+            made using shared memory to a local server. The default
+            value is <code class="literal">MYSQL</code>. The shared-memory name is
+            case-sensitive.
+          </p><p>
+            This option applies only if the server was started with the
+            <a class="link" href="server-system-variables.html#sysvar_shared_memory"><code class="literal">shared_memory</code></a> system
+            variable enabled to support shared-memory connections.
+          </p></li><li class="listitem"><p><a name="option_mysql_show-warnings"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_show-warnings"><code class="option">--show-warnings</code></a>
+          </p><a class="indexterm" name="idm44933628090768"></a><a class="indexterm" name="idm44933628089280"></a><p>
+            Cause warnings to be shown after each statement if there are
+            any. This option applies to interactive and batch mode.
+          </p></li><li class="listitem"><p><a name="option_mysql_sigint-ignore"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_sigint-ignore"><code class="option">--sigint-ignore</code></a>
+          </p><a class="indexterm" name="idm44933628085040"></a><a class="indexterm" name="idm44933628083552"></a><p>
+            Ignore <code class="literal">SIGINT</code> signals (typically the
+            result of typing <span class="keycap"><strong>Control+C</strong></span>).
+          </p><p>
+            Without this option, typing <span class="keycap"><strong>Control+C</strong></span>
+            interrupts the current statement if there is one, or cancels
+            any partial input line otherwise.
+          </p><a class="indexterm" name="idm44933628078896"></a><a class="indexterm" name="idm44933628077408"></a><a class="indexterm" name="idm44933628075920"></a></li><li class="listitem"><p><a name="option_mysql_silent"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_silent"><code class="option">--silent</code></a>, <code class="option">-s</code>
+          </p><a class="indexterm" name="idm44933628071968"></a><a class="indexterm" name="idm44933628070480"></a><p>
+            Silent mode. Produce less output. This option can be given
+            multiple times to produce less and less output.
+          </p><p>
+            This option results in nontabular output format and escaping
+            of special characters. Escaping may be disabled by using raw
+            mode; see the description for the
+            <a class="link" href="mysql-command-options.html#option_mysql_raw"><code class="option">--raw</code></a> option.
+          </p></li><li class="listitem"><p><a name="option_mysql_skip-column-names"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_skip-column-names"><code class="option">--skip-column-names</code></a>,
+            <code class="option">-N</code>
+          </p><a class="indexterm" name="idm44933628064224"></a><a class="indexterm" name="idm44933628062720"></a><p>
+            Do not write column names in results.
+          </p></li><li class="listitem"><p><a name="option_mysql_skip-line-numbers"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_skip-line-numbers"><code class="option">--skip-line-numbers</code></a>,
+            <code class="option">-L</code>
+          </p><a class="indexterm" name="idm44933628058096"></a><a class="indexterm" name="idm44933628056640"></a><p>
+            Do not write line numbers for errors. Useful when you want
+            to compare result files that include error messages.
+          </p></li><li class="listitem"><p><a name="option_mysql_socket"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_socket"><code class="option">--socket=<em class="replaceable"><code>path</code></em></code></a>,
+            <code class="option">-S <em class="replaceable"><code>path</code></em></code>
+          </p><a class="indexterm" name="idm44933628051472"></a><a class="indexterm" name="idm44933628049984"></a><p>
+            For connections to <code class="literal">localhost</code>, the Unix
+            socket file to use, or, on Windows, the name of the named
+            pipe to use.
+          </p><p>
+            On Windows, this option applies only if the server was
+            started with the <a class="link" href="server-system-variables.html#sysvar_named_pipe"><code class="literal">named_pipe</code></a>
+            system variable enabled to support named-pipe connections.
+            In addition, the user making the connection must be a member
+            of the Windows group specified by the
+            <a class="link" href="server-system-variables.html#sysvar_named_pipe_full_access_group"><code class="literal">named_pipe_full_access_group</code></a>
+            system variable.
+          </p></li><li class="listitem"><p><a name="option_mysql_ssl"></a>
+            <code class="option">--ssl*</code>
+          </p><a class="indexterm" name="idm44933628042400"></a><a class="indexterm" name="idm44933628040912"></a><p>
+            Options that begin with <code class="option">--ssl</code> specify
+            whether to connect to the server using encryption and
+            indicate where to find SSL keys and certificates. See
+            <a class="xref" href="connection-options.html#encrypted-connection-options" title="Command Options for Encrypted Connections">Command Options for Encrypted Connections</a>.
+          </p></li><li class="listitem"><p><a name="option_mysql_syslog"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_syslog"><code class="option">--syslog</code></a>, <code class="option">-j</code>
+          </p><a class="indexterm" name="idm44933628035136"></a><a class="indexterm" name="idm44933628033648"></a><p>
+            This option causes <a class="link" href="mysql.html" title="4.5.1 mysql — The MySQL Command-Line Client"><span class="command"><strong>mysql</strong></span></a> to send
+            interactive statements to the system logging facility. On
+            Unix, this is <code class="literal">syslog</code>; on Windows, it is
+            the Windows Event Log. The destination where logged messages
+            appear is system dependent. On Linux, the destination is
+            often the <code class="filename">/var/log/messages</code> file.
+          </p><p>
+            Here is a sample of output generated on Linux by using
+            <code class="option">--syslog</code>. This output is formatted for
+            readability; each logged message actually takes a single
+            line.
+          </p><pre class="programlisting copytoclipboard line-numbers language-none"><code class="language-none">Mar  7 12:39:25 myhost MysqlClient[20824]:
+  SYSTEM_USER:'oscar', MYSQL_USER:'my_oscar', CONNECTION_ID:23,
+  DB_SERVER:'127.0.0.1', DB:'--', QUERY:'USE test;'
+Mar  7 12:39:28 myhost MysqlClient[20824]:
+  SYSTEM_USER:'oscar', MYSQL_USER:'my_oscar', CONNECTION_ID:23,
+  DB_SERVER:'127.0.0.1', DB:'test', QUERY:'SHOW TABLES;'</code></pre><p>
+            For more information, see <a class="xref" href="mysql-logging.html" title="4.5.1.3 mysql Client Logging">Section 4.5.1.3, “mysql Client Logging”</a>.
+          </p></li><li class="listitem"><p><a name="option_mysql_table"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_table"><code class="option">--table</code></a>, <code class="option">-t</code>
+          </p><a class="indexterm" name="idm44933628022816"></a><a class="indexterm" name="idm44933628021328"></a><p>
+            Display output in table format. This is the default for
+            interactive use, but can be used to produce table output in
+            batch mode.
+          </p></li><li class="listitem"><p><a name="option_mysql_tee"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_tee"><code class="option">--tee=<em class="replaceable"><code>file_name</code></em></code></a>
+          </p><a class="indexterm" name="idm44933628016848"></a><a class="indexterm" name="idm44933628015360"></a><p>
+            Append a copy of output to the given file. This option works
+            only in interactive mode. <a class="xref" href="mysql-commands.html" title="4.5.1.2 mysql Client Commands">Section 4.5.1.2, “mysql Client Commands”</a>,
+            discusses tee files further.
+          </p></li><li class="listitem"><p><a name="option_mysql_tls-version"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_tls-version"><code class="option">--tls-version=<em class="replaceable"><code>protocol_list</code></em></code></a>
+          </p><a class="indexterm" name="idm44933628010128"></a><a class="indexterm" name="idm44933628008640"></a><p>
+            The permissible TLS protocols for encrypted connections. The
+            value is a list of one or more comma-separated protocol
+            names. The protocols that can be named for this option
+            depend on the SSL library used to compile MySQL. For
+            details, see
+            <a class="xref" href="encrypted-connection-protocols-ciphers.html" title="6.3.2 Encrypted Connection TLS Protocols and Ciphers">Section 6.3.2, “Encrypted Connection TLS Protocols and Ciphers”</a>.
+          </p><p>
+            This option was added in MySQL 5.7.10.
+          </p></li><li class="listitem"><p><a name="option_mysql_unbuffered"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_unbuffered"><code class="option">--unbuffered</code></a>,
+            <code class="option">-n</code>
+          </p><a class="indexterm" name="idm44933628002784"></a><a class="indexterm" name="idm44933628001296"></a><p>
+            Flush the buffer after each query.
+          </p></li><li class="listitem"><p><a name="option_mysql_user"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_user"><code class="option">--user=<em class="replaceable"><code>user_name</code></em></code></a>,
+            <code class="option">-u <em class="replaceable"><code>user_name</code></em></code>
+          </p><a class="indexterm" name="idm44933627996224"></a><a class="indexterm" name="idm44933627994736"></a><p>
+            The user name of the MySQL account to use for connecting to
+            the server.
+          </p></li><li class="listitem"><p><a name="option_mysql_verbose"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_verbose"><code class="option">--verbose</code></a>, <code class="option">-v</code>
+          </p><a class="indexterm" name="idm44933627990224"></a><a class="indexterm" name="idm44933627988736"></a><p>
+            Verbose mode. Produce more output about what the program
+            does. This option can be given multiple times to produce
+            more and more output. (For example, <code class="option">-v -v
+            -v</code> produces table output format even in batch
+            mode.)
+          </p></li><li class="listitem"><p><a name="option_mysql_version"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_version"><code class="option">--version</code></a>, <code class="option">-V</code>
+          </p><a class="indexterm" name="idm44933627983632"></a><a class="indexterm" name="idm44933627982144"></a><p>
+            Display version information and exit.
+          </p></li><li class="listitem"><p><a name="option_mysql_vertical"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_vertical"><code class="option">--vertical</code></a>,
+            <code class="option">-E</code>
+          </p><a class="indexterm" name="idm44933627977600"></a><a class="indexterm" name="idm44933627976112"></a><p>
+            Print query output rows vertically (one line per column
+            value). Without this option, you can specify vertical output
+            for individual statements by terminating them with
+            <code class="literal">\G</code>.
+          </p></li><li class="listitem"><p><a name="option_mysql_wait"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_wait"><code class="option">--wait</code></a>, <code class="option">-w</code>
+          </p><a class="indexterm" name="idm44933627970752"></a><a class="indexterm" name="idm44933627969264"></a><p>
+            If the connection cannot be established, wait and retry
+            instead of aborting.
+          </p></li><li class="listitem"><p><a name="option_mysql_xml"></a>
+            <a class="link" href="mysql-command-options.html#option_mysql_xml"><code class="option">--xml</code></a>, <code class="option">-X</code>
+          </p><a class="indexterm" name="idm44933627964704"></a><a class="indexterm" name="idm44933627963216"></a><p>
+            Produce XML output.
+          </p><pre class="programlisting copytoclipboard line-numbers language-xml one-line"><code class="language-xml">&lt;field name="<em class="replaceable">column_name</em>"&gt;NULL&lt;/field&gt;</code></pre><p>
+            The output when <a class="link" href="mysql-command-options.html#option_mysql_xml"><code class="option">--xml</code></a> is used
+            with <a class="link" href="mysql.html" title="4.5.1 mysql — The MySQL Command-Line Client"><span class="command"><strong>mysql</strong></span></a> matches that of
+            <a class="link" href="mysqldump.html" title="4.5.4 mysqldump — A Database Backup Program"><span class="command"><strong>mysqldump</strong></span></a>
+            <a class="link" href="mysqldump.html#option_mysqldump_xml"><code class="option">--xml</code></a>. See
+            <a class="xref" href="mysqldump.html" title="4.5.4 mysqldump — A Database Backup Program">Section 4.5.4, “<span class="command"><strong>mysqldump</strong></span> — A Database Backup Program”</a>, for details.
+          </p><p>
+            The XML output also uses an XML namespace, as shown here:
+          </p><pre class="programlisting copytoclipboard line-numbers language-terminal"><code class="language-terminal">shell&gt; mysql --xml -uroot -e "SHOW VARIABLES LIKE 'version%'"
+&lt;?xml version="1.0"?&gt;
+
+&lt;resultset statement="SHOW VARIABLES LIKE 'version%'" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&gt;
+&lt;row&gt;
+&lt;field name="Variable_name"&gt;version&lt;/field&gt;
+&lt;field name="Value"&gt;5.0.40-debug&lt;/field&gt;
+&lt;/row&gt;
+
+&lt;row&gt;
+&lt;field name="Variable_name"&gt;version_comment&lt;/field&gt;
+&lt;field name="Value"&gt;Source distribution&lt;/field&gt;
+&lt;/row&gt;
+
+&lt;row&gt;
+&lt;field name="Variable_name"&gt;version_compile_machine&lt;/field&gt;
+&lt;field name="Value"&gt;i686&lt;/field&gt;
+&lt;/row&gt;
+
+&lt;row&gt;
+&lt;field name="Variable_name"&gt;version_compile_os&lt;/field&gt;
+&lt;field name="Value"&gt;suse-linux-gnu&lt;/field&gt;
+&lt;/row&gt;
+&lt;/resultset&gt;</code></pre></li></ul>
+</div>
+
+</div>
+<br />
+        </div>
+
+                <div id="docs-in-page-nav-container">
+            <div id="docs-in-page-nav">
+                
+    <a href="mysql.html"
+        aria-label="Previous" title="Previous: mysql — The MySQL Command-Line Client"><span
+        class="icon-chevron-left"></span> PREV</a> &nbsp;
+<a href="index.html" aria-label="Start" title="Start"> HOME</a> &nbsp;
+        <a aria-label="Up" href="mysql.html" title="Up: mysql — The MySQL Command-Line Client"> UP</a> &nbsp;
+    <a href="mysql-commands.html" aria-label="Next"
+        title="Next: mysql Client Commands">NEXT <span
+        class="icon-chevron-right"></span></a>
+            </div>
+        </div>
+        
+         <div id="docs-body-extra">
+             
+<a class="docs-sidebar-section" href="mysql-command-options.html?ff=nopfpls"><span class="icon-related"></span>
+    <span class="text">Related Documentation</span></a>
+<div class="docs-sidebar-accordian">
+    <div class="text">
+        <a href="https://dev.mysql.com/doc/relnotes/mysql/5.7/en/">MySQL 5.7 Release Notes</a><br />
+        </div>
+</div>
+
+    <a class="docs-sidebar-section" href="mysql-command-options.html?ff=nopfpls"><span class="icon-download-thin"></span>
+        <span class="text">
+            Download
+                            this Manual
+                    </span>
+    </a>
+    <div class="docs-sidebar-accordian">
+        <div class="text">
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.pdf">PDF (US Ltr)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.a4.pdf">PDF (A4)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-ref-manual-5.7-en-pdf-1-20210225.noarch.rpm">PDF (RPM)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.html-chapter.tar.gz">HTML Download (TGZ)</a>
+            - 10.1Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.html-chapter.zip">HTML Download (Zip)</a>
+            - 10.2Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-ref-manual-5.7-en-html-chapter-1-20210225.noarch.rpm">HTML Download (RPM)</a>
+            - 8.9Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.man-gpl.tar.gz">Man Pages (TGZ)</a>
+            - 224.7Kb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.man-gpl.zip">Man Pages (Zip)</a>
+            - 332.6Kb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-5.7.info.gz">Info (Gzip)</a>
+            - 3.3Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-5.7.info.zip">Info (Zip)</a>
+            - 3.3Mb<br />
+                    </div>
+    </div>
+
+<a class="docs-sidebar-section" href="mysql-command-options.html?ff=nopfpls"><span class="icon-book"></span>
+    <span class="text">Excerpts from this Manual</span></a>
+<div class="docs-sidebar-accordian">
+    <div class="text">
+                <a href="https://dev.mysql.com/doc/mysql-backup-excerpt/5.7/en/">MySQL Backup and Recovery</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-g11n-excerpt/5.7/en/">MySQL Globalization</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-infoschema-excerpt/5.7/en/">MySQL Information Schema</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-installation-excerpt/5.7/en/">MySQL Installation Guide</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-linuxunix-excerpt/5.7/en/">MySQL and Linux/Unix</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-osx-excerpt/5.7/en/">MySQL and OS X</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-partitioning-excerpt/5.7/en/">MySQL Partitioning</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-perfschema-excerpt/5.7/en/">MySQL Performance Schema</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-replication-excerpt/5.7/en/">MySQL Replication</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-repo-excerpt/5.7/en/">Using the MySQL Yum Repository</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-reslimits-excerpt/5.7/en/">MySQL Restrictions and Limitations</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-security-excerpt/5.7/en/">Security in MySQL</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-solaris-excerpt/5.7/en/">MySQL and Solaris</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-sourcebuild-excerpt/5.7/en/">Building MySQL from Source</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-startstop-excerpt/5.7/en/">Starting and Stopping MySQL</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-tutorial-excerpt/5.7/en/">MySQL Tutorial</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-windows-excerpt/5.7/en/">MySQL and Windows</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-cluster-excerpt/5.7/en/">MySQL NDB Cluster 7.5</a><br />
+            </div>
+</div>
+         </div>
+
+              </div>
+     </div>
+
+</div>
+
+<script>
+$(function() {
+    var doc = new $.doc({ 'mobile': $.browser.mobile, 'docId': 1, 'highlight': true });
+});
+</script>
+    
+
+            
+        </div>
+    </div>
+
+    <footer class="collapsed">
+        <div id="footer-bottom">
+                                    <div id="footer-collapse">
+                <a href="mysql-command-options.html?ff=nopfpls" id="expand-footer"
+                    aria-label="Expand Footer"
+                    title="Expand Footer"><span
+                    class="icon-plus-square"></span></a>
+            </div>
+                        <div class="footer-contact">
+                <div id="footer-contact-icon" style="display: none;">
+                    <span class="icon-call-phone"></span>
+                </div>
+                <div id="footer-contact-numbers" style="display: none;">
+                    <strong>Contact MySQL Sales</strong><br/>
+                    USA/Canada: +1-866-221-0634 &nbsp;
+                    (<a href="https://www.mysql.com/about/contact/phone/">More Countries &raquo;</a>)
+                </div>
+                <div id="footer-contact-copyright" style="display: inline-block;">
+                    <a href="http://www.oracle.com/" aria-label="Oracle" title="Oracle"><span class="oracle-logo"></span></a>
+                    &nbsp; &copy; 2021, Oracle Corporation and/or its affiliates
+                </div>
+            </div>
+            <div class="social-icons">
+                <a aria-label="Join us on Facebook" title="Join us on Facebook" href="http://www.facebook.com/mysql"><span class="icon-facebook-square"></span></a>
+                <a aria-label="Follow us on Twitter" title="Follow us on Twitter" href="https://twitter.com/mysql"><span class="icon-twitter-square"></span></a>
+                <a aria-label="Follow us on LinkedIn" title="Follow us on LinkedIn" href="https://www.linkedin.com/company/mysql"><span class="icon-linkedin-square"></span></a>
+                <a aria-label="Visit our YouTube channel" title="Visit our YouTube channel" href="http://www.youtube.com/mysqlchannel"><span class="icon-youtube-square"></span></a>
+            </div>
+            <br class="clear" />
+        </div>
+        <div id="footer-links">
+
+            <div id="site-footer-links">
+                <div id="footer-nav"></div>
+
+                <div class="links">
+                    <ul>
+                        <li class="top"><a href="https://www.mysql.com/products/">Products</a></li>
+                        <li><a href="https://www.mysql.com/cloud/">MySQL Database Service</a></li>
+                        <li><a href="https://www.mysql.com/products/enterprise/">MySQL Enterprise Edition</a></li>
+                        <li><a href="https://www.mysql.com/products/standard/">MySQL Standard Edition</a></li>
+                        <li><a href="https://www.mysql.com/products/classic/">MySQL Classic Edition</a></li>
+                        <li><a href="https://www.mysql.com/products/cluster/">MySQL Cluster CGE</a></li>
+                        <li><a href="https://www.mysql.com/oem/">MySQL Embedded (OEM/ISV)</a></li>
+                    </ul>
+                </div>
+
+                <div class="links">
+                    <ul>
+                        <li class="top"><a href="https://www.mysql.com/services/">Services</a></li>
+                        <li><a href="https://www.mysql.com/training/">Training</a></li>
+                        <li><a href="https://www.mysql.com/certification/">Certification</a></li>
+                        <li><a href="https://www.mysql.com/consulting/">Consulting</a></li>
+                        <li><a href="https://www.mysql.com/support/">Support</a></li>
+                    </ul>
+                </div>
+
+                <div class="links">
+                    <ul>
+                        <li class="top"><a href="https://www.mysql.com/downloads/">Downloads</a></li>
+                        <li><a href="https://dev.mysql.com/downloads/mysql/">MySQL Community Server</a></li>
+                        <li><a href="https://dev.mysql.com/downloads/cluster/">MySQL NDB Cluster</a></li>
+                        <li><a href="https://dev.mysql.com/downloads/shell/">MySQL Shell</a></li>
+                        <li><a href="https://dev.mysql.com/downloads/router/">MySQL Router</a></li>
+                        <li><a href="https://dev.mysql.com/downloads/workbench/">MySQL Workbench</a></li>
+                    </ul>
+                </div>
+
+                <div class="links">
+                    <ul>
+                        <li class="top"><a href="https://dev.mysql.com/doc/">Documentation</a></li>
+                        <li><a href="https://dev.mysql.com/doc/refman/en/">MySQL Reference Manual</a></li>
+                        <li><a href="https://dev.mysql.com/doc/workbench/en/">MySQL Workbench</a></li>
+                        <li><a href="https://dev.mysql.com/doc/index-cluster.html">MySQL NDB Cluster</a></li>
+                        <li><a href="https://dev.mysql.com/doc/index-connectors.html">MySQL Connectors</a></li>
+                        <li><a href="https://dev.mysql.com/doc/#topic">Topic Guides</a></li>
+                    </ul>
+                </div>
+
+                <div class="links">
+                    <ul>
+                        <li class="top"><a href="https://www.mysql.com/about/">About MySQL</a></li>
+                        <li><a href="https://www.mysql.com/about/contact/">Contact Us</a></li>
+                                                                        <li><a href="https://www.mysql.com/buy-mysql/">How to Buy</a></li>
+                        <li><a href="https://www.mysql.com/partners/">Partners</a></li>
+                        <li><a href="https://www.mysql.com/about/jobs/">Job Opportunities</a></li>
+                        <li><a href="https://www.mysql.com/sitemap.html">Site Map</a></li>
+                    </ul>
+                </div>
+
+                            </div>
+
+            <div id="footer-logo">
+                <a href="http://www.oracle.com/" aria-label="Oracle" title="Oracle"><span class="oracle-logo"></span></a>
+                &nbsp; &copy; 2021, Oracle Corporation and/or its affiliates
+                <div class="footer-legal-links">
+                    <a href="https://www.mysql.com/about/legal/">Legal Policies</a> |
+                    <a href="http://www.oracle.com/us/legal/privacy/index.htm">Your Privacy Rights</a> |
+                    <a href="http://www.oracle.com/us/legal/terms/index.html">Terms of Use</a> |
+                    <a href="http://www.oracle.com/us/legal/third-party-trademarks/index.html">Trademark Policy</a> |
+                    <a href="http://www.oracle.com/technetwork/community/oca-486395.html">Contributor Agreement</a> |
+                    <div id="teconsent"></div>
+                </div>
+            </div>
+
+        </div>
+    </footer>
+</div>
+
+            <script>
+    if ((oracle.truste.api.getGdprConsentDecision().consentDecision) &&
+            (oracle.truste.api.getGdprConsentDecision().consentDecision.indexOf(0) != -1 ||
+             oracle.truste.api.getGdprConsentDecision().consentDecision.indexOf(2) != -1) )
+    {
+        document.write('<script src="https://labs.mysql.com/common/js/metrics/s_code_remote.js"><\/script>');
+        document.write('<script type="text/javascript" async src="https://c.oracleinfinity.io/acs/account/wh3g12c3gg/js/mysql/odc.js?_ora.context=analytics:production"><\/script>');
+    }
+    </script>
+
+        
+    
+</body>
+</html>

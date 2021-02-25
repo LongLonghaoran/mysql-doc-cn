@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html lang="en" class="svg no-js">
+<head>
+    <meta charset="utf-8" />
+    <!--[if IE ]>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="Language" content="en">
+
+    <title>MySQL :: MySQL 5.7 Reference Manual :: 12.17.8 Spatial Operator Functions</title>
+    <link rel="stylesheet" media="all" href="https://labs.mysql.com/common/css/main-20201221.min.css" />
+            <link rel="stylesheet" media="all" href="https://labs.mysql.com/common/css/docs-20201221.min.css" />
+    
+    
+    <link rel="stylesheet" media="print" href="https://labs.mysql.com/common/css/print-20201221.min.css" />
+
+    
+    
+    
+    
+            <link rel="contents" href="index.html" title="MySQL 5.7 Reference Manual" />
+<link rel="start" href="index.html" title="MySQL 5.7 Reference Manual" />
+<link rel="prev" href="gis-geometrycollection-property-functions.html" title="12.17.7.5 GeometryCollection Property Functions" />
+<link rel="next" href="spatial-relation-functions.html?ff=nopfpls" title="12.17.9 Functions That Test Spatial Relations Between Geometry Objects" />
+<link rel="up" href="spatial-analysis-functions.html" title="12.17 Spatial Analysis Functions" />
+
+    
+    <link rel="shortcut icon" href="https://labs.mysql.com/common/themes/sakila/favicon.ico" />
+    <script async="async" type="text/javascript" src='https://consent.truste.com/notice?domain=oracle.com&c=teconsent&js=bb&noticeType=bb&text=true&cdn=1&pcookie&gtm=1' crossorigin></script>
+    <script src="https://www.oracle.com/assets/truste-oraclelib.js"></script>
+    <script>(function(H){ H.className=H.className.replace(/\bno-js\b/,'js') })(document.documentElement)</script>
+    <script src="https://labs.mysql.com/common/js/site-20200928.min.js"></script>
+
+    
+    
+    <!--[if lt IE 9]>
+        <script src="https://labs.mysql.com/common/js/polyfills/html5shiv-printshiv-3.7.2.min.js"></script>
+        <script src="https://labs.mysql.com/common/js/polyfills/respond-1.4.2.min.js"></script>
+    <![endif]-->
+        <!--[if IE 9]>
+        <style>#docs-sidebar-toc { box-sizing: content-box; }</style>
+    <![endif]-->
+    </head>
+
+<body class="no-sidebar full-page dev">
+<div class="page-wrapper">
+    <header>
+
+                        <a href="https://dev.mysql.com/" aria-label="Home" title="MySQL" id="l1-home-link"></a>
+        
+        <div id="l1-nav-container">
+            <div id="l1-line1">
+                <div id="l1-auth-links">
+                    <a href="https://www.mysql.com/about/contact/"><b>Contact MySQL</b></a>
+                    <span id="l1-contact-separator">&nbsp;|&nbsp;</span>
+                    <span id="l1-contact-separator-br"><br /></span>
+                                             <a href="https://dev.mysql.com/auth/login/?dest=https%3A%2F%2Fdev.mysql.com%2Fdoc%2Frefman%2F5.7%2Fen%2Fspatial-operator-functions.html%3Fff%3Dnopfpls">Login</a> &nbsp;|&nbsp;
+                         <a href="https://dev.mysql.com/auth/register/">Register</a>
+                                    </div>
+                <div id="l1-lhs">
+                    <div id="l1-slogan">
+                        The world's most popular open source database
+                    </div>
+                    <div id="l1-search-box">
+                        <form id="l1-search-form" method="get" action="https://www.oracle.com/search/results">
+                        <input type="hidden" name="cat" value="mysql" />
+                        <input type="hidden" name="Ntk" value="SI-ALL5" />
+                        <input id="l1-search-input" type="search" class="icon-search" placeholder="Search" aria-label="Search" name="Ntt" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div id="l1-line2">
+                <div class="social-icons">
+                    <a aria-label="Join us on Facebook" title="Join us on Facebook" href="http://www.facebook.com/mysql"><span class="icon-facebook"></span></a>
+                    <a aria-label="Follow us on Twitter" title="Follow us on Twitter" href="https://twitter.com/mysql"><span class="icon-twitter"></span></a>
+                    <a aria-label="Follow us on LinkedIn" title="Follow us on LinkedIn" href="https://www.linkedin.com/company/mysql"><span class="icon-linkedin"></span></a>
+                    <a aria-label="Visit our YouTube channel" title="Visit our YouTube channel" href="http://www.youtube.com/mysqlchannel"><span class="icon-youtube"></span></a>
+                </div>
+                <ul id="l1-nav">
+                    <li>
+                        <a href="https://www.mysql.com/"><!-- <span class="icon-sakila"></span>  -->MySQL.com</a>
+                    </li><li>
+                        <a href="https://www.mysql.com/downloads/"><!-- <span class="icon-download-thin"></span>  -->Downloads</a>
+                    </li><li class="active">
+                        <a href="https://dev.mysql.com/doc/"><!-- <span class="icon-books"></span>  -->Documentation</a>
+                    </li><li>
+                        <a href="https://dev.mysql.com/"><!-- <span class="icon-code"></span>  -->Developer Zone</a>
+                    </li>                </ul>
+            </div>
+        </div>
+        <div id="sub-header">
+            <div id="l2-nav-container">
+                <div id="l2-nav-toggle">
+                    <span class="icon-three-bars"></span>
+                </div>
+                                                                                        <a class="button nav-button-3" href="https://dev.mysql.com/"><span class="icon-code"></span> Developer Zone</a>
+                                                                                                                                    <a class="button nav-button-2" href="https://www.mysql.com/downloads/"><span class="icon-download-thin"></span> Downloads</a>
+                                                                                                <a class="button nav-button-1" href="https://www.mysql.com/"><span class="icon-sakila"></span> MySQL.com</a>
+                                                                        <div id="l2-search-toggle">
+                    <span class="icon-search"></span>
+                </div>
+                <div id="l2-site-icon">
+                                                                                                                                                                                                    <span class="icon-books"></span>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </div>
+                <div id="l1-section-title">
+                    <span id="l1-section-label">
+                        <a href="https://dev.mysql.com/doc/">Documentation</a>
+                    </span>
+                </div>
+                <nav>
+                    
+
+<ul id="l2-nav">
+            	<li class="active"><a class="active " href="https://dev.mysql.com/doc/refman/en/">MySQL Server</a>
+    			</li>
+	        	<li class=""><a  href="https://dev.mysql.com/doc/index-enterprise.html">MySQL Enterprise</a>
+    			</li>
+	        	<li class=""><a  href="https://dev.mysql.com/doc/workbench/en/">Workbench</a>
+    			</li>
+	        	<li class=""><a  href="https://dev.mysql.com/doc/mysql-shell/en/mysql-innodb-cluster.html">InnoDB Cluster</a>
+    			</li>
+	        	<li class=""><a  href="https://dev.mysql.com/doc/index-cluster.html">MySQL NDB Cluster</a>
+    			</li>
+	        	<li class=""><a  href="https://dev.mysql.com/doc/index-connectors.html">Connectors</a>
+    			</li>
+	        	<li class=" last"><a  href="https://dev.mysql.com/doc/index-other.html">More</a>
+    			</li>
+	                        <li class="other-section"><a href="https://www.mysql.com/">MySQL.com</a></li>
+                            <li class="other-section"><a href="https://www.mysql.com/downloads/">Downloads</a></li>
+                                        <li class="other-section"><a href="https://dev.mysql.com/">Developer Zone</a></li>
+            </ul>
+                </nav>
+            </div>
+            <div id="l3-search-container"></div>
+            <div id="top-orange"><span id="section-nav">Section Menu: &nbsp; </span></div>
+        </div>
+    </header>
+        <div id="page">
+                        <div role="main" id="main">
+
+            
+                
+            
+<div>
+    <div id="docs-sidebar-toc" class="">
+    <div id="docs-toc-inner">
+        <div class="docs-sidebar-header" id="docs-nav-header">
+            <a class="docs-show-hide-nav" id="docs-hide-nav" href="spatial-operator-functions.html?ff=nopfpls" title="Hide Sidebar" aria-label="Hide Sidebar"><span class="icon-arrow-small-left"></span></a>
+            <div class="docs-nav-links">
+                                    
+    <a href="gis-geometrycollection-property-functions.html"
+        aria-label="Previous" title="Previous: GeometryCollection Property Functions"><span
+        class="icon-chevron-left"></span></a>
+<a href="index.html" aria-label="Start" title="Start"><span class="icon-book-open"></span></a>
+        <a aria-label="Up" href="spatial-analysis-functions.html" title="Up: Spatial Analysis Functions"><span class="icon-chevron-up"></span></a>
+    <a href="spatial-relation-functions.html" aria-label="Next"
+        title="Next: Functions That Test Spatial Relations Between Geometry Objects"><span
+        class="icon-chevron-right"></span></a>
+                            </div>
+        </div>
+                    
+<div id="docs-sidebar-search-container">
+    <div id="docs-sidebar-search-box">
+        <form method="get" action="https://dev.mysql.com/doc/search/">
+            <input type="hidden" name="d" id="d" value="12" />
+            <input type="hidden" name="p" id="p" value="1" />
+            <input type="text" name="q" id="q" title="Search this Manual"
+                value="Search this Manual"
+                style="color: #bbb;"
+                onfocus="if(this.value == 'Search this Manual') {this.value='';this.style.color='#555';}"
+                onblur="if(this.value == '') {this.value='Search this Manual';this.style.color='#bbb';}" />
+
+            <button class="docs-sidebar-search-btn" aria-label="Search" title="Search" type="submit">
+                <span class="icon-search"></span>
+            </button>
+        </form>
+    </div>
+</div>
+                <div class="docs-sidebar-nav">
+            <a class="docs-icon-home" href="https://dev.mysql.com/doc/"><span class="icon-home"></span>Documentation Home</a><hr />
+            <div class="docs-sidebar-mtitle">MySQL 5.7 Reference Manual</div>
+            <nav class="doctoc" id="doc-12">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="preface.html">Preface and Legal Notices</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="spatial-operator-functions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="introduction.html">General Information</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="spatial-operator-functions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="installing.html">Installing and Upgrading MySQL</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="spatial-operator-functions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="tutorial.html">Tutorial</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="spatial-operator-functions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="programs.html">MySQL Programs</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="spatial-operator-functions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="server-administration.html">MySQL Server Administration</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="spatial-operator-functions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="security.html">Security</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="spatial-operator-functions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="backup-and-recovery.html">Backup and Recovery</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="spatial-operator-functions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="optimization.html">Optimization</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="spatial-operator-functions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="language-structure.html">Language Structure</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="spatial-operator-functions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="charset.html">Character Sets, Collations, Unicode</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="spatial-operator-functions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="data-types.html">Data Types</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="spatial-operator-functions.html?ff=nopfpls"><span class="icon-chevron-down"></span></a></div><div class="docs-sidebar-nav-link"><a href="functions.html">Functions and Operators</a></div></div>                        <div class="docs-submenu">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="sql-function-reference.html">SQL Function and Operator Reference</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="udf-reference.html">User-Defined Function Reference</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="type-conversion.html">Type Conversion in Expression Evaluation</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="spatial-operator-functions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="non-typed-operators.html">Operators</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="operator-precedence.html">Operator Precedence</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="comparison-operators.html">Comparison Functions and Operators</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="logical-operators.html">Logical Operators</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="assignment-operators.html">Assignment Operators</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="flow-control-functions.html">Flow Control Functions</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="spatial-operator-functions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="numeric-functions.html">Numeric Functions and Operators</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="arithmetic-functions.html">Arithmetic Operators</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mathematical-functions.html">Mathematical Functions</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="date-and-time-functions.html">Date and Time Functions</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="spatial-operator-functions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="string-functions.html">String Functions and Operators</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="string-comparison-functions.html">String Comparison Functions and Operators</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="regexp.html">Regular Expressions</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="string-functions-charset.html">Character Set and Collation of Function Results</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysql-calendar.html">What Calendar Is Used By MySQL?</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="spatial-operator-functions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="fulltext-search.html">Full-Text Search Functions</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="fulltext-natural-language.html">Natural Language Full-Text Searches</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="fulltext-boolean.html">Boolean Full-Text Searches</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="fulltext-query-expansion.html">Full-Text Searches with Query Expansion</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="fulltext-stopwords.html">Full-Text Stopwords</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="fulltext-restrictions.html">Full-Text Restrictions</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="fulltext-fine-tuning.html">Fine-Tuning MySQL Full-Text Search</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="full-text-adding-collation.html">Adding a User-Defined Collation for Full-Text Indexing</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="fulltext-search-ngram.html">ngram Full-Text Parser</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="fulltext-search-mecab.html">MeCab Full-Text Parser Plugin</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="cast-functions.html">Cast Functions and Operators</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="xml-functions.html">XML Functions</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="bit-functions.html">Bit Functions and Operators</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="encryption-functions.html">Encryption and Compression Functions</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="locking-functions.html">Locking Functions</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="information-functions.html">Information Functions</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="spatial-operator-functions.html?ff=nopfpls"><span class="icon-chevron-down"></span></a></div><div class="docs-sidebar-nav-link"><a href="spatial-analysis-functions.html">Spatial Analysis Functions</a></div></div>                        <div class="docs-submenu">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="spatial-function-reference.html">Spatial Function Reference</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="spatial-function-argument-handling.html">Argument Handling by Spatial Functions</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="gis-wkt-functions.html">Functions That Create Geometry Values from WKT Values</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="gis-wkb-functions.html">Functions That Create Geometry Values from WKB Values</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="gis-mysql-specific-functions.html">MySQL-Specific Functions That Create Geometry Values</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="gis-format-conversion-functions.html">Geometry Format Conversion Functions</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="spatial-operator-functions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="gis-property-functions.html">Geometry Property Functions</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="gis-general-property-functions.html">General Geometry Property Functions</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="gis-point-property-functions.html">Point Property Functions</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="gis-linestring-property-functions.html">LineString and MultiLineString Property Functions</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="gis-polygon-property-functions.html">Polygon and MultiPolygon Property Functions</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="gis-geometrycollection-property-functions.html">GeometryCollection Property Functions</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link current"><a href="spatial-operator-functions.html">Spatial Operator Functions</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="spatial-operator-functions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="spatial-relation-functions.html">Functions That Test Spatial Relations Between Geometry Objects</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="spatial-relation-functions-object-shapes.html">Spatial Relation Functions That Use Object Shapes</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="spatial-relation-functions-mbr.html">Spatial Relation Functions That Use Minimum Bounding Rectangles</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="spatial-geohash-functions.html">Spatial Geohash Functions</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="spatial-geojson-functions.html">Spatial GeoJSON Functions</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="spatial-convenience-functions.html">Spatial Convenience Functions</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="spatial-operator-functions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="json-functions.html">JSON Functions</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="json-function-reference.html">JSON Function Reference</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="json-creation-functions.html">Functions That Create JSON Values</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="json-search-functions.html">Functions That Search JSON Values</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="json-modification-functions.html">Functions That Modify JSON Values</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="json-attribute-functions.html">Functions That Return JSON Value Attributes</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="json-utility-functions.html">JSON Utility Functions</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="gtid-functions.html">Functions Used with Global Transaction Identifiers (GTIDs)</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="spatial-operator-functions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="aggregate-functions-and-modifiers.html">Aggregate Functions</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="aggregate-functions.html">Aggregate Function Descriptions</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="group-by-modifiers.html">GROUP BY Modifiers</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="group-by-handling.html">MySQL Handling of GROUP BY</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="group-by-functional-dependence.html">Detection of Functional Dependence</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="miscellaneous-functions.html">Miscellaneous Functions</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="spatial-operator-functions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="precision-math.html">Precision Math</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="precision-math-numbers.html">Types of Numeric Values</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="precision-math-decimal-characteristics.html">DECIMAL Data Type Characteristics</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="precision-math-expressions.html">Expression Handling</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="precision-math-rounding.html">Rounding Behavior</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="precision-math-examples.html">Precision Math Examples</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="spatial-operator-functions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="sql-statements.html">SQL Statements</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="spatial-operator-functions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="innodb-storage-engine.html">The InnoDB Storage Engine</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="spatial-operator-functions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="storage-engines.html">Alternative Storage Engines</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="spatial-operator-functions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="replication.html">Replication</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="spatial-operator-functions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="group-replication.html">Group Replication</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysql-shell-userguide.html">MySQL Shell</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="spatial-operator-functions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="document-store.html">Using MySQL as a Document Store</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysql-innodb-cluster-introduction.html">InnoDB Cluster</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="spatial-operator-functions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="mysql-cluster.html">MySQL NDB Cluster 7.5 and NDB Cluster 7.6</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="spatial-operator-functions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="partitioning.html">Partitioning</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="spatial-operator-functions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="stored-objects.html">Stored Objects</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="spatial-operator-functions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="information-schema.html">INFORMATION_SCHEMA Tables</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="spatial-operator-functions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="performance-schema.html">MySQL Performance Schema</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="spatial-operator-functions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="sys-schema.html">MySQL sys Schema</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="spatial-operator-functions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="connectors-apis.html">Connectors and APIs</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="spatial-operator-functions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="mysql-enterprise.html">MySQL Enterprise Edition</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="workbench.html">MySQL Workbench</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="spatial-operator-functions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="faqs.html">MySQL 5.7 Frequently Asked Questions</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="spatial-operator-functions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="error-handling.html">Error Messages and Common Problems</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="spatial-operator-functions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="indexes.html">Indexes</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="glossary.html">MySQL Glossary</a></div></div>                    </li>
+        </ul>
+                            </nav>
+        </div>
+
+        
+<a class="docs-sidebar-section" href="spatial-operator-functions.html?ff=nopfpls"><span class="icon-related"></span>
+    <span class="text">Related Documentation</span></a>
+<div class="docs-sidebar-accordian open">
+    <div class="text">
+        <a href="https://dev.mysql.com/doc/relnotes/mysql/5.7/en/">MySQL 5.7 Release Notes</a><br />
+        </div>
+</div>
+
+    <a class="docs-sidebar-section" href="spatial-operator-functions.html?ff=nopfpls"><span class="icon-download-thin"></span>
+        <span class="text">
+            Download
+                            this Manual
+                    </span>
+    </a>
+    <div class="docs-sidebar-accordian open">
+        <div class="text">
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.pdf">PDF (US Ltr)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.a4.pdf">PDF (A4)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-ref-manual-5.7-en-pdf-1-20210225.noarch.rpm">PDF (RPM)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.html-chapter.tar.gz">HTML Download (TGZ)</a>
+            - 10.1Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.html-chapter.zip">HTML Download (Zip)</a>
+            - 10.2Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-ref-manual-5.7-en-html-chapter-1-20210225.noarch.rpm">HTML Download (RPM)</a>
+            - 8.9Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.man-gpl.tar.gz">Man Pages (TGZ)</a>
+            - 224.7Kb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.man-gpl.zip">Man Pages (Zip)</a>
+            - 332.6Kb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-5.7.info.gz">Info (Gzip)</a>
+            - 3.3Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-5.7.info.zip">Info (Zip)</a>
+            - 3.3Mb<br />
+                    </div>
+    </div>
+
+<a class="docs-sidebar-section" href="spatial-operator-functions.html?ff=nopfpls"><span class="icon-book"></span>
+    <span class="text">Excerpts from this Manual</span></a>
+<div class="docs-sidebar-accordian">
+    <div class="text">
+                <a href="https://dev.mysql.com/doc/mysql-backup-excerpt/5.7/en/">MySQL Backup and Recovery</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-g11n-excerpt/5.7/en/">MySQL Globalization</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-infoschema-excerpt/5.7/en/">MySQL Information Schema</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-installation-excerpt/5.7/en/">MySQL Installation Guide</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-linuxunix-excerpt/5.7/en/">MySQL and Linux/Unix</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-osx-excerpt/5.7/en/">MySQL and OS X</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-partitioning-excerpt/5.7/en/">MySQL Partitioning</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-perfschema-excerpt/5.7/en/">MySQL Performance Schema</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-replication-excerpt/5.7/en/">MySQL Replication</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-repo-excerpt/5.7/en/">Using the MySQL Yum Repository</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-reslimits-excerpt/5.7/en/">MySQL Restrictions and Limitations</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-security-excerpt/5.7/en/">Security in MySQL</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-solaris-excerpt/5.7/en/">MySQL and Solaris</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-sourcebuild-excerpt/5.7/en/">Building MySQL from Source</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-startstop-excerpt/5.7/en/">Starting and Stopping MySQL</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-tutorial-excerpt/5.7/en/">MySQL Tutorial</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-windows-excerpt/5.7/en/">MySQL and Windows</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-cluster-excerpt/5.7/en/">MySQL NDB Cluster 7.5</a><br />
+            </div>
+</div>
+
+        <br /><span id="wkr"><br /></span>
+    </div>
+    </div>
+
+    <div id="docs-main" class="has-toc">
+    <div id="docs-main-inner">
+
+                <div class="right" id="docs-version-nav">
+            <a href="spatial-operator-functions.html?ff=nopfpls" id="docs-version-nav-toggle">version 5.7
+            <span class="icon-chevron-down"></span></a>
+            <div id="docs-version-list">
+                                                        <a                         href="https://dev.mysql.com/doc/refman/8.0/en/spatial-operator-functions.html">
+                        8.0
+                                                &nbsp;current
+                                            </a><br />
+                                                                                                                <a                         href="https://dev.mysql.com/doc/refman/5.6/en/spatial-operator-functions.html">
+                        5.6
+                                            </a><br />
+                                                                        <div id="docs-version-nav-lang">
+                                                                                                                                                    <a                                     href="https://dev.mysql.com/doc/refman/5.6/ja/spatial-operator-functions.html">
+                                    5.6&nbsp;
+                                                                            Japanese
+                                                                    </a><br />
+                                                                                            </div>
+                            </div>
+        </div>
+        
+        <div id="docs-show-nav" class="left hidden" style="margin-right: 15px;">
+            <a class="docs-show-hide-nav" href="spatial-operator-functions.html?ff=nopfpls" aria-label="Show Sidebar"
+                title="Show Sidebar"><span class="icon-arrow-small-right"></span></a>
+        </div>
+
+                        <div id="docs-breadcrumbs">
+            <a href="index.html">MySQL 5.7 Reference Manual</a> &nbsp;/&nbsp;
+                            <span id="breadcrumbs-link"><a href="spatial-operator-functions.html?ff=nopfpls" id="show-breadcrumbs">...</a> &nbsp;/&nbsp;</span>
+                <span class="hidden" id="hidden-breadcrumbs">
+                                                        <a href="functions.html">Functions and Operators</a> &nbsp;/&nbsp;
+                                                            <a href="spatial-analysis-functions.html">Spatial Analysis Functions</a> &nbsp;/&nbsp;
+                                                                                        </span>
+                                        Spatial Operator Functions
+                                    </div>
+        
+        <div id="docs-body">
+        
+<div class="section">
+<div class="titlepage">
+<div>
+<div>
+<h3 class="title"><a name="spatial-operator-functions"></a>12.17.8 Spatial Operator Functions</h3>
+
+</div>
+
+</div>
+
+</div>
+<p>
+      OpenGIS proposes a number of functions that can produce
+      geometries. They are designed to implement spatial operators.
+    </p><p>
+      These functions support all argument type combinations except
+      those that are inapplicable according to the
+      <a class="ulink" href="http://www.opengeospatial.org" target="_top">Open Geospatial
+      Consortium</a> specification.
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><a name="function_buffer"></a><p>
+          <a class="link" href="spatial-operator-functions.html#function_buffer"><code class="literal">Buffer(<em class="replaceable"><code>g</code></em>,
+          <em class="replaceable"><code>d</code></em> [,
+          <em class="replaceable"><code>strategy1</code></em> [,
+          <em class="replaceable"><code>strategy2</code></em> [,
+          <em class="replaceable"><code>strategy3</code></em>]]])</code></a>
+        </p><a class="indexterm" name="idm44933534008784"></a><p>
+          <a class="link" href="spatial-operator-functions.html#function_st-buffer"><code class="literal">ST_Buffer()</code></a> and
+          <a class="link" href="spatial-operator-functions.html#function_buffer"><code class="literal">Buffer()</code></a> are synonyms. For more
+          information, see the description of
+          <a class="link" href="spatial-operator-functions.html#function_st-buffer"><code class="literal">ST_Buffer()</code></a>.
+        </p><p>
+          <a class="link" href="spatial-operator-functions.html#function_buffer"><code class="literal">Buffer()</code></a> is deprecated; expect
+          it to be removed in a future MySQL release. Use
+          <a class="link" href="spatial-operator-functions.html#function_st-buffer"><code class="literal">ST_Buffer()</code></a> instead.
+        </p></li><li class="listitem"><a name="function_convexhull"></a><p>
+          <a class="link" href="spatial-operator-functions.html#function_convexhull"><code class="literal">ConvexHull(<em class="replaceable"><code>g</code></em>)</code></a>
+        </p><a class="indexterm" name="idm44933533995360"></a><p>
+          <a class="link" href="spatial-operator-functions.html#function_st-convexhull"><code class="literal">ST_ConvexHull()</code></a> and
+          <a class="link" href="spatial-operator-functions.html#function_convexhull"><code class="literal">ConvexHull()</code></a> are synonyms. For
+          more information, see the description of
+          <a class="link" href="spatial-operator-functions.html#function_st-convexhull"><code class="literal">ST_ConvexHull()</code></a>.
+        </p><p>
+          <a class="link" href="spatial-operator-functions.html#function_convexhull"><code class="literal">ConvexHull()</code></a> is deprecated;
+          expect it to be removed in a future MySQL release. Use
+          <a class="link" href="spatial-operator-functions.html#function_st-convexhull"><code class="literal">ST_ConvexHull()</code></a> instead.
+        </p></li><li class="listitem"><a name="function_st-buffer"></a><p>
+          <a class="link" href="spatial-operator-functions.html#function_st-buffer"><code class="literal">ST_Buffer(<em class="replaceable"><code>g</code></em>,
+          <em class="replaceable"><code>d</code></em> [,
+          <em class="replaceable"><code>strategy1</code></em> [,
+          <em class="replaceable"><code>strategy2</code></em> [,
+          <em class="replaceable"><code>strategy3</code></em>]]])</code></a>
+        </p><a class="indexterm" name="idm44933533980080"></a><p>
+          Returns a geometry that represents all points whose distance
+          from the geometry value <em class="replaceable"><code>g</code></em> is less
+          than or equal to a distance of <em class="replaceable"><code>d</code></em>,
+          or <code class="literal">NULL</code> if any argument is
+          <code class="literal">NULL</code>. The SRID of the geometry argument
+          must be 0 because <a class="link" href="spatial-operator-functions.html#function_st-buffer"><code class="literal">ST_Buffer()</code></a>
+          supports only the Cartesian coordinate system. If any geometry
+          argument is not a syntactically well-formed geometry, an
+          <a class="ulink" href="https://dev.mysql.com/doc/mysql-errors/5.7/en/server-error-reference.html#error_er_gis_invalid_data" target="_top"><code class="literal">ER_GIS_INVALID_DATA</code></a> error
+          occurs.
+        </p><p>
+          If the geometry argument is empty,
+          <a class="link" href="spatial-operator-functions.html#function_st-buffer"><code class="literal">ST_Buffer()</code></a> returns an empty
+          geometry.
+        </p><p>
+          If the distance is 0,
+          <a class="link" href="spatial-operator-functions.html#function_st-buffer"><code class="literal">ST_Buffer()</code></a> returns the
+          geometry argument unchanged:
+        </p><pre class="programlisting copytoclipboard line-numbers language-sql"><code class="language-sql">mysql&gt; SET @pt = ST_GeomFromText('POINT(0 0)');
+mysql&gt; SELECT ST_AsText(ST_Buffer(@pt, 0));
++------------------------------+
+| ST_AsText(ST_Buffer(@pt, 0)) |
++------------------------------+
+| POINT(0 0)                   |
++------------------------------+</code></pre><p>
+          <a class="link" href="spatial-operator-functions.html#function_st-buffer"><code class="literal">ST_Buffer()</code></a> supports negative
+          distances for <code class="literal">Polygon</code> and
+          <code class="literal">MultiPolygon</code> values, and for geometry
+          collections containing <code class="literal">Polygon</code> or
+          <code class="literal">MultiPolygon</code> values. The result may be an
+          empty geometry. An
+          <a class="ulink" href="https://dev.mysql.com/doc/mysql-errors/5.7/en/server-error-reference.html#error_er_wrong_arguments" target="_top"><code class="literal">ER_WRONG_ARGUMENTS</code></a> error
+          occurs for <a class="link" href="spatial-operator-functions.html#function_st-buffer"><code class="literal">ST_Buffer()</code></a> with a
+          negative distance for <code class="literal">Point</code>,
+          <code class="literal">MultiPoint</code>, <code class="literal">LineString</code>,
+          and <code class="literal">MultiLineString</code> values, and for
+          geometry collections not containing any
+          <code class="literal">Polygon</code> or <code class="literal">MultiPolygon</code>
+          values.
+        </p><p>
+          <a class="link" href="spatial-operator-functions.html#function_st-buffer"><code class="literal">ST_Buffer()</code></a> permits up to three
+          optional strategy arguments following the distance argument.
+          Strategies influence buffer computation. These arguments are
+          byte string values produced by the
+          <a class="link" href="spatial-operator-functions.html#function_st-buffer-strategy"><code class="literal">ST_Buffer_Strategy()</code></a> function,
+          to be used for point, join, and end strategies:
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p>
+              Point strategies apply to <code class="literal">Point</code> and
+              <code class="literal">MultiPoint</code> geometries. If no point
+              strategy is specified, the default is
+              <a class="link" href="spatial-operator-functions.html#function_st-buffer-strategy"><code class="literal">ST_Buffer_Strategy('point_circle',
+              32)</code></a>.
+            </p></li><li class="listitem"><p>
+              Join strategies apply to <code class="literal">LineString</code>,
+              <code class="literal">MultiLineString</code>,
+              <code class="literal">Polygon</code>, and
+              <code class="literal">MultiPolygon</code> geometries. If no join
+              strategy is specified, the default is
+              <a class="link" href="spatial-operator-functions.html#function_st-buffer-strategy"><code class="literal">ST_Buffer_Strategy('join_round',
+              32)</code></a>.
+            </p></li><li class="listitem"><p>
+              End strategies apply to <code class="literal">LineString</code> and
+              <code class="literal">MultiLineString</code> geometries. If no end
+              strategy is specified, the default is
+              <a class="link" href="spatial-operator-functions.html#function_st-buffer-strategy"><code class="literal">ST_Buffer_Strategy('end_round',
+              32)</code></a>.
+</p></li></ul>
+</div>
+<p>
+          Up to one strategy of each type may be specified, and they may
+          be given in any order. If multiple strategies of a given type
+          are specified, an
+          <a class="ulink" href="https://dev.mysql.com/doc/mysql-errors/5.7/en/server-error-reference.html#error_er_wrong_arguments" target="_top"><code class="literal">ER_WRONG_ARGUMENTS</code></a> error
+          occurs.
+        </p><pre class="programlisting copytoclipboard line-numbers language-sql"><code class="language-sql">mysql&gt; SET @pt = ST_GeomFromText('POINT(0 0)');
+mysql&gt; SET @pt_strategy = ST_Buffer_Strategy('point_square');
+mysql&gt; SELECT ST_AsText(ST_Buffer(@pt, 2, @pt_strategy));
++--------------------------------------------+
+| ST_AsText(ST_Buffer(@pt, 2, @pt_strategy)) |
++--------------------------------------------+
+| POLYGON((-2 -2,2 -2,2 2,-2 2,-2 -2))       |
++--------------------------------------------+</code></pre><pre class="programlisting copytoclipboard line-numbers language-sql"><code class="language-sql">mysql&gt; SET @ls = ST_GeomFromText('LINESTRING(0 0,0 5,5 5)');
+mysql&gt; SET @end_strategy = ST_Buffer_Strategy('end_flat');
+mysql&gt; SET @join_strategy = ST_Buffer_Strategy('join_round', 10);
+mysql&gt; SELECT ST_AsText(ST_Buffer(@ls, 5, @end_strategy, @join_strategy))
++---------------------------------------------------------------+
+| ST_AsText(ST_Buffer(@ls, 5, @end_strategy, @join_strategy))   |
++---------------------------------------------------------------+
+| POLYGON((5 5,5 10,0 10,-3.5355339059327373 8.535533905932738, |
+| -5 5,-5 0,0 0,5 0,5 5))                                       |
++---------------------------------------------------------------+</code></pre><p>
+          <a class="link" href="spatial-operator-functions.html#function_st-buffer"><code class="literal">ST_Buffer()</code></a> and
+          <a class="link" href="spatial-operator-functions.html#function_buffer"><code class="literal">Buffer()</code></a> are synonyms.
+        </p></li><li class="listitem"><a name="function_st-buffer-strategy"></a><p>
+          <a class="link" href="spatial-operator-functions.html#function_st-buffer-strategy"><code class="literal">ST_Buffer_Strategy(<em class="replaceable"><code>strategy</code></em>
+          [, <em class="replaceable"><code>points_per_circle</code></em>])</code></a>
+        </p><a class="indexterm" name="idm44933533920016"></a><p>
+          This function returns a strategy byte string for use with
+          <a class="link" href="spatial-operator-functions.html#function_st-buffer"><code class="literal">ST_Buffer()</code></a> to influence buffer
+          computation. If any argument is <code class="literal">NULL</code>, the
+          return value is <code class="literal">NULL</code>. If any argument is
+          invalid, an <a class="ulink" href="https://dev.mysql.com/doc/mysql-errors/5.7/en/server-error-reference.html#error_er_wrong_arguments" target="_top"><code class="literal">ER_WRONG_ARGUMENTS</code></a>
+          error occurs.
+        </p><p>
+          Information about strategies is available at
+          <a class="ulink" href="http://www.boost.org" target="_top">Boost.org</a>.
+        </p><p>
+          The first argument must be a string indicating a strategy
+          option:
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p>
+              For point strategies, permitted values are
+              <code class="literal">'point_circle'</code> and
+              <code class="literal">'point_square'</code>.
+            </p></li><li class="listitem"><p>
+              For join strategies, permitted values are
+              <code class="literal">'join_round'</code> and
+              <code class="literal">'join_miter'</code>.
+            </p></li><li class="listitem"><p>
+              For end strategies, permitted values are
+              <code class="literal">'end_round'</code> and
+              <code class="literal">'end_flat'</code>.
+</p></li></ul>
+</div>
+<p>
+          If the first argument is <code class="literal">'point_circle'</code>,
+          <code class="literal">'join_round'</code>,
+          <code class="literal">'join_miter'</code>, or
+          <code class="literal">'end_round'</code>, the
+          <em class="replaceable"><code>points_per_circle</code></em> argument must be
+          given as a positive numeric value. The maximum
+          <em class="replaceable"><code>points_per_circle</code></em> value is the
+          value of the
+          <a class="link" href="server-system-variables.html#sysvar_max_points_in_geometry"><code class="literal">max_points_in_geometry</code></a> system
+          variable. If the first argument is
+          <code class="literal">'point_square'</code> or
+          <code class="literal">'end_flat'</code>, the
+          <em class="replaceable"><code>points_per_circle</code></em> argument must not
+          be given or an
+          <a class="ulink" href="https://dev.mysql.com/doc/mysql-errors/5.7/en/server-error-reference.html#error_er_wrong_arguments" target="_top"><code class="literal">ER_WRONG_ARGUMENTS</code></a> error
+          occurs.
+        </p><p>
+          For examples, see the description of
+          <a class="link" href="spatial-operator-functions.html#function_st-buffer"><code class="literal">ST_Buffer()</code></a>.
+        </p></li><li class="listitem"><a name="function_st-convexhull"></a><p>
+          <a class="link" href="spatial-operator-functions.html#function_st-convexhull"><code class="literal">ST_ConvexHull(<em class="replaceable"><code>g</code></em>)</code></a>
+        </p><a class="indexterm" name="idm44933533889792"></a><p>
+          Returns a geometry that represents the convex hull of the
+          geometry value <em class="replaceable"><code>g</code></em>. If the argument
+          is <code class="literal">NULL</code>, the return value is
+          <code class="literal">NULL</code>.
+        </p><p>
+          This function computes a geometry's convex hull by first
+          checking whether its vertex points are colinear. The function
+          returns a linear hull if so, a polygon hull otherwise. This
+          function processes geometry collections by extracting all
+          vertex points of all components of the collection, creating a
+          <code class="literal">MultiPoint</code> value from them, and computing
+          its convex hull. If the argument is an empty geometry
+          collection, the return value is <code class="literal">NULL</code>.
+        </p><pre class="programlisting copytoclipboard line-numbers language-sql"><code class="language-sql">mysql&gt; SET @g = 'MULTIPOINT(5 0,25 0,15 10,15 25)';
+mysql&gt; SELECT ST_AsText(ST_ConvexHull(ST_GeomFromText(@g)));
++-----------------------------------------------+
+| ST_AsText(ST_ConvexHull(ST_GeomFromText(@g))) |
++-----------------------------------------------+
+| POLYGON((5 0,25 0,15 25,5 0))                 |
++-----------------------------------------------+</code></pre><p>
+          <a class="link" href="spatial-operator-functions.html#function_st-convexhull"><code class="literal">ST_ConvexHull()</code></a> and
+          <a class="link" href="spatial-operator-functions.html#function_convexhull"><code class="literal">ConvexHull()</code></a> are synonyms.
+        </p></li><li class="listitem"><a name="function_st-difference"></a><p>
+          <a class="link" href="spatial-operator-functions.html#function_st-difference"><code class="literal">ST_Difference(<em class="replaceable"><code>g1</code></em>,
+          <em class="replaceable"><code>g2</code></em>)</code></a>
+        </p><a class="indexterm" name="idm44933533871568"></a><p>
+          Returns a geometry that represents the point set difference of
+          the geometry values <em class="replaceable"><code>g1</code></em> and
+          <em class="replaceable"><code>g2</code></em>. If any argument is
+          <code class="literal">NULL</code>, the return value is
+          <code class="literal">NULL</code>.
+        </p><pre class="programlisting copytoclipboard line-numbers language-sql"><code class="language-sql">mysql&gt; SET @g1 = Point(1,1), @g2 = Point(2,2);
+mysql&gt; SELECT ST_AsText(ST_Difference(@g1, @g2));
++------------------------------------+
+| ST_AsText(ST_Difference(@g1, @g2)) |
++------------------------------------+
+| POINT(1 1)                         |
++------------------------------------+</code></pre></li><li class="listitem"><a name="function_st-intersection"></a><p>
+          <a class="link" href="spatial-operator-functions.html#function_st-intersection"><code class="literal">ST_Intersection(<em class="replaceable"><code>g1</code></em>,
+          <em class="replaceable"><code>g2</code></em>)</code></a>
+        </p><a class="indexterm" name="idm44933533858160"></a><p>
+          Returns a geometry that represents the point set intersection
+          of the geometry values <em class="replaceable"><code>g1</code></em> and
+          <em class="replaceable"><code>g2</code></em>. If any argument is
+          <code class="literal">NULL</code>, the return value is
+          <code class="literal">NULL</code>.
+        </p><pre class="programlisting copytoclipboard line-numbers language-sql"><code class="language-sql">mysql&gt; SET @g1 = ST_GeomFromText('LineString(1 1, 3 3)');
+mysql&gt; SET @g2 = ST_GeomFromText('LineString(1 3, 3 1)');
+mysql&gt; SELECT ST_AsText(ST_Intersection(@g1, @g2));
++--------------------------------------+
+| ST_AsText(ST_Intersection(@g1, @g2)) |
++--------------------------------------+
+| POINT(2 2)                           |
++--------------------------------------+</code></pre></li><li class="listitem"><a name="function_st-symdifference"></a><p>
+          <a class="link" href="spatial-operator-functions.html#function_st-symdifference"><code class="literal">ST_SymDifference(<em class="replaceable"><code>g1</code></em>,
+          <em class="replaceable"><code>g2</code></em>)</code></a>
+        </p><a class="indexterm" name="idm44933533844016"></a><p>
+          Returns a geometry that represents the point set symmetric
+          difference of the geometry values
+          <em class="replaceable"><code>g1</code></em> and
+          <em class="replaceable"><code>g2</code></em>, which is defined as:
+        </p><pre class="programlisting copytoclipboard line-numbers language-clike one-line"><code class="language-clike"><em class="replaceable">g1</em> symdifference <em class="replaceable">g2</em> := (<em class="replaceable">g1</em> union <em class="replaceable">g2</em>) difference (<em class="replaceable">g1</em> intersection <em class="replaceable">g2</em>)</code></pre><p>
+          Or, in function call notation:
+        </p><pre class="programlisting copytoclipboard line-numbers language-clike one-line"><code class="language-clike">ST_SymDifference(<em class="replaceable">g1</em>, <em class="replaceable">g2</em>) = ST_Difference(ST_Union(<em class="replaceable">g1</em>, <em class="replaceable">g2</em>), ST_Intersection(<em class="replaceable">g1</em>, <em class="replaceable">g2</em>))</code></pre><p>
+          If any argument is <code class="literal">NULL</code>, the return value
+          is <code class="literal">NULL</code>.
+        </p><pre class="programlisting copytoclipboard line-numbers language-sql"><code class="language-sql">mysql&gt; SET @g1 = Point(1,1), @g2 = Point(2,2);
+mysql&gt; SELECT ST_AsText(ST_SymDifference(@g1, @g2));
++---------------------------------------+
+| ST_AsText(ST_SymDifference(@g1, @g2)) |
++---------------------------------------+
+| MULTIPOINT((1 1),(2 2))               |
++---------------------------------------+</code></pre></li><li class="listitem"><a name="function_st-union"></a><p>
+          <a class="link" href="spatial-operator-functions.html#function_st-union"><code class="literal">ST_Union(<em class="replaceable"><code>g1</code></em>,
+          <em class="replaceable"><code>g2</code></em>)</code></a>
+        </p><a class="indexterm" name="idm44933533823248"></a><p>
+          Returns a geometry that represents the point set union of the
+          geometry values <em class="replaceable"><code>g1</code></em> and
+          <em class="replaceable"><code>g2</code></em>. If any argument is
+          <code class="literal">NULL</code>, the return value is
+          <code class="literal">NULL</code>.
+        </p><pre class="programlisting copytoclipboard line-numbers language-sql"><code class="language-sql">mysql&gt; SET @g1 = ST_GeomFromText('LineString(1 1, 3 3)');
+mysql&gt; SET @g2 = ST_GeomFromText('LineString(1 3, 3 1)');
+mysql&gt; SELECT ST_AsText(ST_Union(@g1, @g2));
++--------------------------------------+
+| ST_AsText(ST_Union(@g1, @g2))        |
++--------------------------------------+
+| MULTILINESTRING((1 1,3 3),(1 3,3 1)) |
++--------------------------------------+</code></pre></li></ul>
+</div>
+<p>
+      In addition, <a class="xref" href="gis-property-functions.html" title="12.17.7 Geometry Property Functions">Section 12.17.7, “Geometry Property Functions”</a>, discusses
+      several functions that construct new geometries from existing
+      ones. See that section for descriptions of these functions:
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+          <a class="link" href="gis-general-property-functions.html#function_st-envelope"><code class="literal">ST_Envelope(<em class="replaceable"><code>g</code></em>)</code></a>
+        </p></li><li class="listitem"><p>
+          <a class="link" href="gis-linestring-property-functions.html#function_st-startpoint"><code class="literal">ST_StartPoint(<em class="replaceable"><code>ls</code></em>)</code></a>
+        </p></li><li class="listitem"><p>
+          <a class="link" href="gis-linestring-property-functions.html#function_st-endpoint"><code class="literal">ST_EndPoint(<em class="replaceable"><code>ls</code></em>)</code></a>
+        </p></li><li class="listitem"><p>
+          <a class="link" href="gis-linestring-property-functions.html#function_st-pointn"><code class="literal">ST_PointN(<em class="replaceable"><code>ls</code></em>,
+          <em class="replaceable"><code>N</code></em>)</code></a>
+        </p></li><li class="listitem"><p>
+          <a class="link" href="gis-polygon-property-functions.html#function_st-exteriorring"><code class="literal">ST_ExteriorRing(<em class="replaceable"><code>poly</code></em>)</code></a>
+        </p></li><li class="listitem"><p>
+          <a class="link" href="gis-polygon-property-functions.html#function_st-interiorringn"><code class="literal">ST_InteriorRingN(<em class="replaceable"><code>poly</code></em>,
+          <em class="replaceable"><code>N</code></em>)</code></a>
+        </p></li><li class="listitem"><p>
+          <a class="link" href="gis-geometrycollection-property-functions.html#function_st-geometryn"><code class="literal">ST_GeometryN(<em class="replaceable"><code>gc</code></em>,
+          <em class="replaceable"><code>N</code></em>)</code></a>
+</p></li></ul>
+</div>
+
+</div>
+<br />
+        </div>
+
+                <div id="docs-in-page-nav-container">
+            <div id="docs-in-page-nav">
+                
+    <a href="gis-geometrycollection-property-functions.html"
+        aria-label="Previous" title="Previous: GeometryCollection Property Functions"><span
+        class="icon-chevron-left"></span> PREV</a> &nbsp;
+<a href="index.html" aria-label="Start" title="Start"> HOME</a> &nbsp;
+        <a aria-label="Up" href="spatial-analysis-functions.html" title="Up: Spatial Analysis Functions"> UP</a> &nbsp;
+    <a href="spatial-relation-functions.html" aria-label="Next"
+        title="Next: Functions That Test Spatial Relations Between Geometry Objects">NEXT <span
+        class="icon-chevron-right"></span></a>
+            </div>
+        </div>
+        
+         <div id="docs-body-extra">
+             
+<a class="docs-sidebar-section" href="spatial-operator-functions.html?ff=nopfpls"><span class="icon-related"></span>
+    <span class="text">Related Documentation</span></a>
+<div class="docs-sidebar-accordian">
+    <div class="text">
+        <a href="https://dev.mysql.com/doc/relnotes/mysql/5.7/en/">MySQL 5.7 Release Notes</a><br />
+        </div>
+</div>
+
+    <a class="docs-sidebar-section" href="spatial-operator-functions.html?ff=nopfpls"><span class="icon-download-thin"></span>
+        <span class="text">
+            Download
+                            this Manual
+                    </span>
+    </a>
+    <div class="docs-sidebar-accordian">
+        <div class="text">
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.pdf">PDF (US Ltr)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.a4.pdf">PDF (A4)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-ref-manual-5.7-en-pdf-1-20210225.noarch.rpm">PDF (RPM)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.html-chapter.tar.gz">HTML Download (TGZ)</a>
+            - 10.1Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.html-chapter.zip">HTML Download (Zip)</a>
+            - 10.2Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-ref-manual-5.7-en-html-chapter-1-20210225.noarch.rpm">HTML Download (RPM)</a>
+            - 8.9Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.man-gpl.tar.gz">Man Pages (TGZ)</a>
+            - 224.7Kb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.man-gpl.zip">Man Pages (Zip)</a>
+            - 332.6Kb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-5.7.info.gz">Info (Gzip)</a>
+            - 3.3Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-5.7.info.zip">Info (Zip)</a>
+            - 3.3Mb<br />
+                    </div>
+    </div>
+
+<a class="docs-sidebar-section" href="spatial-operator-functions.html?ff=nopfpls"><span class="icon-book"></span>
+    <span class="text">Excerpts from this Manual</span></a>
+<div class="docs-sidebar-accordian">
+    <div class="text">
+                <a href="https://dev.mysql.com/doc/mysql-backup-excerpt/5.7/en/">MySQL Backup and Recovery</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-g11n-excerpt/5.7/en/">MySQL Globalization</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-infoschema-excerpt/5.7/en/">MySQL Information Schema</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-installation-excerpt/5.7/en/">MySQL Installation Guide</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-linuxunix-excerpt/5.7/en/">MySQL and Linux/Unix</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-osx-excerpt/5.7/en/">MySQL and OS X</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-partitioning-excerpt/5.7/en/">MySQL Partitioning</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-perfschema-excerpt/5.7/en/">MySQL Performance Schema</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-replication-excerpt/5.7/en/">MySQL Replication</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-repo-excerpt/5.7/en/">Using the MySQL Yum Repository</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-reslimits-excerpt/5.7/en/">MySQL Restrictions and Limitations</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-security-excerpt/5.7/en/">Security in MySQL</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-solaris-excerpt/5.7/en/">MySQL and Solaris</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-sourcebuild-excerpt/5.7/en/">Building MySQL from Source</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-startstop-excerpt/5.7/en/">Starting and Stopping MySQL</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-tutorial-excerpt/5.7/en/">MySQL Tutorial</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-windows-excerpt/5.7/en/">MySQL and Windows</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-cluster-excerpt/5.7/en/">MySQL NDB Cluster 7.5</a><br />
+            </div>
+</div>
+         </div>
+
+              </div>
+     </div>
+
+</div>
+
+<script>
+$(function() {
+    var doc = new $.doc({ 'mobile': $.browser.mobile, 'docId': 1, 'highlight': true });
+});
+</script>
+    
+
+            
+        </div>
+    </div>
+
+    <footer class="collapsed">
+        <div id="footer-bottom">
+                                    <div id="footer-collapse">
+                <a href="spatial-operator-functions.html?ff=nopfpls" id="expand-footer"
+                    aria-label="Expand Footer"
+                    title="Expand Footer"><span
+                    class="icon-plus-square"></span></a>
+            </div>
+                        <div class="footer-contact">
+                <div id="footer-contact-icon" style="display: none;">
+                    <span class="icon-call-phone"></span>
+                </div>
+                <div id="footer-contact-numbers" style="display: none;">
+                    <strong>Contact MySQL Sales</strong><br/>
+                    USA/Canada: +1-866-221-0634 &nbsp;
+                    (<a href="https://www.mysql.com/about/contact/phone/">More Countries &raquo;</a>)
+                </div>
+                <div id="footer-contact-copyright" style="display: inline-block;">
+                    <a href="http://www.oracle.com/" aria-label="Oracle" title="Oracle"><span class="oracle-logo"></span></a>
+                    &nbsp; &copy; 2021, Oracle Corporation and/or its affiliates
+                </div>
+            </div>
+            <div class="social-icons">
+                <a aria-label="Join us on Facebook" title="Join us on Facebook" href="http://www.facebook.com/mysql"><span class="icon-facebook-square"></span></a>
+                <a aria-label="Follow us on Twitter" title="Follow us on Twitter" href="https://twitter.com/mysql"><span class="icon-twitter-square"></span></a>
+                <a aria-label="Follow us on LinkedIn" title="Follow us on LinkedIn" href="https://www.linkedin.com/company/mysql"><span class="icon-linkedin-square"></span></a>
+                <a aria-label="Visit our YouTube channel" title="Visit our YouTube channel" href="http://www.youtube.com/mysqlchannel"><span class="icon-youtube-square"></span></a>
+            </div>
+            <br class="clear" />
+        </div>
+        <div id="footer-links">
+
+            <div id="site-footer-links">
+                <div id="footer-nav"></div>
+
+                <div class="links">
+                    <ul>
+                        <li class="top"><a href="https://www.mysql.com/products/">Products</a></li>
+                        <li><a href="https://www.mysql.com/cloud/">MySQL Database Service</a></li>
+                        <li><a href="https://www.mysql.com/products/enterprise/">MySQL Enterprise Edition</a></li>
+                        <li><a href="https://www.mysql.com/products/standard/">MySQL Standard Edition</a></li>
+                        <li><a href="https://www.mysql.com/products/classic/">MySQL Classic Edition</a></li>
+                        <li><a href="https://www.mysql.com/products/cluster/">MySQL Cluster CGE</a></li>
+                        <li><a href="https://www.mysql.com/oem/">MySQL Embedded (OEM/ISV)</a></li>
+                    </ul>
+                </div>
+
+                <div class="links">
+                    <ul>
+                        <li class="top"><a href="https://www.mysql.com/services/">Services</a></li>
+                        <li><a href="https://www.mysql.com/training/">Training</a></li>
+                        <li><a href="https://www.mysql.com/certification/">Certification</a></li>
+                        <li><a href="https://www.mysql.com/consulting/">Consulting</a></li>
+                        <li><a href="https://www.mysql.com/support/">Support</a></li>
+                    </ul>
+                </div>
+
+                <div class="links">
+                    <ul>
+                        <li class="top"><a href="https://www.mysql.com/downloads/">Downloads</a></li>
+                        <li><a href="https://dev.mysql.com/downloads/mysql/">MySQL Community Server</a></li>
+                        <li><a href="https://dev.mysql.com/downloads/cluster/">MySQL NDB Cluster</a></li>
+                        <li><a href="https://dev.mysql.com/downloads/shell/">MySQL Shell</a></li>
+                        <li><a href="https://dev.mysql.com/downloads/router/">MySQL Router</a></li>
+                        <li><a href="https://dev.mysql.com/downloads/workbench/">MySQL Workbench</a></li>
+                    </ul>
+                </div>
+
+                <div class="links">
+                    <ul>
+                        <li class="top"><a href="https://dev.mysql.com/doc/">Documentation</a></li>
+                        <li><a href="https://dev.mysql.com/doc/refman/en/">MySQL Reference Manual</a></li>
+                        <li><a href="https://dev.mysql.com/doc/workbench/en/">MySQL Workbench</a></li>
+                        <li><a href="https://dev.mysql.com/doc/index-cluster.html">MySQL NDB Cluster</a></li>
+                        <li><a href="https://dev.mysql.com/doc/index-connectors.html">MySQL Connectors</a></li>
+                        <li><a href="https://dev.mysql.com/doc/#topic">Topic Guides</a></li>
+                    </ul>
+                </div>
+
+                <div class="links">
+                    <ul>
+                        <li class="top"><a href="https://www.mysql.com/about/">About MySQL</a></li>
+                        <li><a href="https://www.mysql.com/about/contact/">Contact Us</a></li>
+                                                                        <li><a href="https://www.mysql.com/buy-mysql/">How to Buy</a></li>
+                        <li><a href="https://www.mysql.com/partners/">Partners</a></li>
+                        <li><a href="https://www.mysql.com/about/jobs/">Job Opportunities</a></li>
+                        <li><a href="https://www.mysql.com/sitemap.html">Site Map</a></li>
+                    </ul>
+                </div>
+
+                            </div>
+
+            <div id="footer-logo">
+                <a href="http://www.oracle.com/" aria-label="Oracle" title="Oracle"><span class="oracle-logo"></span></a>
+                &nbsp; &copy; 2021, Oracle Corporation and/or its affiliates
+                <div class="footer-legal-links">
+                    <a href="https://www.mysql.com/about/legal/">Legal Policies</a> |
+                    <a href="http://www.oracle.com/us/legal/privacy/index.htm">Your Privacy Rights</a> |
+                    <a href="http://www.oracle.com/us/legal/terms/index.html">Terms of Use</a> |
+                    <a href="http://www.oracle.com/us/legal/third-party-trademarks/index.html">Trademark Policy</a> |
+                    <a href="http://www.oracle.com/technetwork/community/oca-486395.html">Contributor Agreement</a> |
+                    <div id="teconsent"></div>
+                </div>
+            </div>
+
+        </div>
+    </footer>
+</div>
+
+            <script>
+    if ((oracle.truste.api.getGdprConsentDecision().consentDecision) &&
+            (oracle.truste.api.getGdprConsentDecision().consentDecision.indexOf(0) != -1 ||
+             oracle.truste.api.getGdprConsentDecision().consentDecision.indexOf(2) != -1) )
+    {
+        document.write('<script src="https://labs.mysql.com/common/js/metrics/s_code_remote.js"><\/script>');
+        document.write('<script type="text/javascript" async src="https://c.oracleinfinity.io/acs/account/wh3g12c3gg/js/mysql/odc.js?_ora.context=analytics:production"><\/script>');
+    }
+    </script>
+
+        
+    
+</body>
+</html>

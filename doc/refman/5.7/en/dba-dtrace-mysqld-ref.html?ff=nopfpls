@@ -1,0 +1,2616 @@
+<!DOCTYPE html>
+<html lang="en" class="svg no-js">
+<head>
+    <meta charset="utf-8" />
+    <!--[if IE ]>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="Language" content="en">
+
+    <title>MySQL :: MySQL 5.7 Reference Manual :: 5.8.4.1 mysqld DTrace Probe Reference</title>
+    <link rel="stylesheet" media="all" href="https://labs.mysql.com/common/css/main-20201221.min.css" />
+            <link rel="stylesheet" media="all" href="https://labs.mysql.com/common/css/docs-20201221.min.css" />
+    
+    
+    <link rel="stylesheet" media="print" href="https://labs.mysql.com/common/css/print-20201221.min.css" />
+
+    
+    
+    
+    
+            <link rel="contents" href="index.html" title="MySQL 5.7 Reference Manual" />
+<link rel="start" href="index.html" title="MySQL 5.7 Reference Manual" />
+<link rel="prev" href="dba-dtrace-server.html" title="5.8.4 Tracing mysqld Using DTrace" />
+<link rel="next" href="security.html?ff=nopfpls" title="6 Security" />
+<link rel="up" href="dba-dtrace-server.html" title="5.8.4 Tracing mysqld Using DTrace" />
+
+    
+    <link rel="shortcut icon" href="https://labs.mysql.com/common/themes/sakila/favicon.ico" />
+    <script async="async" type="text/javascript" src='https://consent.truste.com/notice?domain=oracle.com&c=teconsent&js=bb&noticeType=bb&text=true&cdn=1&pcookie&gtm=1' crossorigin></script>
+    <script src="https://www.oracle.com/assets/truste-oraclelib.js"></script>
+    <script>(function(H){ H.className=H.className.replace(/\bno-js\b/,'js') })(document.documentElement)</script>
+    <script src="https://labs.mysql.com/common/js/site-20200928.min.js"></script>
+
+    
+    
+    <!--[if lt IE 9]>
+        <script src="https://labs.mysql.com/common/js/polyfills/html5shiv-printshiv-3.7.2.min.js"></script>
+        <script src="https://labs.mysql.com/common/js/polyfills/respond-1.4.2.min.js"></script>
+    <![endif]-->
+        <!--[if IE 9]>
+        <style>#docs-sidebar-toc { box-sizing: content-box; }</style>
+    <![endif]-->
+    </head>
+
+<body class="no-sidebar full-page dev">
+<div class="page-wrapper">
+    <header>
+
+                        <a href="https://dev.mysql.com/" aria-label="Home" title="MySQL" id="l1-home-link"></a>
+        
+        <div id="l1-nav-container">
+            <div id="l1-line1">
+                <div id="l1-auth-links">
+                    <a href="https://www.mysql.com/about/contact/"><b>Contact MySQL</b></a>
+                    <span id="l1-contact-separator">&nbsp;|&nbsp;</span>
+                    <span id="l1-contact-separator-br"><br /></span>
+                                             <a href="https://dev.mysql.com/auth/login/?dest=https%3A%2F%2Fdev.mysql.com%2Fdoc%2Frefman%2F5.7%2Fen%2Fdba-dtrace-mysqld-ref.html%3Fff%3Dnopfpls">Login</a> &nbsp;|&nbsp;
+                         <a href="https://dev.mysql.com/auth/register/">Register</a>
+                                    </div>
+                <div id="l1-lhs">
+                    <div id="l1-slogan">
+                        The world's most popular open source database
+                    </div>
+                    <div id="l1-search-box">
+                        <form id="l1-search-form" method="get" action="https://www.oracle.com/search/results">
+                        <input type="hidden" name="cat" value="mysql" />
+                        <input type="hidden" name="Ntk" value="SI-ALL5" />
+                        <input id="l1-search-input" type="search" class="icon-search" placeholder="Search" aria-label="Search" name="Ntt" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div id="l1-line2">
+                <div class="social-icons">
+                    <a aria-label="Join us on Facebook" title="Join us on Facebook" href="http://www.facebook.com/mysql"><span class="icon-facebook"></span></a>
+                    <a aria-label="Follow us on Twitter" title="Follow us on Twitter" href="https://twitter.com/mysql"><span class="icon-twitter"></span></a>
+                    <a aria-label="Follow us on LinkedIn" title="Follow us on LinkedIn" href="https://www.linkedin.com/company/mysql"><span class="icon-linkedin"></span></a>
+                    <a aria-label="Visit our YouTube channel" title="Visit our YouTube channel" href="http://www.youtube.com/mysqlchannel"><span class="icon-youtube"></span></a>
+                </div>
+                <ul id="l1-nav">
+                    <li>
+                        <a href="https://www.mysql.com/"><!-- <span class="icon-sakila"></span>  -->MySQL.com</a>
+                    </li><li>
+                        <a href="https://www.mysql.com/downloads/"><!-- <span class="icon-download-thin"></span>  -->Downloads</a>
+                    </li><li class="active">
+                        <a href="https://dev.mysql.com/doc/"><!-- <span class="icon-books"></span>  -->Documentation</a>
+                    </li><li>
+                        <a href="https://dev.mysql.com/"><!-- <span class="icon-code"></span>  -->Developer Zone</a>
+                    </li>                </ul>
+            </div>
+        </div>
+        <div id="sub-header">
+            <div id="l2-nav-container">
+                <div id="l2-nav-toggle">
+                    <span class="icon-three-bars"></span>
+                </div>
+                                                                                        <a class="button nav-button-3" href="https://dev.mysql.com/"><span class="icon-code"></span> Developer Zone</a>
+                                                                                                                                    <a class="button nav-button-2" href="https://www.mysql.com/downloads/"><span class="icon-download-thin"></span> Downloads</a>
+                                                                                                <a class="button nav-button-1" href="https://www.mysql.com/"><span class="icon-sakila"></span> MySQL.com</a>
+                                                                        <div id="l2-search-toggle">
+                    <span class="icon-search"></span>
+                </div>
+                <div id="l2-site-icon">
+                                                                                                                                                                                                    <span class="icon-books"></span>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </div>
+                <div id="l1-section-title">
+                    <span id="l1-section-label">
+                        <a href="https://dev.mysql.com/doc/">Documentation</a>
+                    </span>
+                </div>
+                <nav>
+                    
+
+<ul id="l2-nav">
+            	<li class="active"><a class="active " href="https://dev.mysql.com/doc/refman/en/">MySQL Server</a>
+    			</li>
+	        	<li class=""><a  href="https://dev.mysql.com/doc/index-enterprise.html">MySQL Enterprise</a>
+    			</li>
+	        	<li class=""><a  href="https://dev.mysql.com/doc/workbench/en/">Workbench</a>
+    			</li>
+	        	<li class=""><a  href="https://dev.mysql.com/doc/mysql-shell/en/mysql-innodb-cluster.html">InnoDB Cluster</a>
+    			</li>
+	        	<li class=""><a  href="https://dev.mysql.com/doc/index-cluster.html">MySQL NDB Cluster</a>
+    			</li>
+	        	<li class=""><a  href="https://dev.mysql.com/doc/index-connectors.html">Connectors</a>
+    			</li>
+	        	<li class=" last"><a  href="https://dev.mysql.com/doc/index-other.html">More</a>
+    			</li>
+	                        <li class="other-section"><a href="https://www.mysql.com/">MySQL.com</a></li>
+                            <li class="other-section"><a href="https://www.mysql.com/downloads/">Downloads</a></li>
+                                        <li class="other-section"><a href="https://dev.mysql.com/">Developer Zone</a></li>
+            </ul>
+                </nav>
+            </div>
+            <div id="l3-search-container"></div>
+            <div id="top-orange"><span id="section-nav">Section Menu: &nbsp; </span></div>
+        </div>
+    </header>
+        <div id="page">
+                        <div role="main" id="main">
+
+            
+                
+            
+<div>
+    <div id="docs-sidebar-toc" class="">
+    <div id="docs-toc-inner">
+        <div class="docs-sidebar-header" id="docs-nav-header">
+            <a class="docs-show-hide-nav" id="docs-hide-nav" href="dba-dtrace-mysqld-ref.html?ff=nopfpls" title="Hide Sidebar" aria-label="Hide Sidebar"><span class="icon-arrow-small-left"></span></a>
+            <div class="docs-nav-links">
+                                    
+    <a href="dba-dtrace-server.html"
+        aria-label="Previous" title="Previous: Tracing mysqld Using DTrace"><span
+        class="icon-chevron-left"></span></a>
+<a href="index.html" aria-label="Start" title="Start"><span class="icon-book-open"></span></a>
+        <a aria-label="Up" href="dba-dtrace-server.html" title="Up: Tracing mysqld Using DTrace"><span class="icon-chevron-up"></span></a>
+    <a href="security.html" aria-label="Next"
+        title="Next: Security"><span
+        class="icon-chevron-right"></span></a>
+                            </div>
+        </div>
+                    
+<div id="docs-sidebar-search-container">
+    <div id="docs-sidebar-search-box">
+        <form method="get" action="https://dev.mysql.com/doc/search/">
+            <input type="hidden" name="d" id="d" value="12" />
+            <input type="hidden" name="p" id="p" value="1" />
+            <input type="text" name="q" id="q" title="Search this Manual"
+                value="Search this Manual"
+                style="color: #bbb;"
+                onfocus="if(this.value == 'Search this Manual') {this.value='';this.style.color='#555';}"
+                onblur="if(this.value == '') {this.value='Search this Manual';this.style.color='#bbb';}" />
+
+            <button class="docs-sidebar-search-btn" aria-label="Search" title="Search" type="submit">
+                <span class="icon-search"></span>
+            </button>
+        </form>
+    </div>
+</div>
+                <div class="docs-sidebar-nav">
+            <a class="docs-icon-home" href="https://dev.mysql.com/doc/"><span class="icon-home"></span>Documentation Home</a><hr />
+            <div class="docs-sidebar-mtitle">MySQL 5.7 Reference Manual</div>
+            <nav class="doctoc" id="doc-12">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="preface.html">Preface and Legal Notices</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="dba-dtrace-mysqld-ref.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="introduction.html">General Information</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="dba-dtrace-mysqld-ref.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="installing.html">Installing and Upgrading MySQL</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="dba-dtrace-mysqld-ref.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="tutorial.html">Tutorial</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="dba-dtrace-mysqld-ref.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="programs.html">MySQL Programs</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="dba-dtrace-mysqld-ref.html?ff=nopfpls"><span class="icon-chevron-down"></span></a></div><div class="docs-sidebar-nav-link"><a href="server-administration.html">MySQL Server Administration</a></div></div>                        <div class="docs-submenu">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="dba-dtrace-mysqld-ref.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="mysqld-server.html">The MySQL Server</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="server-configuration.html">Configuring the Server</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="server-configuration-defaults.html">Server Configuration Defaults</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="server-option-variable-reference.html">Server Option, System Variable, and Status Variable Reference</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="server-system-variable-reference.html">Server System Variable Reference</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="server-status-variable-reference.html">Server Status Variable Reference</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="server-options.html">Server Command Options</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="server-system-variables.html">Server System Variables</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="dba-dtrace-mysqld-ref.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="using-system-variables.html">Using System Variables</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="system-variable-privileges.html">System Variable Privileges</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="dynamic-system-variables.html">Dynamic System Variables</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="structured-system-variables.html">Structured System Variables</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="server-status-variables.html">Server Status Variables</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="sql-mode.html">Server SQL Modes</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="dba-dtrace-mysqld-ref.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="connection-management.html">Connection Management</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="connection-interfaces.html">Connection Interfaces</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="host-cache.html">DNS Lookups and the Host Cache</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="dba-dtrace-mysqld-ref.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="ipv6-support.html">IPv6 Support</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="ipv6-system-support.html">Verifying System Support for IPv6</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="ipv6-server-config.html">Configuring the MySQL Server to Permit IPv6 Connections</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="ipv6-local-connections.html">Connecting Using the IPv6 Local Host Address</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="ipv6-remote-connections.html">Connecting Using IPv6 Nonlocal Host Addresses</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="ipv6-brokers.html">Obtaining an IPv6 Address from a Broker</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="time-zone-support.html">MySQL Server Time Zone Support</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="server-side-help-support.html">Server-Side Help Support</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="session-state-tracking.html">Server Tracking of Client Session State Changes</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="server-shutdown.html">The Server Shutdown Process</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="data-directory.html">The MySQL Data Directory</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="system-schema.html">The mysql System Database</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="dba-dtrace-mysqld-ref.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="server-logs.html">MySQL Server Logs</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="log-destinations.html">Selecting General Query Log and Slow Query Log Output Destinations</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="dba-dtrace-mysqld-ref.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="error-log.html">The Error Log</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="error-log-windows.html">Error Logging on Windows</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="error-log-unix.html">Error Logging on Unix and Unix-Like Systems</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="error-log-syslog.html">Error Logging to the System Log</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="error-log-filtering.html">Error Log Filtering</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="error-log-format.html">Error Log Output Format</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="error-log-rotation.html">Error Log File Flushing and Renaming</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="query-log.html">The General Query Log</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="dba-dtrace-mysqld-ref.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="binary-log.html">The Binary Log</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="binary-log-formats.html">Binary Logging Formats</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="binary-log-setting.html">Setting The Binary Log Format</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="binary-log-mixed.html">Mixed Binary Logging Format</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="binary-log-mysql-database.html">Logging Format for Changes to mysql Database Tables</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="slow-query-log.html">The Slow Query Log</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="ddl-log.html">The DDL Log</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="log-file-maintenance.html">Server Log Maintenance</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="dba-dtrace-mysqld-ref.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="server-plugins.html">MySQL Server Plugins</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="plugin-loading.html">Installing and Uninstalling Plugins</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="obtaining-plugin-information.html">Obtaining Server Plugin Information</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="dba-dtrace-mysqld-ref.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="thread-pool.html">MySQL Enterprise Thread Pool</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="thread-pool-elements.html">Thread Pool Elements</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="thread-pool-installation.html">Thread Pool Installation</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="thread-pool-operation.html">Thread Pool Operation</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="thread-pool-tuning.html">Thread Pool Tuning</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="dba-dtrace-mysqld-ref.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="rewriter-query-rewrite-plugin.html">The Rewriter Query Rewrite Plugin</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="rewriter-query-rewrite-plugin-installation.html">Installing or Uninstalling the Rewriter Query Rewrite Plugin</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="rewriter-query-rewrite-plugin-usage.html">Using the Rewriter Query Rewrite Plugin</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="rewriter-query-rewrite-plugin-reference.html">Rewriter Query Rewrite Plugin Reference</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="dba-dtrace-mysqld-ref.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="version-tokens.html">Version Tokens</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="version-tokens-elements.html">Version Tokens Elements</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="version-tokens-installation.html">Installing or Uninstalling Version Tokens</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="version-tokens-usage.html">Using Version Tokens</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="version-tokens-reference.html">Version Tokens Reference</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="dba-dtrace-mysqld-ref.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="plugin-services.html">MySQL Plugin Services</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="locking-service.html">The Locking Service</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="keyring-service.html">The Keyring Service</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="dba-dtrace-mysqld-ref.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="server-udfs.html">MySQL Server User-Defined Functions</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="udf-loading.html">Installing and Uninstalling User-Defined Functions</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="obtaining-udf-information.html">Obtaining User-Defined Function Information</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="dba-dtrace-mysqld-ref.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="multiple-servers.html">Running Multiple MySQL Instances on One Machine</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="multiple-data-directories.html">Setting Up Multiple Data Directories</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="dba-dtrace-mysqld-ref.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="multiple-windows-servers.html">Running Multiple MySQL Instances on Windows</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="multiple-windows-command-line-servers.html">Starting Multiple MySQL Instances at the Windows Command Line</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="multiple-windows-services.html">Starting Multiple MySQL Instances as Windows Services</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="multiple-unix-servers.html">Running Multiple MySQL Instances on Unix</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="multiple-server-clients.html">Using Client Programs in a Multiple-Server Environment</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="dba-dtrace-mysqld-ref.html?ff=nopfpls"><span class="icon-chevron-down"></span></a></div><div class="docs-sidebar-nav-link"><a href="debugging-mysql.html">Debugging MySQL</a></div></div>                        <div class="docs-submenu">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="dba-dtrace-mysqld-ref.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="debugging-server.html">Debugging a MySQL Server</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="compiling-for-debugging.html">Compiling MySQL for Debugging</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="making-trace-files.html">Creating Trace Files</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="making-windows-dumps.html">Using WER with PDB to create a Windows crashdump</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="using-gdb-on-mysqld.html">Debugging mysqld under gdb</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="using-stack-trace.html">Using a Stack Trace</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="using-log-files.html">Using Server Logs to Find Causes of Errors in mysqld</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="reproducible-test-case.html">Making a Test Case If You Experience Table Corruption</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="debugging-client.html">Debugging a MySQL Client</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="dbug-package.html">The DBUG Package</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="dba-dtrace-mysqld-ref.html?ff=nopfpls"><span class="icon-chevron-down"></span></a></div><div class="docs-sidebar-nav-link"><a href="dba-dtrace-server.html">Tracing mysqld Using DTrace</a></div></div>                        <div class="docs-submenu">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link current"><a href="dba-dtrace-mysqld-ref.html">mysqld DTrace Probe Reference</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+        </ul>
+                            </div>
+                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="dba-dtrace-mysqld-ref.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="security.html">Security</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="dba-dtrace-mysqld-ref.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="backup-and-recovery.html">Backup and Recovery</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="dba-dtrace-mysqld-ref.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="optimization.html">Optimization</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="dba-dtrace-mysqld-ref.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="language-structure.html">Language Structure</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="dba-dtrace-mysqld-ref.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="charset.html">Character Sets, Collations, Unicode</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="dba-dtrace-mysqld-ref.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="data-types.html">Data Types</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="dba-dtrace-mysqld-ref.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="functions.html">Functions and Operators</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="dba-dtrace-mysqld-ref.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="sql-statements.html">SQL Statements</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="dba-dtrace-mysqld-ref.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="innodb-storage-engine.html">The InnoDB Storage Engine</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="dba-dtrace-mysqld-ref.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="storage-engines.html">Alternative Storage Engines</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="dba-dtrace-mysqld-ref.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="replication.html">Replication</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="dba-dtrace-mysqld-ref.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="group-replication.html">Group Replication</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysql-shell-userguide.html">MySQL Shell</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="dba-dtrace-mysqld-ref.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="document-store.html">Using MySQL as a Document Store</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysql-innodb-cluster-introduction.html">InnoDB Cluster</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="dba-dtrace-mysqld-ref.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="mysql-cluster.html">MySQL NDB Cluster 7.5 and NDB Cluster 7.6</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="dba-dtrace-mysqld-ref.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="partitioning.html">Partitioning</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="dba-dtrace-mysqld-ref.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="stored-objects.html">Stored Objects</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="dba-dtrace-mysqld-ref.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="information-schema.html">INFORMATION_SCHEMA Tables</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="dba-dtrace-mysqld-ref.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="performance-schema.html">MySQL Performance Schema</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="dba-dtrace-mysqld-ref.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="sys-schema.html">MySQL sys Schema</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="dba-dtrace-mysqld-ref.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="connectors-apis.html">Connectors and APIs</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="dba-dtrace-mysqld-ref.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="mysql-enterprise.html">MySQL Enterprise Edition</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="workbench.html">MySQL Workbench</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="dba-dtrace-mysqld-ref.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="faqs.html">MySQL 5.7 Frequently Asked Questions</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="dba-dtrace-mysqld-ref.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="error-handling.html">Error Messages and Common Problems</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="dba-dtrace-mysqld-ref.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="indexes.html">Indexes</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="glossary.html">MySQL Glossary</a></div></div>                    </li>
+        </ul>
+                            </nav>
+        </div>
+
+        
+<a class="docs-sidebar-section" href="dba-dtrace-mysqld-ref.html?ff=nopfpls"><span class="icon-related"></span>
+    <span class="text">Related Documentation</span></a>
+<div class="docs-sidebar-accordian open">
+    <div class="text">
+        <a href="https://dev.mysql.com/doc/relnotes/mysql/5.7/en/">MySQL 5.7 Release Notes</a><br />
+        </div>
+</div>
+
+    <a class="docs-sidebar-section" href="dba-dtrace-mysqld-ref.html?ff=nopfpls"><span class="icon-download-thin"></span>
+        <span class="text">
+            Download
+                            this Manual
+                    </span>
+    </a>
+    <div class="docs-sidebar-accordian open">
+        <div class="text">
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.pdf">PDF (US Ltr)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.a4.pdf">PDF (A4)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-ref-manual-5.7-en-pdf-1-20210225.noarch.rpm">PDF (RPM)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.html-chapter.tar.gz">HTML Download (TGZ)</a>
+            - 10.1Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.html-chapter.zip">HTML Download (Zip)</a>
+            - 10.2Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-ref-manual-5.7-en-html-chapter-1-20210225.noarch.rpm">HTML Download (RPM)</a>
+            - 8.9Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.man-gpl.tar.gz">Man Pages (TGZ)</a>
+            - 224.7Kb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.man-gpl.zip">Man Pages (Zip)</a>
+            - 332.6Kb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-5.7.info.gz">Info (Gzip)</a>
+            - 3.3Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-5.7.info.zip">Info (Zip)</a>
+            - 3.3Mb<br />
+                    </div>
+    </div>
+
+<a class="docs-sidebar-section" href="dba-dtrace-mysqld-ref.html?ff=nopfpls"><span class="icon-book"></span>
+    <span class="text">Excerpts from this Manual</span></a>
+<div class="docs-sidebar-accordian">
+    <div class="text">
+                <a href="https://dev.mysql.com/doc/mysql-backup-excerpt/5.7/en/">MySQL Backup and Recovery</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-g11n-excerpt/5.7/en/">MySQL Globalization</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-infoschema-excerpt/5.7/en/">MySQL Information Schema</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-installation-excerpt/5.7/en/">MySQL Installation Guide</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-linuxunix-excerpt/5.7/en/">MySQL and Linux/Unix</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-osx-excerpt/5.7/en/">MySQL and OS X</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-partitioning-excerpt/5.7/en/">MySQL Partitioning</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-perfschema-excerpt/5.7/en/">MySQL Performance Schema</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-replication-excerpt/5.7/en/">MySQL Replication</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-repo-excerpt/5.7/en/">Using the MySQL Yum Repository</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-reslimits-excerpt/5.7/en/">MySQL Restrictions and Limitations</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-security-excerpt/5.7/en/">Security in MySQL</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-solaris-excerpt/5.7/en/">MySQL and Solaris</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-sourcebuild-excerpt/5.7/en/">Building MySQL from Source</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-startstop-excerpt/5.7/en/">Starting and Stopping MySQL</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-tutorial-excerpt/5.7/en/">MySQL Tutorial</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-windows-excerpt/5.7/en/">MySQL and Windows</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-cluster-excerpt/5.7/en/">MySQL NDB Cluster 7.5</a><br />
+            </div>
+</div>
+
+        <br /><span id="wkr"><br /></span>
+    </div>
+    </div>
+
+    <div id="docs-main" class="has-toc">
+    <div id="docs-main-inner">
+
+                <div class="right" id="docs-version-nav">
+            <a href="dba-dtrace-mysqld-ref.html?ff=nopfpls" id="docs-version-nav-toggle">version 5.7
+            <span class="icon-chevron-down"></span></a>
+            <div id="docs-version-list">
+                                                        <a                         class="tooltip-left"
+                        data-tooltip="The page you are viewing does not exist in version 8.0.
+                        This link will take you to the Table of Contents."
+                                                href="https://dev.mysql.com/doc/refman/8.0/en/">
+                        8.0
+                                                &nbsp;current
+                                            </a><br />
+                                                                                                                <a                         href="https://dev.mysql.com/doc/refman/5.6/en/dba-dtrace-mysqld-ref.html">
+                        5.6
+                                            </a><br />
+                                                                        <div id="docs-version-nav-lang">
+                                                                                                                                                    <a                                     href="https://dev.mysql.com/doc/refman/5.6/ja/dba-dtrace-mysqld-ref.html">
+                                    5.6&nbsp;
+                                                                            Japanese
+                                                                    </a><br />
+                                                                                            </div>
+                            </div>
+        </div>
+        
+        <div id="docs-show-nav" class="left hidden" style="margin-right: 15px;">
+            <a class="docs-show-hide-nav" href="dba-dtrace-mysqld-ref.html?ff=nopfpls" aria-label="Show Sidebar"
+                title="Show Sidebar"><span class="icon-arrow-small-right"></span></a>
+        </div>
+
+                        <div id="docs-breadcrumbs">
+            <a href="index.html">MySQL 5.7 Reference Manual</a> &nbsp;/&nbsp;
+                            <span id="breadcrumbs-link"><a href="dba-dtrace-mysqld-ref.html?ff=nopfpls" id="show-breadcrumbs">...</a> &nbsp;/&nbsp;</span>
+                <span class="hidden" id="hidden-breadcrumbs">
+                                                        <a href="server-administration.html">MySQL Server Administration</a> &nbsp;/&nbsp;
+                                                            <a href="debugging-mysql.html">Debugging MySQL</a> &nbsp;/&nbsp;
+                                                            <a href="dba-dtrace-server.html">Tracing mysqld Using DTrace</a> &nbsp;/&nbsp;
+                                                                                        </span>
+                                        mysqld DTrace Probe Reference
+                                    </div>
+        
+        <div id="docs-body">
+        
+<div class="section">
+<div class="titlepage">
+<div>
+<div>
+<h4 class="title"><a name="dba-dtrace-mysqld-ref"></a>5.8.4.1 mysqld DTrace Probe Reference</h4>
+
+</div>
+
+</div>
+
+</div>
+<p>
+        MySQL supports the following static probes, organized into
+        groups of functionality.
+</p>
+<div class="table">
+<a name="idm44933579946544"></a><p class="title"><b>Table 5.5 MySQL DTrace Probes</b></p>
+<div class="table-contents">
+<table><col width="20%"><col width="80%"><thead><tr>
+            <th>Group</th>
+            <th>Probes</th>
+          </tr></thead><tbody><tr>
+            <td><a class="link" href="dba-dtrace-mysqld-ref.html#dba-dtrace-ref-connection" title="5.8.4.1.1 Connection Probes">Connection</a></td>
+            <td><code class="literal">connection-start</code>, <code class="literal">connection-done</code></td>
+          </tr><tr>
+            <td><a class="link" href="dba-dtrace-mysqld-ref.html#dba-dtrace-ref-command" title="5.8.4.1.2 Command Probes">Command</a></td>
+            <td><code class="literal">command-start</code>, <code class="literal">command-done</code></td>
+          </tr><tr>
+            <td><a class="link" href="dba-dtrace-mysqld-ref.html#dba-dtrace-ref-query" title="5.8.4.1.3 Query Probes">Query</a></td>
+            <td><code class="literal">query-start</code>, <code class="literal">query-done</code></td>
+          </tr><tr>
+            <td><a class="link" href="dba-dtrace-mysqld-ref.html#dba-dtrace-ref-query-parsing" title="5.8.4.1.4 Query Parsing Probes">Query Parsing</a></td>
+            <td><code class="literal">query-parse-start</code>,
+              <code class="literal">query-parse-done</code></td>
+          </tr><tr>
+            <td><a class="link" href="dba-dtrace-mysqld-ref.html#dba-dtrace-ref-querycache" title="5.8.4.1.5 Query Cache Probes">Query Cache</a></td>
+            <td><code class="literal">query-cache-hit</code>, <code class="literal">query-cache-miss</code></td>
+          </tr><tr>
+            <td><a class="link" href="dba-dtrace-mysqld-ref.html#dba-dtrace-ref-queryexec" title="5.8.4.1.6 Query Execution Probes">Query Execution</a></td>
+            <td><code class="literal">query-exec-start</code>, <code class="literal">query-exec-done</code></td>
+          </tr><tr>
+            <td><a class="link" href="dba-dtrace-mysqld-ref.html#dba-dtrace-ref-rowlevel" title="5.8.4.1.7 Row-Level Probes">Row Level</a></td>
+            <td><code class="literal">insert-row-start</code>, <code class="literal">insert-row-done</code></td>
+          </tr><tr>
+            <td></td>
+            <td><code class="literal">update-row-start</code>, <code class="literal">update-row-done</code></td>
+          </tr><tr>
+            <td></td>
+            <td><code class="literal">delete-row-start</code>, <code class="literal">delete-row-done</code></td>
+          </tr><tr>
+            <td><a class="link" href="dba-dtrace-mysqld-ref.html#dba-dtrace-ref-readrow" title="5.8.4.1.8 Read Row Probes">Row Reads</a></td>
+            <td><code class="literal">read-row-start</code>, <code class="literal">read-row-done</code></td>
+          </tr><tr>
+            <td><a class="link" href="dba-dtrace-mysqld-ref.html#dba-dtrace-ref-index" title="5.8.4.1.9 Index Probes">Index Reads</a></td>
+            <td><code class="literal">index-read-row-start</code>,
+              <code class="literal">index-read-row-done</code></td>
+          </tr><tr>
+            <td><a class="link" href="dba-dtrace-mysqld-ref.html#dba-dtrace-ref-lock" title="5.8.4.1.10 Lock Probes">Lock</a></td>
+            <td><code class="literal">handler-rdlock-start</code>,
+              <code class="literal">handler-rdlock-done</code></td>
+          </tr><tr>
+            <td></td>
+            <td><code class="literal">handler-wrlock-start</code>,
+              <code class="literal">handler-wrlock-done</code></td>
+          </tr><tr>
+            <td></td>
+            <td><code class="literal">handler-unlock-start</code>,
+              <code class="literal">handler-unlock-done</code></td>
+          </tr><tr>
+            <td><a class="link" href="dba-dtrace-mysqld-ref.html#dba-dtrace-ref-filesort" title="5.8.4.1.11 Filesort Probes">Filesort</a></td>
+            <td><code class="literal">filesort-start</code>, <code class="literal">filesort-done</code></td>
+          </tr><tr>
+            <td><a class="link" href="dba-dtrace-mysqld-ref.html#dba-dtrace-ref-statement" title="5.8.4.1.12 Statement Probes">Statement</a></td>
+            <td><code class="literal">select-start</code>, <code class="literal">select-done</code></td>
+          </tr><tr>
+            <td></td>
+            <td><code class="literal">insert-start</code>, <code class="literal">insert-done</code></td>
+          </tr><tr>
+            <td></td>
+            <td><code class="literal">insert-select-start</code>,
+              <code class="literal">insert-select-done</code></td>
+          </tr><tr>
+            <td></td>
+            <td><code class="literal">update-start</code>, <code class="literal">update-done</code></td>
+          </tr><tr>
+            <td></td>
+            <td><code class="literal">multi-update-start</code>,
+              <code class="literal">multi-update-done</code></td>
+          </tr><tr>
+            <td></td>
+            <td><code class="literal">delete-start</code>, <code class="literal">delete-done</code></td>
+          </tr><tr>
+            <td></td>
+            <td><code class="literal">multi-delete-start</code>,
+              <code class="literal">multi-delete-done</code></td>
+          </tr><tr>
+            <td><a class="link" href="dba-dtrace-mysqld-ref.html#dba-dtrace-ref-network" title="5.8.4.1.13 Network Probes">Network</a></td>
+            <td><code class="literal">net-read-start</code>, <code class="literal">net-read-done</code>,
+              <code class="literal">net-write-start</code>,
+              <code class="literal">net-write-done</code></td>
+          </tr><tr>
+            <td><a class="link" href="dba-dtrace-mysqld-ref.html#dba-dtrace-ref-keycache" title="5.8.4.1.14 Keycache Probes">Keycache</a></td>
+            <td><code class="literal">keycache-read-start</code>,
+              <code class="literal">keycache-read-block</code>,
+              <code class="literal">keycache-read-done</code>,
+              <code class="literal">keycache-read-hit</code>,
+              <code class="literal">keycache-read-miss</code>,
+              <code class="literal">keycache-write-start</code>,
+              <code class="literal">keycache-write-block</code>,
+              <code class="literal">keycache-write-done</code></td>
+</tr></tbody></table>
+</div>
+
+</div>
+<br class="table-break">
+<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+
+<div class="admon-title">
+Note
+</div>
+<p>
+          When extracting the argument data from the probes, each
+          argument is available as
+          <code class="literal">arg<em class="replaceable"><code>N</code></em></code>, starting
+          with <code class="literal">arg0</code>. To identify each argument within
+          the definitions they are provided with a descriptive name, but
+          you must access the information using the corresponding
+          <code class="literal">arg<em class="replaceable"><code>N</code></em></code> parameter.
+</p>
+</div>
+<div class="section">
+<div class="titlepage">
+<div>
+<div>
+<h5 class="title"><a name="dba-dtrace-ref-connection"></a>5.8.4.1.1 Connection Probes</h5>
+
+</div>
+
+</div>
+
+</div>
+<p>
+          The <code class="literal">connection-start</code> and
+          <code class="literal">connection-done</code> probes enclose a connection
+          from a client, regardless of whether the connection is through
+          a socket or network connection.
+        </p><pre class="programlisting copytoclipboard line-numbers language-simple"><code class="language-simple">connection-start(connectionid, user, host)
+connection-done(status, connectionid)</code></pre>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+              <code class="literal">connection-start</code>: Triggered after a
+              connection and successful login/authentication have been
+              completed by a client. The arguments contain the
+              connection information:
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p>
+                  <code class="literal">connectionid</code>: An <code class="literal">unsigned
+                  long</code> containing the connection ID. This is
+                  the same as the process ID shown as the
+                  <code class="literal">Id</code> value in the output from
+                  <a class="link" href="show-processlist.html" title="13.7.5.29 SHOW PROCESSLIST Statement"><code class="literal">SHOW PROCESSLIST</code></a>.
+                </p></li><li class="listitem"><p>
+                  <code class="literal">user</code>: The username used when
+                  authenticating. The value is blank for the anonymous
+                  user.
+                </p></li><li class="listitem"><p>
+                  <code class="literal">host</code>: The host of the client
+                  connection. For a connection made using Unix sockets,
+                  the value is blank.
+</p></li></ul>
+</div>
+</li><li class="listitem"><p>
+              <code class="literal">connection-done</code>: Triggered just as the
+              connection to the client has been closed. The arguments
+              are:
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p>
+                  <code class="literal">status</code>: The status of the
+                  connection when it was closed. A logout operation has
+                  a value of 0; any other termination of the connection
+                  has a nonzero value.
+                </p></li><li class="listitem"><p>
+                  <code class="literal">connectionid</code>: The connection ID of
+                  the connection that was closed.
+</p></li></ul>
+</div>
+</li></ul>
+</div>
+<p>
+          The following D script quantifies and summarizes the average
+          duration of individual connections, and provides a count,
+          dumping the information every 60 seconds:
+        </p><pre class="programlisting copytoclipboard line-numbers language-simple"><code class="language-simple">#!/usr/sbin/dtrace -s
+
+
+mysql*:::connection-start
+{
+  self-&gt;start = timestamp;
+}
+
+mysql*:::connection-done
+/self-&gt;start/
+{
+  @ = quantize(((timestamp - self-&gt;start)/1000000));
+  self-&gt;start = 0;
+}
+
+tick-60s
+{
+  printa(@);
+}</code></pre><p>
+          When executed on a server with a large number of clients you
+          might see output similar to this:
+        </p><pre class="programlisting copytoclipboard line-numbers language-simple"><code class="language-simple">  1  57413                        :tick-60s
+
+           value  ------------- Distribution ------------- count
+              -1 |                                         0
+               0 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 30011
+               1 |                                         59
+               2 |                                         5
+               4 |                                         20
+               8 |                                         29
+              16 |                                         18
+              32 |                                         27
+              64 |                                         30
+             128 |                                         11
+             256 |                                         10
+             512 |                                         1
+            1024 |                                         6
+            2048 |                                         8
+            4096 |                                         9
+            8192 |                                         8
+           16384 |                                         2
+           32768 |                                         1
+           65536 |                                         1
+          131072 |                                         0
+          262144 |                                         1
+524288 |                                         0</code></pre>
+</div>
+<div class="section">
+<div class="titlepage">
+<div>
+<div>
+<h5 class="title"><a name="dba-dtrace-ref-command"></a>5.8.4.1.2 Command Probes</h5>
+
+</div>
+
+</div>
+
+</div>
+<p>
+          The command probes are executed before and after a client
+          command is executed, including any SQL statement that might be
+          executed during that period. Commands include operations such
+          as the initialization of the DB, use of the
+          <code class="literal">COM_CHANGE_USER</code> operation (supported by the
+          MySQL protocol), and manipulation of prepared statements. Many
+          of these commands are used only by the MySQL client API from
+          various connectors such as PHP and Java.
+        </p><pre class="programlisting copytoclipboard line-numbers language-simple"><code class="language-simple">command-start(connectionid, command, user, host)
+command-done(status)</code></pre>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+              <code class="literal">command-start</code>: Triggered when a command
+              is submitted to the server.
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p>
+                  <code class="literal">connectionid</code>: The connection ID of
+                  the client executing the command.
+                </p></li><li class="listitem"><p>
+                  <code class="literal">command</code>: An integer representing
+                  the command that was executed. Possible values are
+                  shown in the following table.
+</p>
+<div class="informaltable">
+<table summary="Possible command-start command values and a name and description for each."><col width="10%"><col width="20%"><col width="70%"><thead><tr>
+                      <th scope="col">Value</th>
+                      <th scope="col">Name</th>
+                      <th scope="col">Description</th>
+                    </tr></thead><tbody><tr>
+                      <th scope="row">00</th>
+                      <td>COM_SLEEP</td>
+                      <td>Internal thread state</td>
+                    </tr><tr>
+                      <th scope="row">01</th>
+                      <td>COM_QUIT</td>
+                      <td>Close connection</td>
+                    </tr><tr>
+                      <th scope="row">02</th>
+                      <td>COM_INIT_DB</td>
+                      <td>Select database (<code class="literal">USE ...</code>)</td>
+                    </tr><tr>
+                      <th scope="row">03</th>
+                      <td>COM_QUERY</td>
+                      <td>Execute a query</td>
+                    </tr><tr>
+                      <th scope="row">04</th>
+                      <td>COM_FIELD_LIST</td>
+                      <td>Get a list of fields</td>
+                    </tr><tr>
+                      <th scope="row">05</th>
+                      <td>COM_CREATE_DB</td>
+                      <td>Create a database (deprecated)</td>
+                    </tr><tr>
+                      <th scope="row">06</th>
+                      <td>COM_DROP_DB</td>
+                      <td>Drop a database (deprecated)</td>
+                    </tr><tr>
+                      <th scope="row">07</th>
+                      <td>COM_REFRESH</td>
+                      <td>Refresh connection</td>
+                    </tr><tr>
+                      <th scope="row">08</th>
+                      <td>COM_SHUTDOWN</td>
+                      <td>Shutdown server</td>
+                    </tr><tr>
+                      <th scope="row">09</th>
+                      <td>COM_STATISTICS</td>
+                      <td>Get statistics</td>
+                    </tr><tr>
+                      <th scope="row">10</th>
+                      <td>COM_PROCESS_INFO</td>
+                      <td>Get processes (<a class="link" href="show-processlist.html" title="13.7.5.29 SHOW PROCESSLIST Statement"><code class="literal">SHOW PROCESSLIST</code></a>)</td>
+                    </tr><tr>
+                      <th scope="row">11</th>
+                      <td>COM_CONNECT</td>
+                      <td>Initialize connection</td>
+                    </tr><tr>
+                      <th scope="row">12</th>
+                      <td>COM_PROCESS_KILL</td>
+                      <td>Kill process</td>
+                    </tr><tr>
+                      <th scope="row">13</th>
+                      <td>COM_DEBUG</td>
+                      <td>Get debug information</td>
+                    </tr><tr>
+                      <th scope="row">14</th>
+                      <td>COM_PING</td>
+                      <td>Ping</td>
+                    </tr><tr>
+                      <th scope="row">15</th>
+                      <td>COM_TIME</td>
+                      <td>Internal thread state</td>
+                    </tr><tr>
+                      <th scope="row">16</th>
+                      <td>COM_DELAYED_INSERT</td>
+                      <td>Internal thread state</td>
+                    </tr><tr>
+                      <th scope="row">17</th>
+                      <td>COM_CHANGE_USER</td>
+                      <td>Change user</td>
+                    </tr><tr>
+                      <th scope="row">18</th>
+                      <td>COM_BINLOG_DUMP</td>
+                      <td>Used by a replica or <a class="link" href="mysqlbinlog.html" title="4.6.7 mysqlbinlog — Utility for Processing Binary Log Files"><span class="command"><strong>mysqlbinlog</strong></span></a> to initiate a binary
+                        log read</td>
+                    </tr><tr>
+                      <th scope="row">19</th>
+                      <td>COM_TABLE_DUMP</td>
+                      <td>Used by a replica to get the source table information</td>
+                    </tr><tr>
+                      <th scope="row">20</th>
+                      <td>COM_CONNECT_OUT</td>
+                      <td>Used by a replica to log a connection to the server</td>
+                    </tr><tr>
+                      <th scope="row">21</th>
+                      <td>COM_REGISTER_SLAVE</td>
+                      <td>Used by a replica during registration</td>
+                    </tr><tr>
+                      <th scope="row">22</th>
+                      <td>COM_STMT_PREPARE</td>
+                      <td>Prepare a statement</td>
+                    </tr><tr>
+                      <th scope="row">23</th>
+                      <td>COM_STMT_EXECUTE</td>
+                      <td>Execute a statement</td>
+                    </tr><tr>
+                      <th scope="row">24</th>
+                      <td>COM_STMT_SEND_LONG_DATA</td>
+                      <td>Used by a client when requesting extended data</td>
+                    </tr><tr>
+                      <th scope="row">25</th>
+                      <td>COM_STMT_CLOSE</td>
+                      <td>Close a prepared statement</td>
+                    </tr><tr>
+                      <th scope="row">26</th>
+                      <td>COM_STMT_RESET</td>
+                      <td>Reset a prepared statement</td>
+                    </tr><tr>
+                      <th scope="row">27</th>
+                      <td>COM_SET_OPTION</td>
+                      <td>Set a server option</td>
+                    </tr><tr>
+                      <th scope="row">28</th>
+                      <td>COM_STMT_FETCH</td>
+                      <td>Fetch a prepared statement</td>
+</tr></tbody></table>
+</div>
+</li><li class="listitem"><p>
+                  <code class="literal">user</code>: The user executing the
+                  command.
+                </p></li><li class="listitem"><p>
+                  <code class="literal">host</code>: The client host.
+</p></li></ul>
+</div>
+</li><li class="listitem"><p>
+              <code class="literal">command-done</code>: Triggered when the
+              command execution completes. The <code class="literal">status</code>
+              argument contains 0 if the command executed successfully,
+              or 1 if the statement was terminated before normal
+              completion.
+</p></li></ul>
+</div>
+<p>
+          The <code class="literal">command-start</code> and
+          <code class="literal">command-done</code> probes are best used when
+          combined with the statement probes to get an idea of overall
+          execution time.
+</p>
+</div>
+<div class="section">
+<div class="titlepage">
+<div>
+<div>
+<h5 class="title"><a name="dba-dtrace-ref-query"></a>5.8.4.1.3 Query Probes</h5>
+
+</div>
+
+</div>
+
+</div>
+<p>
+          The <code class="literal">query-start</code> and
+          <code class="literal">query-done</code> probes are triggered when a
+          specific query is received by the server and when the query
+          has been completed and the information has been successfully
+          sent to the client.
+        </p><pre class="programlisting copytoclipboard line-numbers language-simple"><code class="language-simple">query-start(query, connectionid, database, user, host)
+query-done(status)</code></pre>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+              <code class="literal">query-start</code>: Triggered after the query
+              string has been received from the client. The arguments
+              are:
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p>
+                  <code class="literal">query</code>: The full text of the
+                  submitted query.
+                </p></li><li class="listitem"><p>
+                  <code class="literal">connectionid</code>: The connection ID of
+                  the client that submitted the query. The connection ID
+                  equals the connection ID returned when the client
+                  first connects and the <code class="literal">Id</code> value in
+                  the output from <a class="link" href="show-processlist.html" title="13.7.5.29 SHOW PROCESSLIST Statement"><code class="literal">SHOW
+                  PROCESSLIST</code></a>.
+                </p></li><li class="listitem"><p>
+                  <code class="literal">database</code>: The database name on
+                  which the query is being executed.
+                </p></li><li class="listitem"><p>
+                  <code class="literal">user</code>: The username used to connect
+                  to the server.
+                </p></li><li class="listitem"><p>
+                  <code class="literal">host</code>: The hostname of the client.
+</p></li></ul>
+</div>
+</li><li class="listitem"><p>
+              <code class="literal">query-done</code>: Triggered once the query
+              has been executed and the information has been returned to
+              the client. The probe includes a single argument,
+              <code class="literal">status</code>, which returns 0 when the query
+              is successfully executed and 1 if there was an error.
+</p></li></ul>
+</div>
+<p>
+          You can get a simple report of the execution time for each
+          query using the following D script:
+        </p><pre class="programlisting copytoclipboard line-numbers language-simple"><code class="language-simple">#!/usr/sbin/dtrace -s
+
+#pragma D option quiet
+
+dtrace:::BEGIN
+{
+   printf("%-20s %-20s %-40s %-9s\n", "Who", "Database", "Query", "Time(ms)");
+}
+
+mysql*:::query-start
+{
+   self-&gt;query = copyinstr(arg0);
+   self-&gt;connid = arg1;
+   self-&gt;db    = copyinstr(arg2);
+   self-&gt;who   = strjoin(copyinstr(arg3),strjoin("@",copyinstr(arg4)));
+   self-&gt;querystart = timestamp;
+}
+
+mysql*:::query-done
+{
+   printf("%-20s %-20s %-40s %-9d\n",self-&gt;who,self-&gt;db,self-&gt;query,
+          (timestamp - self-&gt;querystart) / 1000000);
+}</code></pre><p>
+          When executing the above script you should get a basic idea of
+          the execution time of your queries:
+        </p><pre class="programlisting copytoclipboard line-numbers language-terminal"><code class="language-terminal">shell&gt; ./query.d
+Who                  Database             Query                                    Time(ms)
+root@localhost       test                 select * from t1 order by i limit 10     0
+root@localhost       test                 set global query_cache_size=0            0
+root@localhost       test                 select * from t1 order by i limit 10     776
+root@localhost       test                 select * from t1 order by i limit 10     773
+root@localhost       test                 select * from t1 order by i desc limit 10 795</code></pre>
+</div>
+<div class="section">
+<div class="titlepage">
+<div>
+<div>
+<h5 class="title"><a name="dba-dtrace-ref-query-parsing"></a>5.8.4.1.4 Query Parsing Probes</h5>
+
+</div>
+
+</div>
+
+</div>
+<p>
+          The query parsing probes are triggered before the original SQL
+          statement is parsed and when the parsing of the statement and
+          determination of the execution model required to process the
+          statement has been completed:
+        </p><pre class="programlisting copytoclipboard line-numbers language-simple"><code class="language-simple">query-parse-start(query)
+query-parse-done(status)</code></pre>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+              <code class="literal">query-parse-start</code>: Triggered just
+              before the statement is parsed by the MySQL query parser.
+              The single argument, <code class="literal">query</code>, is a string
+              containing the full text of the original query.
+            </p></li><li class="listitem"><p>
+              <code class="literal">query-parse-done</code>: Triggered when the
+              parsing of the original statement has been completed. The
+              <code class="literal">status</code> is an integer describing the
+              status of the operation. A <code class="literal">0</code> indicates
+              that the query was successfully parsed. A
+              <code class="literal">1</code> indicates that the parsing of the
+              query failed.
+</p></li></ul>
+</div>
+<p>
+          For example, you could monitor the execution time for parsing
+          a given query using the following D script:
+        </p><pre class="programlisting copytoclipboard line-numbers language-simple"><code class="language-simple">#!/usr/sbin/dtrace -s
+
+#pragma D option quiet
+
+mysql*:::query-parse-start
+{
+   self-&gt;parsestart = timestamp;
+   self-&gt;parsequery = copyinstr(arg0);
+}
+
+mysql*:::query-parse-done
+/arg0 == 0/
+{
+   printf("Parsing %s: %d microseconds\n", self-&gt;parsequery,((timestamp - self-&gt;parsestart)/1000));
+}
+
+mysql*:::query-parse-done
+/arg0 != 0/
+{
+   printf("Error parsing %s: %d microseconds\n", self-&gt;parsequery,((timestamp - self-&gt;parsestart)/1000));
+}</code></pre><p>
+          In the above script a predicate is used on
+          <code class="literal">query-parse-done</code> so that different output
+          is generated based on the status value of the probe.
+        </p><p>
+          When running the script and monitoring the execution:
+        </p><pre class="programlisting copytoclipboard line-numbers language-terminal"><code class="language-terminal">shell&gt; ./query-parsing.d
+Error parsing select from t1 join (t2) on (t1.i = t2.i) order by t1.s,t1.i limit 10: 36 ms
+Parsing select * from t1 join (t2) on (t1.i = t2.i) order by t1.s,t1.i limit 10: 176 ms</code></pre>
+</div>
+<div class="section">
+<div class="titlepage">
+<div>
+<div>
+<h5 class="title"><a name="dba-dtrace-ref-querycache"></a>5.8.4.1.5 Query Cache Probes</h5>
+
+</div>
+
+</div>
+
+</div>
+<p>
+          The query cache probes are fired when executing any query. The
+          <code class="literal">query-cache-hit</code> query is triggered when a
+          query exists in the query cache and can be used to return the
+          query cache information. The arguments contain the original
+          query text and the number of rows returned from the query
+          cache for the query. If the query is not within the query
+          cache, or the query cache is not enabled, then the
+          <code class="literal">query-cache-miss</code> probe is triggered
+          instead.
+        </p><pre class="programlisting copytoclipboard line-numbers language-simple"><code class="language-simple">query-cache-hit(query, rows)
+query-cache-miss(query)</code></pre>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+              <code class="literal">query-cache-hit</code>: Triggered when the
+              query has been found within the query cache. The first
+              argument, <code class="literal">query</code>, contains the original
+              text of the query. The second argument,
+              <code class="literal">rows</code>, is an integer containing the
+              number of rows in the cached query.
+            </p></li><li class="listitem"><p>
+              <code class="literal">query-cache-miss</code>: Triggered when the
+              query is not found within the query cache. The first
+              argument, <code class="literal">query</code>, contains the original
+              text of the query.
+</p></li></ul>
+</div>
+<p>
+          The query cache probes are best combined with a probe on the
+          main query so that you can determine the differences in times
+          between using or not using the query cache for specified
+          queries. For example, in the following D script, the query and
+          query cache information are combined into the information
+          output during monitoring:
+        </p><pre class="programlisting copytoclipboard line-numbers language-simple"><code class="language-simple">#!/usr/sbin/dtrace -s
+
+#pragma D option quiet
+
+dtrace:::BEGIN
+{
+   printf("%-20s %-20s %-40s %2s %-9s\n", "Who", "Database", "Query", "QC", "Time(ms)");
+}
+
+mysql*:::query-start
+{
+   self-&gt;query = copyinstr(arg0);
+   self-&gt;connid = arg1;
+   self-&gt;db    = copyinstr(arg2);
+   self-&gt;who   = strjoin(copyinstr(arg3),strjoin("@",copyinstr(arg4)));
+   self-&gt;querystart = timestamp;
+   self-&gt;qc = 0;
+}
+
+mysql*:::query-cache-hit
+{
+   self-&gt;qc = 1;
+}
+
+mysql*:::query-cache-miss
+{
+   self-&gt;qc = 0;
+}
+
+mysql*:::query-done
+{
+   printf("%-20s %-20s %-40s %-2s %-9d\n",self-&gt;who,self-&gt;db,self-&gt;query,(self-&gt;qc ? "Y" : "N"),
+          (timestamp - self-&gt;querystart) / 1000000);
+}</code></pre><p>
+          When executing the script you can see the effects of the query
+          cache. Initially the query cache is disabled. If you set the
+          query cache size and then execute the query multiple times you
+          should see that the query cache is being used to return the
+          query data:
+        </p><pre class="programlisting copytoclipboard line-numbers language-terminal"><code class="language-terminal">shell&gt; ./query-cache.d
+root@localhost       test                 select * from t1 order by i limit 10     N  1072
+root@localhost                            set global query_cache_size=262144       N  0
+root@localhost       test                 select * from t1 order by i limit 10     N  781
+root@localhost       test                 select * from t1 order by i limit 10     Y  0</code></pre>
+</div>
+<div class="section">
+<div class="titlepage">
+<div>
+<div>
+<h5 class="title"><a name="dba-dtrace-ref-queryexec"></a>5.8.4.1.6 Query Execution Probes</h5>
+
+</div>
+
+</div>
+
+</div>
+<p>
+          The query execution probe is triggered when the actual
+          execution of the query starts, after the parsing and checking
+          the query cache but before any privilege checks or
+          optimization. By comparing the difference between the start
+          and done probes you can monitor the time actually spent
+          servicing the query (instead of just handling the parsing and
+          other elements of the query).
+        </p><pre class="programlisting copytoclipboard line-numbers language-simple"><code class="language-simple">query-exec-start(query, connectionid, database, user, host, exec_type)
+query-exec-done(status)</code></pre>
+<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+
+<div class="admon-title">
+Note
+</div>
+<p>
+            The information provided in the arguments for
+            <code class="literal">query-start</code> and
+            <code class="literal">query-exec-start</code> are almost identical and
+            designed so that you can choose to monitor either the entire
+            query process (using <code class="literal">query-start</code>) or only
+            the execution (using <code class="literal">query-exec-start</code>)
+            while exposing the core information about the user, client,
+            and query being executed.
+</p>
+</div>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+              <code class="literal">query-exec-start</code>: Triggered when the
+              execution of a individual query is started. The arguments
+              are:
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p>
+                  <code class="literal">query</code>: The full text of the
+                  submitted query.
+                </p></li><li class="listitem"><p>
+                  <code class="literal">connectionid</code>: The connection ID of
+                  the client that submitted the query. The connection ID
+                  equals the connection ID returned when the client
+                  first connects and the <code class="literal">Id</code> value in
+                  the output from <a class="link" href="show-processlist.html" title="13.7.5.29 SHOW PROCESSLIST Statement"><code class="literal">SHOW
+                  PROCESSLIST</code></a>.
+                </p></li><li class="listitem"><p>
+                  <code class="literal">database</code>: The database name on
+                  which the query is being executed.
+                </p></li><li class="listitem"><p>
+                  <code class="literal">user</code>: The username used to connect
+                  to the server.
+                </p></li><li class="listitem"><p>
+                  <code class="literal">host</code>: The hostname of the client.
+                </p></li><li class="listitem"><p>
+                  <code class="literal">exec_type</code>: The type of execution.
+                  Execution types are determined based on the contents
+                  of the query and where it was submitted. The values
+                  for each type are shown in the following table.
+</p>
+<div class="informaltable">
+<table summary="exec_type values."><col width="10%"><col width="90%"><thead><tr>
+                      <th>Value</th>
+                      <th>Description</th>
+                    </tr></thead><tbody><tr>
+                      <td>0</td>
+                      <td>Executed query from sql_parse, top-level query.</td>
+                    </tr><tr>
+                      <td>1</td>
+                      <td>Executed prepared statement</td>
+                    </tr><tr>
+                      <td>2</td>
+                      <td>Executed cursor statement</td>
+                    </tr><tr>
+                      <td>3</td>
+                      <td>Executed query in stored procedure</td>
+</tr></tbody></table>
+</div>
+</li></ul>
+</div>
+</li><li class="listitem"><p>
+              <code class="literal">query-exec-done</code>: Triggered when the
+              execution of the query has completed. The probe includes a
+              single argument, <code class="literal">status</code>, which returns
+              0 when the query is successfully executed and 1 if there
+              was an error.
+</p></li></ul>
+</div>
+
+</div>
+<div class="section">
+<div class="titlepage">
+<div>
+<div>
+<h5 class="title"><a name="dba-dtrace-ref-rowlevel"></a>5.8.4.1.7 Row-Level Probes</h5>
+
+</div>
+
+</div>
+
+</div>
+<p>
+          The <code class="literal">*row-{start,done}</code> probes are triggered
+          each time a row operation is pushed down to a storage engine.
+          For example, if you execute an
+          <a class="link" href="insert.html" title="13.2.5 INSERT Statement"><code class="literal">INSERT</code></a> statement with 100 rows
+          of data, then the <code class="literal">insert-row-start</code> and
+          <code class="literal">insert-row-done</code> probes are triggered 100
+          times each, for each row insert.
+        </p><pre class="programlisting copytoclipboard line-numbers language-simple"><code class="language-simple">insert-row-start(database, table)
+insert-row-done(status)
+
+update-row-start(database, table)
+update-row-done(status)
+
+delete-row-start(database, table)
+delete-row-done(status)</code></pre>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+              <code class="literal">insert-row-start</code>: Triggered before a
+              row is inserted into a table.
+            </p></li><li class="listitem"><p>
+              <code class="literal">insert-row-done</code>: Triggered after a row
+              is inserted into a table.
+            </p></li><li class="listitem"><p>
+              <code class="literal">update-row-start</code>: Triggered before a
+              row is updated in a table.
+            </p></li><li class="listitem"><p>
+              <code class="literal">update-row-done</code>: Triggered before a row
+              is updated in a table.
+            </p></li><li class="listitem"><p>
+              <code class="literal">delete-row-start</code>: Triggered before a
+              row is deleted from a table.
+            </p></li><li class="listitem"><p>
+              <code class="literal">delete-row-done</code>: Triggered before a row
+              is deleted from a table.
+</p></li></ul>
+</div>
+<p>
+          The arguments supported by the probes are consistent for the
+          corresponding <code class="literal">start</code> and
+          <code class="literal">done</code> probes in each case:
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+              <code class="literal">database</code>: The database name.
+            </p></li><li class="listitem"><p>
+              <code class="literal">table</code>: The table name.
+            </p></li><li class="listitem"><p>
+              <code class="literal">status</code>: The status; 0 for success or 1
+              for failure.
+</p></li></ul>
+</div>
+<p>
+          Because the row-level probes are triggered for each individual
+          row access, these probes can be triggered many thousands of
+          times each second, which may have a detrimental effect on both
+          the monitoring script and MySQL. The DTrace environment should
+          limit the triggering on these probes to prevent the
+          performance being adversely affected. Either use the probes
+          sparingly, or use counter or aggregation functions to report
+          on these probes and then provide a summary when the script
+          terminates or as part of a <code class="literal">query-done</code> or
+          <code class="literal">query-exec-done</code> probes.
+        </p><p>
+          The following example script summarizes the duration of each
+          row operation within a larger query:
+        </p><pre class="programlisting copytoclipboard line-numbers language-simple"><code class="language-simple">#!/usr/sbin/dtrace -s
+
+#pragma D option quiet
+
+dtrace:::BEGIN
+{
+   printf("%-2s %-10s %-10s %9s %9s %-s \n",
+          "St", "Who", "DB", "ConnID", "Dur ms", "Query");
+}
+
+mysql*:::query-start
+{
+   self-&gt;query = copyinstr(arg0);
+   self-&gt;who   = strjoin(copyinstr(arg3),strjoin("@",copyinstr(arg4)));
+   self-&gt;db    = copyinstr(arg2);
+   self-&gt;connid = arg1;
+   self-&gt;querystart = timestamp;
+   self-&gt;rowdur = 0;
+}
+
+mysql*:::query-done
+{
+   this-&gt;elapsed = (timestamp - self-&gt;querystart) /1000000;
+   printf("%2d %-10s %-10s %9d %9d %s\n",
+          arg0, self-&gt;who, self-&gt;db,
+          self-&gt;connid, this-&gt;elapsed, self-&gt;query);
+}
+
+mysql*:::query-done
+/ self-&gt;rowdur /
+{
+   printf("%34s %9d %s\n", "", (self-&gt;rowdur/1000000), "-&gt; Row ops");
+}
+
+mysql*:::insert-row-start
+{
+   self-&gt;rowstart = timestamp;
+}
+
+mysql*:::delete-row-start
+{
+   self-&gt;rowstart = timestamp;
+}
+
+mysql*:::update-row-start
+{
+   self-&gt;rowstart = timestamp;
+}
+
+mysql*:::insert-row-done
+{
+   self-&gt;rowdur += (timestamp-self-&gt;rowstart);
+}
+
+mysql*:::delete-row-done
+{
+   self-&gt;rowdur += (timestamp-self-&gt;rowstart);
+}
+
+mysql*:::update-row-done
+{
+   self-&gt;rowdur += (timestamp-self-&gt;rowstart);
+}</code></pre><p>
+          Running the above script with a query that inserts data into a
+          table, you can monitor the exact time spent performing the raw
+          row insertion:
+        </p><pre class="programlisting copytoclipboard line-numbers language-simple"><code class="language-simple">St Who        DB            ConnID    Dur ms Query
+ 0 @localhost test              13     20767 insert into t1(select * from t2)
+                                        4827 -&gt; Row ops</code></pre>
+</div>
+<div class="section">
+<div class="titlepage">
+<div>
+<div>
+<h5 class="title"><a name="dba-dtrace-ref-readrow"></a>5.8.4.1.8 Read Row Probes</h5>
+
+</div>
+
+</div>
+
+</div>
+<p>
+          The read row probes are triggered at a storage engine level
+          each time a row read operation occurs. These probes are
+          specified within each storage engine (as opposed to the
+          <code class="literal">*row-start</code> probes which are in the storage
+          engine interface). These probes can therefore be used to
+          monitor individual storage engine row-level operations and
+          performance. Because these probes are triggered around the
+          storage engine row read interface, they may be hit a
+          significant number of times during a basic query.
+        </p><pre class="programlisting copytoclipboard line-numbers language-simple"><code class="language-simple">read-row-start(database, table, scan_flag)
+read-row-done(status)</code></pre>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+              <code class="literal">read-row-start</code>: Triggered when a row is
+              read by the storage engine from the specified
+              <code class="literal">database</code> and <code class="literal">table</code>.
+              The <code class="literal">scan_flag</code> is set to 1 (true) when
+              the read is part of a table scan (that is, a sequential
+              read), or 0 (false) when the read is of a specific record.
+            </p></li><li class="listitem"><p>
+              <code class="literal">read-row-done</code>: Triggered when a row
+              read operation within a storage engine completes. The
+              <code class="literal">status</code> returns 0 on success, or a
+              positive value on failure.
+</p></li></ul>
+</div>
+
+</div>
+<div class="section">
+<div class="titlepage">
+<div>
+<div>
+<h5 class="title"><a name="dba-dtrace-ref-index"></a>5.8.4.1.9 Index Probes</h5>
+
+</div>
+
+</div>
+
+</div>
+<p>
+          The index probes are triggered each time a row is read using
+          one of the indexes for the specified table. The probe is
+          triggered within the corresponding storage engine for the
+          table.
+        </p><pre class="programlisting copytoclipboard line-numbers language-simple"><code class="language-simple">index-read-row-start(database, table)
+index-read-row-done(status)</code></pre>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+              <code class="literal">index-read-row-start</code>: Triggered when a
+              row is read by the storage engine from the specified
+              <code class="literal">database</code> and <code class="literal">table</code>.
+            </p></li><li class="listitem"><p>
+              <code class="literal">index-read-row-done</code>: Triggered when an
+              indexed row read operation within a storage engine
+              completes. The <code class="literal">status</code> returns 0 on
+              success, or a positive value on failure.
+</p></li></ul>
+</div>
+
+</div>
+<div class="section">
+<div class="titlepage">
+<div>
+<div>
+<h5 class="title"><a name="dba-dtrace-ref-lock"></a>5.8.4.1.10 Lock Probes</h5>
+
+</div>
+
+</div>
+
+</div>
+<p>
+          The lock probes are called whenever an external lock is
+          requested by MySQL for a table using the corresponding lock
+          mechanism on the table as defined by the table's engine type.
+          There are three different types of lock, the read lock, write
+          lock, and unlock operations. Using the probes you can
+          determine the duration of the external locking routine (that
+          is, the time taken by the storage engine to implement the
+          lock, including any time waiting for another lock to become
+          free) and the total duration of the lock/unlock process.
+        </p><pre class="programlisting copytoclipboard line-numbers language-simple"><code class="language-simple">handler-rdlock-start(database, table)
+handler-rdlock-done(status)
+
+handler-wrlock-start(database, table)
+handler-wrlock-done(status)
+
+handler-unlock-start(database, table)
+handler-unlock-done(status)</code></pre>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+              <code class="literal">handler-rdlock-start</code>: Triggered when a
+              read lock is requested on the specified
+              <code class="literal">database</code> and <code class="literal">table</code>.
+            </p></li><li class="listitem"><p>
+              <code class="literal">handler-wrlock-start</code>: Triggered when a
+              write lock is requested on the specified
+              <code class="literal">database</code> and <code class="literal">table</code>.
+            </p></li><li class="listitem"><p>
+              <code class="literal">handler-unlock-start</code>: Triggered when an
+              unlock request is made on the specified
+              <code class="literal">database</code> and <code class="literal">table</code>.
+            </p></li><li class="listitem"><p>
+              <code class="literal">handler-rdlock-done</code>: Triggered when a
+              read lock request completes. The <code class="literal">status</code>
+              is 0 if the lock operation succeeded, or
+              <code class="literal">&gt;0</code> on failure.
+            </p></li><li class="listitem"><p>
+              <code class="literal">handler-wrlock-done</code>: Triggered when a
+              write lock request completes. The
+              <code class="literal">status</code> is 0 if the lock operation
+              succeeded, or <code class="literal">&gt;0</code> on failure.
+            </p></li><li class="listitem"><p>
+              <code class="literal">handler-unlock-done</code>: Triggered when an
+              unlock request completes. The <code class="literal">status</code> is
+              0 if the unlock operation succeeded, or
+              <code class="literal">&gt;0</code> on failure.
+</p></li></ul>
+</div>
+<p>
+          You can use arrays to monitor the locking and unlocking of
+          individual tables and then calculate the duration of the
+          entire table lock using the following script:
+        </p><pre class="programlisting copytoclipboard line-numbers language-simple"><code class="language-simple">#!/usr/sbin/dtrace -s
+
+#pragma D option quiet
+
+mysql*:::handler-rdlock-start
+{
+   self-&gt;rdlockstart = timestamp;
+   this-&gt;lockref = strjoin(copyinstr(arg0),strjoin("@",copyinstr(arg1)));
+   self-&gt;lockmap[this-&gt;lockref] = self-&gt;rdlockstart;
+   printf("Start: Lock-&gt;Read   %s.%s\n",copyinstr(arg0),copyinstr(arg1));
+}
+
+mysql*:::handler-wrlock-start
+{
+   self-&gt;wrlockstart = timestamp;
+   this-&gt;lockref = strjoin(copyinstr(arg0),strjoin("@",copyinstr(arg1)));
+   self-&gt;lockmap[this-&gt;lockref] = self-&gt;rdlockstart;
+   printf("Start: Lock-&gt;Write  %s.%s\n",copyinstr(arg0),copyinstr(arg1));
+}
+
+mysql*:::handler-unlock-start
+{
+   self-&gt;unlockstart = timestamp;
+   this-&gt;lockref = strjoin(copyinstr(arg0),strjoin("@",copyinstr(arg1)));
+   printf("Start: Lock-&gt;Unlock %s.%s (%d ms lock duration)\n",
+          copyinstr(arg0),copyinstr(arg1),
+          (timestamp - self-&gt;lockmap[this-&gt;lockref])/1000000);
+}
+
+mysql*:::handler-rdlock-done
+{
+   printf("End:   Lock-&gt;Read   %d ms\n",
+          (timestamp - self-&gt;rdlockstart)/1000000);
+}
+
+mysql*:::handler-wrlock-done
+{
+   printf("End:   Lock-&gt;Write  %d ms\n",
+          (timestamp - self-&gt;wrlockstart)/1000000);
+}
+
+mysql*:::handler-unlock-done
+{
+   printf("End:   Lock-&gt;Unlock %d ms\n",
+          (timestamp - self-&gt;unlockstart)/1000000);
+}</code></pre><p>
+          When executed, you should get information both about the
+          duration of the locking process itself, and of the locks on a
+          specific table:
+        </p><pre class="programlisting copytoclipboard line-numbers language-simple"><code class="language-simple">Start: Lock-&gt;Read   test.t2
+End:   Lock-&gt;Read   0 ms
+Start: Lock-&gt;Unlock test.t2 (25743 ms lock duration)
+End:   Lock-&gt;Unlock 0 ms
+Start: Lock-&gt;Read   test.t2
+End:   Lock-&gt;Read   0 ms
+Start: Lock-&gt;Unlock test.t2 (1 ms lock duration)
+End:   Lock-&gt;Unlock 0 ms
+Start: Lock-&gt;Read   test.t2
+End:   Lock-&gt;Read   0 ms
+Start: Lock-&gt;Unlock test.t2 (1 ms lock duration)
+End:   Lock-&gt;Unlock 0 ms
+Start: Lock-&gt;Read   test.t2
+End:   Lock-&gt;Read   0 ms</code></pre>
+</div>
+<div class="section">
+<div class="titlepage">
+<div>
+<div>
+<h5 class="title"><a name="dba-dtrace-ref-filesort"></a>5.8.4.1.11 Filesort Probes</h5>
+
+</div>
+
+</div>
+
+</div>
+<p>
+          The filesort probes are triggered whenever a filesort
+          operation is applied to a table. For more information on
+          filesort and the conditions under which it occurs, see
+          <a class="xref" href="order-by-optimization.html" title="8.2.1.14 ORDER BY Optimization">Section 8.2.1.14, “ORDER BY Optimization”</a>.
+        </p><pre class="programlisting copytoclipboard line-numbers language-simple"><code class="language-simple">filesort-start(database, table)
+filesort-done(status, rows)</code></pre>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+              <code class="literal">filesort-start</code>: Triggered when the
+              filesort operation starts on a table. The two arguments to
+              the probe, <code class="literal">database</code> and
+              <code class="literal">table</code>, identify the table being sorted.
+            </p></li><li class="listitem"><p>
+              <code class="literal">filesort-done</code>: Triggered when the
+              filesort operation completes. Two arguments are supplied,
+              the <code class="literal">status</code> (0 for success, 1 for
+              failure), and the number of rows sorted during the
+              filesort process.
+</p></li></ul>
+</div>
+<p>
+          An example of this is in the following script, which tracks
+          the duration of the filesort process in addition to the
+          duration of the main query:
+        </p><pre class="programlisting copytoclipboard line-numbers language-simple"><code class="language-simple">#!/usr/sbin/dtrace -s
+
+#pragma D option quiet
+
+dtrace:::BEGIN
+{
+   printf("%-2s %-10s %-10s %9s %18s %-s \n",
+          "St", "Who", "DB", "ConnID", "Dur microsec", "Query");
+}
+
+mysql*:::query-start
+{
+   self-&gt;query = copyinstr(arg0);
+   self-&gt;who   = strjoin(copyinstr(arg3),strjoin("@",copyinstr(arg4)));
+   self-&gt;db    = copyinstr(arg2);
+   self-&gt;connid = arg1;
+   self-&gt;querystart = timestamp;
+   self-&gt;filesort = 0;
+   self-&gt;fsdb = "";
+   self-&gt;fstable = "";
+}
+
+mysql*:::filesort-start
+{
+  self-&gt;filesort = timestamp;
+  self-&gt;fsdb = copyinstr(arg0);
+  self-&gt;fstable = copyinstr(arg1);
+}
+
+mysql*:::filesort-done
+{
+   this-&gt;elapsed = (timestamp - self-&gt;filesort) /1000;
+   printf("%2d %-10s %-10s %9d %18d Filesort on %s\n",
+          arg0, self-&gt;who, self-&gt;fsdb,
+          self-&gt;connid, this-&gt;elapsed, self-&gt;fstable);
+}
+
+mysql*:::query-done
+{
+   this-&gt;elapsed = (timestamp - self-&gt;querystart) /1000;
+   printf("%2d %-10s %-10s %9d %18d %s\n",
+          arg0, self-&gt;who, self-&gt;db,
+          self-&gt;connid, this-&gt;elapsed, self-&gt;query);
+}</code></pre><p>
+          Executing a query on a large table with an <code class="literal">ORDER
+          BY</code> clause that triggers a filesort, and then
+          creating an index on the table and then repeating the same
+          query, you can see the difference in execution speed:
+        </p><pre class="programlisting copytoclipboard line-numbers language-simple"><code class="language-simple">St Who        DB            ConnID       Dur microsec Query
+ 0 @localhost test              14           11335469 Filesort on t1
+ 0 @localhost test              14           11335787 select * from t1 order by i limit 100
+ 0 @localhost test              14          466734378 create index t1a on t1 (i)
+ 0 @localhost test              14              26472 select * from t1 order by i limit 100</code></pre>
+</div>
+<div class="section">
+<div class="titlepage">
+<div>
+<div>
+<h5 class="title"><a name="dba-dtrace-ref-statement"></a>5.8.4.1.12 Statement Probes</h5>
+
+</div>
+
+</div>
+
+</div>
+<p>
+          The individual statement probes are provided to give specific
+          information about different statement types. For the start
+          probes the string of the query is provided as the only
+          argument. Depending on the statement type, the information
+          provided by the corresponding done probe can differ. For all
+          done probes the status of the operation (<code class="literal">0</code>
+          for success, <code class="literal">&gt;0</code> for failure) is
+          provided. For <a class="link" href="select.html" title="13.2.9 SELECT Statement"><code class="literal">SELECT</code></a>,
+          <a class="link" href="insert.html" title="13.2.5 INSERT Statement"><code class="literal">INSERT</code></a>,
+          <a class="link" href="insert.html" title="13.2.5 INSERT Statement"><code class="literal">INSERT ... (SELECT
+          FROM ...)</code></a>, <a class="link" href="delete.html" title="13.2.2 DELETE Statement"><code class="literal">DELETE</code></a>,
+          and <a class="link" href="delete.html" title="13.2.2 DELETE Statement"><code class="literal">DELETE FROM
+          t1,t2</code></a> operations the number of rows affected is
+          returned.
+        </p><p>
+          For <a class="link" href="update.html" title="13.2.11 UPDATE Statement"><code class="literal">UPDATE</code></a> and
+          <a class="link" href="update.html" title="13.2.11 UPDATE Statement"><code class="literal">UPDATE t1,t2
+          ...</code></a> statements the number of rows matched and the
+          number of rows actually changed is provided. This is because
+          the number of rows actually matched by the corresponding
+          <code class="literal">WHERE</code> clause, and the number of rows
+          changed can differ. MySQL does not update the value of a row
+          if the value already matches the new setting.
+        </p><pre class="programlisting copytoclipboard line-numbers language-simple"><code class="language-simple">select-start(query)
+select-done(status,rows)
+
+insert-start(query)
+insert-done(status,rows)
+
+insert-select-start(query)
+insert-select-done(status,rows)
+
+update-start(query)
+update-done(status,rowsmatched,rowschanged)
+
+multi-update-start(query)
+multi-update-done(status,rowsmatched,rowschanged)
+
+delete-start(query)
+delete-done(status,rows)
+
+multi-delete-start(query)
+multi-delete-done(status,rows)</code></pre>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+              <code class="literal">select-start</code>: Triggered before a
+              <a class="link" href="select.html" title="13.2.9 SELECT Statement"><code class="literal">SELECT</code></a> statement.
+            </p></li><li class="listitem"><p>
+              <code class="literal">select-done</code>: Triggered at the end of a
+              <a class="link" href="select.html" title="13.2.9 SELECT Statement"><code class="literal">SELECT</code></a> statement.
+            </p></li><li class="listitem"><p>
+              <code class="literal">insert-start</code>: Triggered before a
+              <a class="link" href="insert.html" title="13.2.5 INSERT Statement"><code class="literal">INSERT</code></a> statement.
+            </p></li><li class="listitem"><p>
+              <code class="literal">insert-done</code>: Triggered at the end of an
+              <a class="link" href="insert.html" title="13.2.5 INSERT Statement"><code class="literal">INSERT</code></a> statement.
+            </p></li><li class="listitem"><p>
+              <code class="literal">insert-select-start</code>: Triggered before
+              an <a class="link" href="insert.html" title="13.2.5 INSERT Statement"><code class="literal">INSERT ...
+              SELECT</code></a> statement.
+            </p></li><li class="listitem"><p>
+              <code class="literal">insert-select-done</code>: Triggered at the
+              end of an <a class="link" href="insert.html" title="13.2.5 INSERT Statement"><code class="literal">INSERT
+              ... SELECT</code></a> statement.
+            </p></li><li class="listitem"><p>
+              <code class="literal">update-start</code>: Triggered before an
+              <a class="link" href="update.html" title="13.2.11 UPDATE Statement"><code class="literal">UPDATE</code></a> statement.
+            </p></li><li class="listitem"><p>
+              <code class="literal">update-done</code>: Triggered at the end of an
+              <a class="link" href="update.html" title="13.2.11 UPDATE Statement"><code class="literal">UPDATE</code></a> statement.
+            </p></li><li class="listitem"><p>
+              <code class="literal">multi-update-start</code>: Triggered before an
+              <a class="link" href="update.html" title="13.2.11 UPDATE Statement"><code class="literal">UPDATE</code></a> statement involving
+              multiple tables.
+            </p></li><li class="listitem"><p>
+              <code class="literal">multi-update-done</code>: Triggered at the end
+              of an <a class="link" href="update.html" title="13.2.11 UPDATE Statement"><code class="literal">UPDATE</code></a> statement
+              involving multiple tables.
+            </p></li><li class="listitem"><p>
+              <code class="literal">delete-start</code>: Triggered before a
+              <a class="link" href="delete.html" title="13.2.2 DELETE Statement"><code class="literal">DELETE</code></a> statement.
+            </p></li><li class="listitem"><p>
+              <code class="literal">delete-done</code>: Triggered at the end of a
+              <a class="link" href="delete.html" title="13.2.2 DELETE Statement"><code class="literal">DELETE</code></a> statement.
+            </p></li><li class="listitem"><p>
+              <code class="literal">multi-delete-start</code>: Triggered before a
+              <a class="link" href="delete.html" title="13.2.2 DELETE Statement"><code class="literal">DELETE</code></a> statement involving
+              multiple tables.
+            </p></li><li class="listitem"><p>
+              <code class="literal">multi-delete-done</code>: Triggered at the end
+              of a <a class="link" href="delete.html" title="13.2.2 DELETE Statement"><code class="literal">DELETE</code></a> statement
+              involving multiple tables.
+</p></li></ul>
+</div>
+<p>
+          The arguments for the statement probes are:
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+              <code class="literal">query</code>: The query string.
+            </p></li><li class="listitem"><p>
+              <code class="literal">status</code>: The status of the query.
+              <code class="literal">0</code> for success, and
+              <code class="literal">&gt;0</code> for failure.
+            </p></li><li class="listitem"><p>
+              <code class="literal">rows</code>: The number of rows affected by
+              the statement. This returns the number rows found for
+              <a class="link" href="select.html" title="13.2.9 SELECT Statement"><code class="literal">SELECT</code></a>, the number of rows
+              deleted for <a class="link" href="delete.html" title="13.2.2 DELETE Statement"><code class="literal">DELETE</code></a>, and the
+              number of rows successfully inserted for
+              <a class="link" href="insert.html" title="13.2.5 INSERT Statement"><code class="literal">INSERT</code></a>.
+            </p></li><li class="listitem"><p>
+              <code class="literal">rowsmatched</code>: The number of rows matched
+              by the <code class="literal">WHERE</code> clause of an
+              <a class="link" href="update.html" title="13.2.11 UPDATE Statement"><code class="literal">UPDATE</code></a> operation.
+            </p></li><li class="listitem"><p>
+              <code class="literal">rowschanged</code>: The number of rows
+              actually changed during an
+              <a class="link" href="update.html" title="13.2.11 UPDATE Statement"><code class="literal">UPDATE</code></a> operation.
+</p></li></ul>
+</div>
+<p>
+          You use these probes to monitor the execution of these
+          statement types without having to monitor the user or client
+          executing the statements. A simple example of this is to track
+          the execution times:
+        </p><pre class="programlisting copytoclipboard line-numbers language-simple"><code class="language-simple">#!/usr/sbin/dtrace -s
+
+#pragma D option quiet
+
+dtrace:::BEGIN
+{
+   printf("%-60s %-8s %-8s %-8s\n", "Query", "RowsU", "RowsM", "Dur (ms)");
+}
+
+mysql*:::update-start, mysql*:::insert-start,
+mysql*:::delete-start, mysql*:::multi-delete-start,
+mysql*:::multi-delete-done, mysql*:::select-start,
+mysql*:::insert-select-start, mysql*:::multi-update-start
+{
+    self-&gt;query = copyinstr(arg0);
+    self-&gt;querystart = timestamp;
+}
+
+mysql*:::insert-done, mysql*:::select-done,
+mysql*:::delete-done, mysql*:::multi-delete-done, mysql*:::insert-select-done
+/ self-&gt;querystart /
+{
+    this-&gt;elapsed = ((timestamp - self-&gt;querystart)/1000000);
+    printf("%-60s %-8d %-8d %d\n",
+           self-&gt;query,
+           0,
+           arg1,
+           this-&gt;elapsed);
+    self-&gt;querystart = 0;
+}
+
+mysql*:::update-done, mysql*:::multi-update-done
+/ self-&gt;querystart /
+{
+    this-&gt;elapsed = ((timestamp - self-&gt;querystart)/1000000);
+    printf("%-60s %-8d %-8d %d\n",
+           self-&gt;query,
+           arg1,
+           arg2,
+           this-&gt;elapsed);
+    self-&gt;querystart = 0;
+}</code></pre><p>
+          When executed you can see the basic execution times and rows
+          matches:
+        </p><pre class="programlisting copytoclipboard line-numbers language-simple"><code class="language-simple">Query                                                        RowsU    RowsM    Dur (ms)
+select * from t2                                             0        275      0
+insert into t2 (select * from t2)                            0        275      9
+update t2 set i=5 where i &gt; 75                               110      110      8
+update t2 set i=5 where i &lt; 25                               254      134      12
+delete from t2 where i &lt; 5                                   0        0        0</code></pre><p>
+          Another alternative is to use the aggregation functions in
+          DTrace to aggregate the execution time of individual
+          statements together:
+        </p><pre class="programlisting copytoclipboard line-numbers language-simple"><code class="language-simple">#!/usr/sbin/dtrace -s
+
+#pragma D option quiet
+
+
+mysql*:::update-start, mysql*:::insert-start,
+mysql*:::delete-start, mysql*:::multi-delete-start,
+mysql*:::multi-delete-done, mysql*:::select-start,
+mysql*:::insert-select-start, mysql*:::multi-update-start
+{
+    self-&gt;querystart = timestamp;
+}
+
+mysql*:::select-done
+{
+        @statements["select"] = sum(((timestamp - self-&gt;querystart)/1000000));
+}
+
+mysql*:::insert-done, mysql*:::insert-select-done
+{
+        @statements["insert"] = sum(((timestamp - self-&gt;querystart)/1000000));
+}
+
+mysql*:::update-done, mysql*:::multi-update-done
+{
+        @statements["update"] = sum(((timestamp - self-&gt;querystart)/1000000));
+}
+
+mysql*:::delete-done, mysql*:::multi-delete-done
+{
+        @statements["delete"] = sum(((timestamp - self-&gt;querystart)/1000000));
+}
+
+tick-30s
+{
+        printa(@statements);
+}</code></pre><p>
+          The script just shown aggregates the times spent doing each
+          operation, which could be used to help benchmark a standard
+          suite of tests.
+        </p><pre class="programlisting copytoclipboard line-numbers language-simple"><code class="language-simple"> delete                                                            0
+  update                                                            0
+  insert                                                           23
+  select                                                         2484
+
+  delete                                                            0
+  update                                                            0
+  insert                                                           39
+  select                                                        10744
+
+  delete                                                            0
+  update                                                           26
+  insert                                                           56
+  select                                                        10944
+
+  delete                                                            0
+  update                                                           26
+  insert                                                         2287
+  select                                                        15985</code></pre>
+</div>
+<div class="section">
+<div class="titlepage">
+<div>
+<div>
+<h5 class="title"><a name="dba-dtrace-ref-network"></a>5.8.4.1.13 Network Probes</h5>
+
+</div>
+
+</div>
+
+</div>
+<p>
+          The network probes monitor the transfer of information from
+          the MySQL server and clients of all types over the network.
+          The probes are defined as follows:
+        </p><pre class="programlisting copytoclipboard line-numbers language-simple"><code class="language-simple">net-read-start()
+net-read-done(status, bytes)
+net-write-start(bytes)
+net-write-done(status)</code></pre>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+              <code class="literal">net-read-start</code>: Triggered when a
+              network read operation is started.
+            </p></li><li class="listitem"><p>
+              <code class="literal">net-read-done</code>: Triggered when the
+              network read operation completes. The
+              <code class="literal">status</code> is an <code class="literal">integer</code>
+              representing the return status for the operation,
+              <code class="literal">0</code> for success and <code class="literal">1</code>
+              for failure. The <code class="literal">bytes</code> argument is an
+              integer specifying the number of bytes read during the
+              process.
+            </p></li><li class="listitem"><p>
+              <code class="literal">net-start-bytes</code>: Triggered when data is
+              written to a network socket. The single argument,
+              <code class="literal">bytes</code>, specifies the number of bytes
+              written to the network socket.
+            </p></li><li class="listitem"><p>
+              <code class="literal">net-write-done</code>: Triggered when the
+              network write operation has completed. The single
+              argument, <code class="literal">status</code>, is an integer
+              representing the return status for the operation,
+              <code class="literal">0</code> for success and <code class="literal">1</code>
+              for failure.
+</p></li></ul>
+</div>
+<p>
+          You can use the network probes to monitor the time spent
+          reading from and writing to network clients during execution.
+          The following D script provides an example of this. Both the
+          cumulative time for the read or write is calculated, and the
+          number of bytes. Note that the dynamic variable size has been
+          increased (using the <code class="literal">dynvarsize</code> option) to
+          cope with the rapid firing of the individual probes for the
+          network reads/writes.
+        </p><pre class="programlisting copytoclipboard line-numbers language-simple"><code class="language-simple">#!/usr/sbin/dtrace -s
+
+#pragma D option quiet
+#pragma D option dynvarsize=4m
+
+dtrace:::BEGIN
+{
+   printf("%-2s %-30s %-10s %9s %18s %-s \n",
+          "St", "Who", "DB", "ConnID", "Dur microsec", "Query");
+}
+
+mysql*:::query-start
+{
+   self-&gt;query = copyinstr(arg0);
+   self-&gt;who   = strjoin(copyinstr(arg3),strjoin("@",copyinstr(arg4)));
+   self-&gt;db    = copyinstr(arg2);
+   self-&gt;connid = arg1;
+   self-&gt;querystart = timestamp;
+   self-&gt;netwrite = 0;
+   self-&gt;netwritecum = 0;
+   self-&gt;netwritebase = 0;
+   self-&gt;netread = 0;
+   self-&gt;netreadcum = 0;
+   self-&gt;netreadbase = 0;
+}
+
+mysql*:::net-write-start
+{
+   self-&gt;netwrite += arg0;
+   self-&gt;netwritebase = timestamp;
+}
+
+mysql*:::net-write-done
+{
+   self-&gt;netwritecum += (timestamp - self-&gt;netwritebase);
+   self-&gt;netwritebase = 0;
+}
+
+mysql*:::net-read-start
+{
+   self-&gt;netreadbase = timestamp;
+}
+
+mysql*:::net-read-done
+{
+   self-&gt;netread += arg1;
+   self-&gt;netreadcum += (timestamp - self-&gt;netreadbase);
+   self-&gt;netreadbase = 0;
+}
+
+mysql*:::query-done
+{
+   this-&gt;elapsed = (timestamp - self-&gt;querystart) /1000000;
+   printf("%2d %-30s %-10s %9d %18d %s\n",
+          arg0, self-&gt;who, self-&gt;db,
+          self-&gt;connid, this-&gt;elapsed, self-&gt;query);
+   printf("Net read: %d bytes (%d ms) write: %d bytes (%d ms)\n",
+               self-&gt;netread, (self-&gt;netreadcum/1000000),
+               self-&gt;netwrite, (self-&gt;netwritecum/1000000));
+}</code></pre><p>
+          When executing the above script on a machine with a remote
+          client, you can see that approximately a third of the time
+          spent executing the query is related to writing the query
+          results back to the client.
+        </p><pre class="programlisting copytoclipboard line-numbers language-simple"><code class="language-simple">St Who                            DB            ConnID       Dur microsec Query
+ 0 root@::ffff:198.51.100.108      test              31               3495 select * from t1 limit 1000000
+Net read: 0 bytes (0 ms) write: 10000075 bytes (1220 ms)</code></pre>
+</div>
+<div class="section">
+<div class="titlepage">
+<div>
+<div>
+<h5 class="title"><a name="dba-dtrace-ref-keycache"></a>5.8.4.1.14 Keycache Probes</h5>
+
+</div>
+
+</div>
+
+</div>
+<p>
+          The keycache probes are triggered when using the index key
+          cache used with the MyISAM storage engine. Probes exist to
+          monitor when data is read into the keycache, cached key data
+          is written from the cache into a cached file, or when
+          accessing the keycache.
+        </p><p>
+          Keycache usage indicates when data is read or written from the
+          index files into the cache, and can be used to monitor how
+          efficient the memory allocated to the keycache is being used.
+          A high number of keycache reads across a range of queries may
+          indicate that the keycache is too small for size of data being
+          accessed.
+        </p><pre class="programlisting copytoclipboard line-numbers language-simple"><code class="language-simple">keycache-read-start(filepath, bytes, mem_used, mem_free)
+keycache-read-block(bytes)
+keycache-read-hit()
+keycache-read-miss()
+keycache-read-done(mem_used, mem_free)
+keycache-write-start(filepath, bytes, mem_used, mem_free)
+keycache-write-block(bytes)
+keycache-write-done(mem_used, mem_free)</code></pre><p>
+          When reading data from the index files into the keycache, the
+          process first initializes the read operation (indicated by
+          <code class="literal">keycache-read-start</code>), then loads blocks of
+          data (<code class="literal">keycache-read-block</code>), and then the
+          read block is either matches the data being identified
+          (<code class="literal">keycache-read-hit</code>) or more data needs to
+          be read (<code class="literal">keycache-read-miss</code>). Once the read
+          operation has completed, reading stops with the
+          <code class="literal">keycache-read-done</code>.
+        </p><p>
+          Data can be read from the index file into the keycache only
+          when the specified key is not already within the keycache.
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+              <code class="literal">keycache-read-start</code>: Triggered when the
+              keycache read operation is started. Data is read from the
+              specified <code class="literal">filepath</code>, reading the
+              specified number of <code class="literal">bytes</code>. The
+              <code class="literal">mem_used</code> and
+              <code class="literal">mem_avail</code> indicate memory currently
+              used by the keycache and the amount of memory available
+              within the keycache.
+            </p></li><li class="listitem"><p>
+              <code class="literal">keycache-read-block</code>: Triggered when the
+              keycache reads a block of data, of the specified number of
+              <code class="literal">bytes</code>, from the index file into the
+              keycache.
+            </p></li><li class="listitem"><p>
+              <code class="literal">keycache-read-hit</code>: Triggered when the
+              block of data read from the index file matches the key
+              data requested.
+            </p></li><li class="listitem"><p>
+              <code class="literal">keycache-read-miss</code>: Triggered when the
+              block of data read from the index file does not match the
+              key data needed.
+            </p></li><li class="listitem"><p>
+              <code class="literal">keycache-read-done</code>: Triggered when the
+              keycache read operation has completed. The
+              <code class="literal">mem_used</code> and
+              <code class="literal">mem_avail</code> indicate memory currently
+              used by the keycache and the amount of memory available
+              within the keycache.
+</p></li></ul>
+</div>
+<p>
+          Keycache writes occur when the index information is updated
+          during an <code class="literal">INSERT</code>,
+          <code class="literal">UPDATE</code>, or <code class="literal">DELETE</code>
+          operation, and the cached key information is flushed back to
+          the index file.
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+              <code class="literal">keycache-write-start</code>: Triggered when
+              the keycache write operation is started. Data is written
+              to the specified <code class="literal">filepath</code>, reading the
+              specified number of <code class="literal">bytes</code>. The
+              <code class="literal">mem_used</code> and
+              <code class="literal">mem_avail</code> indicate memory currently
+              used by the keycache and the amount of memory available
+              within the keycache.
+            </p></li><li class="listitem"><p>
+              <code class="literal">keycache-write-block</code>: Triggered when
+              the keycache writes a block of data, of the specified
+              number of <code class="literal">bytes</code>, to the index file from
+              the keycache.
+            </p></li><li class="listitem"><p>
+              <code class="literal">keycache-write-done</code>: Triggered when the
+              keycache write operation has completed. The
+              <code class="literal">mem_used</code> and
+              <code class="literal">mem_avail</code> indicate memory currently
+              used by the keycache and the amount of memory available
+              within the keycache.
+</p></li></ul>
+</div>
+
+</div>
+
+</div>
+
+<br />
+        </div>
+
+                <div id="docs-in-page-nav-container">
+            <div id="docs-in-page-nav">
+                
+    <a href="dba-dtrace-server.html"
+        aria-label="Previous" title="Previous: Tracing mysqld Using DTrace"><span
+        class="icon-chevron-left"></span> PREV</a> &nbsp;
+<a href="index.html" aria-label="Start" title="Start"> HOME</a> &nbsp;
+        <a aria-label="Up" href="dba-dtrace-server.html" title="Up: Tracing mysqld Using DTrace"> UP</a> &nbsp;
+    <a href="security.html" aria-label="Next"
+        title="Next: Security">NEXT <span
+        class="icon-chevron-right"></span></a>
+            </div>
+        </div>
+        
+         <div id="docs-body-extra">
+             
+<a class="docs-sidebar-section" href="dba-dtrace-mysqld-ref.html?ff=nopfpls"><span class="icon-related"></span>
+    <span class="text">Related Documentation</span></a>
+<div class="docs-sidebar-accordian">
+    <div class="text">
+        <a href="https://dev.mysql.com/doc/relnotes/mysql/5.7/en/">MySQL 5.7 Release Notes</a><br />
+        </div>
+</div>
+
+    <a class="docs-sidebar-section" href="dba-dtrace-mysqld-ref.html?ff=nopfpls"><span class="icon-download-thin"></span>
+        <span class="text">
+            Download
+                            this Manual
+                    </span>
+    </a>
+    <div class="docs-sidebar-accordian">
+        <div class="text">
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.pdf">PDF (US Ltr)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.a4.pdf">PDF (A4)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-ref-manual-5.7-en-pdf-1-20210225.noarch.rpm">PDF (RPM)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.html-chapter.tar.gz">HTML Download (TGZ)</a>
+            - 10.1Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.html-chapter.zip">HTML Download (Zip)</a>
+            - 10.2Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-ref-manual-5.7-en-html-chapter-1-20210225.noarch.rpm">HTML Download (RPM)</a>
+            - 8.9Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.man-gpl.tar.gz">Man Pages (TGZ)</a>
+            - 224.7Kb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.man-gpl.zip">Man Pages (Zip)</a>
+            - 332.6Kb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-5.7.info.gz">Info (Gzip)</a>
+            - 3.3Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-5.7.info.zip">Info (Zip)</a>
+            - 3.3Mb<br />
+                    </div>
+    </div>
+
+<a class="docs-sidebar-section" href="dba-dtrace-mysqld-ref.html?ff=nopfpls"><span class="icon-book"></span>
+    <span class="text">Excerpts from this Manual</span></a>
+<div class="docs-sidebar-accordian">
+    <div class="text">
+                <a href="https://dev.mysql.com/doc/mysql-backup-excerpt/5.7/en/">MySQL Backup and Recovery</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-g11n-excerpt/5.7/en/">MySQL Globalization</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-infoschema-excerpt/5.7/en/">MySQL Information Schema</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-installation-excerpt/5.7/en/">MySQL Installation Guide</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-linuxunix-excerpt/5.7/en/">MySQL and Linux/Unix</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-osx-excerpt/5.7/en/">MySQL and OS X</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-partitioning-excerpt/5.7/en/">MySQL Partitioning</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-perfschema-excerpt/5.7/en/">MySQL Performance Schema</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-replication-excerpt/5.7/en/">MySQL Replication</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-repo-excerpt/5.7/en/">Using the MySQL Yum Repository</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-reslimits-excerpt/5.7/en/">MySQL Restrictions and Limitations</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-security-excerpt/5.7/en/">Security in MySQL</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-solaris-excerpt/5.7/en/">MySQL and Solaris</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-sourcebuild-excerpt/5.7/en/">Building MySQL from Source</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-startstop-excerpt/5.7/en/">Starting and Stopping MySQL</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-tutorial-excerpt/5.7/en/">MySQL Tutorial</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-windows-excerpt/5.7/en/">MySQL and Windows</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-cluster-excerpt/5.7/en/">MySQL NDB Cluster 7.5</a><br />
+            </div>
+</div>
+         </div>
+
+              </div>
+     </div>
+
+</div>
+
+<script>
+$(function() {
+    var doc = new $.doc({ 'mobile': $.browser.mobile, 'docId': 1, 'highlight': true });
+});
+</script>
+    
+
+            
+        </div>
+    </div>
+
+    <footer class="collapsed">
+        <div id="footer-bottom">
+                                    <div id="footer-collapse">
+                <a href="dba-dtrace-mysqld-ref.html?ff=nopfpls" id="expand-footer"
+                    aria-label="Expand Footer"
+                    title="Expand Footer"><span
+                    class="icon-plus-square"></span></a>
+            </div>
+                        <div class="footer-contact">
+                <div id="footer-contact-icon" style="display: none;">
+                    <span class="icon-call-phone"></span>
+                </div>
+                <div id="footer-contact-numbers" style="display: none;">
+                    <strong>Contact MySQL Sales</strong><br/>
+                    USA/Canada: +1-866-221-0634 &nbsp;
+                    (<a href="https://www.mysql.com/about/contact/phone/">More Countries &raquo;</a>)
+                </div>
+                <div id="footer-contact-copyright" style="display: inline-block;">
+                    <a href="http://www.oracle.com/" aria-label="Oracle" title="Oracle"><span class="oracle-logo"></span></a>
+                    &nbsp; &copy; 2021, Oracle Corporation and/or its affiliates
+                </div>
+            </div>
+            <div class="social-icons">
+                <a aria-label="Join us on Facebook" title="Join us on Facebook" href="http://www.facebook.com/mysql"><span class="icon-facebook-square"></span></a>
+                <a aria-label="Follow us on Twitter" title="Follow us on Twitter" href="https://twitter.com/mysql"><span class="icon-twitter-square"></span></a>
+                <a aria-label="Follow us on LinkedIn" title="Follow us on LinkedIn" href="https://www.linkedin.com/company/mysql"><span class="icon-linkedin-square"></span></a>
+                <a aria-label="Visit our YouTube channel" title="Visit our YouTube channel" href="http://www.youtube.com/mysqlchannel"><span class="icon-youtube-square"></span></a>
+            </div>
+            <br class="clear" />
+        </div>
+        <div id="footer-links">
+
+            <div id="site-footer-links">
+                <div id="footer-nav"></div>
+
+                <div class="links">
+                    <ul>
+                        <li class="top"><a href="https://www.mysql.com/products/">Products</a></li>
+                        <li><a href="https://www.mysql.com/cloud/">MySQL Database Service</a></li>
+                        <li><a href="https://www.mysql.com/products/enterprise/">MySQL Enterprise Edition</a></li>
+                        <li><a href="https://www.mysql.com/products/standard/">MySQL Standard Edition</a></li>
+                        <li><a href="https://www.mysql.com/products/classic/">MySQL Classic Edition</a></li>
+                        <li><a href="https://www.mysql.com/products/cluster/">MySQL Cluster CGE</a></li>
+                        <li><a href="https://www.mysql.com/oem/">MySQL Embedded (OEM/ISV)</a></li>
+                    </ul>
+                </div>
+
+                <div class="links">
+                    <ul>
+                        <li class="top"><a href="https://www.mysql.com/services/">Services</a></li>
+                        <li><a href="https://www.mysql.com/training/">Training</a></li>
+                        <li><a href="https://www.mysql.com/certification/">Certification</a></li>
+                        <li><a href="https://www.mysql.com/consulting/">Consulting</a></li>
+                        <li><a href="https://www.mysql.com/support/">Support</a></li>
+                    </ul>
+                </div>
+
+                <div class="links">
+                    <ul>
+                        <li class="top"><a href="https://www.mysql.com/downloads/">Downloads</a></li>
+                        <li><a href="https://dev.mysql.com/downloads/mysql/">MySQL Community Server</a></li>
+                        <li><a href="https://dev.mysql.com/downloads/cluster/">MySQL NDB Cluster</a></li>
+                        <li><a href="https://dev.mysql.com/downloads/shell/">MySQL Shell</a></li>
+                        <li><a href="https://dev.mysql.com/downloads/router/">MySQL Router</a></li>
+                        <li><a href="https://dev.mysql.com/downloads/workbench/">MySQL Workbench</a></li>
+                    </ul>
+                </div>
+
+                <div class="links">
+                    <ul>
+                        <li class="top"><a href="https://dev.mysql.com/doc/">Documentation</a></li>
+                        <li><a href="https://dev.mysql.com/doc/refman/en/">MySQL Reference Manual</a></li>
+                        <li><a href="https://dev.mysql.com/doc/workbench/en/">MySQL Workbench</a></li>
+                        <li><a href="https://dev.mysql.com/doc/index-cluster.html">MySQL NDB Cluster</a></li>
+                        <li><a href="https://dev.mysql.com/doc/index-connectors.html">MySQL Connectors</a></li>
+                        <li><a href="https://dev.mysql.com/doc/#topic">Topic Guides</a></li>
+                    </ul>
+                </div>
+
+                <div class="links">
+                    <ul>
+                        <li class="top"><a href="https://www.mysql.com/about/">About MySQL</a></li>
+                        <li><a href="https://www.mysql.com/about/contact/">Contact Us</a></li>
+                                                                        <li><a href="https://www.mysql.com/buy-mysql/">How to Buy</a></li>
+                        <li><a href="https://www.mysql.com/partners/">Partners</a></li>
+                        <li><a href="https://www.mysql.com/about/jobs/">Job Opportunities</a></li>
+                        <li><a href="https://www.mysql.com/sitemap.html">Site Map</a></li>
+                    </ul>
+                </div>
+
+                            </div>
+
+            <div id="footer-logo">
+                <a href="http://www.oracle.com/" aria-label="Oracle" title="Oracle"><span class="oracle-logo"></span></a>
+                &nbsp; &copy; 2021, Oracle Corporation and/or its affiliates
+                <div class="footer-legal-links">
+                    <a href="https://www.mysql.com/about/legal/">Legal Policies</a> |
+                    <a href="http://www.oracle.com/us/legal/privacy/index.htm">Your Privacy Rights</a> |
+                    <a href="http://www.oracle.com/us/legal/terms/index.html">Terms of Use</a> |
+                    <a href="http://www.oracle.com/us/legal/third-party-trademarks/index.html">Trademark Policy</a> |
+                    <a href="http://www.oracle.com/technetwork/community/oca-486395.html">Contributor Agreement</a> |
+                    <div id="teconsent"></div>
+                </div>
+            </div>
+
+        </div>
+    </footer>
+</div>
+
+            <script>
+    if ((oracle.truste.api.getGdprConsentDecision().consentDecision) &&
+            (oracle.truste.api.getGdprConsentDecision().consentDecision.indexOf(0) != -1 ||
+             oracle.truste.api.getGdprConsentDecision().consentDecision.indexOf(2) != -1) )
+    {
+        document.write('<script src="https://labs.mysql.com/common/js/metrics/s_code_remote.js"><\/script>');
+        document.write('<script type="text/javascript" async src="https://c.oracleinfinity.io/acs/account/wh3g12c3gg/js/mysql/odc.js?_ora.context=analytics:production"><\/script>');
+    }
+    </script>
+
+        
+    
+</body>
+</html>

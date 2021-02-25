@@ -1,0 +1,1630 @@
+<!DOCTYPE html>
+<html lang="en" class="svg no-js">
+<head>
+    <meta charset="utf-8" />
+    <!--[if IE ]>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="Language" content="en">
+
+    <title>MySQL :: MySQL 5.7 Reference Manual :: 14.21.7 InnoDB memcached Plugin Internals</title>
+    <link rel="stylesheet" media="all" href="https://labs.mysql.com/common/css/main-20201221.min.css" />
+            <link rel="stylesheet" media="all" href="https://labs.mysql.com/common/css/docs-20201221.min.css" />
+    
+    
+    <link rel="stylesheet" media="print" href="https://labs.mysql.com/common/css/print-20201221.min.css" />
+
+    
+    
+    
+    
+            <link rel="contents" href="index.html" title="MySQL 5.7 Reference Manual" />
+<link rel="start" href="index.html" title="MySQL 5.7 Reference Manual" />
+<link rel="prev" href="innodb-memcached-replication.html" title="14.21.6 The InnoDB memcached Plugin and Replication" />
+<link rel="next" href="innodb-memcached-troubleshoot.html?ff=nopfpls" title="14.21.8 Troubleshooting the InnoDB memcached Plugin" />
+<link rel="up" href="innodb-memcached.html" title="14.21 InnoDB memcached Plugin" />
+
+    
+    <link rel="shortcut icon" href="https://labs.mysql.com/common/themes/sakila/favicon.ico" />
+    <script async="async" type="text/javascript" src='https://consent.truste.com/notice?domain=oracle.com&c=teconsent&js=bb&noticeType=bb&text=true&cdn=1&pcookie&gtm=1' crossorigin></script>
+    <script src="https://www.oracle.com/assets/truste-oraclelib.js"></script>
+    <script>(function(H){ H.className=H.className.replace(/\bno-js\b/,'js') })(document.documentElement)</script>
+    <script src="https://labs.mysql.com/common/js/site-20200928.min.js"></script>
+
+    
+    
+    <!--[if lt IE 9]>
+        <script src="https://labs.mysql.com/common/js/polyfills/html5shiv-printshiv-3.7.2.min.js"></script>
+        <script src="https://labs.mysql.com/common/js/polyfills/respond-1.4.2.min.js"></script>
+    <![endif]-->
+        <!--[if IE 9]>
+        <style>#docs-sidebar-toc { box-sizing: content-box; }</style>
+    <![endif]-->
+    </head>
+
+<body class="no-sidebar full-page dev">
+<div class="page-wrapper">
+    <header>
+
+                        <a href="https://dev.mysql.com/" aria-label="Home" title="MySQL" id="l1-home-link"></a>
+        
+        <div id="l1-nav-container">
+            <div id="l1-line1">
+                <div id="l1-auth-links">
+                    <a href="https://www.mysql.com/about/contact/"><b>Contact MySQL</b></a>
+                    <span id="l1-contact-separator">&nbsp;|&nbsp;</span>
+                    <span id="l1-contact-separator-br"><br /></span>
+                                             <a href="https://dev.mysql.com/auth/login/?dest=https%3A%2F%2Fdev.mysql.com%2Fdoc%2Frefman%2F5.7%2Fen%2Finnodb-memcached-internals.html%3Fff%3Dnopfpls">Login</a> &nbsp;|&nbsp;
+                         <a href="https://dev.mysql.com/auth/register/">Register</a>
+                                    </div>
+                <div id="l1-lhs">
+                    <div id="l1-slogan">
+                        The world's most popular open source database
+                    </div>
+                    <div id="l1-search-box">
+                        <form id="l1-search-form" method="get" action="https://www.oracle.com/search/results">
+                        <input type="hidden" name="cat" value="mysql" />
+                        <input type="hidden" name="Ntk" value="SI-ALL5" />
+                        <input id="l1-search-input" type="search" class="icon-search" placeholder="Search" aria-label="Search" name="Ntt" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div id="l1-line2">
+                <div class="social-icons">
+                    <a aria-label="Join us on Facebook" title="Join us on Facebook" href="http://www.facebook.com/mysql"><span class="icon-facebook"></span></a>
+                    <a aria-label="Follow us on Twitter" title="Follow us on Twitter" href="https://twitter.com/mysql"><span class="icon-twitter"></span></a>
+                    <a aria-label="Follow us on LinkedIn" title="Follow us on LinkedIn" href="https://www.linkedin.com/company/mysql"><span class="icon-linkedin"></span></a>
+                    <a aria-label="Visit our YouTube channel" title="Visit our YouTube channel" href="http://www.youtube.com/mysqlchannel"><span class="icon-youtube"></span></a>
+                </div>
+                <ul id="l1-nav">
+                    <li>
+                        <a href="https://www.mysql.com/"><!-- <span class="icon-sakila"></span>  -->MySQL.com</a>
+                    </li><li>
+                        <a href="https://www.mysql.com/downloads/"><!-- <span class="icon-download-thin"></span>  -->Downloads</a>
+                    </li><li class="active">
+                        <a href="https://dev.mysql.com/doc/"><!-- <span class="icon-books"></span>  -->Documentation</a>
+                    </li><li>
+                        <a href="https://dev.mysql.com/"><!-- <span class="icon-code"></span>  -->Developer Zone</a>
+                    </li>                </ul>
+            </div>
+        </div>
+        <div id="sub-header">
+            <div id="l2-nav-container">
+                <div id="l2-nav-toggle">
+                    <span class="icon-three-bars"></span>
+                </div>
+                                                                                        <a class="button nav-button-3" href="https://dev.mysql.com/"><span class="icon-code"></span> Developer Zone</a>
+                                                                                                                                    <a class="button nav-button-2" href="https://www.mysql.com/downloads/"><span class="icon-download-thin"></span> Downloads</a>
+                                                                                                <a class="button nav-button-1" href="https://www.mysql.com/"><span class="icon-sakila"></span> MySQL.com</a>
+                                                                        <div id="l2-search-toggle">
+                    <span class="icon-search"></span>
+                </div>
+                <div id="l2-site-icon">
+                                                                                                                                                                                                    <span class="icon-books"></span>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </div>
+                <div id="l1-section-title">
+                    <span id="l1-section-label">
+                        <a href="https://dev.mysql.com/doc/">Documentation</a>
+                    </span>
+                </div>
+                <nav>
+                    
+
+<ul id="l2-nav">
+            	<li class="active"><a class="active " href="https://dev.mysql.com/doc/refman/en/">MySQL Server</a>
+    			</li>
+	        	<li class=""><a  href="https://dev.mysql.com/doc/index-enterprise.html">MySQL Enterprise</a>
+    			</li>
+	        	<li class=""><a  href="https://dev.mysql.com/doc/workbench/en/">Workbench</a>
+    			</li>
+	        	<li class=""><a  href="https://dev.mysql.com/doc/mysql-shell/en/mysql-innodb-cluster.html">InnoDB Cluster</a>
+    			</li>
+	        	<li class=""><a  href="https://dev.mysql.com/doc/index-cluster.html">MySQL NDB Cluster</a>
+    			</li>
+	        	<li class=""><a  href="https://dev.mysql.com/doc/index-connectors.html">Connectors</a>
+    			</li>
+	        	<li class=" last"><a  href="https://dev.mysql.com/doc/index-other.html">More</a>
+    			</li>
+	                        <li class="other-section"><a href="https://www.mysql.com/">MySQL.com</a></li>
+                            <li class="other-section"><a href="https://www.mysql.com/downloads/">Downloads</a></li>
+                                        <li class="other-section"><a href="https://dev.mysql.com/">Developer Zone</a></li>
+            </ul>
+                </nav>
+            </div>
+            <div id="l3-search-container"></div>
+            <div id="top-orange"><span id="section-nav">Section Menu: &nbsp; </span></div>
+        </div>
+    </header>
+        <div id="page">
+                        <div role="main" id="main">
+
+            
+                
+            
+<div>
+    <div id="docs-sidebar-toc" class="">
+    <div id="docs-toc-inner">
+        <div class="docs-sidebar-header" id="docs-nav-header">
+            <a class="docs-show-hide-nav" id="docs-hide-nav" href="innodb-memcached-internals.html?ff=nopfpls" title="Hide Sidebar" aria-label="Hide Sidebar"><span class="icon-arrow-small-left"></span></a>
+            <div class="docs-nav-links">
+                                    
+    <a href="innodb-memcached-replication.html"
+        aria-label="Previous" title="Previous: The InnoDB memcached Plugin and Replication"><span
+        class="icon-chevron-left"></span></a>
+<a href="index.html" aria-label="Start" title="Start"><span class="icon-book-open"></span></a>
+        <a aria-label="Up" href="innodb-memcached.html" title="Up: InnoDB memcached Plugin"><span class="icon-chevron-up"></span></a>
+    <a href="innodb-memcached-troubleshoot.html" aria-label="Next"
+        title="Next: Troubleshooting the InnoDB memcached Plugin"><span
+        class="icon-chevron-right"></span></a>
+                            </div>
+        </div>
+                    
+<div id="docs-sidebar-search-container">
+    <div id="docs-sidebar-search-box">
+        <form method="get" action="https://dev.mysql.com/doc/search/">
+            <input type="hidden" name="d" id="d" value="12" />
+            <input type="hidden" name="p" id="p" value="1" />
+            <input type="text" name="q" id="q" title="Search this Manual"
+                value="Search this Manual"
+                style="color: #bbb;"
+                onfocus="if(this.value == 'Search this Manual') {this.value='';this.style.color='#555';}"
+                onblur="if(this.value == '') {this.value='Search this Manual';this.style.color='#bbb';}" />
+
+            <button class="docs-sidebar-search-btn" aria-label="Search" title="Search" type="submit">
+                <span class="icon-search"></span>
+            </button>
+        </form>
+    </div>
+</div>
+                <div class="docs-sidebar-nav">
+            <a class="docs-icon-home" href="https://dev.mysql.com/doc/"><span class="icon-home"></span>Documentation Home</a><hr />
+            <div class="docs-sidebar-mtitle">MySQL 5.7 Reference Manual</div>
+            <nav class="doctoc" id="doc-12">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="preface.html">Preface and Legal Notices</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="innodb-memcached-internals.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="introduction.html">General Information</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="innodb-memcached-internals.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="installing.html">Installing and Upgrading MySQL</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="innodb-memcached-internals.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="tutorial.html">Tutorial</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="innodb-memcached-internals.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="programs.html">MySQL Programs</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="innodb-memcached-internals.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="server-administration.html">MySQL Server Administration</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="innodb-memcached-internals.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="security.html">Security</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="innodb-memcached-internals.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="backup-and-recovery.html">Backup and Recovery</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="innodb-memcached-internals.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="optimization.html">Optimization</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="innodb-memcached-internals.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="language-structure.html">Language Structure</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="innodb-memcached-internals.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="charset.html">Character Sets, Collations, Unicode</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="innodb-memcached-internals.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="data-types.html">Data Types</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="innodb-memcached-internals.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="functions.html">Functions and Operators</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="innodb-memcached-internals.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="sql-statements.html">SQL Statements</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="innodb-memcached-internals.html?ff=nopfpls"><span class="icon-chevron-down"></span></a></div><div class="docs-sidebar-nav-link"><a href="innodb-storage-engine.html">The InnoDB Storage Engine</a></div></div>                        <div class="docs-submenu">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="innodb-memcached-internals.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="innodb-introduction.html">Introduction to InnoDB</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-benefits.html">Benefits of Using InnoDB Tables</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-best-practices.html">Best Practices for InnoDB Tables</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-check-availability.html">Verifying that InnoDB is the Default Storage Engine</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-benchmarking.html">Testing and Benchmarking with InnoDB</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-turning-off.html">Turning Off InnoDB</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysql-acid.html">InnoDB and the ACID Model</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-multi-versioning.html">InnoDB Multi-Versioning</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-architecture.html">InnoDB Architecture</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="innodb-memcached-internals.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="innodb-in-memory-structures.html">InnoDB In-Memory Structures</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-buffer-pool.html">Buffer Pool</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-change-buffer.html">Change Buffer</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-adaptive-hash.html">Adaptive Hash Index</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-redo-log-buffer.html">Log Buffer</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="innodb-memcached-internals.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="innodb-on-disk-structures.html">InnoDB On-Disk Structures</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="innodb-memcached-internals.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="innodb-tables.html">Tables</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="using-innodb-tables.html">Creating InnoDB Tables</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-create-table-external.html">Creating Tables Externally</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-table-import.html">Importing InnoDB Tables</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-migration.html">Moving or Copying InnoDB Tables</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="converting-tables-to-innodb.html">Converting Tables from MyISAM to InnoDB</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-auto-increment-handling.html">AUTO_INCREMENT Handling in InnoDB</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="innodb-memcached-internals.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="innodb-indexes.html">Indexes</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-index-types.html">Clustered and Secondary Indexes</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-physical-structure.html">The Physical Structure of an InnoDB Index</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="sorted-index-builds.html">Sorted Index Builds</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-fulltext-index.html">InnoDB FULLTEXT Indexes</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="innodb-memcached-internals.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="innodb-tablespace.html">Tablespaces</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-system-tablespace.html">The System Tablespace</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-file-per-table-tablespaces.html">File-Per-Table Tablespaces</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="general-tablespaces.html">General Tablespaces</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-undo-tablespaces.html">Undo Tablespaces</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-temporary-tablespace.html">The Temporary Tablespace</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-data-dictionary.html">InnoDB Data Dictionary</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-doublewrite-buffer.html">Doublewrite Buffer</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-redo-log.html">Redo Log</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-undo-logs.html">Undo Logs</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="innodb-memcached-internals.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="innodb-locking-transaction-model.html">InnoDB Locking and Transaction Model</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-locking.html">InnoDB Locking</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="innodb-memcached-internals.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="innodb-transaction-model.html">InnoDB Transaction Model</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-transaction-isolation-levels.html">Transaction Isolation Levels</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-autocommit-commit-rollback.html">autocommit, Commit, and Rollback</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-consistent-read.html">Consistent Nonlocking Reads</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-locking-reads.html">Locking Reads</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-locks-set.html">Locks Set by Different SQL Statements in InnoDB</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-next-key-locking.html">Phantom Rows</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="innodb-memcached-internals.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="innodb-deadlocks.html">Deadlocks in InnoDB</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-deadlock-example.html">An InnoDB Deadlock Example</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-deadlock-detection.html">Deadlock Detection</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-deadlocks-handling.html">How to Minimize and Handle Deadlocks</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="innodb-memcached-internals.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="innodb-configuration.html">InnoDB Configuration</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-init-startup-configuration.html">InnoDB Startup Configuration</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-read-only-instance.html">Configuring InnoDB for Read-Only Operation</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="innodb-memcached-internals.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="innodb-performance-buffer-pool.html">InnoDB Buffer Pool Configuration</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-buffer-pool-resize.html">Configuring InnoDB Buffer Pool Size</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-multiple-buffer-pools.html">Configuring Multiple Buffer Pool Instances</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-performance-midpoint_insertion.html">Making the Buffer Pool Scan Resistant</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-performance-read_ahead.html">Configuring InnoDB Buffer Pool Prefetching (Read-Ahead)</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-buffer-pool-flushing.html">Configuring Buffer Pool Flushing</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-preload-buffer-pool.html">Saving and Restoring the Buffer Pool State</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-performance-use_sys_malloc.html">Configuring the Memory Allocator for InnoDB</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-performance-thread_concurrency.html">Configuring Thread Concurrency for InnoDB</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-performance-multiple_io_threads.html">Configuring the Number of Background InnoDB I/O Threads</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-linux-native-aio.html">Using Asynchronous I/O on Linux</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-configuring-io-capacity.html">Configuring InnoDB I/O Capacity</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-performance-spin_lock_polling.html">Configuring Spin Lock Polling</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-purge-configuration.html">Purge Configuration</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="innodb-memcached-internals.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="innodb-performance-optimizer-statistics.html">Configuring Optimizer Statistics for InnoDB</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-persistent-stats.html">Configuring Persistent Optimizer Statistics Parameters</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-statistics-estimation.html">Configuring Non-Persistent Optimizer Statistics Parameters</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-analyze-table-complexity.html">Estimating ANALYZE TABLE Complexity for InnoDB Tables</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="index-page-merge-threshold.html">Configuring the Merge Threshold for Index Pages</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="innodb-memcached-internals.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="innodb-compression.html">InnoDB Table and Page Compression</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="innodb-memcached-internals.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="innodb-table-compression.html">InnoDB Table Compression</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-compression-background.html">Overview of Table Compression</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-compression-usage.html">Creating Compressed Tables</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-compression-tuning.html">Tuning Compression for InnoDB Tables</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-compression-tuning-monitoring.html">Monitoring InnoDB Table Compression at Runtime</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-compression-internals.html">How Compression Works for InnoDB Tables</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-performance-compression-oltp.html">Compression for OLTP Workloads</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-compression-syntax-warnings.html">SQL Compression Syntax Warnings and Errors</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-page-compression.html">InnoDB Page Compression</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="innodb-memcached-internals.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="innodb-file-format.html">InnoDB File-Format Management</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-file-format-enabling.html">Enabling File Formats</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="innodb-memcached-internals.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="innodb-file-format-compatibility.html">Verifying File Format Compatibility</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-file-format-compatibility-checking.html">Compatibility Check When InnoDB Is Started</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-file-format-compatibility-checking-table-access.html">Compatibility Check When a Table Is Opened</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-file-format-identifying.html">Identifying the File Format in Use</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-file-format-downgrading.html">Modifying the File Format</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-row-format.html">InnoDB Row Formats</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="innodb-memcached-internals.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="innodb-disk-management.html">InnoDB Disk I/O and File Space Management</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-disk-io.html">InnoDB Disk I/O</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-file-space.html">File Space Management</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-checkpoints.html">InnoDB Checkpoints</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-file-defragmenting.html">Defragmenting a Table</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-truncate-table-reclaim-space.html">Reclaiming Disk Space with TRUNCATE TABLE</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="innodb-memcached-internals.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="innodb-online-ddl.html">InnoDB and Online DDL</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-online-ddl-operations.html">Online DDL Operations</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-online-ddl-performance.html">Online DDL Performance and Concurrency</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-online-ddl-space-requirements.html">Online DDL Space Requirements</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-online-ddl-single-multi.html">Simplifying DDL Statements with Online DDL</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-online-ddl-failure-conditions.html">Online DDL Failure Conditions</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-online-ddl-limitations.html">Online DDL Limitations</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-data-encryption.html">InnoDB Data-at-Rest Encryption</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-parameters.html">InnoDB Startup Options and System Variables</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="innodb-memcached-internals.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="innodb-information-schema.html">InnoDB INFORMATION_SCHEMA Tables</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="innodb-memcached-internals.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="innodb-information-schema-compression-tables.html">InnoDB INFORMATION_SCHEMA Tables about Compression</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-information-schema-innodb_cmp.html">INNODB_CMP and INNODB_CMP_RESET</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-information-schema-innodb_cmpmem.html">INNODB_CMPMEM and INNODB_CMPMEM_RESET</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-information-schema-examples-compression-sect.html">Using the Compression Information Schema Tables</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="innodb-memcached-internals.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="innodb-information-schema-transactions.html">InnoDB INFORMATION_SCHEMA Transaction and Locking Information</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-information-schema-examples.html">Using InnoDB Transaction and Locking Information</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-information-schema-understanding-innodb-locking.html">InnoDB Lock and Lock-Wait Information</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-information-schema-internal-data.html">Persistence and Consistency of InnoDB Transaction and Locking
+Information</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-information-schema-system-tables.html">InnoDB INFORMATION_SCHEMA System Tables</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-information-schema-fulltext_index-tables.html">InnoDB INFORMATION_SCHEMA FULLTEXT Index Tables</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-information-schema-buffer-pool-tables.html">InnoDB INFORMATION_SCHEMA Buffer Pool Tables</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-information-schema-metrics-table.html">InnoDB INFORMATION_SCHEMA Metrics Table</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-information-schema-temp-table-info.html">InnoDB INFORMATION_SCHEMA Temporary Table Info Table</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-information-schema-files-table.html">Retrieving InnoDB Tablespace Metadata from INFORMATION_SCHEMA.FILES</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="innodb-memcached-internals.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="innodb-performance-schema.html">InnoDB Integration with MySQL Performance Schema</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="monitor-alter-table-performance-schema.html">Monitoring ALTER TABLE Progress for InnoDB Tables Using Performance
+      Schema</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="monitor-innodb-mutex-waits-performance-schema.html">Monitoring InnoDB Mutex Waits Using Performance Schema</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="innodb-memcached-internals.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="innodb-monitors.html">InnoDB Monitors</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-monitor-types.html">InnoDB Monitor Types</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-enabling-monitors.html">Enabling InnoDB Monitors</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-standard-monitor.html">InnoDB Standard Monitor and Lock Monitor Output</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="innodb-memcached-internals.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="innodb-backup-recovery.html">InnoDB Backup and Recovery</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-backup.html">InnoDB Backup</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-recovery.html">InnoDB Recovery</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-and-mysql-replication.html">InnoDB and MySQL Replication</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="innodb-memcached-internals.html?ff=nopfpls"><span class="icon-chevron-down"></span></a></div><div class="docs-sidebar-nav-link"><a href="innodb-memcached.html">InnoDB memcached Plugin</a></div></div>                        <div class="docs-submenu">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-memcached-benefits.html">Benefits of the InnoDB memcached Plugin</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-memcached-intro.html">InnoDB memcached Architecture</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-memcached-setup.html">Setting Up the InnoDB memcached Plugin</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-memcached-security.html">Security Considerations for the InnoDB memcached Plugin</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="innodb-memcached-internals.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="innodb-memcached-developing.html">Writing Applications for the InnoDB memcached Plugin</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-memcached-porting-mysql.html">Adapting an Existing MySQL Schema for the InnoDB memcached Plugin</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-memcached-porting-memcached.html">Adapting a memcached Application for the InnoDB memcached Plugin</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-memcached-tuning.html">Tuning InnoDB memcached Plugin Performance</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-memcached-txn.html">Controlling Transactional Behavior of the InnoDB memcached Plugin</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-memcached-dml.html">Adapting DML Statements to memcached Operations</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-memcached-ddl.html">Performing DML and DDL Statements on the Underlying InnoDB Table</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-memcached-replication.html">The InnoDB memcached Plugin and Replication</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link current"><a href="innodb-memcached-internals.html">InnoDB memcached Plugin Internals</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-memcached-troubleshoot.html">Troubleshooting the InnoDB memcached Plugin</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="innodb-memcached-internals.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="innodb-troubleshooting.html">InnoDB Troubleshooting</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="error-creating-innodb.html">Troubleshooting InnoDB I/O Problems</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="forcing-innodb-recovery.html">Forcing InnoDB Recovery</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-troubleshooting-datadict.html">Troubleshooting InnoDB Data Dictionary Operations</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-error-handling.html">InnoDB Error Handling</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-limits.html">InnoDB Limits</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innodb-restrictions-limitations.html">InnoDB Restrictions and Limitations</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="innodb-memcached-internals.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="storage-engines.html">Alternative Storage Engines</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="innodb-memcached-internals.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="replication.html">Replication</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="innodb-memcached-internals.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="group-replication.html">Group Replication</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysql-shell-userguide.html">MySQL Shell</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="innodb-memcached-internals.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="document-store.html">Using MySQL as a Document Store</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysql-innodb-cluster-introduction.html">InnoDB Cluster</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="innodb-memcached-internals.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="mysql-cluster.html">MySQL NDB Cluster 7.5 and NDB Cluster 7.6</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="innodb-memcached-internals.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="partitioning.html">Partitioning</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="innodb-memcached-internals.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="stored-objects.html">Stored Objects</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="innodb-memcached-internals.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="information-schema.html">INFORMATION_SCHEMA Tables</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="innodb-memcached-internals.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="performance-schema.html">MySQL Performance Schema</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="innodb-memcached-internals.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="sys-schema.html">MySQL sys Schema</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="innodb-memcached-internals.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="connectors-apis.html">Connectors and APIs</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="innodb-memcached-internals.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="mysql-enterprise.html">MySQL Enterprise Edition</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="workbench.html">MySQL Workbench</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="innodb-memcached-internals.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="faqs.html">MySQL 5.7 Frequently Asked Questions</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="innodb-memcached-internals.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="error-handling.html">Error Messages and Common Problems</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="innodb-memcached-internals.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="indexes.html">Indexes</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="glossary.html">MySQL Glossary</a></div></div>                    </li>
+        </ul>
+                            </nav>
+        </div>
+
+        
+<a class="docs-sidebar-section" href="innodb-memcached-internals.html?ff=nopfpls"><span class="icon-related"></span>
+    <span class="text">Related Documentation</span></a>
+<div class="docs-sidebar-accordian open">
+    <div class="text">
+        <a href="https://dev.mysql.com/doc/relnotes/mysql/5.7/en/">MySQL 5.7 Release Notes</a><br />
+        </div>
+</div>
+
+    <a class="docs-sidebar-section" href="innodb-memcached-internals.html?ff=nopfpls"><span class="icon-download-thin"></span>
+        <span class="text">
+            Download
+                            this Manual
+                    </span>
+    </a>
+    <div class="docs-sidebar-accordian open">
+        <div class="text">
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.pdf">PDF (US Ltr)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.a4.pdf">PDF (A4)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-ref-manual-5.7-en-pdf-1-20210225.noarch.rpm">PDF (RPM)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.html-chapter.tar.gz">HTML Download (TGZ)</a>
+            - 10.1Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.html-chapter.zip">HTML Download (Zip)</a>
+            - 10.2Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-ref-manual-5.7-en-html-chapter-1-20210225.noarch.rpm">HTML Download (RPM)</a>
+            - 8.9Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.man-gpl.tar.gz">Man Pages (TGZ)</a>
+            - 224.7Kb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.man-gpl.zip">Man Pages (Zip)</a>
+            - 332.6Kb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-5.7.info.gz">Info (Gzip)</a>
+            - 3.3Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-5.7.info.zip">Info (Zip)</a>
+            - 3.3Mb<br />
+                    </div>
+    </div>
+
+<a class="docs-sidebar-section" href="innodb-memcached-internals.html?ff=nopfpls"><span class="icon-book"></span>
+    <span class="text">Excerpts from this Manual</span></a>
+<div class="docs-sidebar-accordian">
+    <div class="text">
+                <a href="https://dev.mysql.com/doc/mysql-backup-excerpt/5.7/en/">MySQL Backup and Recovery</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-g11n-excerpt/5.7/en/">MySQL Globalization</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-infoschema-excerpt/5.7/en/">MySQL Information Schema</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-installation-excerpt/5.7/en/">MySQL Installation Guide</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-linuxunix-excerpt/5.7/en/">MySQL and Linux/Unix</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-osx-excerpt/5.7/en/">MySQL and OS X</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-partitioning-excerpt/5.7/en/">MySQL Partitioning</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-perfschema-excerpt/5.7/en/">MySQL Performance Schema</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-replication-excerpt/5.7/en/">MySQL Replication</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-repo-excerpt/5.7/en/">Using the MySQL Yum Repository</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-reslimits-excerpt/5.7/en/">MySQL Restrictions and Limitations</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-security-excerpt/5.7/en/">Security in MySQL</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-solaris-excerpt/5.7/en/">MySQL and Solaris</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-sourcebuild-excerpt/5.7/en/">Building MySQL from Source</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-startstop-excerpt/5.7/en/">Starting and Stopping MySQL</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-tutorial-excerpt/5.7/en/">MySQL Tutorial</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-windows-excerpt/5.7/en/">MySQL and Windows</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-cluster-excerpt/5.7/en/">MySQL NDB Cluster 7.5</a><br />
+            </div>
+</div>
+
+        <br /><span id="wkr"><br /></span>
+    </div>
+    </div>
+
+    <div id="docs-main" class="has-toc">
+    <div id="docs-main-inner">
+
+                <div class="right" id="docs-version-nav">
+            <a href="innodb-memcached-internals.html?ff=nopfpls" id="docs-version-nav-toggle">version 5.7
+            <span class="icon-chevron-down"></span></a>
+            <div id="docs-version-list">
+                                                        <a                         href="https://dev.mysql.com/doc/refman/8.0/en/innodb-memcached-internals.html">
+                        8.0
+                                                &nbsp;current
+                                            </a><br />
+                                                                                                                <a                         href="https://dev.mysql.com/doc/refman/5.6/en/innodb-memcached-internals.html">
+                        5.6
+                                            </a><br />
+                                                                        <div id="docs-version-nav-lang">
+                                                                                                                                                    <a                                     href="https://dev.mysql.com/doc/refman/5.6/ja/innodb-memcached-internals.html">
+                                    5.6&nbsp;
+                                                                            Japanese
+                                                                    </a><br />
+                                                                                            </div>
+                            </div>
+        </div>
+        
+        <div id="docs-show-nav" class="left hidden" style="margin-right: 15px;">
+            <a class="docs-show-hide-nav" href="innodb-memcached-internals.html?ff=nopfpls" aria-label="Show Sidebar"
+                title="Show Sidebar"><span class="icon-arrow-small-right"></span></a>
+        </div>
+
+                        <div id="docs-breadcrumbs">
+            <a href="index.html">MySQL 5.7 Reference Manual</a> &nbsp;/&nbsp;
+                            <span id="breadcrumbs-link"><a href="innodb-memcached-internals.html?ff=nopfpls" id="show-breadcrumbs">...</a> &nbsp;/&nbsp;</span>
+                <span class="hidden" id="hidden-breadcrumbs">
+                                                        <a href="innodb-storage-engine.html">The InnoDB Storage Engine</a> &nbsp;/&nbsp;
+                                                            <a href="innodb-memcached.html">InnoDB memcached Plugin</a> &nbsp;/&nbsp;
+                                                                                        </span>
+                                        InnoDB memcached Plugin Internals
+                                    </div>
+        
+        <div id="docs-body">
+        
+<div class="section">
+<div class="titlepage">
+<div>
+<div>
+<h3 class="title"><a name="innodb-memcached-internals"></a>14.21.7 InnoDB memcached Plugin Internals</h3>
+
+</div>
+
+</div>
+
+</div>
+<div class="simplesect">
+<div class="titlepage">
+<div>
+<div class="simple">
+<h4 class="title"><a name="innodb-memcached-api"></a>InnoDB API for the InnoDB memcached Plugin</h4>
+
+</div>
+
+</div>
+
+</div>
+<p>
+        The <code class="literal">InnoDB</code> <span class="command"><strong>memcached</strong></span>
+        engine accesses <code class="literal">InnoDB</code> through
+        <code class="literal">InnoDB</code> APIs, most of which are directly
+        adopted from embedded <code class="literal">InnoDB</code>.
+        <code class="literal">InnoDB</code> API functions are passed to the
+        <code class="literal">InnoDB</code> <span class="command"><strong>memcached</strong></span> engine as
+        callback functions. <code class="literal">InnoDB</code> API functions
+        access the <code class="literal">InnoDB</code> tables directly, and are
+        mostly DML operations with the exception of
+        <a class="link" href="truncate-table.html" title="13.1.34 TRUNCATE TABLE Statement"><code class="literal">TRUNCATE TABLE</code></a>.
+      </p><p>
+        <span class="command"><strong>memcached</strong></span> commands are implemented through
+        the <code class="literal">InnoDB</code> <span class="command"><strong>memcached</strong></span> API.
+        The following table outlines how <span class="command"><strong>memcached</strong></span>
+        commands are mapped to DML or DDL operations.
+</p>
+<div class="table">
+<a name="idm44933495199680"></a><p class="title"><b>Table 14.21 memcached Commands and Associated DML or DDL Operations</b></p>
+<div class="table-contents">
+<table frame="all" summary="memcached commands and associated DML or DDL operations."><col width="25%"><col width="75%"><thead><tr>
+            <th>memcached Command</th>
+            <th>DML or DDL Operations</th>
+          </tr></thead><tbody><tr>
+            <td><code class="literal">get</code></td>
+            <td>a read/fetch command</td>
+          </tr><tr>
+            <td><code class="literal">set</code></td>
+            <td>a search followed by an <code class="literal">INSERT</code> or
+              <code class="literal">UPDATE</code> (depending on whether or not a
+              key exists)</td>
+          </tr><tr>
+            <td><code class="literal">add</code></td>
+            <td>a search followed by an <code class="literal">INSERT</code> or
+              <code class="literal">UPDATE</code></td>
+          </tr><tr>
+            <td><code class="literal">replace</code></td>
+            <td>a search followed by an <code class="literal">UPDATE</code></td>
+          </tr><tr>
+            <td><code class="literal">append</code></td>
+            <td>a search followed by an <code class="literal">UPDATE</code> (appends data to the
+              result before <code class="literal">UPDATE</code>)</td>
+          </tr><tr>
+            <td><code class="literal">prepend</code></td>
+            <td>a search followed by an <code class="literal">UPDATE</code> (prepends data to the
+              result before <code class="literal">UPDATE</code>)</td>
+          </tr><tr>
+            <td><code class="literal">incr</code></td>
+            <td>a search followed by an <code class="literal">UPDATE</code></td>
+          </tr><tr>
+            <td><code class="literal">decr</code></td>
+            <td>a search followed by an <code class="literal">UPDATE</code></td>
+          </tr><tr>
+            <td><code class="literal">delete</code></td>
+            <td>a search followed by a <code class="literal">DELETE</code></td>
+          </tr><tr>
+            <td><code class="literal">flush_all</code></td>
+            <td><code class="literal">TRUNCATE TABLE</code> (DDL)</td>
+</tr></tbody></table>
+</div>
+
+</div>
+<br class="table-break">
+</div>
+<div class="simplesect">
+<div class="titlepage">
+<div>
+<div class="simple">
+<h4 class="title"><a name="innodb-memcached-config-tables"></a>InnoDB memcached Plugin Configuration Tables</h4>
+
+</div>
+
+</div>
+
+</div>
+<a class="indexterm" name="idm44933495158256"></a><a class="indexterm" name="idm44933495157216"></a><a class="indexterm" name="idm44933495156144"></a><a class="indexterm" name="idm44933495155072"></a><p>
+        This section describes configuration tables used by the
+        <code class="literal">daemon_memcached</code> plugin. The
+        <code class="literal">cache_policies</code> table,
+        <code class="literal">config_options</code> table, and
+        <code class="literal">containers</code> table are created by the
+        <code class="filename">innodb_memcached_config.sql</code> configuration
+        script in the <code class="literal">innodb_memcache</code> database.
+      </p><pre class="programlisting copytoclipboard line-numbers language-sql"><code class="language-sql">mysql&gt; USE innodb_memcache;
+Database changed
+mysql&gt; SHOW TABLES;
++---------------------------+
+| Tables_in_innodb_memcache |
++---------------------------+
+| cache_policies            |
+| config_options            |
+| containers                |
++---------------------------+</code></pre>
+</div>
+<div class="simplesect">
+<div class="titlepage">
+<div>
+<div class="simple">
+<h4 class="title"><a name="innodb-memcached-cache-policies-table"></a>cache_policies Table</h4>
+
+</div>
+
+</div>
+
+</div>
+<p>
+        The <code class="literal">cache_policies</code> table defines a cache
+        policy for the <code class="literal">InnoDB</code>
+        <code class="literal">memcached</code> installation. You can specify
+        individual policies for <code class="literal">get</code>,
+        <code class="literal">set</code>, <code class="literal">delete</code>, and
+        <code class="literal">flush</code> operations, within a single cache
+        policy. The default setting for all operations is
+        <code class="literal">innodb_only</code>.
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+            <code class="literal">innodb_only</code>: Use
+            <code class="literal">InnoDB</code> as the data store.
+          </p></li><li class="listitem"><p>
+            <code class="literal">cache_only</code>: Use the
+            <span class="command"><strong>memcached</strong></span> engine as the data store.
+          </p></li><li class="listitem"><p>
+            <code class="literal">caching</code>: Use both
+            <code class="literal">InnoDB</code> and the
+            <span class="command"><strong>memcached</strong></span> engine as data stores. In this
+            case, if <span class="command"><strong>memcached</strong></span> cannot find a key in
+            memory, it searches for the value in an
+            <code class="literal">InnoDB</code> table.
+          </p></li><li class="listitem"><p>
+            <code class="literal">disable</code>: Disable caching.
+</p></li></ul>
+</div>
+
+<div class="table">
+<a name="idm44933495128240"></a><p class="title"><b>Table 14.22 cache_policies Columns</b></p>
+<div class="table-contents">
+<table frame="all" summary="Columns of the cache_policies table."><col width="50%"><col width="50%"><thead><tr>
+            <th>Column</th>
+            <th>Description</th>
+          </tr></thead><tbody><tr>
+            <td><code class="literal">policy_name</code></td>
+            <td>Name of the cache policy. The default cache policy name is
+              <code class="literal">cache_policy</code>.</td>
+          </tr><tr>
+            <td><code class="literal">get_policy</code></td>
+            <td>The cache policy for get operations. Valid values are
+              <code class="literal">innodb_only</code>,
+              <code class="literal">cache_only</code>, <code class="literal">caching</code>,
+              or <code class="literal">disabled</code>. The default setting is
+              <code class="literal">innodb_only</code>.</td>
+          </tr><tr>
+            <td><code class="literal">set_policy</code></td>
+            <td>The cache policy for set operations. Valid values are
+              <code class="literal">innodb_only</code>,
+              <code class="literal">cache_only</code>, <code class="literal">caching</code>,
+              or <code class="literal">disabled</code>. The default setting is
+              <code class="literal">innodb_only</code>.</td>
+          </tr><tr>
+            <td><code class="literal">delete_policy</code></td>
+            <td>The cache policy for delete operations. Valid values are
+              <code class="literal">innodb_only</code>,
+              <code class="literal">cache_only</code>, <code class="literal">caching</code>,
+              or <code class="literal">disabled</code>. The default setting is
+              <code class="literal">innodb_only</code>.</td>
+          </tr><tr>
+            <td><code class="literal">flush_policy</code></td>
+            <td>The cache policy for flush operations. Valid values are
+              <code class="literal">innodb_only</code>,
+              <code class="literal">cache_only</code>, <code class="literal">caching</code>,
+              or <code class="literal">disabled</code>. The default setting is
+              <code class="literal">innodb_only</code>.</td>
+</tr></tbody></table>
+</div>
+
+</div>
+<br class="table-break">
+</div>
+<div class="simplesect">
+<div class="titlepage">
+<div>
+<div class="simple">
+<h4 class="title"><a name="innodb-memcached-config-options-table"></a>config_options Table</h4>
+
+</div>
+
+</div>
+
+</div>
+<p>
+        The <code class="literal">config_options</code> table stores
+        <span class="command"><strong>memcached</strong></span>-related settings that can be
+        changed at runtime using SQL. Supported configuration options
+        are <code class="literal">separator</code> and
+        <code class="literal">table_map_delimiter</code>.
+</p>
+<div class="table">
+<a name="idm44933495089712"></a><p class="title"><b>Table 14.23 config_options Columns</b></p>
+<div class="table-contents">
+<table frame="all" summary="Columns of the config_options table."><col width="20%"><col width="80%"><thead><tr>
+            <th>Column</th>
+            <th>Description</th>
+          </tr></thead><tbody><tr>
+            <td><code class="literal">Name</code></td>
+            <td>Name of the <span class="command"><strong>memcached</strong></span>-related configuration option.
+              The following configuration options are supported by the
+<code class="literal">config_options</code> table:
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+                    <code class="literal">separator</code>: Used to separate
+                    values of a long string into separate values when
+                    there are multiple <code class="literal">value_columns</code>
+                    defined. By default, the
+                    <code class="literal">separator</code> is a
+                    <code class="literal">|</code> character. For example, if you
+                    define <code class="literal">col1, col2</code> as value
+                    columns, and you define <code class="literal">|</code> as the
+                    separator, you can issue the following
+                    <span class="command"><strong>memcached</strong></span> command to insert
+                    values into <code class="literal">col1</code> and
+                    <code class="literal">col2</code>, respectively:
+                  </p><pre class="programlisting copytoclipboard line-numbers language-terminal"><code class="language-terminal">set keyx 10 0 19
+valuecolx|valuecoly</code></pre><p>
+                    <code class="literal">valuecol1x</code> is stored in
+                    <code class="literal">col1</code> and
+                    <code class="literal">valuecoly</code> is stored in
+                    <code class="literal">col2</code>.
+                  </p></li><li class="listitem"><p>
+                    <code class="literal">table_map_delimiter</code>: The
+                    character separating the schema name and the table
+                    name when you use the <code class="literal">@@</code> notation
+                    in a key name to access a key in a specific table.
+                    For example, <code class="literal">@@t1.some_key</code> and
+                    <code class="literal">@@t2.some_key</code> have the same key
+                    value, but are stored in different tables.
+</p></li></ul>
+</div>
+</td>
+          </tr><tr>
+            <td><code class="literal">Value</code></td>
+            <td>The value assigned to the <span class="command"><strong>memcached</strong></span>-related
+              configuration option.</td>
+</tr></tbody></table>
+</div>
+
+</div>
+<br class="table-break">
+</div>
+<div class="simplesect">
+<div class="titlepage">
+<div>
+<div class="simple">
+<h4 class="title"><a name="innodb-memcached-containers-table"></a>containers Table</h4>
+
+</div>
+
+</div>
+
+</div>
+<p>
+        The <code class="literal">containers</code> table is the most important of
+        the three configuration tables. Each <code class="literal">InnoDB</code>
+        table that is used to store <span class="command"><strong>memcached</strong></span> values
+        must have an entry in the <code class="literal">containers</code> table.
+        The entry provides a mapping between <code class="literal">InnoDB</code>
+        table columns and container table columns, which is required for
+        <code class="literal">memcached</code> to work with
+        <code class="literal">InnoDB</code> tables.
+      </p><p>
+        The <code class="literal">containers</code> table contains a default entry
+        for the <code class="literal">test.demo_test</code> table, which is
+        created by the <code class="filename">innodb_memcached_config.sql</code>
+        configuration script. To use the
+        <code class="literal">daemon_memcached</code> plugin with your own
+        <code class="literal">InnoDB</code> table, you must create an entry in the
+        <code class="literal">containers</code> table.
+</p>
+<div class="table">
+<a name="idm44933495048672"></a><p class="title"><b>Table 14.24 containers Columns</b></p>
+<div class="table-contents">
+<table frame="all" summary="Columns of the containers table."><col width="30%"><col width="70%"><thead><tr>
+            <th>Column</th>
+            <th>Description</th>
+          </tr></thead><tbody><tr>
+            <td><code class="literal">name</code></td>
+            <td>The name given to the container. If an <code class="literal">InnoDB</code> table
+              is not requested by name using <code class="literal">@@</code>
+              notation, the <code class="literal">daemon_memcached</code> plugin
+              uses the <code class="literal">InnoDB</code> table with a
+              <code class="literal">containers.name</code> value of
+              <code class="literal">default</code>. If there is no such entry, the
+              first entry in the <code class="literal">containers</code> table,
+              ordered alphabetically by <code class="literal">name</code>
+              (ascending), determines the default
+              <code class="literal">InnoDB</code> table.</td>
+          </tr><tr>
+            <td><code class="literal">db_schema</code></td>
+            <td>The name of the database where the <code class="literal">InnoDB</code> table
+              resides. This is a required value.</td>
+          </tr><tr>
+            <td><code class="literal">db_table</code></td>
+            <td>The name of the <code class="literal">InnoDB</code> table that stores
+              <span class="command"><strong>memcached</strong></span> values. This is a required
+              value.</td>
+          </tr><tr>
+            <td><code class="literal">key_columns</code></td>
+            <td>The column in the <code class="literal">InnoDB</code> table that contains lookup
+              key values for <span class="command"><strong>memcached</strong></span> operations.
+              This is a required value.</td>
+          </tr><tr>
+            <td><code class="literal">value_columns</code></td>
+            <td>The <code class="literal">InnoDB</code> table columns (one or more) that store
+              <code class="literal">memcached</code> data. Multiple columns can be
+              specified using the separator character specified in the
+              <code class="literal">innodb_memcached.config_options</code> table.
+              By default, the separator is a pipe character
+              (<span class="quote">“<span class="quote">|</span>”</span>). To specify multiple columns, separate
+              them with the defined separator character. For example:
+              <code class="literal">col1|col2|col3</code>. This is a required
+              value.</td>
+          </tr><tr>
+            <td><code class="literal">flags</code></td>
+            <td>The <code class="literal">InnoDB</code> table columns that are used as flags (a
+              user-defined numeric value that is stored and retrieved
+              along with the main value) for
+              <span class="command"><strong>memcached</strong></span>. A flag value can be used as
+              a column specifier for some operations (such as
+              <code class="literal">incr</code>, <code class="literal">prepend</code>) if a
+              <span class="command"><strong>memcached</strong></span> value is mapped to multiple
+              columns, so that an operation is performed on a specified
+              column. For example, if you have mapped a
+              <code class="literal">value_columns</code> to three
+              <code class="literal">InnoDB</code> table columns, and only want the
+              increment operation performed on one columns, use the
+              <code class="literal">flags</code> column to specify the column. If
+              you do not use the <code class="literal">flags</code> column, set a
+              value of <code class="literal">0</code> to indicate that it is
+              unused.</td>
+          </tr><tr>
+            <td><code class="literal">cas_column</code></td>
+            <td>The <code class="literal">InnoDB</code> table column that stores compare-and-swap
+              (cas) values. The <code class="literal">cas_column</code> value is
+              related to the way <span class="command"><strong>memcached</strong></span> hashes
+              requests to different servers and caches data in memory.
+              Because the <code class="literal">InnoDB</code>
+              <span class="command"><strong>memcached</strong></span> plugin is tightly integrated
+              with a single <span class="command"><strong>memcached</strong></span> daemon, and the
+              in-memory caching mechanism is handled by MySQL and the
+              <a class="link" href="glossary.html#glos_buffer_pool" title="buffer pool">InnoDB buffer
+              pool</a>, this column is rarely needed. If you do not
+              use this column, set a value of <code class="literal">0</code> to
+              indicate that it is unused.</td>
+          </tr><tr>
+            <td><code class="literal">expire_time_column</code></td>
+            <td>The <code class="literal">InnoDB</code> table column that stores expiration
+              values. The <code class="literal">expire_time_column</code> value is
+              related to the way <span class="command"><strong>memcached</strong></span> hashes
+              requests to different servers and caches data in memory.
+              Because the <code class="literal">InnoDB</code>
+              <span class="command"><strong>memcached</strong></span> plugin is tightly integrated
+              with a single <span class="command"><strong>memcached</strong></span> daemon, and the
+              in-memory caching mechanism is handled by MySQL and the
+              <a class="link" href="glossary.html#glos_buffer_pool" title="buffer pool">InnoDB buffer
+              pool</a>, this column is rarely needed. If you do not
+              use this column, set a value of <code class="literal">0</code> to
+              indicate that the column is unused. The maximum expire
+              time is defined as <code class="literal">INT_MAX32</code> or
+              2147483647 seconds (approximately 68 years).</td>
+          </tr><tr>
+            <td><code class="literal">unique_idx_name_on_key</code></td>
+            <td>The name of the index on the key column. It must be a unique index. It
+              can be the <a class="link" href="glossary.html#glos_primary_key" title="primary key">primary
+              key</a> or a
+              <a class="link" href="glossary.html#glos_secondary_index" title="secondary index">secondary
+              index</a>. Preferably, use the primary key of the
+              <code class="literal">InnoDB</code> table. Using the primary key
+              avoids a lookup that is performed when using a secondary
+              index. You cannot make a
+              <a class="link" href="glossary.html#glos_covering_index" title="covering index">covering index</a>
+              for <span class="command"><strong>memcached</strong></span> lookups;
+              <code class="literal">InnoDB</code> returns an error if you try to
+              define a composite secondary index over both the key and
+              value columns.</td>
+</tr></tbody></table>
+</div>
+
+</div>
+<br class="table-break">
+<h5><a name="idm44933494979472"></a>containers Table Column Constraints</h5>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+            You must supply a value for <code class="literal">db_schema</code>,
+            <code class="literal">db_name</code>, <code class="literal">key_columns</code>,
+            <code class="literal">value_columns</code> and
+            <code class="literal">unique_idx_name_on_key</code>. Specify
+            <code class="literal">0</code> for <code class="literal">flags</code>,
+            <code class="literal">cas_column</code>, and
+            <code class="literal">expire_time_column</code> if they are unused.
+            Failing to do so could cause your setup to fail.
+          </p></li><li class="listitem"><p>
+            <code class="literal">key_columns</code>: The maximum limit for a
+            <span class="command"><strong>memcached</strong></span> key is 250 characters, which is
+            enforced by <span class="command"><strong>memcached</strong></span>. The mapped key
+            must be a non-Null <a class="link" href="char.html" title="11.3.2 The CHAR and VARCHAR Types"><code class="literal">CHAR</code></a> or
+            <a class="link" href="char.html" title="11.3.2 The CHAR and VARCHAR Types"><code class="literal">VARCHAR</code></a> type.
+          </p></li><li class="listitem"><p>
+            <code class="literal">value_columns</code>: Must be mapped to a
+            <a class="link" href="char.html" title="11.3.2 The CHAR and VARCHAR Types"><code class="literal">CHAR</code></a>,
+            <a class="link" href="char.html" title="11.3.2 The CHAR and VARCHAR Types"><code class="literal">VARCHAR</code></a>, or
+            <a class="link" href="blob.html" title="11.3.4 The BLOB and TEXT Types"><code class="literal">BLOB</code></a> column. There is no
+            length restriction and the value can be NULL.
+          </p></li><li class="listitem"><p>
+            <code class="literal">cas_column</code>: The <code class="literal">cas</code>
+            value is a 64 bit integer. It must be mapped to a
+            <a class="link" href="integer-types.html" title="11.1.2 Integer Types (Exact Value) - INTEGER, INT, SMALLINT, TINYINT, MEDIUMINT, BIGINT"><code class="literal">BIGINT</code></a> of at least 8 bytes.
+            If you do not use this column, set a value of
+            <code class="literal">0</code> to indicate that it is unused.
+          </p></li><li class="listitem"><p>
+            <code class="literal">expiration_time_column</code>: Must mapped to an
+            <a class="link" href="integer-types.html" title="11.1.2 Integer Types (Exact Value) - INTEGER, INT, SMALLINT, TINYINT, MEDIUMINT, BIGINT"><code class="literal">INTEGER</code></a> of at least 4 bytes.
+            Expiration time is defined as a 32-bit integer for Unix time
+            (the number of seconds since January 1, 1970, as a 32-bit
+            value), or the number of seconds starting from the current
+            time. For the latter, the number of seconds may not exceed
+            60*60*24*30 (the number of seconds in 30 days). If the
+            number sent by a client is larger, the server considers it
+            to be a real Unix time value rather than an offset from the
+            current time. If you do not use this column, set a value of
+            <code class="literal">0</code> to indicate that it is unused.
+          </p></li><li class="listitem"><p>
+            <code class="literal">flags</code>: Must be mapped to an
+            <a class="link" href="integer-types.html" title="11.1.2 Integer Types (Exact Value) - INTEGER, INT, SMALLINT, TINYINT, MEDIUMINT, BIGINT"><code class="literal">INTEGER</code></a> of at least 32-bits
+            and can be NULL. If you do not use this column, set a value
+            of <code class="literal">0</code> to indicate that it is unused.
+</p></li></ul>
+</div>
+<p>
+        A pre-check is performed at plugin load time to enforce column
+        constraints. If mismatches are found, the plugin is not loaded.
+</p>
+<h5><a name="idm44933494947856"></a>Multiple Value Column Mapping</h5>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+            During plugin initialization, when <code class="literal">InnoDB</code>
+            <span class="command"><strong>memcached</strong></span> is configured with information
+            defined in the <code class="literal">containers</code> table, each
+            mapped column defined in
+            <code class="literal">containers.value_columns</code> is verified
+            against the mapped <code class="literal">InnoDB</code> table. If
+            multiple <code class="literal">InnoDB</code> table columns are mapped,
+            there is a check to ensure that each column exists and is
+            the right type.
+          </p></li><li class="listitem"><p>
+            At run-time, for <code class="literal">memcached</code> insert
+            operations, if there are more delimited values than the
+            number of mapped columns, only the number of mapped values
+            are taken. For example, if there are six mapped columns, and
+            seven delimited values are provided, only the first six
+            delimited values are taken. The seventh delimited value is
+            ignored.
+          </p></li><li class="listitem"><p>
+            If there are fewer delimited values than mapped columns,
+            unfilled columns are set to NULL. If an unfilled column
+            cannot be set to NULL, insert operations fail.
+          </p></li><li class="listitem"><p>
+            If a table has more columns than mapped values, the extra
+            columns do not affect results.
+</p></li></ul>
+</div>
+
+</div>
+<div class="simplesect">
+<div class="titlepage">
+<div>
+<div class="simple">
+<h4 class="title"><a name="innodb-memcached-demo-test-table"></a>The demo_test Example Table</h4>
+
+</div>
+
+</div>
+
+</div>
+<p>
+        The <code class="filename">innodb_memcached_config.sql</code>
+        configuration script creates a <code class="literal">demo_test</code>
+        table in the <code class="literal">test</code> database, which can be used
+        to verify <code class="literal">InnoDB</code> <span class="command"><strong>memcached</strong></span>
+        plugin installation immediately after setup.
+      </p><p>
+        The <code class="filename">innodb_memcached_config.sql</code>
+        configuration script also creates an entry for the
+        <code class="literal">demo_test</code> table in the
+        <code class="literal">innodb_memcache.containers</code> table.
+      </p><pre class="programlisting copytoclipboard line-numbers language-terminal"><code class="language-terminal">mysql&gt; SELECT * FROM innodb_memcache.containers\G
+*************************** 1. row ***************************
+                  name: aaa
+             db_schema: test
+              db_table: demo_test
+           key_columns: c1
+         value_columns: c2
+                 flags: c3
+            cas_column: c4
+    expire_time_column: c5
+unique_idx_name_on_key: PRIMARY
+
+mysql&gt; SELECT * FROM test.demo_test;
++----+------------------+------+------+------+
+| c1 | c2               | c3   | c4   | c5   |
++----+------------------+------+------+------+
+| AA | HELLO, HELLO     |    8 |    0 |    0 |
++----+------------------+------+------+------+</code></pre>
+</div>
+
+</div>
+<br />
+        </div>
+
+                <div id="docs-in-page-nav-container">
+            <div id="docs-in-page-nav">
+                
+    <a href="innodb-memcached-replication.html"
+        aria-label="Previous" title="Previous: The InnoDB memcached Plugin and Replication"><span
+        class="icon-chevron-left"></span> PREV</a> &nbsp;
+<a href="index.html" aria-label="Start" title="Start"> HOME</a> &nbsp;
+        <a aria-label="Up" href="innodb-memcached.html" title="Up: InnoDB memcached Plugin"> UP</a> &nbsp;
+    <a href="innodb-memcached-troubleshoot.html" aria-label="Next"
+        title="Next: Troubleshooting the InnoDB memcached Plugin">NEXT <span
+        class="icon-chevron-right"></span></a>
+            </div>
+        </div>
+        
+         <div id="docs-body-extra">
+             
+<a class="docs-sidebar-section" href="innodb-memcached-internals.html?ff=nopfpls"><span class="icon-related"></span>
+    <span class="text">Related Documentation</span></a>
+<div class="docs-sidebar-accordian">
+    <div class="text">
+        <a href="https://dev.mysql.com/doc/relnotes/mysql/5.7/en/">MySQL 5.7 Release Notes</a><br />
+        </div>
+</div>
+
+    <a class="docs-sidebar-section" href="innodb-memcached-internals.html?ff=nopfpls"><span class="icon-download-thin"></span>
+        <span class="text">
+            Download
+                            this Manual
+                    </span>
+    </a>
+    <div class="docs-sidebar-accordian">
+        <div class="text">
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.pdf">PDF (US Ltr)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.a4.pdf">PDF (A4)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-ref-manual-5.7-en-pdf-1-20210225.noarch.rpm">PDF (RPM)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.html-chapter.tar.gz">HTML Download (TGZ)</a>
+            - 10.1Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.html-chapter.zip">HTML Download (Zip)</a>
+            - 10.2Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-ref-manual-5.7-en-html-chapter-1-20210225.noarch.rpm">HTML Download (RPM)</a>
+            - 8.9Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.man-gpl.tar.gz">Man Pages (TGZ)</a>
+            - 224.7Kb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.man-gpl.zip">Man Pages (Zip)</a>
+            - 332.6Kb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-5.7.info.gz">Info (Gzip)</a>
+            - 3.3Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-5.7.info.zip">Info (Zip)</a>
+            - 3.3Mb<br />
+                    </div>
+    </div>
+
+<a class="docs-sidebar-section" href="innodb-memcached-internals.html?ff=nopfpls"><span class="icon-book"></span>
+    <span class="text">Excerpts from this Manual</span></a>
+<div class="docs-sidebar-accordian">
+    <div class="text">
+                <a href="https://dev.mysql.com/doc/mysql-backup-excerpt/5.7/en/">MySQL Backup and Recovery</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-g11n-excerpt/5.7/en/">MySQL Globalization</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-infoschema-excerpt/5.7/en/">MySQL Information Schema</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-installation-excerpt/5.7/en/">MySQL Installation Guide</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-linuxunix-excerpt/5.7/en/">MySQL and Linux/Unix</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-osx-excerpt/5.7/en/">MySQL and OS X</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-partitioning-excerpt/5.7/en/">MySQL Partitioning</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-perfschema-excerpt/5.7/en/">MySQL Performance Schema</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-replication-excerpt/5.7/en/">MySQL Replication</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-repo-excerpt/5.7/en/">Using the MySQL Yum Repository</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-reslimits-excerpt/5.7/en/">MySQL Restrictions and Limitations</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-security-excerpt/5.7/en/">Security in MySQL</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-solaris-excerpt/5.7/en/">MySQL and Solaris</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-sourcebuild-excerpt/5.7/en/">Building MySQL from Source</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-startstop-excerpt/5.7/en/">Starting and Stopping MySQL</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-tutorial-excerpt/5.7/en/">MySQL Tutorial</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-windows-excerpt/5.7/en/">MySQL and Windows</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-cluster-excerpt/5.7/en/">MySQL NDB Cluster 7.5</a><br />
+            </div>
+</div>
+         </div>
+
+              </div>
+     </div>
+
+</div>
+
+<script>
+$(function() {
+    var doc = new $.doc({ 'mobile': $.browser.mobile, 'docId': 1, 'highlight': true });
+});
+</script>
+    
+
+            
+        </div>
+    </div>
+
+    <footer class="collapsed">
+        <div id="footer-bottom">
+                                    <div id="footer-collapse">
+                <a href="innodb-memcached-internals.html?ff=nopfpls" id="expand-footer"
+                    aria-label="Expand Footer"
+                    title="Expand Footer"><span
+                    class="icon-plus-square"></span></a>
+            </div>
+                        <div class="footer-contact">
+                <div id="footer-contact-icon" style="display: none;">
+                    <span class="icon-call-phone"></span>
+                </div>
+                <div id="footer-contact-numbers" style="display: none;">
+                    <strong>Contact MySQL Sales</strong><br/>
+                    USA/Canada: +1-866-221-0634 &nbsp;
+                    (<a href="https://www.mysql.com/about/contact/phone/">More Countries &raquo;</a>)
+                </div>
+                <div id="footer-contact-copyright" style="display: inline-block;">
+                    <a href="http://www.oracle.com/" aria-label="Oracle" title="Oracle"><span class="oracle-logo"></span></a>
+                    &nbsp; &copy; 2021, Oracle Corporation and/or its affiliates
+                </div>
+            </div>
+            <div class="social-icons">
+                <a aria-label="Join us on Facebook" title="Join us on Facebook" href="http://www.facebook.com/mysql"><span class="icon-facebook-square"></span></a>
+                <a aria-label="Follow us on Twitter" title="Follow us on Twitter" href="https://twitter.com/mysql"><span class="icon-twitter-square"></span></a>
+                <a aria-label="Follow us on LinkedIn" title="Follow us on LinkedIn" href="https://www.linkedin.com/company/mysql"><span class="icon-linkedin-square"></span></a>
+                <a aria-label="Visit our YouTube channel" title="Visit our YouTube channel" href="http://www.youtube.com/mysqlchannel"><span class="icon-youtube-square"></span></a>
+            </div>
+            <br class="clear" />
+        </div>
+        <div id="footer-links">
+
+            <div id="site-footer-links">
+                <div id="footer-nav"></div>
+
+                <div class="links">
+                    <ul>
+                        <li class="top"><a href="https://www.mysql.com/products/">Products</a></li>
+                        <li><a href="https://www.mysql.com/cloud/">MySQL Database Service</a></li>
+                        <li><a href="https://www.mysql.com/products/enterprise/">MySQL Enterprise Edition</a></li>
+                        <li><a href="https://www.mysql.com/products/standard/">MySQL Standard Edition</a></li>
+                        <li><a href="https://www.mysql.com/products/classic/">MySQL Classic Edition</a></li>
+                        <li><a href="https://www.mysql.com/products/cluster/">MySQL Cluster CGE</a></li>
+                        <li><a href="https://www.mysql.com/oem/">MySQL Embedded (OEM/ISV)</a></li>
+                    </ul>
+                </div>
+
+                <div class="links">
+                    <ul>
+                        <li class="top"><a href="https://www.mysql.com/services/">Services</a></li>
+                        <li><a href="https://www.mysql.com/training/">Training</a></li>
+                        <li><a href="https://www.mysql.com/certification/">Certification</a></li>
+                        <li><a href="https://www.mysql.com/consulting/">Consulting</a></li>
+                        <li><a href="https://www.mysql.com/support/">Support</a></li>
+                    </ul>
+                </div>
+
+                <div class="links">
+                    <ul>
+                        <li class="top"><a href="https://www.mysql.com/downloads/">Downloads</a></li>
+                        <li><a href="https://dev.mysql.com/downloads/mysql/">MySQL Community Server</a></li>
+                        <li><a href="https://dev.mysql.com/downloads/cluster/">MySQL NDB Cluster</a></li>
+                        <li><a href="https://dev.mysql.com/downloads/shell/">MySQL Shell</a></li>
+                        <li><a href="https://dev.mysql.com/downloads/router/">MySQL Router</a></li>
+                        <li><a href="https://dev.mysql.com/downloads/workbench/">MySQL Workbench</a></li>
+                    </ul>
+                </div>
+
+                <div class="links">
+                    <ul>
+                        <li class="top"><a href="https://dev.mysql.com/doc/">Documentation</a></li>
+                        <li><a href="https://dev.mysql.com/doc/refman/en/">MySQL Reference Manual</a></li>
+                        <li><a href="https://dev.mysql.com/doc/workbench/en/">MySQL Workbench</a></li>
+                        <li><a href="https://dev.mysql.com/doc/index-cluster.html">MySQL NDB Cluster</a></li>
+                        <li><a href="https://dev.mysql.com/doc/index-connectors.html">MySQL Connectors</a></li>
+                        <li><a href="https://dev.mysql.com/doc/#topic">Topic Guides</a></li>
+                    </ul>
+                </div>
+
+                <div class="links">
+                    <ul>
+                        <li class="top"><a href="https://www.mysql.com/about/">About MySQL</a></li>
+                        <li><a href="https://www.mysql.com/about/contact/">Contact Us</a></li>
+                                                                        <li><a href="https://www.mysql.com/buy-mysql/">How to Buy</a></li>
+                        <li><a href="https://www.mysql.com/partners/">Partners</a></li>
+                        <li><a href="https://www.mysql.com/about/jobs/">Job Opportunities</a></li>
+                        <li><a href="https://www.mysql.com/sitemap.html">Site Map</a></li>
+                    </ul>
+                </div>
+
+                            </div>
+
+            <div id="footer-logo">
+                <a href="http://www.oracle.com/" aria-label="Oracle" title="Oracle"><span class="oracle-logo"></span></a>
+                &nbsp; &copy; 2021, Oracle Corporation and/or its affiliates
+                <div class="footer-legal-links">
+                    <a href="https://www.mysql.com/about/legal/">Legal Policies</a> |
+                    <a href="http://www.oracle.com/us/legal/privacy/index.htm">Your Privacy Rights</a> |
+                    <a href="http://www.oracle.com/us/legal/terms/index.html">Terms of Use</a> |
+                    <a href="http://www.oracle.com/us/legal/third-party-trademarks/index.html">Trademark Policy</a> |
+                    <a href="http://www.oracle.com/technetwork/community/oca-486395.html">Contributor Agreement</a> |
+                    <div id="teconsent"></div>
+                </div>
+            </div>
+
+        </div>
+    </footer>
+</div>
+
+            <script>
+    if ((oracle.truste.api.getGdprConsentDecision().consentDecision) &&
+            (oracle.truste.api.getGdprConsentDecision().consentDecision.indexOf(0) != -1 ||
+             oracle.truste.api.getGdprConsentDecision().consentDecision.indexOf(2) != -1) )
+    {
+        document.write('<script src="https://labs.mysql.com/common/js/metrics/s_code_remote.js"><\/script>');
+        document.write('<script type="text/javascript" async src="https://c.oracleinfinity.io/acs/account/wh3g12c3gg/js/mysql/odc.js?_ora.context=analytics:production"><\/script>');
+    }
+    </script>
+
+        
+    
+</body>
+</html>

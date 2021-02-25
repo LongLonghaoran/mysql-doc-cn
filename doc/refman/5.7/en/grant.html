@@ -1,0 +1,2315 @@
+<!DOCTYPE html>
+<html lang="en" class="svg no-js">
+<head>
+    <meta charset="utf-8" />
+    <!--[if IE ]>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="Language" content="en">
+
+    <title>MySQL :: MySQL 5.7 Reference Manual :: 13.7.1.4 GRANT Statement</title>
+    <link rel="stylesheet" media="all" href="https://labs.mysql.com/common/css/main-20201221.min.css" />
+            <link rel="stylesheet" media="all" href="https://labs.mysql.com/common/css/docs-20201221.min.css" />
+    
+    
+    <link rel="stylesheet" media="print" href="https://labs.mysql.com/common/css/print-20201221.min.css" />
+
+    
+    
+    
+    
+            <link rel="contents" href="index.html" title="MySQL 5.7 Reference Manual" />
+<link rel="start" href="index.html" title="MySQL 5.7 Reference Manual" />
+<link rel="prev" href="drop-user.html" title="13.7.1.3 DROP USER Statement" />
+<link rel="next" href="rename-user.html?ff=nopfpls" title="13.7.1.5 RENAME USER Statement" />
+<link rel="up" href="account-management-statements.html" title="13.7.1 Account Management Statements" />
+
+    
+    <link rel="shortcut icon" href="https://labs.mysql.com/common/themes/sakila/favicon.ico" />
+    <script async="async" type="text/javascript" src='https://consent.truste.com/notice?domain=oracle.com&c=teconsent&js=bb&noticeType=bb&text=true&cdn=1&pcookie&gtm=1' crossorigin></script>
+    <script src="https://www.oracle.com/assets/truste-oraclelib.js"></script>
+    <script>(function(H){ H.className=H.className.replace(/\bno-js\b/,'js') })(document.documentElement)</script>
+    <script src="https://labs.mysql.com/common/js/site-20200928.min.js"></script>
+
+    
+    
+    <!--[if lt IE 9]>
+        <script src="https://labs.mysql.com/common/js/polyfills/html5shiv-printshiv-3.7.2.min.js"></script>
+        <script src="https://labs.mysql.com/common/js/polyfills/respond-1.4.2.min.js"></script>
+    <![endif]-->
+        <!--[if IE 9]>
+        <style>#docs-sidebar-toc { box-sizing: content-box; }</style>
+    <![endif]-->
+    </head>
+
+<body class="no-sidebar full-page dev">
+<div class="page-wrapper">
+    <header>
+
+                        <a href="https://dev.mysql.com/" aria-label="Home" title="MySQL" id="l1-home-link"></a>
+        
+        <div id="l1-nav-container">
+            <div id="l1-line1">
+                <div id="l1-auth-links">
+                    <a href="https://www.mysql.com/about/contact/"><b>Contact MySQL</b></a>
+                    <span id="l1-contact-separator">&nbsp;|&nbsp;</span>
+                    <span id="l1-contact-separator-br"><br /></span>
+                                             <a href="https://dev.mysql.com/auth/login/?dest=https%3A%2F%2Fdev.mysql.com%2Fdoc%2Frefman%2F5.7%2Fen%2Fgrant.html">Login</a> &nbsp;|&nbsp;
+                         <a href="https://dev.mysql.com/auth/register/">Register</a>
+                                    </div>
+                <div id="l1-lhs">
+                    <div id="l1-slogan">
+                        The world's most popular open source database
+                    </div>
+                    <div id="l1-search-box">
+                        <form id="l1-search-form" method="get" action="https://www.oracle.com/search/results">
+                        <input type="hidden" name="cat" value="mysql" />
+                        <input type="hidden" name="Ntk" value="SI-ALL5" />
+                        <input id="l1-search-input" type="search" class="icon-search" placeholder="Search" aria-label="Search" name="Ntt" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div id="l1-line2">
+                <div class="social-icons">
+                    <a aria-label="Join us on Facebook" title="Join us on Facebook" href="http://www.facebook.com/mysql"><span class="icon-facebook"></span></a>
+                    <a aria-label="Follow us on Twitter" title="Follow us on Twitter" href="https://twitter.com/mysql"><span class="icon-twitter"></span></a>
+                    <a aria-label="Follow us on LinkedIn" title="Follow us on LinkedIn" href="https://www.linkedin.com/company/mysql"><span class="icon-linkedin"></span></a>
+                    <a aria-label="Visit our YouTube channel" title="Visit our YouTube channel" href="http://www.youtube.com/mysqlchannel"><span class="icon-youtube"></span></a>
+                </div>
+                <ul id="l1-nav">
+                    <li>
+                        <a href="https://www.mysql.com/"><!-- <span class="icon-sakila"></span>  -->MySQL.com</a>
+                    </li><li>
+                        <a href="https://www.mysql.com/downloads/"><!-- <span class="icon-download-thin"></span>  -->Downloads</a>
+                    </li><li class="active">
+                        <a href="https://dev.mysql.com/doc/"><!-- <span class="icon-books"></span>  -->Documentation</a>
+                    </li><li>
+                        <a href="https://dev.mysql.com/"><!-- <span class="icon-code"></span>  -->Developer Zone</a>
+                    </li>                </ul>
+            </div>
+        </div>
+        <div id="sub-header">
+            <div id="l2-nav-container">
+                <div id="l2-nav-toggle">
+                    <span class="icon-three-bars"></span>
+                </div>
+                                                                                        <a class="button nav-button-3" href="https://dev.mysql.com/"><span class="icon-code"></span> Developer Zone</a>
+                                                                                                                                    <a class="button nav-button-2" href="https://www.mysql.com/downloads/"><span class="icon-download-thin"></span> Downloads</a>
+                                                                                                <a class="button nav-button-1" href="https://www.mysql.com/"><span class="icon-sakila"></span> MySQL.com</a>
+                                                                        <div id="l2-search-toggle">
+                    <span class="icon-search"></span>
+                </div>
+                <div id="l2-site-icon">
+                                                                                                                                                                                                    <span class="icon-books"></span>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </div>
+                <div id="l1-section-title">
+                    <span id="l1-section-label">
+                        <a href="https://dev.mysql.com/doc/">Documentation</a>
+                    </span>
+                </div>
+                <nav>
+                    
+
+<ul id="l2-nav">
+            	<li class="active"><a class="active " href="https://dev.mysql.com/doc/refman/en/">MySQL Server</a>
+    			</li>
+	        	<li class=""><a  href="https://dev.mysql.com/doc/index-enterprise.html">MySQL Enterprise</a>
+    			</li>
+	        	<li class=""><a  href="https://dev.mysql.com/doc/workbench/en/">Workbench</a>
+    			</li>
+	        	<li class=""><a  href="https://dev.mysql.com/doc/mysql-shell/en/mysql-innodb-cluster.html">InnoDB Cluster</a>
+    			</li>
+	        	<li class=""><a  href="https://dev.mysql.com/doc/index-cluster.html">MySQL NDB Cluster</a>
+    			</li>
+	        	<li class=""><a  href="https://dev.mysql.com/doc/index-connectors.html">Connectors</a>
+    			</li>
+	        	<li class=" last"><a  href="https://dev.mysql.com/doc/index-other.html">More</a>
+    			</li>
+	                        <li class="other-section"><a href="https://www.mysql.com/">MySQL.com</a></li>
+                            <li class="other-section"><a href="https://www.mysql.com/downloads/">Downloads</a></li>
+                                        <li class="other-section"><a href="https://dev.mysql.com/">Developer Zone</a></li>
+            </ul>
+                </nav>
+            </div>
+            <div id="l3-search-container"></div>
+            <div id="top-orange"><span id="section-nav">Section Menu: &nbsp; </span></div>
+        </div>
+    </header>
+        <div id="page">
+                        <div role="main" id="main">
+
+            
+                
+            
+<div>
+    <div id="docs-sidebar-toc" class="">
+    <div id="docs-toc-inner">
+        <div class="docs-sidebar-header" id="docs-nav-header">
+            <a class="docs-show-hide-nav" id="docs-hide-nav" href="grant.html" title="Hide Sidebar" aria-label="Hide Sidebar"><span class="icon-arrow-small-left"></span></a>
+            <div class="docs-nav-links">
+                                    
+    <a href="drop-user.html"
+        aria-label="Previous" title="Previous: DROP USER Statement"><span
+        class="icon-chevron-left"></span></a>
+<a href="index.html" aria-label="Start" title="Start"><span class="icon-book-open"></span></a>
+        <a aria-label="Up" href="account-management-statements.html" title="Up: Account Management Statements"><span class="icon-chevron-up"></span></a>
+    <a href="rename-user.html" aria-label="Next"
+        title="Next: RENAME USER Statement"><span
+        class="icon-chevron-right"></span></a>
+                            </div>
+        </div>
+                    
+<div id="docs-sidebar-search-container">
+    <div id="docs-sidebar-search-box">
+        <form method="get" action="https://dev.mysql.com/doc/search/">
+            <input type="hidden" name="d" id="d" value="12" />
+            <input type="hidden" name="p" id="p" value="1" />
+            <input type="text" name="q" id="q" title="Search this Manual"
+                value="Search this Manual"
+                style="color: #bbb;"
+                onfocus="if(this.value == 'Search this Manual') {this.value='';this.style.color='#555';}"
+                onblur="if(this.value == '') {this.value='Search this Manual';this.style.color='#bbb';}" />
+
+            <button class="docs-sidebar-search-btn" aria-label="Search" title="Search" type="submit">
+                <span class="icon-search"></span>
+            </button>
+        </form>
+    </div>
+</div>
+                <div class="docs-sidebar-nav">
+            <a class="docs-icon-home" href="https://dev.mysql.com/doc/"><span class="icon-home"></span>Documentation Home</a><hr />
+            <div class="docs-sidebar-mtitle">MySQL 5.7 Reference Manual</div>
+            <nav class="doctoc" id="doc-12">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="preface.html">Preface and Legal Notices</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="grant.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="introduction.html">General Information</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="grant.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="installing.html">Installing and Upgrading MySQL</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="grant.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="tutorial.html">Tutorial</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="grant.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="programs.html">MySQL Programs</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="grant.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="server-administration.html">MySQL Server Administration</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="grant.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="security.html">Security</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="grant.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="backup-and-recovery.html">Backup and Recovery</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="grant.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="optimization.html">Optimization</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="grant.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="language-structure.html">Language Structure</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="grant.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="charset.html">Character Sets, Collations, Unicode</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="grant.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="data-types.html">Data Types</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="grant.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="functions.html">Functions and Operators</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="grant.html"><span class="icon-chevron-down"></span></a></div><div class="docs-sidebar-nav-link"><a href="sql-statements.html">SQL Statements</a></div></div>                        <div class="docs-submenu">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="grant.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="sql-data-definition-statements.html">Data Definition Statements</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="alter-database.html">ALTER DATABASE Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="alter-event.html">ALTER EVENT Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="alter-function.html">ALTER FUNCTION Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="alter-instance.html">ALTER INSTANCE Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="alter-logfile-group.html">ALTER LOGFILE GROUP Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="alter-procedure.html">ALTER PROCEDURE Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="alter-server.html">ALTER SERVER Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="grant.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="alter-table.html">ALTER TABLE Statement</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="alter-table-partition-operations.html">ALTER TABLE Partition Operations</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="alter-table-generated-columns.html">ALTER TABLE and Generated Columns</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="alter-table-examples.html">ALTER TABLE Examples</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="alter-tablespace.html">ALTER TABLESPACE Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="alter-view.html">ALTER VIEW Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="create-database.html">CREATE DATABASE Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="create-event.html">CREATE EVENT Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="create-function.html">CREATE FUNCTION Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="create-index.html">CREATE INDEX Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="create-logfile-group.html">CREATE LOGFILE GROUP Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="create-procedure.html">CREATE PROCEDURE and CREATE FUNCTION Statements</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="create-server.html">CREATE SERVER Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="grant.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="create-table.html">CREATE TABLE Statement</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="create-table-files.html">Files Created by CREATE TABLE</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="create-temporary-table.html">CREATE TEMPORARY TABLE Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="create-table-like.html">CREATE TABLE ... LIKE Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="create-table-select.html">CREATE TABLE ... SELECT Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="create-table-foreign-keys.html">FOREIGN KEY Constraints</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="silent-column-changes.html">Silent Column Specification Changes</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="create-table-generated-columns.html">CREATE TABLE and Generated Columns</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="create-table-secondary-indexes.html">Secondary Indexes and Generated Columns</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="create-table-ndb-table-comment-options.html">Setting NDB_TABLE Options</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="create-tablespace.html">CREATE TABLESPACE Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="create-trigger.html">CREATE TRIGGER Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="create-view.html">CREATE VIEW Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="drop-database.html">DROP DATABASE Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="drop-event.html">DROP EVENT Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="drop-function.html">DROP FUNCTION Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="drop-index.html">DROP INDEX Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="drop-logfile-group.html">DROP LOGFILE GROUP Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="drop-procedure.html">DROP PROCEDURE and DROP FUNCTION Statements</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="drop-server.html">DROP SERVER Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="drop-table.html">DROP TABLE Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="drop-tablespace.html">DROP TABLESPACE Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="drop-trigger.html">DROP TRIGGER Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="drop-view.html">DROP VIEW Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="rename-table.html">RENAME TABLE Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="truncate-table.html">TRUNCATE TABLE Statement</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="grant.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="sql-data-manipulation-statements.html">Data Manipulation Statements</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="call.html">CALL Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="delete.html">DELETE Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="do.html">DO Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="handler.html">HANDLER Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="grant.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="insert.html">INSERT Statement</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="insert-select.html">INSERT ... SELECT Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="insert-on-duplicate.html">INSERT ... ON DUPLICATE KEY UPDATE Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="insert-delayed.html">INSERT DELAYED Statement</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="load-data.html">LOAD DATA Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="load-xml.html">LOAD XML Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="replace.html">REPLACE Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="grant.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="select.html">SELECT Statement</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="select-into.html">SELECT ... INTO Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="join.html">JOIN Clause</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="union.html">UNION Clause</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="grant.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="subqueries.html">Subqueries</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="scalar-subqueries.html">The Subquery as Scalar Operand</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="comparisons-using-subqueries.html">Comparisons Using Subqueries</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="any-in-some-subqueries.html">Subqueries with ANY, IN, or SOME</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="all-subqueries.html">Subqueries with ALL</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="row-subqueries.html">Row Subqueries</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="exists-and-not-exists-subqueries.html">Subqueries with EXISTS or NOT EXISTS</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="correlated-subqueries.html">Correlated Subqueries</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="derived-tables.html">Derived Tables</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="subquery-errors.html">Subquery Errors</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="optimizing-subqueries.html">Optimizing Subqueries</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="rewriting-subqueries.html">Rewriting Subqueries as Joins</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="subquery-restrictions.html">Restrictions on Subqueries</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="update.html">UPDATE Statement</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="grant.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="sql-transactional-statements.html">Transactional and Locking Statements</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="commit.html">START TRANSACTION, COMMIT, and ROLLBACK Statements</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="cannot-roll-back.html">Statements That Cannot Be Rolled Back</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="implicit-commit.html">Statements That Cause an Implicit Commit</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="savepoint.html">SAVEPOINT, ROLLBACK TO SAVEPOINT, and RELEASE SAVEPOINT Statements</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="lock-tables.html">LOCK TABLES and UNLOCK TABLES Statements</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="set-transaction.html">SET TRANSACTION Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="grant.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="xa.html">XA Transactions</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="xa-statements.html">XA Transaction SQL Statements</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="xa-states.html">XA Transaction States</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="xa-restrictions.html">Restrictions on XA Transactions</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="grant.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="sql-replication-statements.html">Replication Statements</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="grant.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="replication-statements-master.html">SQL Statements for Controlling Replication Source Servers</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="purge-binary-logs.html">PURGE BINARY LOGS Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="reset-master.html">RESET MASTER Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="set-sql-log-bin.html">SET sql_log_bin Statement</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="grant.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="replication-statements-replica.html">SQL Statements for Controlling Replica Servers</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="change-master-to.html">CHANGE MASTER TO Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="change-replication-filter.html">CHANGE REPLICATION FILTER Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="master-pos-wait.html">MASTER_POS_WAIT() Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="reset-slave.html">RESET SLAVE Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="start-slave.html">START SLAVE Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="stop-slave.html">STOP SLAVE Statement</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="grant.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="replication-statements-group.html">SQL Statements for Controlling Group Replication</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="start-group-replication.html">START GROUP_REPLICATION Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="stop-group-replication.html">STOP GROUP_REPLICATION Statement</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="grant.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="sql-prepared-statements.html">Prepared Statements</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="prepare.html">PREPARE Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="execute.html">EXECUTE Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="deallocate-prepare.html">DEALLOCATE PREPARE Statement</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="grant.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="sql-compound-statements.html">Compound Statements</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="begin-end.html">BEGIN ... END Compound Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="statement-labels.html">Statement Labels</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="declare.html">DECLARE Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="grant.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="stored-program-variables.html">Variables in Stored Programs</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="declare-local-variable.html">Local Variable DECLARE Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="local-variable-scope.html">Local Variable Scope and Resolution</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="grant.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="flow-control-statements.html">Flow Control Statements</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="case.html">CASE Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="if.html">IF Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="iterate.html">ITERATE Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="leave.html">LEAVE Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="loop.html">LOOP Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="repeat.html">REPEAT Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="return.html">RETURN Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="while.html">WHILE Statement</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="grant.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="cursors.html">Cursors</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="close.html">Cursor CLOSE Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="declare-cursor.html">Cursor DECLARE Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="fetch.html">Cursor FETCH Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="open.html">Cursor OPEN Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="cursor-restrictions.html">Restrictions on Server-Side Cursors</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="grant.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="condition-handling.html">Condition Handling</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="declare-condition.html">DECLARE ... CONDITION Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="declare-handler.html">DECLARE ... HANDLER Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="get-diagnostics.html">GET DIAGNOSTICS Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="resignal.html">RESIGNAL Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="signal.html">SIGNAL Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="handler-scope.html">Scope Rules for Handlers</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="diagnostics-area.html">The MySQL Diagnostics Area</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="conditions-and-parameters.html">Condition Handling and OUT or INOUT Parameters</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="condition-handling-restrictions.html">Restrictions on Condition Handling</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="grant.html"><span class="icon-chevron-down"></span></a></div><div class="docs-sidebar-nav-link"><a href="sql-server-administration-statements.html">Database Administration Statements</a></div></div>                        <div class="docs-submenu">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="grant.html"><span class="icon-chevron-down"></span></a></div><div class="docs-sidebar-nav-link"><a href="account-management-statements.html">Account Management Statements</a></div></div>                        <div class="docs-submenu">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="alter-user.html">ALTER USER Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="create-user.html">CREATE USER Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="drop-user.html">DROP USER Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link current"><a href="grant.html">GRANT Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="rename-user.html">RENAME USER Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="revoke.html">REVOKE Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="set-password.html">SET PASSWORD Statement</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="grant.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="table-maintenance-statements.html">Table Maintenance Statements</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="analyze-table.html">ANALYZE TABLE Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="check-table.html">CHECK TABLE Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="checksum-table.html">CHECKSUM TABLE Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="optimize-table.html">OPTIMIZE TABLE Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="repair-table.html">REPAIR TABLE Statement</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="grant.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="component-statements.html">Plugin and User-Defined Function Statements</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="create-function-udf.html">CREATE FUNCTION Statement for User-Defined Functions</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="drop-function-udf.html">DROP FUNCTION Statement for User-Defined Functions</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="install-plugin.html">INSTALL PLUGIN Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="uninstall-plugin.html">UNINSTALL PLUGIN Statement</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="grant.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="set-statement.html">SET Statements</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="set-variable.html">SET Syntax for Variable Assignment</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="set-character-set.html">SET CHARACTER SET Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="set-names.html">SET NAMES Statement</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="grant.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="show.html">SHOW Statements</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="show-binary-logs.html">SHOW BINARY LOGS Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="show-binlog-events.html">SHOW BINLOG EVENTS Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="show-character-set.html">SHOW CHARACTER SET Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="show-collation.html">SHOW COLLATION Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="show-columns.html">SHOW COLUMNS Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="show-create-database.html">SHOW CREATE DATABASE Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="show-create-event.html">SHOW CREATE EVENT Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="show-create-function.html">SHOW CREATE FUNCTION Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="show-create-procedure.html">SHOW CREATE PROCEDURE Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="show-create-table.html">SHOW CREATE TABLE Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="show-create-trigger.html">SHOW CREATE TRIGGER Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="show-create-user.html">SHOW CREATE USER Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="show-create-view.html">SHOW CREATE VIEW Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="show-databases.html">SHOW DATABASES Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="show-engine.html">SHOW ENGINE Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="show-engines.html">SHOW ENGINES Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="show-errors.html">SHOW ERRORS Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="show-events.html">SHOW EVENTS Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="show-function-code.html">SHOW FUNCTION CODE Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="show-function-status.html">SHOW FUNCTION STATUS Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="show-grants.html">SHOW GRANTS Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="show-index.html">SHOW INDEX Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="show-master-status.html">SHOW MASTER STATUS Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="show-open-tables.html">SHOW OPEN TABLES Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="show-plugins.html">SHOW PLUGINS Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="show-privileges.html">SHOW PRIVILEGES Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="show-procedure-code.html">SHOW PROCEDURE CODE Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="show-procedure-status.html">SHOW PROCEDURE STATUS Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="show-processlist.html">SHOW PROCESSLIST Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="show-profile.html">SHOW PROFILE Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="show-profiles.html">SHOW PROFILES Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="show-relaylog-events.html">SHOW RELAYLOG EVENTS Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="show-slave-hosts.html">SHOW SLAVE HOSTS Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="show-slave-status.html">SHOW SLAVE STATUS Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="show-status.html">SHOW STATUS Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="show-table-status.html">SHOW TABLE STATUS Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="show-tables.html">SHOW TABLES Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="show-triggers.html">SHOW TRIGGERS Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="show-variables.html">SHOW VARIABLES Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="show-warnings.html">SHOW WARNINGS Statement</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="grant.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="other-administrative-statements.html">Other Administrative Statements</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="binlog.html">BINLOG Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="cache-index.html">CACHE INDEX Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="flush.html">FLUSH Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="kill.html">KILL Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="load-index.html">LOAD INDEX INTO CACHE Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="reset.html">RESET Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="shutdown.html">SHUTDOWN Statement</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="grant.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="sql-utility-statements.html">Utility Statements</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="describe.html">DESCRIBE Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="explain.html">EXPLAIN Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="help.html">HELP Statement</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="use.html">USE Statement</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="grant.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="innodb-storage-engine.html">The InnoDB Storage Engine</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="grant.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="storage-engines.html">Alternative Storage Engines</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="grant.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="replication.html">Replication</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="grant.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="group-replication.html">Group Replication</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysql-shell-userguide.html">MySQL Shell</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="grant.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="document-store.html">Using MySQL as a Document Store</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysql-innodb-cluster-introduction.html">InnoDB Cluster</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="grant.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="mysql-cluster.html">MySQL NDB Cluster 7.5 and NDB Cluster 7.6</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="grant.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="partitioning.html">Partitioning</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="grant.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="stored-objects.html">Stored Objects</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="grant.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="information-schema.html">INFORMATION_SCHEMA Tables</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="grant.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="performance-schema.html">MySQL Performance Schema</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="grant.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="sys-schema.html">MySQL sys Schema</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="grant.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="connectors-apis.html">Connectors and APIs</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="grant.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="mysql-enterprise.html">MySQL Enterprise Edition</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="workbench.html">MySQL Workbench</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="grant.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="faqs.html">MySQL 5.7 Frequently Asked Questions</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="grant.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="error-handling.html">Error Messages and Common Problems</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="grant.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="indexes.html">Indexes</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="glossary.html">MySQL Glossary</a></div></div>                    </li>
+        </ul>
+                            </nav>
+        </div>
+
+        
+<a class="docs-sidebar-section" href="grant.html"><span class="icon-related"></span>
+    <span class="text">Related Documentation</span></a>
+<div class="docs-sidebar-accordian open">
+    <div class="text">
+        <a href="https://dev.mysql.com/doc/relnotes/mysql/5.7/en/">MySQL 5.7 Release Notes</a><br />
+        </div>
+</div>
+
+    <a class="docs-sidebar-section" href="grant.html"><span class="icon-download-thin"></span>
+        <span class="text">
+            Download
+                            this Manual
+                    </span>
+    </a>
+    <div class="docs-sidebar-accordian open">
+        <div class="text">
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.pdf">PDF (US Ltr)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.a4.pdf">PDF (A4)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-ref-manual-5.7-en-pdf-1-20210225.noarch.rpm">PDF (RPM)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.html-chapter.tar.gz">HTML Download (TGZ)</a>
+            - 10.1Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.html-chapter.zip">HTML Download (Zip)</a>
+            - 10.2Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-ref-manual-5.7-en-html-chapter-1-20210225.noarch.rpm">HTML Download (RPM)</a>
+            - 8.9Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.man-gpl.tar.gz">Man Pages (TGZ)</a>
+            - 224.7Kb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.man-gpl.zip">Man Pages (Zip)</a>
+            - 332.6Kb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-5.7.info.gz">Info (Gzip)</a>
+            - 3.3Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-5.7.info.zip">Info (Zip)</a>
+            - 3.3Mb<br />
+                    </div>
+    </div>
+
+<a class="docs-sidebar-section" href="grant.html"><span class="icon-book"></span>
+    <span class="text">Excerpts from this Manual</span></a>
+<div class="docs-sidebar-accordian">
+    <div class="text">
+                <a href="https://dev.mysql.com/doc/mysql-backup-excerpt/5.7/en/">MySQL Backup and Recovery</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-g11n-excerpt/5.7/en/">MySQL Globalization</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-infoschema-excerpt/5.7/en/">MySQL Information Schema</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-installation-excerpt/5.7/en/">MySQL Installation Guide</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-linuxunix-excerpt/5.7/en/">MySQL and Linux/Unix</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-osx-excerpt/5.7/en/">MySQL and OS X</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-partitioning-excerpt/5.7/en/">MySQL Partitioning</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-perfschema-excerpt/5.7/en/">MySQL Performance Schema</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-replication-excerpt/5.7/en/">MySQL Replication</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-repo-excerpt/5.7/en/">Using the MySQL Yum Repository</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-reslimits-excerpt/5.7/en/">MySQL Restrictions and Limitations</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-security-excerpt/5.7/en/">Security in MySQL</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-solaris-excerpt/5.7/en/">MySQL and Solaris</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-sourcebuild-excerpt/5.7/en/">Building MySQL from Source</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-startstop-excerpt/5.7/en/">Starting and Stopping MySQL</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-tutorial-excerpt/5.7/en/">MySQL Tutorial</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-windows-excerpt/5.7/en/">MySQL and Windows</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-cluster-excerpt/5.7/en/">MySQL NDB Cluster 7.5</a><br />
+            </div>
+</div>
+
+        <br /><span id="wkr"><br /></span>
+    </div>
+    </div>
+
+    <div id="docs-main" class="has-toc">
+    <div id="docs-main-inner">
+
+                <div class="right" id="docs-version-nav">
+            <a href="grant.html" id="docs-version-nav-toggle">version 5.7
+            <span class="icon-chevron-down"></span></a>
+            <div id="docs-version-list">
+                                                        <a                         href="https://dev.mysql.com/doc/refman/8.0/en/grant.html">
+                        8.0
+                                                &nbsp;current
+                                            </a><br />
+                                                                                                                <a                         href="https://dev.mysql.com/doc/refman/5.6/en/grant.html">
+                        5.6
+                                            </a><br />
+                                                                        <div id="docs-version-nav-lang">
+                                                                                                                                                    <a                                     href="https://dev.mysql.com/doc/refman/5.6/ja/grant.html">
+                                    5.6&nbsp;
+                                                                            Japanese
+                                                                    </a><br />
+                                                                                            </div>
+                            </div>
+        </div>
+        
+        <div id="docs-show-nav" class="left hidden" style="margin-right: 15px;">
+            <a class="docs-show-hide-nav" href="grant.html" aria-label="Show Sidebar"
+                title="Show Sidebar"><span class="icon-arrow-small-right"></span></a>
+        </div>
+
+                        <div id="docs-breadcrumbs">
+            <a href="index.html">MySQL 5.7 Reference Manual</a> &nbsp;/&nbsp;
+                            <span id="breadcrumbs-link"><a href="grant.html" id="show-breadcrumbs">...</a> &nbsp;/&nbsp;</span>
+                <span class="hidden" id="hidden-breadcrumbs">
+                                                        <a href="sql-statements.html">SQL Statements</a> &nbsp;/&nbsp;
+                                                            <a href="sql-server-administration-statements.html">Database Administration Statements</a> &nbsp;/&nbsp;
+                                                            <a href="account-management-statements.html">Account Management Statements</a> &nbsp;/&nbsp;
+                                                                                        </span>
+                                        GRANT Statement
+                                    </div>
+        
+        <div id="docs-body">
+        
+<div class="section">
+<div class="titlepage">
+<div>
+<div>
+<h4 class="title"><a name="grant"></a>13.7.1.4 GRANT Statement</h4>
+
+</div>
+
+</div>
+
+</div>
+<a class="indexterm" name="idm44933518243952"></a><a class="indexterm" name="idm44933518242880"></a><a class="indexterm" name="idm44933518241792"></a><a class="indexterm" name="idm44933518240304"></a><a class="indexterm" name="idm44933518239232"></a><pre class="programlisting copytoclipboard line-numbers language-sql"><code class="language-sql">GRANT
+    <em class="replaceable">priv_type</em> [(<em class="replaceable">column_list</em>)]
+      [, <em class="replaceable">priv_type</em> [(<em class="replaceable">column_list</em>)]] ...
+    ON [<em class="replaceable">object_type</em>] <em class="replaceable">priv_level</em>
+    TO <em class="replaceable">user</em> [<em class="replaceable">auth_option</em>] [, <em class="replaceable">user</em> [<em class="replaceable">auth_option</em>]] ...
+    [REQUIRE {NONE | <em class="replaceable">tls_option</em> [[AND] <em class="replaceable">tls_option</em>] ...}]
+    [WITH {GRANT OPTION | <em class="replaceable">resource_option</em>} ...]
+
+GRANT PROXY ON <em class="replaceable">user</em>
+    TO <em class="replaceable">user</em> [, <em class="replaceable">user</em>] ...
+    [WITH GRANT OPTION]
+
+<em class="replaceable">object_type</em>: {
+    TABLE
+  | FUNCTION
+  | PROCEDURE
+}
+
+<em class="replaceable">priv_level</em>: {
+    *
+  | *.*
+  | <em class="replaceable">db_name</em>.*
+  | <em class="replaceable">db_name.tbl_name</em>
+  | <em class="replaceable">tbl_name</em>
+  | <em class="replaceable">db_name</em>.<em class="replaceable">routine_name</em>
+}
+
+<em class="replaceable">user</em>:
+    (see Section 6.2.4, “Specifying Account Names”)
+
+<em class="replaceable">auth_option</em>: {
+    IDENTIFIED BY '<em class="replaceable">auth_string</em>'
+  | IDENTIFIED WITH <em class="replaceable">auth_plugin</em>
+  | IDENTIFIED WITH <em class="replaceable">auth_plugin</em> BY '<em class="replaceable">auth_string</em>'
+  | IDENTIFIED WITH <em class="replaceable">auth_plugin</em> AS '<em class="replaceable">auth_string</em>'
+  | IDENTIFIED BY PASSWORD '<em class="replaceable">auth_string</em>'
+}
+
+<em class="replaceable">tls_option</em>: {
+    SSL
+  | X509
+  | CIPHER '<em class="replaceable">cipher</em>'
+  | ISSUER '<em class="replaceable">issuer</em>'
+  | SUBJECT '<em class="replaceable">subject</em>'
+}
+
+<em class="replaceable">resource_option</em>: {
+  | MAX_QUERIES_PER_HOUR <em class="replaceable">count</em>
+  | MAX_UPDATES_PER_HOUR <em class="replaceable">count</em>
+  | MAX_CONNECTIONS_PER_HOUR <em class="replaceable">count</em>
+  | MAX_USER_CONNECTIONS <em class="replaceable">count</em>
+}</code></pre><p>
+        The <a class="link" href="grant.html" title="13.7.1.4 GRANT Statement"><code class="literal">GRANT</code></a> statement grants
+        privileges to MySQL user accounts. There are several aspects to
+        the <a class="link" href="grant.html" title="13.7.1.4 GRANT Statement"><code class="literal">GRANT</code></a> statement, described
+        under the following topics:
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><a class="xref" href="grant.html#grant-overview" title="GRANT General Overview">GRANT General Overview</a></p></li><li class="listitem"><p><a class="xref" href="grant.html#grant-quoting" title="Object Quoting Guidelines">Object Quoting Guidelines</a></p></li><li class="listitem"><p><a class="xref" href="grant.html#grant-privileges" title="Privileges Supported by MySQL">Privileges Supported by MySQL</a></p></li><li class="listitem"><p><a class="xref" href="grant.html#grant-accounts-passwords" title="Account Names and Passwords">Account Names and Passwords</a></p></li><li class="listitem"><p><a class="xref" href="grant.html#grant-global-privileges" title="Global Privileges">Global Privileges</a></p></li><li class="listitem"><p><a class="xref" href="grant.html#grant-database-privileges" title="Database Privileges">Database Privileges</a></p></li><li class="listitem"><p><a class="xref" href="grant.html#grant-table-privileges" title="Table Privileges">Table Privileges</a></p></li><li class="listitem"><p><a class="xref" href="grant.html#grant-column-privileges" title="Column Privileges">Column Privileges</a></p></li><li class="listitem"><p><a class="xref" href="grant.html#grant-routine-privileges" title="Stored Routine Privileges">Stored Routine Privileges</a></p></li><li class="listitem"><p><a class="xref" href="grant.html#grant-proxy-privileges" title="Proxy User Privileges">Proxy User Privileges</a></p></li><li class="listitem"><p><a class="xref" href="grant.html#grant-account-creation" title="Implicit Account Creation">Implicit Account Creation</a></p></li><li class="listitem"><p><a class="xref" href="grant.html#grant-other-characteristics" title="Other Account Characteristics">Other Account Characteristics</a></p></li><li class="listitem"><p><a class="xref" href="grant.html#grant-mysql-vs-standard-sql" title="MySQL and Standard SQL Versions of GRANT">MySQL and Standard SQL Versions of GRANT</a></p></li></ul>
+</div>
+
+<div class="simplesect">
+
+<div class="titlepage">
+<div>
+
+<div class="simple">
+<h5 class="title"><a name="grant-overview"></a>GRANT General Overview</h5>
+
+</div>
+
+</div>
+
+</div>
+<p>
+          The <a class="link" href="grant.html" title="13.7.1.4 GRANT Statement"><code class="literal">GRANT</code></a> statement grants
+          privileges to MySQL user accounts.
+        </p><p>
+          To grant a privilege with
+          <a class="link" href="grant.html" title="13.7.1.4 GRANT Statement"><code class="literal">GRANT</code></a>, you must have the
+          <a class="link" href="privileges-provided.html#priv_grant-option"><code class="literal">GRANT OPTION</code></a> privilege, and you
+          must have the privileges that you are granting.
+          (Alternatively, if you have the
+          <a class="link" href="privileges-provided.html#priv_update"><code class="literal">UPDATE</code></a> privilege for the grant
+          tables in the <code class="literal">mysql</code> system database, you
+          can grant any account any privilege.) When the
+          <a class="link" href="server-system-variables.html#sysvar_read_only"><code class="literal">read_only</code></a> system variable is
+          enabled, <a class="link" href="grant.html" title="13.7.1.4 GRANT Statement"><code class="literal">GRANT</code></a> additionally
+          requires the <a class="link" href="privileges-provided.html#priv_super"><code class="literal">SUPER</code></a> privilege.
+        </p><p>
+          The <a class="link" href="revoke.html" title="13.7.1.6 REVOKE Statement"><code class="literal">REVOKE</code></a> statement is related
+          to <a class="link" href="grant.html" title="13.7.1.4 GRANT Statement"><code class="literal">GRANT</code></a> and enables
+          administrators to remove account privileges. See
+          <a class="xref" href="revoke.html" title="13.7.1.6 REVOKE Statement">Section 13.7.1.6, “REVOKE Statement”</a>.
+        </p><p>
+          Each account name uses the format described in
+          <a class="xref" href="account-names.html" title="6.2.4 Specifying Account Names">Section 6.2.4, “Specifying Account Names”</a>. For example:
+        </p><pre class="programlisting copytoclipboard line-numbers language-sql one-line"><code class="language-sql">GRANT ALL ON db1.* TO 'jeffrey'@'localhost';</code></pre><p>
+          The host name part of the account, if omitted, defaults to
+          <code class="literal">'%'</code>.
+        </p><p>
+          Normally, a database administrator first uses
+          <a class="link" href="create-user.html" title="13.7.1.2 CREATE USER Statement"><code class="literal">CREATE USER</code></a> to create an
+          account and define its nonprivilege characteristics such as
+          its password, whether it uses secure connections, and limits
+          on access to server resources, then uses
+          <a class="link" href="grant.html" title="13.7.1.4 GRANT Statement"><code class="literal">GRANT</code></a> to define its privileges.
+          <a class="link" href="alter-user.html" title="13.7.1.1 ALTER USER Statement"><code class="literal">ALTER USER</code></a> may be used to
+          change the nonprivilege characteristics of existing accounts.
+          For example:
+        </p><pre class="programlisting copytoclipboard line-numbers language-sql"><code class="language-sql">CREATE USER 'jeffrey'@'localhost' IDENTIFIED BY '<em class="replaceable">password</em>';
+GRANT ALL ON db1.* TO 'jeffrey'@'localhost';
+GRANT SELECT ON db2.invoice TO 'jeffrey'@'localhost';
+ALTER USER 'jeffrey'@'localhost' WITH MAX_QUERIES_PER_HOUR 90;</code></pre>
+<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+
+<div class="admon-title">
+Note
+</div>
+<p>
+            Examples shown here include no <code class="literal">IDENTIFIED</code>
+            clause. It is assumed that you establish passwords with
+            <a class="link" href="create-user.html" title="13.7.1.2 CREATE USER Statement"><code class="literal">CREATE USER</code></a> at
+            account-creation time to avoid creating insecure accounts.
+</p>
+</div>
+<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<div class="admon-title">
+Note
+</div>
+<p>
+            If an account named in a
+            <a class="link" href="grant.html" title="13.7.1.4 GRANT Statement"><code class="literal">GRANT</code></a> statement does not
+            already exist, <a class="link" href="grant.html" title="13.7.1.4 GRANT Statement"><code class="literal">GRANT</code></a> may
+            create it under the conditions described later in the
+            discussion of the
+            <a class="link" href="sql-mode.html#sqlmode_no_auto_create_user"><code class="literal">NO_AUTO_CREATE_USER</code></a> SQL
+            mode. It is also possible to use
+            <a class="link" href="grant.html" title="13.7.1.4 GRANT Statement"><code class="literal">GRANT</code></a> to specify nonprivilege
+            account characteristics such as whether it uses secure
+            connections and limits on access to server resources.
+          </p><p>
+            However, use of <a class="link" href="grant.html" title="13.7.1.4 GRANT Statement"><code class="literal">GRANT</code></a> to
+            create accounts or define nonprivilege characteristics is
+            deprecated in MySQL 5.7. Instead, perform these
+            tasks using <a class="link" href="create-user.html" title="13.7.1.2 CREATE USER Statement"><code class="literal">CREATE USER</code></a> or
+            <a class="link" href="alter-user.html" title="13.7.1.1 ALTER USER Statement"><code class="literal">ALTER USER</code></a>.
+</p>
+</div>
+<p>
+          From the <a class="link" href="mysql.html" title="4.5.1 mysql — The MySQL Command-Line Client"><span class="command"><strong>mysql</strong></span></a> program,
+          <a class="link" href="grant.html" title="13.7.1.4 GRANT Statement"><code class="literal">GRANT</code></a> responds with
+          <code class="literal">Query OK, 0 rows affected</code> when executed
+          successfully. To determine what privileges result from the
+          operation, use <a class="link" href="show-grants.html" title="13.7.5.21 SHOW GRANTS Statement"><code class="literal">SHOW GRANTS</code></a>. See
+          <a class="xref" href="show-grants.html" title="13.7.5.21 SHOW GRANTS Statement">Section 13.7.5.21, “SHOW GRANTS Statement”</a>.
+</p>
+<div class="important" style="margin-left: 0.5in; margin-right: 0.5in;">
+
+<div class="admon-title">
+Important
+</div>
+<p>
+            Under some circumstances,
+            <a class="link" href="grant.html" title="13.7.1.4 GRANT Statement"><code class="literal">GRANT</code></a> may be recorded in
+            server logs or on the client side in a history file such as
+            <code class="filename">~/.mysql_history</code>, which means that
+            cleartext passwords may be read by anyone having read access
+            to that information. For information about the conditions
+            under which this occurs for the server logs and how to
+            control it, see <a class="xref" href="password-logging.html" title="6.1.2.3 Passwords and Logging">Section 6.1.2.3, “Passwords and Logging”</a>. For
+            similar information about client-side logging, see
+            <a class="xref" href="mysql-logging.html" title="4.5.1.3 mysql Client Logging">Section 4.5.1.3, “mysql Client Logging”</a>.
+</p>
+</div>
+<p>
+          <a class="link" href="grant.html" title="13.7.1.4 GRANT Statement"><code class="literal">GRANT</code></a> supports host names up to
+          60 characters long. User names can be up to 32 characters.
+          Database, table, column, and routine names can be up to 64
+          characters.
+</p>
+<div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;">
+
+<div class="admon-title">
+Warning
+</div>
+<p>
+            <span class="emphasis"><em>Do not attempt to change the permissible length
+            for user names by altering the <code class="literal">mysql.user</code>
+            system table. Doing so results in unpredictable behavior
+            which may even make it impossible for users to log in to the
+            MySQL server</em></span>. Never alter the structure of tables
+            in the <code class="literal">mysql</code> system database in any
+            manner except by means of the procedure described in
+            <a class="xref" href="upgrading.html" title="2.11 Upgrading MySQL">Section 2.11, “Upgrading MySQL”</a>.
+</p>
+</div>
+
+</div>
+<div class="simplesect">
+<div class="titlepage">
+<div>
+<div class="simple">
+<h5 class="title"><a name="grant-quoting"></a>Object Quoting Guidelines</h5>
+
+</div>
+
+</div>
+
+</div>
+<a class="indexterm" name="idm44933518141792"></a><p>
+          Several objects within <a class="link" href="grant.html" title="13.7.1.4 GRANT Statement"><code class="literal">GRANT</code></a>
+          statements are subject to quoting, although quoting is
+          optional in many cases: Account, database, table, column, and
+          routine names. For example, if a
+          <em class="replaceable"><code>user_name</code></em> or
+          <em class="replaceable"><code>host_name</code></em> value in an account name
+          is legal as an unquoted identifier, you need not quote it.
+          However, quotation marks are necessary to specify a
+          <em class="replaceable"><code>user_name</code></em> string containing special
+          characters (such as <code class="literal">-</code>), or a
+          <em class="replaceable"><code>host_name</code></em> string containing special
+          characters or wildcard characters such as <code class="literal">%</code>
+          (for example, <code class="literal">'test-user'@'%.com'</code>). Quote
+          the user name and host name separately.
+        </p><p>
+          To specify quoted values:
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+              Quote database, table, column, and routine names as
+              identifiers.
+            </p></li><li class="listitem"><p>
+              Quote user names and host names as identifiers or as
+              strings.
+            </p></li><li class="listitem"><p>
+              Quote passwords as strings.
+</p></li></ul>
+</div>
+<p>
+          For string-quoting and identifier-quoting guidelines, see
+          <a class="xref" href="string-literals.html" title="9.1.1 String Literals">Section 9.1.1, “String Literals”</a>, and
+          <a class="xref" href="identifiers.html" title="9.2 Schema Object Names">Section 9.2, “Schema Object Names”</a>.
+        </p><p>
+          The <code class="literal">_</code> and <code class="literal">%</code> wildcards
+          are permitted when specifying database names in
+          <a class="link" href="grant.html" title="13.7.1.4 GRANT Statement"><code class="literal">GRANT</code></a> statements that grant
+          privileges at the database level (<code class="literal">GRANT ... ON
+          <em class="replaceable"><code>db_name</code></em>.*</code>). This means,
+          for example, that to use a <code class="literal">_</code> character as
+          part of a database name, specify it as <code class="literal">\_</code>
+          in the <a class="link" href="grant.html" title="13.7.1.4 GRANT Statement"><code class="literal">GRANT</code></a> statement, to
+          prevent the user from being able to access additional
+          databases matching the wildcard pattern (for example,
+          <code class="literal">GRANT ... ON `foo\_bar`.* TO ...</code>).
+        </p><p>
+          When a database name not is used to grant privileges at the
+          database level, but as a qualifier for granting privileges to
+          some other object such as a table or routine (for example,
+          <code class="literal">GRANT ... ON
+          <em class="replaceable"><code>db_name</code></em>.<em class="replaceable"><code>tbl_name</code></em></code>),
+          wildcard characters are treated as normal characters.
+</p>
+</div>
+<div class="simplesect">
+<div class="titlepage">
+<div>
+<div class="simple">
+<h5 class="title"><a name="grant-privileges"></a>Privileges Supported by MySQL</h5>
+
+</div>
+
+</div>
+
+</div>
+<p>
+          The following table summarizes the permissible
+          <em class="replaceable"><code>priv_type</code></em> privilege types that can
+          be specified for the <a class="link" href="grant.html" title="13.7.1.4 GRANT Statement"><code class="literal">GRANT</code></a> and
+          <a class="link" href="revoke.html" title="13.7.1.6 REVOKE Statement"><code class="literal">REVOKE</code></a> statements, and the
+          levels at which each privilege can be granted. For additional
+          information about each privilege, see
+          <a class="xref" href="privileges-provided.html" title="6.2.2 Privileges Provided by MySQL">Section 6.2.2, “Privileges Provided by MySQL”</a>.
+</p>
+<div class="table">
+<a name="idm44933518113600"></a><p class="title"><b>Table 13.8 Permissible Privileges for GRANT and REVOKE</b></p>
+<div class="table-contents">
+<table><col width="30%"><col width="70%"><thead><tr>
+              <th>Privilege</th>
+              <th>Meaning and Grantable Levels</th>
+            </tr></thead><tbody><tr>
+              <td><a class="link" href="privileges-provided.html#priv_all"><code class="literal">ALL [PRIVILEGES]</code></a></td>
+              <td>Grant all privileges at specified access level except
+                <a class="link" href="privileges-provided.html#priv_grant-option"><code class="literal">GRANT OPTION</code></a> and
+                <a class="link" href="privileges-provided.html#priv_proxy"><code class="literal">PROXY</code></a>.</td>
+            </tr><tr>
+              <td><a class="link" href="privileges-provided.html#priv_alter"><code class="literal">ALTER</code></a></td>
+              <td>Enable use of <a class="link" href="alter-table.html" title="13.1.8 ALTER TABLE Statement"><code class="literal">ALTER TABLE</code></a>. Levels:
+                Global, database, table.</td>
+            </tr><tr>
+              <td><a class="link" href="privileges-provided.html#priv_alter-routine"><code class="literal">ALTER ROUTINE</code></a></td>
+              <td>Enable stored routines to be altered or dropped. Levels: Global,
+                database, routine.</td>
+            </tr><tr>
+              <td><a class="link" href="privileges-provided.html#priv_create"><code class="literal">CREATE</code></a></td>
+              <td>Enable database and table creation. Levels: Global, database, table.</td>
+            </tr><tr>
+              <td><a class="link" href="privileges-provided.html#priv_create-routine"><code class="literal">CREATE ROUTINE</code></a></td>
+              <td>Enable stored routine creation. Levels: Global, database.</td>
+            </tr><tr>
+              <td><a class="link" href="privileges-provided.html#priv_create-tablespace"><code class="literal">CREATE TABLESPACE</code></a></td>
+              <td>Enable tablespaces and log file groups to be created, altered, or
+                dropped. Level: Global.</td>
+            </tr><tr>
+              <td><a class="link" href="privileges-provided.html#priv_create-temporary-tables"><code class="literal">CREATE TEMPORARY TABLES</code></a></td>
+              <td>Enable use of <a class="link" href="create-table.html" title="13.1.18 CREATE TABLE Statement"><code class="literal">CREATE
+                TEMPORARY TABLE</code></a>. Levels: Global, database.</td>
+            </tr><tr>
+              <td><a class="link" href="privileges-provided.html#priv_create-user"><code class="literal">CREATE USER</code></a></td>
+              <td>Enable use of <a class="link" href="create-user.html" title="13.7.1.2 CREATE USER Statement"><code class="literal">CREATE USER</code></a>,
+                <a class="link" href="drop-user.html" title="13.7.1.3 DROP USER Statement"><code class="literal">DROP USER</code></a>,
+                <a class="link" href="rename-user.html" title="13.7.1.5 RENAME USER Statement"><code class="literal">RENAME USER</code></a>, and
+                <a class="link" href="revoke.html" title="13.7.1.6 REVOKE Statement"><code class="literal">REVOKE ALL
+                PRIVILEGES</code></a>. Level: Global.</td>
+            </tr><tr>
+              <td><a class="link" href="privileges-provided.html#priv_create-view"><code class="literal">CREATE VIEW</code></a></td>
+              <td>Enable views to be created or altered. Levels: Global, database, table.</td>
+            </tr><tr>
+              <td><a class="link" href="privileges-provided.html#priv_delete"><code class="literal">DELETE</code></a></td>
+              <td>Enable use of <a class="link" href="delete.html" title="13.2.2 DELETE Statement"><code class="literal">DELETE</code></a>. Level: Global,
+                database, table.</td>
+            </tr><tr>
+              <td><a class="link" href="privileges-provided.html#priv_drop"><code class="literal">DROP</code></a></td>
+              <td>Enable databases, tables, and views to be dropped. Levels: Global,
+                database, table.</td>
+            </tr><tr>
+              <td><a class="link" href="privileges-provided.html#priv_event"><code class="literal">EVENT</code></a></td>
+              <td>Enable use of events for the Event Scheduler. Levels: Global, database.</td>
+            </tr><tr>
+              <td><a class="link" href="privileges-provided.html#priv_execute"><code class="literal">EXECUTE</code></a></td>
+              <td>Enable the user to execute stored routines. Levels: Global, database,
+                routine.</td>
+            </tr><tr>
+              <td><a class="link" href="privileges-provided.html#priv_file"><code class="literal">FILE</code></a></td>
+              <td>Enable the user to cause the server to read or write files. Level:
+                Global.</td>
+            </tr><tr>
+              <td><a class="link" href="privileges-provided.html#priv_grant-option"><code class="literal">GRANT OPTION</code></a></td>
+              <td>Enable privileges to be granted to or removed from other accounts.
+                Levels: Global, database, table, routine, proxy.</td>
+            </tr><tr>
+              <td><a class="link" href="privileges-provided.html#priv_index"><code class="literal">INDEX</code></a></td>
+              <td>Enable indexes to be created or dropped. Levels: Global, database,
+                table.</td>
+            </tr><tr>
+              <td><a class="link" href="privileges-provided.html#priv_insert"><code class="literal">INSERT</code></a></td>
+              <td>Enable use of <a class="link" href="insert.html" title="13.2.5 INSERT Statement"><code class="literal">INSERT</code></a>. Levels: Global,
+                database, table, column.</td>
+            </tr><tr>
+              <td><a class="link" href="privileges-provided.html#priv_lock-tables"><code class="literal">LOCK TABLES</code></a></td>
+              <td>Enable use of <a class="link" href="lock-tables.html" title="13.3.5 LOCK TABLES and UNLOCK TABLES Statements"><code class="literal">LOCK TABLES</code></a> on tables for
+                which you have the <a class="link" href="select.html" title="13.2.9 SELECT Statement"><code class="literal">SELECT</code></a>
+                privilege. Levels: Global, database.</td>
+            </tr><tr>
+              <td><a class="link" href="privileges-provided.html#priv_process"><code class="literal">PROCESS</code></a></td>
+              <td>Enable the user to see all processes with <a class="link" href="show-processlist.html" title="13.7.5.29 SHOW PROCESSLIST Statement"><code class="literal">SHOW
+                PROCESSLIST</code></a>. Level: Global.</td>
+            </tr><tr>
+              <td><a class="link" href="privileges-provided.html#priv_proxy"><code class="literal">PROXY</code></a></td>
+              <td>Enable user proxying. Level: From user to user.</td>
+            </tr><tr>
+              <td><a class="link" href="privileges-provided.html#priv_references"><code class="literal">REFERENCES</code></a></td>
+              <td>Enable foreign key creation. Levels: Global, database, table, column.</td>
+            </tr><tr>
+              <td><a class="link" href="privileges-provided.html#priv_reload"><code class="literal">RELOAD</code></a></td>
+              <td>Enable use of <a class="link" href="flush.html" title="13.7.6.3 FLUSH Statement"><code class="literal">FLUSH</code></a> operations. Level:
+                Global.</td>
+            </tr><tr>
+              <td><a class="link" href="privileges-provided.html#priv_replication-client"><code class="literal">REPLICATION CLIENT</code></a></td>
+              <td>Enable the user to ask where source or replica servers are. Level:
+                Global.</td>
+            </tr><tr>
+              <td><a class="link" href="privileges-provided.html#priv_replication-slave"><code class="literal">REPLICATION SLAVE</code></a></td>
+              <td>Enable replicas to read binary log events from the source. Level:
+                Global.</td>
+            </tr><tr>
+              <td><a class="link" href="privileges-provided.html#priv_select"><code class="literal">SELECT</code></a></td>
+              <td>Enable use of <a class="link" href="select.html" title="13.2.9 SELECT Statement"><code class="literal">SELECT</code></a>. Levels: Global,
+                database, table, column.</td>
+            </tr><tr>
+              <td><a class="link" href="privileges-provided.html#priv_show-databases"><code class="literal">SHOW DATABASES</code></a></td>
+              <td>Enable <a class="link" href="show-databases.html" title="13.7.5.14 SHOW DATABASES Statement"><code class="literal">SHOW DATABASES</code></a> to show all
+                databases. Level: Global.</td>
+            </tr><tr>
+              <td><a class="link" href="privileges-provided.html#priv_show-view"><code class="literal">SHOW VIEW</code></a></td>
+              <td>Enable use of <a class="link" href="show-create-view.html" title="13.7.5.13 SHOW CREATE VIEW Statement"><code class="literal">SHOW CREATE VIEW</code></a>. Levels:
+                Global, database, table.</td>
+            </tr><tr>
+              <td><a class="link" href="privileges-provided.html#priv_shutdown"><code class="literal">SHUTDOWN</code></a></td>
+              <td>Enable use of <a class="link" href="mysqladmin.html" title="4.5.2 mysqladmin — A MySQL Server Administration Program"><span class="command"><strong>mysqladmin shutdown</strong></span></a>. Level: Global.</td>
+            </tr><tr>
+              <td><a class="link" href="privileges-provided.html#priv_super"><code class="literal">SUPER</code></a></td>
+              <td>Enable use of other administrative operations such as
+                <a class="link" href="change-master-to.html" title="13.4.2.1 CHANGE MASTER TO Statement"><code class="literal">CHANGE MASTER TO</code></a>,
+                <a class="link" href="kill.html" title="13.7.6.4 KILL Statement"><code class="literal">KILL</code></a>,
+                <a class="link" href="purge-binary-logs.html" title="13.4.1.1 PURGE BINARY LOGS Statement"><code class="literal">PURGE BINARY LOGS</code></a>,
+                <a class="link" href="set-variable.html" title="13.7.4.1 SET Syntax for Variable Assignment"><code class="literal">SET
+                GLOBAL</code></a>, and <a class="link" href="mysqladmin.html" title="4.5.2 mysqladmin — A MySQL Server Administration Program"><span class="command"><strong>mysqladmin
+                debug</strong></span></a> command. Level: Global.</td>
+            </tr><tr>
+              <td><a class="link" href="privileges-provided.html#priv_trigger"><code class="literal">TRIGGER</code></a></td>
+              <td>Enable trigger operations. Levels: Global, database, table.</td>
+            </tr><tr>
+              <td><a class="link" href="privileges-provided.html#priv_update"><code class="literal">UPDATE</code></a></td>
+              <td>Enable use of <a class="link" href="update.html" title="13.2.11 UPDATE Statement"><code class="literal">UPDATE</code></a>. Levels: Global,
+                database, table, column.</td>
+            </tr><tr>
+              <td><a class="link" href="privileges-provided.html#priv_usage"><code class="literal">USAGE</code></a></td>
+              <td>Synonym for <span class="quote">“<span class="quote">no privileges</span>”</span></td>
+</tr></tbody></table>
+</div>
+
+</div>
+<br class="table-break"><p>
+          A trigger is associated with a table. To create or drop a
+          trigger, you must have the
+          <a class="link" href="privileges-provided.html#priv_trigger"><code class="literal">TRIGGER</code></a> privilege for the
+          table, not the trigger.
+        </p><p>
+          In <a class="link" href="grant.html" title="13.7.1.4 GRANT Statement"><code class="literal">GRANT</code></a> statements, the
+          <a class="link" href="privileges-provided.html#priv_all"><code class="literal">ALL
+          [PRIVILEGES]</code></a> or <a class="link" href="privileges-provided.html#priv_proxy"><code class="literal">PROXY</code></a>
+          privilege must be named by itself and cannot be specified
+          along with other privileges.
+          <a class="link" href="privileges-provided.html#priv_all"><code class="literal">ALL
+          [PRIVILEGES]</code></a> stands for all privileges available for
+          the level at which privileges are to be granted except for the
+          <a class="link" href="privileges-provided.html#priv_grant-option"><code class="literal">GRANT OPTION</code></a> and
+          <a class="link" href="privileges-provided.html#priv_proxy"><code class="literal">PROXY</code></a> privileges.
+        </p><p>
+          <a class="link" href="privileges-provided.html#priv_usage"><code class="literal">USAGE</code></a> can be specified to
+          create a user that has no privileges, or to specify the
+          <code class="literal">REQUIRE</code> or <code class="literal">WITH</code> clauses
+          for an account without changing its existing privileges.
+          (However, use of <a class="link" href="grant.html" title="13.7.1.4 GRANT Statement"><code class="literal">GRANT</code></a> to
+          define nonprivilege characteristics is deprecated.
+        </p><p>
+          MySQL account information is stored in the tables of the
+          <code class="literal">mysql</code> system database. For additional
+          details, consult <a class="xref" href="access-control.html" title="6.2 Access Control and Account Management">Section 6.2, “Access Control and Account Management”</a>, which
+          discusses the <code class="literal">mysql</code> system database and the
+          access control system extensively.
+        </p><a class="indexterm" name="idm44933517960880"></a><p>
+          If the grant tables hold privilege rows that contain
+          mixed-case database or table names and the
+          <a class="link" href="server-system-variables.html#sysvar_lower_case_table_names"><code class="literal">lower_case_table_names</code></a> system
+          variable is set to a nonzero value,
+          <a class="link" href="revoke.html" title="13.7.1.6 REVOKE Statement"><code class="literal">REVOKE</code></a> cannot be used to revoke
+          these privileges. It is necessary to manipulate the grant
+          tables directly. (<a class="link" href="grant.html" title="13.7.1.4 GRANT Statement"><code class="literal">GRANT</code></a> does
+          not create such rows when
+          <a class="link" href="server-system-variables.html#sysvar_lower_case_table_names"><code class="literal">lower_case_table_names</code></a> is
+          set, but such rows might have been created prior to setting
+          that variable.)
+        </p><p>
+          Privileges can be granted at several levels, depending on the
+          syntax used for the <code class="literal">ON</code> clause. For
+          <a class="link" href="revoke.html" title="13.7.1.6 REVOKE Statement"><code class="literal">REVOKE</code></a>, the same
+          <code class="literal">ON</code> syntax specifies which privileges to
+          remove.
+        </p><p>
+          For the global, database, table, and routine levels,
+          <a class="link" href="grant.html" title="13.7.1.4 GRANT Statement"><code class="literal">GRANT ALL</code></a>
+          assigns only the privileges that exist at the level you are
+          granting. For example, <code class="literal">GRANT ALL ON
+          <em class="replaceable"><code>db_name</code></em>.*</code> is a
+          database-level statement, so it does not grant any global-only
+          privileges such as <a class="link" href="privileges-provided.html#priv_file"><code class="literal">FILE</code></a>.
+          Granting <a class="link" href="privileges-provided.html#priv_all"><code class="literal">ALL</code></a> does not assign
+          the <a class="link" href="privileges-provided.html#priv_grant-option"><code class="literal">GRANT OPTION</code></a> or
+          <a class="link" href="privileges-provided.html#priv_proxy"><code class="literal">PROXY</code></a> privilege.
+        </p><p>
+          The <em class="replaceable"><code>object_type</code></em> clause, if present,
+          should be specified as <code class="literal">TABLE</code>,
+          <code class="literal">FUNCTION</code>, or <code class="literal">PROCEDURE</code>
+          when the following object is a table, a stored function, or a
+          stored procedure.
+        </p><p>
+          The privileges that a user holds for a database, table,
+          column, or routine are formed additively as the logical
+          <a class="link" href="logical-operators.html#operator_or"><code class="literal">OR</code></a> of the account privileges at
+          each of the privilege levels, including the global level. It
+          is not possible to deny a privilege granted at a higher level
+          by absence of that privilege at a lower level. For example,
+          this statement grants the
+          <a class="link" href="privileges-provided.html#priv_select"><code class="literal">SELECT</code></a> and
+          <a class="link" href="privileges-provided.html#priv_insert"><code class="literal">INSERT</code></a> privileges globally:
+        </p><pre class="programlisting copytoclipboard line-numbers language-sql one-line"><code class="language-sql">GRANT SELECT, INSERT ON *.* TO u1;</code></pre><p>
+          The globally granted privileges apply to all databases,
+          tables, and columns, even though not granted at any of those
+          lower levels.
+        </p><p>
+          Details of the privilege-checking procedure are presented in
+          <a class="xref" href="request-access.html" title="6.2.6 Access Control, Stage 2: Request Verification">Section 6.2.6, “Access Control, Stage 2: Request Verification”</a>.
+        </p><p>
+          If you are using table, column, or routine privileges for even
+          one user, the server examines table, column, and routine
+          privileges for all users and this slows down MySQL a bit.
+          Similarly, if you limit the number of queries, updates, or
+          connections for any users, the server must monitor these
+          values.
+        </p><p>
+          MySQL enables you to grant privileges on databases or tables
+          that do not exist. For tables, the privileges to be granted
+          must include the <a class="link" href="privileges-provided.html#priv_create"><code class="literal">CREATE</code></a>
+          privilege. <span class="emphasis"><em>This behavior is by design</em></span>,
+          and is intended to enable the database administrator to
+          prepare user accounts and privileges for databases or tables
+          that are to be created at a later time.
+</p>
+<div class="important" style="margin-left: 0.5in; margin-right: 0.5in;">
+
+<div class="admon-title">
+Important
+</div>
+<p>
+            <span class="emphasis"><em>MySQL does not automatically revoke any privileges
+            when you drop a database or table</em></span>. However, if
+            you drop a routine, any routine-level privileges granted for
+            that routine are revoked.
+</p>
+</div>
+
+</div>
+<div class="simplesect">
+<div class="titlepage">
+<div>
+<div class="simple">
+<h5 class="title"><a name="grant-accounts-passwords"></a>Account Names and Passwords</h5>
+
+</div>
+
+</div>
+
+</div>
+<p>
+          A <em class="replaceable"><code>user</code></em> value in a
+          <a class="link" href="grant.html" title="13.7.1.4 GRANT Statement"><code class="literal">GRANT</code></a> statement indicates a
+          MySQL account to which the statement applies. To accommodate
+          granting rights to users from arbitrary hosts, MySQL supports
+          specifying the <em class="replaceable"><code>user</code></em> value in the
+          form
+          <code class="literal">'<em class="replaceable"><code>user_name</code></em>'@'<em class="replaceable"><code>host_name</code></em>'</code>.
+        </p><p>
+          You can specify wildcards in the host name. For example,
+          <code class="literal">'<em class="replaceable"><code>user_name</code></em>'@'%.example.com'</code>
+          applies to <em class="replaceable"><code>user_name</code></em> for any host
+          in the <code class="literal">example.com</code> domain, and
+          <code class="literal">'<em class="replaceable"><code>user_name</code></em>'@'198.51.100.%'</code>
+          applies to <em class="replaceable"><code>user_name</code></em> for any host
+          in the <code class="literal">198.51.100</code> class C subnet.
+        </p><p>
+          The simple form
+          <code class="literal">'<em class="replaceable"><code>user_name</code></em>'</code> is a
+          synonym for
+          <code class="literal">'<em class="replaceable"><code>user_name</code></em>'@'%'</code>.
+        </p><p>
+          <span class="emphasis"><em>MySQL does not support wildcards in user
+          names</em></span>. To refer to an anonymous user, specify an
+          account with an empty user name with the
+          <a class="link" href="grant.html" title="13.7.1.4 GRANT Statement"><code class="literal">GRANT</code></a> statement:
+        </p><pre class="programlisting copytoclipboard line-numbers language-sql one-line"><code class="language-sql">GRANT ALL ON test.* TO ''@'localhost' ...;</code></pre><p>
+          In this case, any user who connects from the local host with
+          the correct password for the anonymous user is permitted
+          access, with the privileges associated with the anonymous user
+          account.
+        </p><p>
+          For additional information about user name and host name
+          values in account names, see <a class="xref" href="account-names.html" title="6.2.4 Specifying Account Names">Section 6.2.4, “Specifying Account Names”</a>.
+</p>
+<div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;">
+
+<div class="admon-title">
+Warning
+</div>
+<p>
+            If you permit local anonymous users to connect to the MySQL
+            server, you should also grant privileges to all local users
+            as
+            <code class="literal">'<em class="replaceable"><code>user_name</code></em>'@'localhost'</code>.
+            Otherwise, the anonymous user account for
+            <code class="literal">localhost</code> in the
+            <code class="literal">mysql.user</code> system table is used when
+            named users try to log in to the MySQL server from the local
+            machine. For details, see
+            <a class="xref" href="connection-access.html" title="6.2.5 Access Control, Stage 1: Connection Verification">Section 6.2.5, “Access Control, Stage 1: Connection Verification”</a>.
+          </p><p>
+            To determine whether this issue applies to you, execute the
+            following query, which lists any anonymous users:
+          </p><pre class="programlisting copytoclipboard line-numbers language-sql one-line"><code class="language-sql">SELECT Host, User FROM mysql.user WHERE User='';</code></pre><p>
+            To avoid the problem just described, delete the local
+            anonymous user account using this statement:
+          </p><pre class="programlisting copytoclipboard line-numbers language-sql one-line"><code class="language-sql">DROP USER ''@'localhost';</code></pre>
+</div>
+<a class="indexterm" name="idm44933517901808"></a><p>
+          For <a class="link" href="grant.html" title="13.7.1.4 GRANT Statement"><code class="literal">GRANT</code></a> syntax that permits
+          an <em class="replaceable"><code>auth_option</code></em> value to follow a
+          <em class="replaceable"><code>user</code></em> value,
+          <em class="replaceable"><code>auth_option</code></em> begins with
+          <code class="literal">IDENTIFIED</code> and indicates how the account
+          authenticates by specifying an account authentication plugin,
+          credentials (for example, a password), or both. Syntax of the
+          <em class="replaceable"><code>auth_option</code></em> clause is the same as
+          for the <a class="link" href="create-user.html" title="13.7.1.2 CREATE USER Statement"><code class="literal">CREATE USER</code></a> statement.
+          For details, see <a class="xref" href="create-user.html" title="13.7.1.2 CREATE USER Statement">Section 13.7.1.2, “CREATE USER Statement”</a>.
+</p>
+<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+
+<div class="admon-title">
+Note
+</div>
+<p>
+            Use of <a class="link" href="grant.html" title="13.7.1.4 GRANT Statement"><code class="literal">GRANT</code></a> to define
+            account authentication characteristics is deprecated in
+            MySQL 5.7. Instead, establish or change
+            authentication characteristics using
+            <a class="link" href="create-user.html" title="13.7.1.2 CREATE USER Statement"><code class="literal">CREATE USER</code></a> or
+            <a class="link" href="alter-user.html" title="13.7.1.1 ALTER USER Statement"><code class="literal">ALTER USER</code></a>. Expect this
+            <a class="link" href="grant.html" title="13.7.1.4 GRANT Statement"><code class="literal">GRANT</code></a> capability to be
+            removed in a future MySQL release.
+</p>
+</div>
+<p>
+          When <code class="literal">IDENTIFIED</code> is present and you have the
+          global grant privilege (<a class="link" href="privileges-provided.html#priv_grant-option"><code class="literal">GRANT
+          OPTION</code></a>), any password specified becomes the new
+          password for the account, even if the account exists and
+          already has a password. Without <code class="literal">IDENTIFIED</code>,
+          the account password remains unchanged.
+</p>
+</div>
+<div class="simplesect">
+<div class="titlepage">
+<div>
+<div class="simple">
+<h5 class="title"><a name="grant-global-privileges"></a>Global Privileges</h5>
+
+</div>
+
+</div>
+
+</div>
+<p>
+          Global privileges are administrative or apply to all databases
+          on a given server. To assign global privileges, use
+          <code class="literal">ON *.*</code> syntax:
+        </p><pre class="programlisting copytoclipboard line-numbers language-sql"><code class="language-sql">GRANT ALL ON *.* TO 'someuser'@'somehost';
+GRANT SELECT, INSERT ON *.* TO 'someuser'@'somehost';</code></pre><p>
+          The <a class="link" href="privileges-provided.html#priv_create-tablespace"><code class="literal">CREATE TABLESPACE</code></a>,
+          <a class="link" href="privileges-provided.html#priv_create-user"><code class="literal">CREATE USER</code></a>,
+          <a class="link" href="privileges-provided.html#priv_file"><code class="literal">FILE</code></a>,
+          <a class="link" href="privileges-provided.html#priv_process"><code class="literal">PROCESS</code></a>,
+          <a class="link" href="privileges-provided.html#priv_reload"><code class="literal">RELOAD</code></a>,
+          <a class="link" href="privileges-provided.html#priv_replication-client"><code class="literal">REPLICATION CLIENT</code></a>,
+          <a class="link" href="privileges-provided.html#priv_replication-slave"><code class="literal">REPLICATION SLAVE</code></a>,
+          <a class="link" href="privileges-provided.html#priv_show-databases"><code class="literal">SHOW DATABASES</code></a>,
+          <a class="link" href="privileges-provided.html#priv_shutdown"><code class="literal">SHUTDOWN</code></a>, and
+          <a class="link" href="privileges-provided.html#priv_super"><code class="literal">SUPER</code></a> privileges are
+          administrative and can only be granted globally.
+        </p><p>
+          Other privileges can be granted globally or at more specific
+          levels.
+        </p><p>
+          <a class="link" href="privileges-provided.html#priv_grant-option"><code class="literal">GRANT OPTION</code></a> granted at the
+          global level for any global privilege applies to all global
+          privileges.
+        </p><p>
+          MySQL stores global privileges in the
+          <code class="literal">mysql.user</code> system table.
+</p>
+</div>
+<div class="simplesect">
+<div class="titlepage">
+<div>
+<div class="simple">
+<h5 class="title"><a name="grant-database-privileges"></a>Database Privileges</h5>
+
+</div>
+
+</div>
+
+</div>
+<p>
+          Database privileges apply to all objects in a given database.
+          To assign database-level privileges, use <code class="literal">ON
+          <em class="replaceable"><code>db_name</code></em>.*</code> syntax:
+        </p><pre class="programlisting copytoclipboard line-numbers language-sql"><code class="language-sql">GRANT ALL ON mydb.* TO 'someuser'@'somehost';
+GRANT SELECT, INSERT ON mydb.* TO 'someuser'@'somehost';</code></pre><p>
+          If you use <code class="literal">ON *</code> syntax (rather than
+          <code class="literal">ON *.*</code>), privileges are assigned at the
+          database level for the default database. An error occurs if
+          there is no default database.
+        </p><p>
+          The <a class="link" href="privileges-provided.html#priv_create"><code class="literal">CREATE</code></a>,
+          <a class="link" href="privileges-provided.html#priv_drop"><code class="literal">DROP</code></a>,
+          <a class="link" href="privileges-provided.html#priv_event"><code class="literal">EVENT</code></a>,
+          <a class="link" href="privileges-provided.html#priv_grant-option"><code class="literal">GRANT OPTION</code></a>,
+          <a class="link" href="privileges-provided.html#priv_lock-tables"><code class="literal">LOCK TABLES</code></a>, and
+          <a class="link" href="privileges-provided.html#priv_references"><code class="literal">REFERENCES</code></a> privileges can be
+          specified at the database level. Table or routine privileges
+          also can be specified at the database level, in which case
+          they apply to all tables or routines in the database.
+        </p><p>
+          MySQL stores database privileges in the
+          <code class="literal">mysql.db</code> system table.
+</p>
+</div>
+<div class="simplesect">
+<div class="titlepage">
+<div>
+<div class="simple">
+<h5 class="title"><a name="grant-table-privileges"></a>Table Privileges</h5>
+
+</div>
+
+</div>
+
+</div>
+<p>
+          Table privileges apply to all columns in a given table. To
+          assign table-level privileges, use <code class="literal">ON
+          <em class="replaceable"><code>db_name.tbl_name</code></em></code> syntax:
+        </p><pre class="programlisting copytoclipboard line-numbers language-sql"><code class="language-sql">GRANT ALL ON mydb.mytbl TO 'someuser'@'somehost';
+GRANT SELECT, INSERT ON mydb.mytbl TO 'someuser'@'somehost';</code></pre><p>
+          If you specify <em class="replaceable"><code>tbl_name</code></em> rather than
+          <em class="replaceable"><code>db_name.tbl_name</code></em>, the statement
+          applies to <em class="replaceable"><code>tbl_name</code></em> in the default
+          database. An error occurs if there is no default database.
+        </p><p>
+          The permissible <em class="replaceable"><code>priv_type</code></em> values at
+          the table level are <a class="link" href="privileges-provided.html#priv_alter"><code class="literal">ALTER</code></a>,
+          <a class="link" href="privileges-provided.html#priv_create-view"><code class="literal">CREATE VIEW</code></a>,
+          <a class="link" href="privileges-provided.html#priv_create"><code class="literal">CREATE</code></a>,
+          <a class="link" href="privileges-provided.html#priv_delete"><code class="literal">DELETE</code></a>,
+          <a class="link" href="privileges-provided.html#priv_drop"><code class="literal">DROP</code></a>,
+          <a class="link" href="privileges-provided.html#priv_grant-option"><code class="literal">GRANT OPTION</code></a>,
+          <a class="link" href="privileges-provided.html#priv_index"><code class="literal">INDEX</code></a>,
+          <a class="link" href="privileges-provided.html#priv_insert"><code class="literal">INSERT</code></a>,
+          <a class="link" href="privileges-provided.html#priv_references"><code class="literal">REFERENCES</code></a>,
+          <a class="link" href="privileges-provided.html#priv_select"><code class="literal">SELECT</code></a>,
+          <a class="link" href="privileges-provided.html#priv_show-view"><code class="literal">SHOW VIEW</code></a>,
+          <a class="link" href="privileges-provided.html#priv_trigger"><code class="literal">TRIGGER</code></a>, and
+          <a class="link" href="privileges-provided.html#priv_update"><code class="literal">UPDATE</code></a>.
+        </p><p>
+          Table-level privileges apply to base tables and views. They do
+          not apply to tables created with <a class="link" href="create-temporary-table.html" title="13.1.18.2 CREATE TEMPORARY TABLE Statement"><code class="literal">CREATE
+          TEMPORARY TABLE</code></a>, even if the table names match. For
+          information about <code class="literal">TEMPORARY</code> table
+          privileges, see <a class="xref" href="create-temporary-table.html" title="13.1.18.2 CREATE TEMPORARY TABLE Statement">Section 13.1.18.2, “CREATE TEMPORARY TABLE Statement”</a>.
+        </p><a class="indexterm" name="idm44933517824128"></a><a class="indexterm" name="idm44933517822640"></a><p>
+          MySQL stores table privileges in the
+          <code class="literal">mysql.tables_priv</code> system table.
+</p>
+</div>
+<div class="simplesect">
+<div class="titlepage">
+<div>
+<div class="simple">
+<h5 class="title"><a name="grant-column-privileges"></a>Column Privileges</h5>
+
+</div>
+
+</div>
+
+</div>
+<p>
+          Column privileges apply to single columns in a given table.
+          Each privilege to be granted at the column level must be
+          followed by the column or columns, enclosed within
+          parentheses.
+        </p><pre class="programlisting copytoclipboard line-numbers language-sql one-line"><code class="language-sql">GRANT SELECT (col1), INSERT (col1, col2) ON mydb.mytbl TO 'someuser'@'somehost';</code></pre><p>
+          The permissible <em class="replaceable"><code>priv_type</code></em> values
+          for a column (that is, when you use a
+          <em class="replaceable"><code>column_list</code></em> clause) are
+          <a class="link" href="privileges-provided.html#priv_insert"><code class="literal">INSERT</code></a>,
+          <a class="link" href="privileges-provided.html#priv_references"><code class="literal">REFERENCES</code></a>,
+          <a class="link" href="privileges-provided.html#priv_select"><code class="literal">SELECT</code></a>, and
+          <a class="link" href="privileges-provided.html#priv_update"><code class="literal">UPDATE</code></a>.
+        </p><p>
+          MySQL stores column privileges in the
+          <code class="literal">mysql.columns_priv</code> system table.
+</p>
+</div>
+<div class="simplesect">
+<div class="titlepage">
+<div>
+<div class="simple">
+<h5 class="title"><a name="grant-routine-privileges"></a>Stored Routine Privileges</h5>
+
+</div>
+
+</div>
+
+</div>
+<p>
+          The <a class="link" href="privileges-provided.html#priv_alter-routine"><code class="literal">ALTER ROUTINE</code></a>,
+          <a class="link" href="privileges-provided.html#priv_create-routine"><code class="literal">CREATE ROUTINE</code></a>,
+          <a class="link" href="privileges-provided.html#priv_execute"><code class="literal">EXECUTE</code></a>, and
+          <a class="link" href="privileges-provided.html#priv_grant-option"><code class="literal">GRANT OPTION</code></a> privileges apply
+          to stored routines (procedures and functions). They can be
+          granted at the global and database levels. Except for
+          <a class="link" href="privileges-provided.html#priv_create-routine"><code class="literal">CREATE ROUTINE</code></a>, these
+          privileges can be granted at the routine level for individual
+          routines.
+        </p><pre class="programlisting copytoclipboard line-numbers language-sql"><code class="language-sql">GRANT CREATE ROUTINE ON mydb.* TO 'someuser'@'somehost';
+GRANT EXECUTE ON PROCEDURE mydb.myproc TO 'someuser'@'somehost';</code></pre><p>
+          The permissible <em class="replaceable"><code>priv_type</code></em> values at
+          the routine level are <a class="link" href="privileges-provided.html#priv_alter-routine"><code class="literal">ALTER
+          ROUTINE</code></a>, <a class="link" href="privileges-provided.html#priv_execute"><code class="literal">EXECUTE</code></a>, and
+          <a class="link" href="privileges-provided.html#priv_grant-option"><code class="literal">GRANT OPTION</code></a>.
+          <a class="link" href="privileges-provided.html#priv_create-routine"><code class="literal">CREATE ROUTINE</code></a> is not a
+          routine-level privilege because you must have the privilege at
+          the global or database level to create a routine in the first
+          place.
+        </p><p>
+          MySQL stores routine-level privileges in the
+          <code class="literal">mysql.procs_priv</code> system table.
+</p>
+</div>
+<div class="simplesect">
+<div class="titlepage">
+<div>
+<div class="simple">
+<h5 class="title"><a name="grant-proxy-privileges"></a>Proxy User Privileges</h5>
+
+</div>
+
+</div>
+
+</div>
+<p>
+          The <a class="link" href="privileges-provided.html#priv_proxy"><code class="literal">PROXY</code></a> privilege enables one
+          user to be a proxy for another. The proxy user impersonates or
+          takes the identity of the proxied user; that is, it assumes
+          the privileges of the proxied user.
+        </p><pre class="programlisting copytoclipboard line-numbers language-sql one-line"><code class="language-sql">GRANT PROXY ON 'localuser'@'localhost' TO 'externaluser'@'somehost';</code></pre><p>
+          When <a class="link" href="privileges-provided.html#priv_proxy"><code class="literal">PROXY</code></a> is granted, it must
+          be the only privilege named in the
+          <a class="link" href="grant.html" title="13.7.1.4 GRANT Statement"><code class="literal">GRANT</code></a> statement, the
+          <code class="literal">REQUIRE</code> clause cannot be given, and the
+          only permitted <code class="literal">WITH</code> option is <code class="literal">WITH
+          GRANT OPTION</code>.
+        </p><p>
+          Proxying requires that the proxy user authenticate through a
+          plugin that returns the name of the proxied user to the server
+          when the proxy user connects, and that the proxy user have the
+          <code class="literal">PROXY</code> privilege for the proxied user. For
+          details and examples, see <a class="xref" href="proxy-users.html" title="6.2.14 Proxy Users">Section 6.2.14, “Proxy Users”</a>.
+        </p><p>
+          MySQL stores proxy privileges in the
+          <code class="literal">mysql.proxies_priv</code> system table.
+</p>
+</div>
+<div class="simplesect">
+<div class="titlepage">
+<div>
+<div class="simple">
+<h5 class="title"><a name="grant-account-creation"></a>Implicit Account Creation</h5>
+
+</div>
+
+</div>
+
+</div>
+<p>
+          If an account named in a <a class="link" href="grant.html" title="13.7.1.4 GRANT Statement"><code class="literal">GRANT</code></a>
+          statement does not exist, the action taken depends on the
+          <a class="link" href="sql-mode.html#sqlmode_no_auto_create_user"><code class="literal">NO_AUTO_CREATE_USER</code></a> SQL
+          mode:
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+              If <a class="link" href="sql-mode.html#sqlmode_no_auto_create_user"><code class="literal">NO_AUTO_CREATE_USER</code></a>
+              is not enabled, <a class="link" href="grant.html" title="13.7.1.4 GRANT Statement"><code class="literal">GRANT</code></a>
+              creates the account. <span class="emphasis"><em>This is very
+              insecure</em></span> unless you specify a nonempty password
+              using <code class="literal">IDENTIFIED BY</code>.
+            </p></li><li class="listitem"><p>
+              If <a class="link" href="sql-mode.html#sqlmode_no_auto_create_user"><code class="literal">NO_AUTO_CREATE_USER</code></a>
+              is enabled, <a class="link" href="grant.html" title="13.7.1.4 GRANT Statement"><code class="literal">GRANT</code></a> fails and
+              does not create the account, unless you specify a nonempty
+              password using <code class="literal">IDENTIFIED BY</code> or name an
+              authentication plugin using <code class="literal">IDENTIFIED
+              WITH</code>.
+</p></li></ul>
+</div>
+<p>
+          If the account already exists, <code class="literal">IDENTIFIED
+          WITH</code> is prohibited because it is intended only for
+          use when creating new accounts.
+</p>
+</div>
+<div class="simplesect">
+<div class="titlepage">
+<div>
+<div class="simple">
+<h5 class="title"><a name="grant-other-characteristics"></a>Other Account Characteristics</h5>
+
+</div>
+
+</div>
+
+</div>
+<a class="indexterm" name="idm44933517764656"></a><a class="indexterm" name="idm44933517763168"></a><p>
+          MySQL can check X.509 certificate attributes in addition to
+          the usual authentication that is based on the user name and
+          credentials. For background information on the use of SSL with
+          MySQL, see <a class="xref" href="encrypted-connections.html" title="6.3 Using Encrypted Connections">Section 6.3, “Using Encrypted Connections”</a>.
+        </p><p>
+          The optional <code class="literal">REQUIRE</code> clause specifies
+          SSL-related options for a MySQL account. The syntax is the
+          same as for the <a class="link" href="create-user.html" title="13.7.1.2 CREATE USER Statement"><code class="literal">CREATE USER</code></a>
+          statement. For details, see <a class="xref" href="create-user.html" title="13.7.1.2 CREATE USER Statement">Section 13.7.1.2, “CREATE USER Statement”</a>.
+</p>
+<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+
+<div class="admon-title">
+Note
+</div>
+<p>
+            Use of <a class="link" href="grant.html" title="13.7.1.4 GRANT Statement"><code class="literal">GRANT</code></a> to define
+            account SSL characteristics is deprecated in MySQL
+            5.7. Instead, establish or change SSL
+            characteristics using <a class="link" href="create-user.html" title="13.7.1.2 CREATE USER Statement"><code class="literal">CREATE
+            USER</code></a> or <a class="link" href="alter-user.html" title="13.7.1.1 ALTER USER Statement"><code class="literal">ALTER USER</code></a>.
+            Expect this <a class="link" href="grant.html" title="13.7.1.4 GRANT Statement"><code class="literal">GRANT</code></a> capability
+            to be removed in a future MySQL release.
+</p>
+</div>
+<p>
+          The optional <code class="literal">WITH</code> clause is used for these
+          purposes:
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+              To enable a user to grant privileges to other users
+            </p></li><li class="listitem"><p>
+              To specify resource limits for a user
+</p></li></ul>
+</div>
+<p>
+          The <code class="literal">WITH GRANT OPTION</code> clause gives the user
+          the ability to give to other users any privileges the user has
+          at the specified privilege level.
+        </p><p>
+          To grant the <a class="link" href="privileges-provided.html#priv_grant-option"><code class="literal">GRANT OPTION</code></a>
+          privilege to an account without otherwise changing its
+          privileges, do this:
+        </p><pre class="programlisting copytoclipboard line-numbers language-sql one-line"><code class="language-sql">GRANT USAGE ON *.* TO 'someuser'@'somehost' WITH GRANT OPTION;</code></pre><p>
+          Be careful to whom you give the <a class="link" href="privileges-provided.html#priv_grant-option"><code class="literal">GRANT
+          OPTION</code></a> privilege because two users with different
+          privileges may be able to combine privileges!
+        </p><p>
+          You cannot grant another user a privilege which you yourself
+          do not have; the <a class="link" href="privileges-provided.html#priv_grant-option"><code class="literal">GRANT OPTION</code></a>
+          privilege enables you to assign only those privileges which
+          you yourself possess.
+        </p><p>
+          Be aware that when you grant a user the
+          <a class="link" href="privileges-provided.html#priv_grant-option"><code class="literal">GRANT OPTION</code></a> privilege at a
+          particular privilege level, any privileges the user possesses
+          (or may be given in the future) at that level can also be
+          granted by that user to other users. Suppose that you grant a
+          user the <a class="link" href="privileges-provided.html#priv_insert"><code class="literal">INSERT</code></a> privilege on a
+          database. If you then grant the
+          <a class="link" href="privileges-provided.html#priv_select"><code class="literal">SELECT</code></a> privilege on the
+          database and specify <code class="literal">WITH GRANT OPTION</code>,
+          that user can give to other users not only the
+          <a class="link" href="privileges-provided.html#priv_select"><code class="literal">SELECT</code></a> privilege, but also
+          <a class="link" href="privileges-provided.html#priv_insert"><code class="literal">INSERT</code></a>. If you then grant the
+          <a class="link" href="privileges-provided.html#priv_update"><code class="literal">UPDATE</code></a> privilege to the user on
+          the database, the user can grant
+          <a class="link" href="privileges-provided.html#priv_insert"><code class="literal">INSERT</code></a>,
+          <a class="link" href="privileges-provided.html#priv_select"><code class="literal">SELECT</code></a>, and
+          <a class="link" href="privileges-provided.html#priv_update"><code class="literal">UPDATE</code></a>.
+        </p><p>
+          For a nonadministrative user, you should not grant the
+          <a class="link" href="privileges-provided.html#priv_alter"><code class="literal">ALTER</code></a> privilege globally or for
+          the <code class="literal">mysql</code> system database. If you do that,
+          the user can try to subvert the privilege system by renaming
+          tables!
+        </p><p>
+          For additional information about security risks associated
+          with particular privileges, see
+          <a class="xref" href="privileges-provided.html" title="6.2.2 Privileges Provided by MySQL">Section 6.2.2, “Privileges Provided by MySQL”</a>.
+        </p><a class="indexterm" name="idm44933517723872"></a><a class="indexterm" name="idm44933517722384"></a><p>
+          It is possible to place limits on use of server resources by
+          an account, as discussed in <a class="xref" href="user-resources.html" title="6.2.16 Setting Account Resource Limits">Section 6.2.16, “Setting Account Resource Limits”</a>.
+          To do so, use a <code class="literal">WITH</code> clause that specifies
+          one or more <em class="replaceable"><code>resource_option</code></em> values.
+          Limits not specified retain their current values. The syntax
+          is the same as for the <a class="link" href="create-user.html" title="13.7.1.2 CREATE USER Statement"><code class="literal">CREATE
+          USER</code></a> statement. For details, see
+          <a class="xref" href="create-user.html" title="13.7.1.2 CREATE USER Statement">Section 13.7.1.2, “CREATE USER Statement”</a>.
+</p>
+<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+
+<div class="admon-title">
+Note
+</div>
+<p>
+            Use of <a class="link" href="grant.html" title="13.7.1.4 GRANT Statement"><code class="literal">GRANT</code></a> to define
+            account resource limits is deprecated in MySQL
+            5.7. Instead, establish or change resource
+            limits using <a class="link" href="create-user.html" title="13.7.1.2 CREATE USER Statement"><code class="literal">CREATE USER</code></a> or
+            <a class="link" href="alter-user.html" title="13.7.1.1 ALTER USER Statement"><code class="literal">ALTER USER</code></a>. Expect this
+            <a class="link" href="grant.html" title="13.7.1.4 GRANT Statement"><code class="literal">GRANT</code></a> capability to be
+            removed in a future MySQL release.
+</p>
+</div>
+
+</div>
+<div class="simplesect">
+<div class="titlepage">
+<div>
+<div class="simple">
+<h5 class="title"><a name="grant-mysql-vs-standard-sql"></a>MySQL and Standard SQL Versions of GRANT</h5>
+
+</div>
+
+</div>
+
+</div>
+<a class="indexterm" name="idm44933517709200"></a><p>
+          The biggest differences between the MySQL and standard SQL
+          versions of <a class="link" href="grant.html" title="13.7.1.4 GRANT Statement"><code class="literal">GRANT</code></a> are:
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+              MySQL associates privileges with the combination of a host
+              name and user name and not with only a user name.
+            </p></li><li class="listitem"><p>
+              Standard SQL does not have global or database-level
+              privileges, nor does it support all the privilege types
+              that MySQL supports.
+            </p></li><li class="listitem"><p>
+              MySQL does not support the standard SQL
+              <code class="literal">UNDER</code> privilege.
+            </p></li><li class="listitem"><p>
+              Standard SQL privileges are structured in a hierarchical
+              manner. If you remove a user, all privileges the user has
+              been granted are revoked. This is also true in MySQL if
+              you use <a class="link" href="drop-user.html" title="13.7.1.3 DROP USER Statement"><code class="literal">DROP USER</code></a>. See
+              <a class="xref" href="drop-user.html" title="13.7.1.3 DROP USER Statement">Section 13.7.1.3, “DROP USER Statement”</a>.
+            </p></li><li class="listitem"><p>
+              In standard SQL, when you drop a table, all privileges for
+              the table are revoked. In standard SQL, when you revoke a
+              privilege, all privileges that were granted based on that
+              privilege are also revoked. In MySQL, privileges can be
+              dropped with <a class="link" href="drop-user.html" title="13.7.1.3 DROP USER Statement"><code class="literal">DROP USER</code></a> or
+              <a class="link" href="revoke.html" title="13.7.1.6 REVOKE Statement"><code class="literal">REVOKE</code></a> statements.
+            </p></li><li class="listitem"><p>
+              In MySQL, it is possible to have the
+              <a class="link" href="privileges-provided.html#priv_insert"><code class="literal">INSERT</code></a> privilege for only
+              some of the columns in a table. In this case, you can
+              still execute <a class="link" href="insert.html" title="13.2.5 INSERT Statement"><code class="literal">INSERT</code></a>
+              statements on the table, provided that you insert values
+              only for those columns for which you have the
+              <a class="link" href="privileges-provided.html#priv_insert"><code class="literal">INSERT</code></a> privilege. The
+              omitted columns are set to their implicit default values
+              if strict SQL mode is not enabled. In strict mode, the
+              statement is rejected if any of the omitted columns have
+              no default value. (Standard SQL requires you to have the
+              <a class="link" href="privileges-provided.html#priv_insert"><code class="literal">INSERT</code></a> privilege on all
+              columns.) For information about strict SQL mode and
+              implicit default values, see <a class="xref" href="sql-mode.html" title="5.1.10 Server SQL Modes">Section 5.1.10, “Server SQL Modes”</a>,
+              and <a class="xref" href="data-type-defaults.html" title="11.6 Data Type Default Values">Section 11.6, “Data Type Default Values”</a>.
+</p></li></ul>
+</div>
+
+</div>
+
+</div>
+<br />
+        </div>
+
+                <div id="docs-in-page-nav-container">
+            <div id="docs-in-page-nav">
+                
+    <a href="drop-user.html"
+        aria-label="Previous" title="Previous: DROP USER Statement"><span
+        class="icon-chevron-left"></span> PREV</a> &nbsp;
+<a href="index.html" aria-label="Start" title="Start"> HOME</a> &nbsp;
+        <a aria-label="Up" href="account-management-statements.html" title="Up: Account Management Statements"> UP</a> &nbsp;
+    <a href="rename-user.html" aria-label="Next"
+        title="Next: RENAME USER Statement">NEXT <span
+        class="icon-chevron-right"></span></a>
+            </div>
+        </div>
+        
+         <div id="docs-body-extra">
+             
+<a class="docs-sidebar-section" href="grant.html"><span class="icon-related"></span>
+    <span class="text">Related Documentation</span></a>
+<div class="docs-sidebar-accordian">
+    <div class="text">
+        <a href="https://dev.mysql.com/doc/relnotes/mysql/5.7/en/">MySQL 5.7 Release Notes</a><br />
+        </div>
+</div>
+
+    <a class="docs-sidebar-section" href="grant.html"><span class="icon-download-thin"></span>
+        <span class="text">
+            Download
+                            this Manual
+                    </span>
+    </a>
+    <div class="docs-sidebar-accordian">
+        <div class="text">
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.pdf">PDF (US Ltr)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.a4.pdf">PDF (A4)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-ref-manual-5.7-en-pdf-1-20210225.noarch.rpm">PDF (RPM)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.html-chapter.tar.gz">HTML Download (TGZ)</a>
+            - 10.1Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.html-chapter.zip">HTML Download (Zip)</a>
+            - 10.2Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-ref-manual-5.7-en-html-chapter-1-20210225.noarch.rpm">HTML Download (RPM)</a>
+            - 8.9Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.man-gpl.tar.gz">Man Pages (TGZ)</a>
+            - 224.7Kb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.man-gpl.zip">Man Pages (Zip)</a>
+            - 332.6Kb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-5.7.info.gz">Info (Gzip)</a>
+            - 3.3Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-5.7.info.zip">Info (Zip)</a>
+            - 3.3Mb<br />
+                    </div>
+    </div>
+
+<a class="docs-sidebar-section" href="grant.html"><span class="icon-book"></span>
+    <span class="text">Excerpts from this Manual</span></a>
+<div class="docs-sidebar-accordian">
+    <div class="text">
+                <a href="https://dev.mysql.com/doc/mysql-backup-excerpt/5.7/en/">MySQL Backup and Recovery</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-g11n-excerpt/5.7/en/">MySQL Globalization</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-infoschema-excerpt/5.7/en/">MySQL Information Schema</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-installation-excerpt/5.7/en/">MySQL Installation Guide</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-linuxunix-excerpt/5.7/en/">MySQL and Linux/Unix</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-osx-excerpt/5.7/en/">MySQL and OS X</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-partitioning-excerpt/5.7/en/">MySQL Partitioning</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-perfschema-excerpt/5.7/en/">MySQL Performance Schema</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-replication-excerpt/5.7/en/">MySQL Replication</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-repo-excerpt/5.7/en/">Using the MySQL Yum Repository</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-reslimits-excerpt/5.7/en/">MySQL Restrictions and Limitations</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-security-excerpt/5.7/en/">Security in MySQL</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-solaris-excerpt/5.7/en/">MySQL and Solaris</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-sourcebuild-excerpt/5.7/en/">Building MySQL from Source</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-startstop-excerpt/5.7/en/">Starting and Stopping MySQL</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-tutorial-excerpt/5.7/en/">MySQL Tutorial</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-windows-excerpt/5.7/en/">MySQL and Windows</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-cluster-excerpt/5.7/en/">MySQL NDB Cluster 7.5</a><br />
+            </div>
+</div>
+         </div>
+
+              </div>
+     </div>
+
+</div>
+
+<script>
+$(function() {
+    var doc = new $.doc({ 'mobile': $.browser.mobile, 'docId': 1, 'highlight': true });
+});
+</script>
+    
+
+            
+        </div>
+    </div>
+
+    <footer class="collapsed">
+        <div id="footer-bottom">
+                                    <div id="footer-collapse">
+                <a href="grant.html" id="expand-footer"
+                    aria-label="Expand Footer"
+                    title="Expand Footer"><span
+                    class="icon-plus-square"></span></a>
+            </div>
+                        <div class="footer-contact">
+                <div id="footer-contact-icon" style="display: none;">
+                    <span class="icon-call-phone"></span>
+                </div>
+                <div id="footer-contact-numbers" style="display: none;">
+                    <strong>Contact MySQL Sales</strong><br/>
+                    USA/Canada: +1-866-221-0634 &nbsp;
+                    (<a href="https://www.mysql.com/about/contact/phone/">More Countries &raquo;</a>)
+                </div>
+                <div id="footer-contact-copyright" style="display: inline-block;">
+                    <a href="http://www.oracle.com/" aria-label="Oracle" title="Oracle"><span class="oracle-logo"></span></a>
+                    &nbsp; &copy; 2021, Oracle Corporation and/or its affiliates
+                </div>
+            </div>
+            <div class="social-icons">
+                <a aria-label="Join us on Facebook" title="Join us on Facebook" href="http://www.facebook.com/mysql"><span class="icon-facebook-square"></span></a>
+                <a aria-label="Follow us on Twitter" title="Follow us on Twitter" href="https://twitter.com/mysql"><span class="icon-twitter-square"></span></a>
+                <a aria-label="Follow us on LinkedIn" title="Follow us on LinkedIn" href="https://www.linkedin.com/company/mysql"><span class="icon-linkedin-square"></span></a>
+                <a aria-label="Visit our YouTube channel" title="Visit our YouTube channel" href="http://www.youtube.com/mysqlchannel"><span class="icon-youtube-square"></span></a>
+            </div>
+            <br class="clear" />
+        </div>
+        <div id="footer-links">
+
+            <div id="site-footer-links">
+                <div id="footer-nav"></div>
+
+                <div class="links">
+                    <ul>
+                        <li class="top"><a href="https://www.mysql.com/products/">Products</a></li>
+                        <li><a href="https://www.mysql.com/cloud/">MySQL Database Service</a></li>
+                        <li><a href="https://www.mysql.com/products/enterprise/">MySQL Enterprise Edition</a></li>
+                        <li><a href="https://www.mysql.com/products/standard/">MySQL Standard Edition</a></li>
+                        <li><a href="https://www.mysql.com/products/classic/">MySQL Classic Edition</a></li>
+                        <li><a href="https://www.mysql.com/products/cluster/">MySQL Cluster CGE</a></li>
+                        <li><a href="https://www.mysql.com/oem/">MySQL Embedded (OEM/ISV)</a></li>
+                    </ul>
+                </div>
+
+                <div class="links">
+                    <ul>
+                        <li class="top"><a href="https://www.mysql.com/services/">Services</a></li>
+                        <li><a href="https://www.mysql.com/training/">Training</a></li>
+                        <li><a href="https://www.mysql.com/certification/">Certification</a></li>
+                        <li><a href="https://www.mysql.com/consulting/">Consulting</a></li>
+                        <li><a href="https://www.mysql.com/support/">Support</a></li>
+                    </ul>
+                </div>
+
+                <div class="links">
+                    <ul>
+                        <li class="top"><a href="https://www.mysql.com/downloads/">Downloads</a></li>
+                        <li><a href="https://dev.mysql.com/downloads/mysql/">MySQL Community Server</a></li>
+                        <li><a href="https://dev.mysql.com/downloads/cluster/">MySQL NDB Cluster</a></li>
+                        <li><a href="https://dev.mysql.com/downloads/shell/">MySQL Shell</a></li>
+                        <li><a href="https://dev.mysql.com/downloads/router/">MySQL Router</a></li>
+                        <li><a href="https://dev.mysql.com/downloads/workbench/">MySQL Workbench</a></li>
+                    </ul>
+                </div>
+
+                <div class="links">
+                    <ul>
+                        <li class="top"><a href="https://dev.mysql.com/doc/">Documentation</a></li>
+                        <li><a href="https://dev.mysql.com/doc/refman/en/">MySQL Reference Manual</a></li>
+                        <li><a href="https://dev.mysql.com/doc/workbench/en/">MySQL Workbench</a></li>
+                        <li><a href="https://dev.mysql.com/doc/index-cluster.html">MySQL NDB Cluster</a></li>
+                        <li><a href="https://dev.mysql.com/doc/index-connectors.html">MySQL Connectors</a></li>
+                        <li><a href="https://dev.mysql.com/doc/#topic">Topic Guides</a></li>
+                    </ul>
+                </div>
+
+                <div class="links">
+                    <ul>
+                        <li class="top"><a href="https://www.mysql.com/about/">About MySQL</a></li>
+                        <li><a href="https://www.mysql.com/about/contact/">Contact Us</a></li>
+                                                                        <li><a href="https://www.mysql.com/buy-mysql/">How to Buy</a></li>
+                        <li><a href="https://www.mysql.com/partners/">Partners</a></li>
+                        <li><a href="https://www.mysql.com/about/jobs/">Job Opportunities</a></li>
+                        <li><a href="https://www.mysql.com/sitemap.html">Site Map</a></li>
+                    </ul>
+                </div>
+
+                            </div>
+
+            <div id="footer-logo">
+                <a href="http://www.oracle.com/" aria-label="Oracle" title="Oracle"><span class="oracle-logo"></span></a>
+                &nbsp; &copy; 2021, Oracle Corporation and/or its affiliates
+                <div class="footer-legal-links">
+                    <a href="https://www.mysql.com/about/legal/">Legal Policies</a> |
+                    <a href="http://www.oracle.com/us/legal/privacy/index.htm">Your Privacy Rights</a> |
+                    <a href="http://www.oracle.com/us/legal/terms/index.html">Terms of Use</a> |
+                    <a href="http://www.oracle.com/us/legal/third-party-trademarks/index.html">Trademark Policy</a> |
+                    <a href="http://www.oracle.com/technetwork/community/oca-486395.html">Contributor Agreement</a> |
+                    <div id="teconsent"></div>
+                </div>
+            </div>
+
+        </div>
+    </footer>
+</div>
+
+            <script>
+    if ((oracle.truste.api.getGdprConsentDecision().consentDecision) &&
+            (oracle.truste.api.getGdprConsentDecision().consentDecision.indexOf(0) != -1 ||
+             oracle.truste.api.getGdprConsentDecision().consentDecision.indexOf(2) != -1) )
+    {
+        document.write('<script src="https://labs.mysql.com/common/js/metrics/s_code_remote.js"><\/script>');
+        document.write('<script type="text/javascript" async src="https://c.oracleinfinity.io/acs/account/wh3g12c3gg/js/mysql/odc.js?_ora.context=analytics:production"><\/script>');
+    }
+    </script>
+
+        
+    
+</body>
+</html>

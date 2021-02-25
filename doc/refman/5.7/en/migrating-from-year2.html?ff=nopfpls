@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="en" class="svg no-js">
+<head>
+    <meta charset="utf-8" />
+    <!--[if IE ]>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="Language" content="en">
+
+    <title>MySQL :: MySQL 5.7 Reference Manual :: 11.2.5 2-Digit YEAR(2) Limitations and Migrating to 4-Digit YEAR</title>
+    <link rel="stylesheet" media="all" href="https://labs.mysql.com/common/css/main-20201221.min.css" />
+            <link rel="stylesheet" media="all" href="https://labs.mysql.com/common/css/docs-20201221.min.css" />
+    
+    
+    <link rel="stylesheet" media="print" href="https://labs.mysql.com/common/css/print-20201221.min.css" />
+
+    
+    
+    
+    
+            <link rel="contents" href="index.html" title="MySQL 5.7 Reference Manual" />
+<link rel="start" href="index.html" title="MySQL 5.7 Reference Manual" />
+<link rel="prev" href="year.html" title="11.2.4 The YEAR Type" />
+<link rel="next" href="timestamp-initialization.html?ff=nopfpls" title="11.2.6 Automatic Initialization and Updating for TIMESTAMP and DATETIME" />
+<link rel="up" href="date-and-time-types.html" title="11.2 Date and Time Data Types" />
+
+    
+    <link rel="shortcut icon" href="https://labs.mysql.com/common/themes/sakila/favicon.ico" />
+    <script async="async" type="text/javascript" src='https://consent.truste.com/notice?domain=oracle.com&c=teconsent&js=bb&noticeType=bb&text=true&cdn=1&pcookie&gtm=1' crossorigin></script>
+    <script src="https://www.oracle.com/assets/truste-oraclelib.js"></script>
+    <script>(function(H){ H.className=H.className.replace(/\bno-js\b/,'js') })(document.documentElement)</script>
+    <script src="https://labs.mysql.com/common/js/site-20200928.min.js"></script>
+
+    
+    
+    <!--[if lt IE 9]>
+        <script src="https://labs.mysql.com/common/js/polyfills/html5shiv-printshiv-3.7.2.min.js"></script>
+        <script src="https://labs.mysql.com/common/js/polyfills/respond-1.4.2.min.js"></script>
+    <![endif]-->
+        <!--[if IE 9]>
+        <style>#docs-sidebar-toc { box-sizing: content-box; }</style>
+    <![endif]-->
+    </head>
+
+<body class="no-sidebar full-page dev">
+<div class="page-wrapper">
+    <header>
+
+                        <a href="https://dev.mysql.com/" aria-label="Home" title="MySQL" id="l1-home-link"></a>
+        
+        <div id="l1-nav-container">
+            <div id="l1-line1">
+                <div id="l1-auth-links">
+                    <a href="https://www.mysql.com/about/contact/"><b>Contact MySQL</b></a>
+                    <span id="l1-contact-separator">&nbsp;|&nbsp;</span>
+                    <span id="l1-contact-separator-br"><br /></span>
+                                             <a href="https://dev.mysql.com/auth/login/?dest=https%3A%2F%2Fdev.mysql.com%2Fdoc%2Frefman%2F5.7%2Fen%2Fmigrating-from-year2.html%3Fff%3Dnopfpls">Login</a> &nbsp;|&nbsp;
+                         <a href="https://dev.mysql.com/auth/register/">Register</a>
+                                    </div>
+                <div id="l1-lhs">
+                    <div id="l1-slogan">
+                        The world's most popular open source database
+                    </div>
+                    <div id="l1-search-box">
+                        <form id="l1-search-form" method="get" action="https://www.oracle.com/search/results">
+                        <input type="hidden" name="cat" value="mysql" />
+                        <input type="hidden" name="Ntk" value="SI-ALL5" />
+                        <input id="l1-search-input" type="search" class="icon-search" placeholder="Search" aria-label="Search" name="Ntt" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div id="l1-line2">
+                <div class="social-icons">
+                    <a aria-label="Join us on Facebook" title="Join us on Facebook" href="http://www.facebook.com/mysql"><span class="icon-facebook"></span></a>
+                    <a aria-label="Follow us on Twitter" title="Follow us on Twitter" href="https://twitter.com/mysql"><span class="icon-twitter"></span></a>
+                    <a aria-label="Follow us on LinkedIn" title="Follow us on LinkedIn" href="https://www.linkedin.com/company/mysql"><span class="icon-linkedin"></span></a>
+                    <a aria-label="Visit our YouTube channel" title="Visit our YouTube channel" href="http://www.youtube.com/mysqlchannel"><span class="icon-youtube"></span></a>
+                </div>
+                <ul id="l1-nav">
+                    <li>
+                        <a href="https://www.mysql.com/"><!-- <span class="icon-sakila"></span>  -->MySQL.com</a>
+                    </li><li>
+                        <a href="https://www.mysql.com/downloads/"><!-- <span class="icon-download-thin"></span>  -->Downloads</a>
+                    </li><li class="active">
+                        <a href="https://dev.mysql.com/doc/"><!-- <span class="icon-books"></span>  -->Documentation</a>
+                    </li><li>
+                        <a href="https://dev.mysql.com/"><!-- <span class="icon-code"></span>  -->Developer Zone</a>
+                    </li>                </ul>
+            </div>
+        </div>
+        <div id="sub-header">
+            <div id="l2-nav-container">
+                <div id="l2-nav-toggle">
+                    <span class="icon-three-bars"></span>
+                </div>
+                                                                                        <a class="button nav-button-3" href="https://dev.mysql.com/"><span class="icon-code"></span> Developer Zone</a>
+                                                                                                                                    <a class="button nav-button-2" href="https://www.mysql.com/downloads/"><span class="icon-download-thin"></span> Downloads</a>
+                                                                                                <a class="button nav-button-1" href="https://www.mysql.com/"><span class="icon-sakila"></span> MySQL.com</a>
+                                                                        <div id="l2-search-toggle">
+                    <span class="icon-search"></span>
+                </div>
+                <div id="l2-site-icon">
+                                                                                                                                                                                                    <span class="icon-books"></span>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </div>
+                <div id="l1-section-title">
+                    <span id="l1-section-label">
+                        <a href="https://dev.mysql.com/doc/">Documentation</a>
+                    </span>
+                </div>
+                <nav>
+                    
+
+<ul id="l2-nav">
+            	<li class="active"><a class="active " href="https://dev.mysql.com/doc/refman/en/">MySQL Server</a>
+    			</li>
+	        	<li class=""><a  href="https://dev.mysql.com/doc/index-enterprise.html">MySQL Enterprise</a>
+    			</li>
+	        	<li class=""><a  href="https://dev.mysql.com/doc/workbench/en/">Workbench</a>
+    			</li>
+	        	<li class=""><a  href="https://dev.mysql.com/doc/mysql-shell/en/mysql-innodb-cluster.html">InnoDB Cluster</a>
+    			</li>
+	        	<li class=""><a  href="https://dev.mysql.com/doc/index-cluster.html">MySQL NDB Cluster</a>
+    			</li>
+	        	<li class=""><a  href="https://dev.mysql.com/doc/index-connectors.html">Connectors</a>
+    			</li>
+	        	<li class=" last"><a  href="https://dev.mysql.com/doc/index-other.html">More</a>
+    			</li>
+	                        <li class="other-section"><a href="https://www.mysql.com/">MySQL.com</a></li>
+                            <li class="other-section"><a href="https://www.mysql.com/downloads/">Downloads</a></li>
+                                        <li class="other-section"><a href="https://dev.mysql.com/">Developer Zone</a></li>
+            </ul>
+                </nav>
+            </div>
+            <div id="l3-search-container"></div>
+            <div id="top-orange"><span id="section-nav">Section Menu: &nbsp; </span></div>
+        </div>
+    </header>
+        <div id="page">
+                        <div role="main" id="main">
+
+            
+                
+            
+<div>
+    <div id="docs-sidebar-toc" class="">
+    <div id="docs-toc-inner">
+        <div class="docs-sidebar-header" id="docs-nav-header">
+            <a class="docs-show-hide-nav" id="docs-hide-nav" href="migrating-from-year2.html?ff=nopfpls" title="Hide Sidebar" aria-label="Hide Sidebar"><span class="icon-arrow-small-left"></span></a>
+            <div class="docs-nav-links">
+                                    
+    <a href="year.html"
+        aria-label="Previous" title="Previous: The YEAR Type"><span
+        class="icon-chevron-left"></span></a>
+<a href="index.html" aria-label="Start" title="Start"><span class="icon-book-open"></span></a>
+        <a aria-label="Up" href="date-and-time-types.html" title="Up: Date and Time Data Types"><span class="icon-chevron-up"></span></a>
+    <a href="timestamp-initialization.html" aria-label="Next"
+        title="Next: Automatic Initialization and Updating for TIMESTAMP and DATETIME"><span
+        class="icon-chevron-right"></span></a>
+                            </div>
+        </div>
+                    
+<div id="docs-sidebar-search-container">
+    <div id="docs-sidebar-search-box">
+        <form method="get" action="https://dev.mysql.com/doc/search/">
+            <input type="hidden" name="d" id="d" value="12" />
+            <input type="hidden" name="p" id="p" value="1" />
+            <input type="text" name="q" id="q" title="Search this Manual"
+                value="Search this Manual"
+                style="color: #bbb;"
+                onfocus="if(this.value == 'Search this Manual') {this.value='';this.style.color='#555';}"
+                onblur="if(this.value == '') {this.value='Search this Manual';this.style.color='#bbb';}" />
+
+            <button class="docs-sidebar-search-btn" aria-label="Search" title="Search" type="submit">
+                <span class="icon-search"></span>
+            </button>
+        </form>
+    </div>
+</div>
+                <div class="docs-sidebar-nav">
+            <a class="docs-icon-home" href="https://dev.mysql.com/doc/"><span class="icon-home"></span>Documentation Home</a><hr />
+            <div class="docs-sidebar-mtitle">MySQL 5.7 Reference Manual</div>
+            <nav class="doctoc" id="doc-12">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="preface.html">Preface and Legal Notices</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="migrating-from-year2.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="introduction.html">General Information</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="migrating-from-year2.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="installing.html">Installing and Upgrading MySQL</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="migrating-from-year2.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="tutorial.html">Tutorial</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="migrating-from-year2.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="programs.html">MySQL Programs</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="migrating-from-year2.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="server-administration.html">MySQL Server Administration</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="migrating-from-year2.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="security.html">Security</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="migrating-from-year2.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="backup-and-recovery.html">Backup and Recovery</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="migrating-from-year2.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="optimization.html">Optimization</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="migrating-from-year2.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="language-structure.html">Language Structure</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="migrating-from-year2.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="charset.html">Character Sets, Collations, Unicode</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="migrating-from-year2.html?ff=nopfpls"><span class="icon-chevron-down"></span></a></div><div class="docs-sidebar-nav-link"><a href="data-types.html">Data Types</a></div></div>                        <div class="docs-submenu">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="migrating-from-year2.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="numeric-types.html">Numeric Data Types</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="numeric-type-syntax.html">Numeric Data Type Syntax</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="integer-types.html">Integer Types (Exact Value) - INTEGER, INT, SMALLINT, TINYINT,
+        MEDIUMINT, BIGINT</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="fixed-point-types.html">Fixed-Point Types (Exact Value) - DECIMAL, NUMERIC</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="floating-point-types.html">Floating-Point Types (Approximate Value) - FLOAT, DOUBLE</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="bit-type.html">Bit-Value Type - BIT</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="numeric-type-attributes.html">Numeric Type Attributes</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="out-of-range-and-overflow.html">Out-of-Range and Overflow Handling</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="migrating-from-year2.html?ff=nopfpls"><span class="icon-chevron-down"></span></a></div><div class="docs-sidebar-nav-link"><a href="date-and-time-types.html">Date and Time Data Types</a></div></div>                        <div class="docs-submenu">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="date-and-time-type-syntax.html">Date and Time Data Type Syntax</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="datetime.html">The DATE, DATETIME, and TIMESTAMP Types</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="time.html">The TIME Type</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="year.html">The YEAR Type</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link current"><a href="migrating-from-year2.html">2-Digit YEAR(2) Limitations and Migrating to 4-Digit YEAR</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="timestamp-initialization.html">Automatic Initialization and Updating for TIMESTAMP and DATETIME</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="fractional-seconds.html">Fractional Seconds in Time Values</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="date-and-time-type-conversion.html">Conversion Between Date and Time Types</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="two-digit-years.html">2-Digit Years in Dates</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="migrating-from-year2.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="string-types.html">String Data Types</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="string-type-syntax.html">String Data Type Syntax</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="char.html">The CHAR and VARCHAR Types</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="binary-varbinary.html">The BINARY and VARBINARY Types</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="blob.html">The BLOB and TEXT Types</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="enum.html">The ENUM Type</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="set.html">The SET Type</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="migrating-from-year2.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="spatial-types.html">Spatial Data Types</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="spatial-type-overview.html">Spatial Data Types</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="migrating-from-year2.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="opengis-geometry-model.html">The OpenGIS Geometry Model</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="gis-geometry-class-hierarchy.html">The Geometry Class Hierarchy</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="gis-class-geometry.html">Geometry Class</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="gis-class-point.html">Point Class</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="gis-class-curve.html">Curve Class</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="gis-class-linestring.html">LineString Class</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="gis-class-surface.html">Surface Class</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="gis-class-polygon.html">Polygon Class</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="gis-class-geometrycollection.html">GeometryCollection Class</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="gis-class-multipoint.html">MultiPoint Class</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="gis-class-multicurve.html">MultiCurve Class</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="gis-class-multilinestring.html">MultiLineString Class</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="gis-class-multisurface.html">MultiSurface Class</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="gis-class-multipolygon.html">MultiPolygon Class</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="gis-data-formats.html">Supported Spatial Data Formats</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="geometry-well-formedness-validity.html">Geometry Well-Formedness and Validity</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="creating-spatial-columns.html">Creating Spatial Columns</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="populating-spatial-columns.html">Populating Spatial Columns</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="fetching-spatial-data.html">Fetching Spatial Data</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="optimizing-spatial-analysis.html">Optimizing Spatial Analysis</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="creating-spatial-indexes.html">Creating Spatial Indexes</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="using-spatial-indexes.html">Using Spatial Indexes</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="json.html">The JSON Data Type</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="data-type-defaults.html">Data Type Default Values</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="storage-requirements.html">Data Type Storage Requirements</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="choosing-types.html">Choosing the Right Type for a Column</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="other-vendor-data-types.html">Using Data Types from Other Database Engines</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="migrating-from-year2.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="functions.html">Functions and Operators</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="migrating-from-year2.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="sql-statements.html">SQL Statements</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="migrating-from-year2.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="innodb-storage-engine.html">The InnoDB Storage Engine</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="migrating-from-year2.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="storage-engines.html">Alternative Storage Engines</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="migrating-from-year2.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="replication.html">Replication</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="migrating-from-year2.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="group-replication.html">Group Replication</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysql-shell-userguide.html">MySQL Shell</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="migrating-from-year2.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="document-store.html">Using MySQL as a Document Store</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysql-innodb-cluster-introduction.html">InnoDB Cluster</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="migrating-from-year2.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="mysql-cluster.html">MySQL NDB Cluster 7.5 and NDB Cluster 7.6</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="migrating-from-year2.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="partitioning.html">Partitioning</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="migrating-from-year2.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="stored-objects.html">Stored Objects</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="migrating-from-year2.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="information-schema.html">INFORMATION_SCHEMA Tables</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="migrating-from-year2.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="performance-schema.html">MySQL Performance Schema</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="migrating-from-year2.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="sys-schema.html">MySQL sys Schema</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="migrating-from-year2.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="connectors-apis.html">Connectors and APIs</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="migrating-from-year2.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="mysql-enterprise.html">MySQL Enterprise Edition</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="workbench.html">MySQL Workbench</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="migrating-from-year2.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="faqs.html">MySQL 5.7 Frequently Asked Questions</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="migrating-from-year2.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="error-handling.html">Error Messages and Common Problems</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="migrating-from-year2.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="indexes.html">Indexes</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="glossary.html">MySQL Glossary</a></div></div>                    </li>
+        </ul>
+                            </nav>
+        </div>
+
+        
+<a class="docs-sidebar-section" href="migrating-from-year2.html?ff=nopfpls"><span class="icon-related"></span>
+    <span class="text">Related Documentation</span></a>
+<div class="docs-sidebar-accordian open">
+    <div class="text">
+        <a href="https://dev.mysql.com/doc/relnotes/mysql/5.7/en/">MySQL 5.7 Release Notes</a><br />
+        </div>
+</div>
+
+    <a class="docs-sidebar-section" href="migrating-from-year2.html?ff=nopfpls"><span class="icon-download-thin"></span>
+        <span class="text">
+            Download
+                            this Manual
+                    </span>
+    </a>
+    <div class="docs-sidebar-accordian open">
+        <div class="text">
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.pdf">PDF (US Ltr)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.a4.pdf">PDF (A4)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-ref-manual-5.7-en-pdf-1-20210225.noarch.rpm">PDF (RPM)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.html-chapter.tar.gz">HTML Download (TGZ)</a>
+            - 10.1Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.html-chapter.zip">HTML Download (Zip)</a>
+            - 10.2Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-ref-manual-5.7-en-html-chapter-1-20210225.noarch.rpm">HTML Download (RPM)</a>
+            - 8.9Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.man-gpl.tar.gz">Man Pages (TGZ)</a>
+            - 224.7Kb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.man-gpl.zip">Man Pages (Zip)</a>
+            - 332.6Kb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-5.7.info.gz">Info (Gzip)</a>
+            - 3.3Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-5.7.info.zip">Info (Zip)</a>
+            - 3.3Mb<br />
+                    </div>
+    </div>
+
+<a class="docs-sidebar-section" href="migrating-from-year2.html?ff=nopfpls"><span class="icon-book"></span>
+    <span class="text">Excerpts from this Manual</span></a>
+<div class="docs-sidebar-accordian">
+    <div class="text">
+                <a href="https://dev.mysql.com/doc/mysql-backup-excerpt/5.7/en/">MySQL Backup and Recovery</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-g11n-excerpt/5.7/en/">MySQL Globalization</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-infoschema-excerpt/5.7/en/">MySQL Information Schema</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-installation-excerpt/5.7/en/">MySQL Installation Guide</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-linuxunix-excerpt/5.7/en/">MySQL and Linux/Unix</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-osx-excerpt/5.7/en/">MySQL and OS X</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-partitioning-excerpt/5.7/en/">MySQL Partitioning</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-perfschema-excerpt/5.7/en/">MySQL Performance Schema</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-replication-excerpt/5.7/en/">MySQL Replication</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-repo-excerpt/5.7/en/">Using the MySQL Yum Repository</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-reslimits-excerpt/5.7/en/">MySQL Restrictions and Limitations</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-security-excerpt/5.7/en/">Security in MySQL</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-solaris-excerpt/5.7/en/">MySQL and Solaris</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-sourcebuild-excerpt/5.7/en/">Building MySQL from Source</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-startstop-excerpt/5.7/en/">Starting and Stopping MySQL</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-tutorial-excerpt/5.7/en/">MySQL Tutorial</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-windows-excerpt/5.7/en/">MySQL and Windows</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-cluster-excerpt/5.7/en/">MySQL NDB Cluster 7.5</a><br />
+            </div>
+</div>
+
+        <br /><span id="wkr"><br /></span>
+    </div>
+    </div>
+
+    <div id="docs-main" class="has-toc">
+    <div id="docs-main-inner">
+
+                <div class="right" id="docs-version-nav">
+            <a href="migrating-from-year2.html?ff=nopfpls" id="docs-version-nav-toggle">version 5.7
+            <span class="icon-chevron-down"></span></a>
+            <div id="docs-version-list">
+                                                        <a                         class="tooltip-left"
+                        data-tooltip="The page you are viewing does not exist in version 8.0.
+                        This link will take you to the Table of Contents."
+                                                href="https://dev.mysql.com/doc/refman/8.0/en/">
+                        8.0
+                                                &nbsp;current
+                                            </a><br />
+                                                                                                                <a                         href="https://dev.mysql.com/doc/refman/5.6/en/migrating-from-year2.html">
+                        5.6
+                                            </a><br />
+                                                                        <div id="docs-version-nav-lang">
+                                                                                                                                                    <a                                     href="https://dev.mysql.com/doc/refman/5.6/ja/migrating-from-year2.html">
+                                    5.6&nbsp;
+                                                                            Japanese
+                                                                    </a><br />
+                                                                                            </div>
+                            </div>
+        </div>
+        
+        <div id="docs-show-nav" class="left hidden" style="margin-right: 15px;">
+            <a class="docs-show-hide-nav" href="migrating-from-year2.html?ff=nopfpls" aria-label="Show Sidebar"
+                title="Show Sidebar"><span class="icon-arrow-small-right"></span></a>
+        </div>
+
+                        <div id="docs-breadcrumbs">
+            <a href="index.html">MySQL 5.7 Reference Manual</a> &nbsp;/&nbsp;
+                            <span id="breadcrumbs-link"><a href="migrating-from-year2.html?ff=nopfpls" id="show-breadcrumbs">...</a> &nbsp;/&nbsp;</span>
+                <span class="hidden" id="hidden-breadcrumbs">
+                                                        <a href="data-types.html">Data Types</a> &nbsp;/&nbsp;
+                                                            <a href="date-and-time-types.html">Date and Time Data Types</a> &nbsp;/&nbsp;
+                                                                                        </span>
+                                        2-Digit YEAR(2) Limitations and Migrating to 4-Digit YEAR
+                                    </div>
+        
+        <div id="docs-body">
+        
+<div class="section">
+<div class="titlepage">
+<div>
+<div>
+<h3 class="title"><a name="migrating-from-year2"></a>11.2.5 2-Digit YEAR(2) Limitations and Migrating to 4-Digit YEAR</h3>
+
+</div>
+
+</div>
+
+</div>
+<p>
+        This section describes problems that can occur when using the
+        2-digit <a class="link" href="year.html" title="11.2.4 The YEAR Type"><code class="literal">YEAR(2)</code></a> data type and
+        provides information about converting existing
+        <a class="link" href="year.html" title="11.2.4 The YEAR Type"><code class="literal">YEAR(2)</code></a> columns to 4-digit
+        year-valued columns, which can be declared as
+        <code class="literal">YEAR</code> with an implicit display width of 4
+        characters, or equivalently as <code class="literal">YEAR(4)</code> with
+        an explicit display width.
+      </p><p>
+        Although the internal range of values for
+        <code class="literal">YEAR</code>/<a class="link" href="year.html" title="11.2.4 The YEAR Type"><code class="literal">YEAR(4)</code></a>
+        and the deprecated <a class="link" href="year.html" title="11.2.4 The YEAR Type"><code class="literal">YEAR(2)</code></a> type
+        is the same (<code class="literal">1901</code> to <code class="literal">2155</code>,
+        and <code class="literal">0000</code>), the display width for
+        <a class="link" href="year.html" title="11.2.4 The YEAR Type"><code class="literal">YEAR(2)</code></a> makes that type
+        inherently ambiguous because displayed values indicate only the
+        last two digits of the internal values and omit the century
+        digits. The result can be a loss of information under certain
+        circumstances. For this reason, avoid using
+        <a class="link" href="year.html" title="11.2.4 The YEAR Type"><code class="literal">YEAR(2)</code></a> in your applications and
+        use
+        <code class="literal">YEAR</code>/<a class="link" href="year.html" title="11.2.4 The YEAR Type"><code class="literal">YEAR(4)</code></a>
+        wherever you need a year-valued data type. As of MySQL 5.7.5,
+        support for <a class="link" href="year.html" title="11.2.4 The YEAR Type"><code class="literal">YEAR(2)</code></a> is removed
+        and existing 2-digit <a class="link" href="year.html" title="11.2.4 The YEAR Type"><code class="literal">YEAR(2)</code></a>
+        columns must be converted to 4-digit
+        <a class="link" href="year.html" title="11.2.4 The YEAR Type"><code class="literal">YEAR</code></a> columns to become usable
+        again.
+</p>
+<div class="simplesect">
+
+<div class="titlepage">
+<div>
+
+<div class="simple">
+<h4 class="title"><a name="year2-limitations"></a>YEAR(2) Limitations</h4>
+</div>
+</div>
+</div>
+<p>
+          Issues with the <a class="link" href="year.html" title="11.2.4 The YEAR Type"><code class="literal">YEAR(2)</code></a> data
+          type include ambiguity of displayed values, and possible loss
+          of information when values are dumped and reloaded or
+          converted to strings.
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+              Displayed <a class="link" href="year.html" title="11.2.4 The YEAR Type"><code class="literal">YEAR(2)</code></a> values
+              can be ambiguous. It is possible for up to three
+              <a class="link" href="year.html" title="11.2.4 The YEAR Type"><code class="literal">YEAR(2)</code></a> values that have
+              different internal values to have the same displayed
+              value, as the following example demonstrates:
+            </p><pre class="programlisting copytoclipboard line-numbers language-sql"><code class="language-sql">mysql&gt; CREATE TABLE t (y2 YEAR(2), y4 YEAR);
+Query OK, 0 rows affected, 1 warning (0.01 sec)
+
+mysql&gt; INSERT INTO t (y2) VALUES(1912),(2012),(2112);
+Query OK, 3 rows affected (0.00 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql&gt; UPDATE t SET y4 = y2;
+Query OK, 3 rows affected (0.00 sec)
+Rows matched: 3  Changed: 3  Warnings: 0
+
+mysql&gt; SELECT * FROM t;
++------+------+
+| y2   | y4   |
++------+------+
+|   12 | 1912 |
+|   12 | 2012 |
+|   12 | 2112 |
++------+------+
+3 rows in set (0.00 sec)</code></pre></li><li class="listitem"><p>
+              If you use <a class="link" href="mysqldump.html" title="4.5.4 mysqldump — A Database Backup Program"><span class="command"><strong>mysqldump</strong></span></a> to dump the table
+              created in the preceding example, the dump file represents
+              all <code class="literal">y2</code> values using the same 2-digit
+              representation (<code class="literal">12</code>). If you reload the
+              table from the dump file, all resulting rows have internal
+              value <code class="literal">2012</code> and display value
+              <code class="literal">12</code>, thus losing the distinctions
+              between them.
+            </p></li><li class="listitem"><p>
+              Conversion of a 2-digit or 4-digit
+              <a class="link" href="year.html" title="11.2.4 The YEAR Type"><code class="literal">YEAR</code></a> data value to string
+              form uses the data type display width. Suppose that a
+              <a class="link" href="year.html" title="11.2.4 The YEAR Type"><code class="literal">YEAR(2)</code></a> column and a
+              <code class="literal">YEAR</code>/<a class="link" href="year.html" title="11.2.4 The YEAR Type"><code class="literal">YEAR(4)</code></a>
+              column both contain the value <code class="literal">1970</code>.
+              Assigning each column to a string results in a value of
+              <code class="literal">'70'</code> or <code class="literal">'1970'</code>,
+              respectively. That is, loss of information occurs for
+              conversion from <a class="link" href="year.html" title="11.2.4 The YEAR Type"><code class="literal">YEAR(2)</code></a> to
+              string.
+            </p></li><li class="listitem"><p>
+              Values outside the range from <code class="literal">1970</code> to
+              <code class="literal">2069</code> are stored incorrectly when
+              inserted into a <a class="link" href="year.html" title="11.2.4 The YEAR Type"><code class="literal">YEAR(2)</code></a>
+              column in a <a class="link" href="csv-storage-engine.html" title="15.4 The CSV Storage Engine"><code class="literal">CSV</code></a> table. For
+              example, inserting <code class="literal">2211</code> results in a
+              display value of <code class="literal">11</code> but an internal
+              value of <code class="literal">2011</code>.
+</p></li></ul>
+</div>
+<p>
+          To avoid these problems, use the 4-digit
+          <a class="link" href="year.html" title="11.2.4 The YEAR Type"><code class="literal">YEAR</code></a> or
+          <a class="link" href="year.html" title="11.2.4 The YEAR Type"><code class="literal">YEAR(4)</code></a> data type rather than
+          the 2-digit <a class="link" href="year.html" title="11.2.4 The YEAR Type"><code class="literal">YEAR(2)</code></a> data type.
+          Suggestions regarding migration strategies appear later in
+          this section.
+</p>
+</div>
+<div class="simplesect">
+<div class="titlepage">
+<div>
+<div class="simple">
+<h4 class="title"><a name="limited-y2-support"></a>Reduced/Removed YEAR(2) Support in MySQL 5.7</h4>
+
+</div>
+
+</div>
+
+</div>
+<p>
+          Before MySQL 5.7.5, support for
+          <a class="link" href="year.html" title="11.2.4 The YEAR Type"><code class="literal">YEAR(2)</code></a> is diminished. As of
+          MySQL 5.7.5, support for
+          <a class="link" href="year.html" title="11.2.4 The YEAR Type"><code class="literal">YEAR(2)</code></a> is removed.
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+              <a class="link" href="year.html" title="11.2.4 The YEAR Type"><code class="literal">YEAR(2)</code></a> column definitions
+              for new tables produce warnings or errors:
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p>
+                  Before MySQL 5.7.5,
+                  <a class="link" href="year.html" title="11.2.4 The YEAR Type"><code class="literal">YEAR(2)</code></a> column
+                  definitions for new tables are converted (with an
+                  <a class="ulink" href="https://dev.mysql.com/doc/mysql-errors/5.7/en/server-error-reference.html#error_er_invalid_year_column_length" target="_top"><code class="literal">ER_INVALID_YEAR_COLUMN_LENGTH</code></a>
+                  warning) to 4-digit
+                  <a class="link" href="year.html" title="11.2.4 The YEAR Type"><code class="literal">YEAR</code></a> columns:
+                </p><pre class="programlisting copytoclipboard line-numbers language-sql"><code class="language-sql">mysql&gt; CREATE TABLE t1 (y YEAR(2));
+Query OK, 0 rows affected, 1 warning (0.04 sec)
+
+mysql&gt; SHOW WARNINGS\G
+*************************** 1. row ***************************
+  Level: Warning
+   Code: 1818
+Message: YEAR(2) column type is deprecated. Creating YEAR(4) column instead.
+1 row in set (0.00 sec)
+
+mysql&gt; SHOW CREATE TABLE t1\G
+*************************** 1. row ***************************
+       Table: t1
+Create Table: CREATE TABLE `t1` (
+  `y` year(4) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1
+1 row in set (0.00 sec)</code></pre></li><li class="listitem"><p>
+                  As of MySQL 5.7.5,
+                  <a class="link" href="year.html" title="11.2.4 The YEAR Type"><code class="literal">YEAR(2)</code></a> column
+                  definitions for new tables produce an
+                  <a class="ulink" href="https://dev.mysql.com/doc/mysql-errors/5.7/en/server-error-reference.html#error_er_invalid_year_column_length" target="_top"><code class="literal">ER_INVALID_YEAR_COLUMN_LENGTH</code></a>
+                  error:
+                </p><pre class="programlisting copytoclipboard line-numbers language-sql"><code class="language-sql">mysql&gt; CREATE TABLE t1 (y YEAR(2));
+ERROR 1818 (HY000): Supports only YEAR or YEAR(4) column.</code></pre></li></ul>
+</div>
+</li><li class="listitem"><p>
+              <a class="link" href="year.html" title="11.2.4 The YEAR Type"><code class="literal">YEAR(2)</code></a> column in existing
+              tables remain as <a class="link" href="year.html" title="11.2.4 The YEAR Type"><code class="literal">YEAR(2)</code></a>:
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p>
+                  Before MySQL 5.7.5,
+                  <a class="link" href="year.html" title="11.2.4 The YEAR Type"><code class="literal">YEAR(2)</code></a> is processed in
+                  queries as in older versions of MySQL.
+                </p></li><li class="listitem"><p>
+                  As of MySQL 5.7.5,
+                  <a class="link" href="year.html" title="11.2.4 The YEAR Type"><code class="literal">YEAR(2)</code></a> columns in
+                  queries produce warnings or errors.
+</p></li></ul>
+</div>
+</li><li class="listitem"><p>
+              Several programs or statements convert
+              <a class="link" href="year.html" title="11.2.4 The YEAR Type"><code class="literal">YEAR(2)</code></a> columns to 4-digit
+              <a class="link" href="year.html" title="11.2.4 The YEAR Type"><code class="literal">YEAR</code></a> columns automatically:
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p>
+                  <a class="link" href="alter-table.html" title="13.1.8 ALTER TABLE Statement"><code class="literal">ALTER TABLE</code></a> statements
+                  that result in a table rebuild.
+                </p></li><li class="listitem"><p>
+                  <a class="link" href="repair-table.html" title="13.7.2.5 REPAIR TABLE Statement"><code class="literal">REPAIR TABLE</code></a> (which
+                  <a class="link" href="check-table.html" title="13.7.2.2 CHECK TABLE Statement"><code class="literal">CHECK TABLE</code></a> recommends
+                  you use, if it finds a table that contains
+                  <a class="link" href="year.html" title="11.2.4 The YEAR Type"><code class="literal">YEAR(2)</code></a> columns).
+                </p></li><li class="listitem"><p>
+                  <a class="link" href="mysql-upgrade.html" title="4.4.7 mysql_upgrade — Check and Upgrade MySQL Tables"><span class="command"><strong>mysql_upgrade</strong></span></a> (which uses
+                  <a class="link" href="repair-table.html" title="13.7.2.5 REPAIR TABLE Statement"><code class="literal">REPAIR TABLE</code></a>).
+                </p></li><li class="listitem"><p>
+                  Dumping with <a class="link" href="mysqldump.html" title="4.5.4 mysqldump — A Database Backup Program"><span class="command"><strong>mysqldump</strong></span></a> and
+                  reloading the dump file. Unlike the conversions
+                  performed by the preceding three items, a dump and
+                  reload has the potential to change data values.
+</p></li></ul>
+</div>
+<p>
+              A MySQL upgrade usually involves at least one of the last
+              two items. However, with respect to
+              <a class="link" href="year.html" title="11.2.4 The YEAR Type"><code class="literal">YEAR(2)</code></a>,
+              <a class="link" href="mysql-upgrade.html" title="4.4.7 mysql_upgrade — Check and Upgrade MySQL Tables"><span class="command"><strong>mysql_upgrade</strong></span></a> is preferable to
+              <a class="link" href="mysqldump.html" title="4.5.4 mysqldump — A Database Backup Program"><span class="command"><strong>mysqldump</strong></span></a>, which, as noted, can change
+              data values.
+</p></li></ul>
+</div>
+
+</div>
+<div class="simplesect">
+<div class="titlepage">
+<div>
+<div class="simple">
+<h4 class="title"><a name="migrating-from-y2-to-y4"></a>Migrating from YEAR(2) to 4-Digit YEAR</h4>
+
+</div>
+
+</div>
+
+</div>
+<p>
+          To convert 2-digit <a class="link" href="year.html" title="11.2.4 The YEAR Type"><code class="literal">YEAR(2)</code></a>
+          columns to 4-digit <a class="link" href="year.html" title="11.2.4 The YEAR Type"><code class="literal">YEAR</code></a>
+          columns, you can do so manually at any time without upgrading.
+          Alternatively, you can upgrade to a version of MySQL with
+          reduced or removed support for
+          <a class="link" href="year.html" title="11.2.4 The YEAR Type"><code class="literal">YEAR(2)</code></a> (MySQL 5.6.6 or later),
+          then have MySQL convert <a class="link" href="year.html" title="11.2.4 The YEAR Type"><code class="literal">YEAR(2)</code></a>
+          columns automatically. In the latter case, avoid upgrading by
+          dumping and reloading your data because that can change data
+          values. In addition, if you use replication, there are upgrade
+          considerations you must take into account.
+        </p><p>
+          To convert 2-digit <a class="link" href="year.html" title="11.2.4 The YEAR Type"><code class="literal">YEAR(2)</code></a>
+          columns to 4-digit <a class="link" href="year.html" title="11.2.4 The YEAR Type"><code class="literal">YEAR</code></a>
+          manually, use <a class="link" href="alter-table.html" title="13.1.8 ALTER TABLE Statement"><code class="literal">ALTER TABLE</code></a> or
+          <a class="link" href="repair-table.html" title="13.7.2.5 REPAIR TABLE Statement"><code class="literal">REPAIR TABLE</code></a>. Suppose that a
+          table <code class="literal">t1</code> has this definition:
+        </p><pre class="programlisting copytoclipboard line-numbers language-sql one-line"><code class="language-sql">CREATE TABLE t1 (ycol YEAR(2) NOT NULL DEFAULT '70');</code></pre><p>
+          Modify the column using <code class="literal">ALTER TABLE</code> as
+          follows:
+        </p><pre class="programlisting copytoclipboard line-numbers language-sql one-line"><code class="language-sql">ALTER TABLE t1 FORCE;</code></pre><p>
+          The <a class="link" href="alter-table.html" title="13.1.8 ALTER TABLE Statement"><code class="literal">ALTER TABLE</code></a> statement
+          converts the table without changing
+          <a class="link" href="year.html" title="11.2.4 The YEAR Type"><code class="literal">YEAR(2)</code></a> values. If the server
+          is a replication source, the <a class="link" href="alter-table.html" title="13.1.8 ALTER TABLE Statement"><code class="literal">ALTER
+          TABLE</code></a> statement replicates to replicas and makes the
+          corresponding table change on each one.
+        </p><p>
+          Another migration method is to perform a binary upgrade:
+          Upgrade MySQL in place without dumping and reloading your
+          data. Then run <a class="link" href="mysql-upgrade.html" title="4.4.7 mysql_upgrade — Check and Upgrade MySQL Tables"><span class="command"><strong>mysql_upgrade</strong></span></a>, which uses
+          <a class="link" href="repair-table.html" title="13.7.2.5 REPAIR TABLE Statement"><code class="literal">REPAIR TABLE</code></a> to convert 2-digit
+          <a class="link" href="year.html" title="11.2.4 The YEAR Type"><code class="literal">YEAR(2)</code></a> columns to 4-digit
+          <a class="link" href="year.html" title="11.2.4 The YEAR Type"><code class="literal">YEAR</code></a> columns without changing
+          data values. If the server is a replication source, the
+          <a class="link" href="repair-table.html" title="13.7.2.5 REPAIR TABLE Statement"><code class="literal">REPAIR TABLE</code></a> statements
+          replicate to replicas and make the corresponding table changes
+          on each one, unless you invoke
+          <a class="link" href="mysql-upgrade.html" title="4.4.7 mysql_upgrade — Check and Upgrade MySQL Tables"><span class="command"><strong>mysql_upgrade</strong></span></a> with the
+          <a class="link" href="mysql-upgrade.html#option_mysql_upgrade_write-binlog"><code class="option">--skip-write-binlog</code></a>
+          option.
+        </p><p>
+          Upgrades to replication servers usually involve upgrading
+          replicas to a newer version of MySQL, then upgrading the
+          source. For example, if a source and replica both run MySQL
+          5.5, a typical upgrade sequence involves upgrading the replica
+          to 5.6, then upgrading the source to 5.6. With regard to the
+          different treatment of <a class="link" href="year.html" title="11.2.4 The YEAR Type"><code class="literal">YEAR(2)</code></a>
+          as of MySQL 5.6.6, that upgrade sequence results in a problem:
+          Suppose that the replica has been upgraded but not yet the
+          source. Then creating a table containing a 2-digit
+          <a class="link" href="year.html" title="11.2.4 The YEAR Type"><code class="literal">YEAR(2)</code></a> column on the source
+          results in a table containing a 4-digit
+          <a class="link" href="year.html" title="11.2.4 The YEAR Type"><code class="literal">YEAR</code></a> column on the replica.
+          Consequently, the following operations have a different result
+          on the source and replica, if you use statement-based
+          replication:
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+              Inserting numeric <code class="literal">0</code>. The resulting
+              value has an internal value of <code class="literal">2000</code> on
+              the source but <code class="literal">0000</code> on the replica.
+            </p></li><li class="listitem"><p>
+              Converting <a class="link" href="year.html" title="11.2.4 The YEAR Type"><code class="literal">YEAR(2)</code></a> to
+              string. This operation uses the display value of
+              <a class="link" href="year.html" title="11.2.4 The YEAR Type"><code class="literal">YEAR(2)</code></a> on the source but
+              <a class="link" href="year.html" title="11.2.4 The YEAR Type"><code class="literal">YEAR(4)</code></a> on the replica.
+</p></li></ul>
+</div>
+<p>
+          To avoid such problems, modify all 2-digit
+          <a class="link" href="year.html" title="11.2.4 The YEAR Type"><code class="literal">YEAR(2)</code></a> columns on the source
+          to 4-digit <a class="link" href="year.html" title="11.2.4 The YEAR Type"><code class="literal">YEAR</code></a> columns before
+          upgrading. (Use <a class="link" href="alter-table.html" title="13.1.8 ALTER TABLE Statement"><code class="literal">ALTER TABLE</code></a>, as
+          described previously.) That makes it possible to upgrade
+          normally (replica first, then source) without introducing any
+          <a class="link" href="year.html" title="11.2.4 The YEAR Type"><code class="literal">YEAR(2)</code></a> to
+          <a class="link" href="year.html" title="11.2.4 The YEAR Type"><code class="literal">YEAR(4)</code></a> differences between the
+          source and replica.
+        </p><p>
+          One migration method should be avoided: Do not dump your data
+          with <a class="link" href="mysqldump.html" title="4.5.4 mysqldump — A Database Backup Program"><span class="command"><strong>mysqldump</strong></span></a> and reload the dump file
+          after upgrading. That has the potential to change
+          <a class="link" href="year.html" title="11.2.4 The YEAR Type"><code class="literal">YEAR(2)</code></a> values, as described
+          previously.
+        </p><p>
+          A migration from 2-digit
+          <a class="link" href="year.html" title="11.2.4 The YEAR Type"><code class="literal">YEAR(2)</code></a> columns to 4-digit
+          <a class="link" href="year.html" title="11.2.4 The YEAR Type"><code class="literal">YEAR</code></a> columns should also
+          involve examining application code for the possibility of
+          changed behavior under conditions such as these:
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+              Code that expects selecting a
+              <a class="link" href="year.html" title="11.2.4 The YEAR Type"><code class="literal">YEAR</code></a> column to produce
+              exactly two digits.
+            </p></li><li class="listitem"><p>
+              Code that does not account for different handling for
+              inserts of numeric <code class="literal">0</code>: Inserting
+              <code class="literal">0</code> into
+              <a class="link" href="year.html" title="11.2.4 The YEAR Type"><code class="literal">YEAR(2)</code></a> or
+              <a class="link" href="year.html" title="11.2.4 The YEAR Type"><code class="literal">YEAR(4)</code></a> results in an
+              internal value of <code class="literal">2000</code> or
+              <code class="literal">0000</code>, respectively.
+</p></li></ul>
+</div>
+
+</div>
+
+</div>
+<br />
+        </div>
+
+                <div id="docs-in-page-nav-container">
+            <div id="docs-in-page-nav">
+                
+    <a href="year.html"
+        aria-label="Previous" title="Previous: The YEAR Type"><span
+        class="icon-chevron-left"></span> PREV</a> &nbsp;
+<a href="index.html" aria-label="Start" title="Start"> HOME</a> &nbsp;
+        <a aria-label="Up" href="date-and-time-types.html" title="Up: Date and Time Data Types"> UP</a> &nbsp;
+    <a href="timestamp-initialization.html" aria-label="Next"
+        title="Next: Automatic Initialization and Updating for TIMESTAMP and DATETIME">NEXT <span
+        class="icon-chevron-right"></span></a>
+            </div>
+        </div>
+        
+         <div id="docs-body-extra">
+             
+<a class="docs-sidebar-section" href="migrating-from-year2.html?ff=nopfpls"><span class="icon-related"></span>
+    <span class="text">Related Documentation</span></a>
+<div class="docs-sidebar-accordian">
+    <div class="text">
+        <a href="https://dev.mysql.com/doc/relnotes/mysql/5.7/en/">MySQL 5.7 Release Notes</a><br />
+        </div>
+</div>
+
+    <a class="docs-sidebar-section" href="migrating-from-year2.html?ff=nopfpls"><span class="icon-download-thin"></span>
+        <span class="text">
+            Download
+                            this Manual
+                    </span>
+    </a>
+    <div class="docs-sidebar-accordian">
+        <div class="text">
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.pdf">PDF (US Ltr)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.a4.pdf">PDF (A4)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-ref-manual-5.7-en-pdf-1-20210225.noarch.rpm">PDF (RPM)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.html-chapter.tar.gz">HTML Download (TGZ)</a>
+            - 10.1Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.html-chapter.zip">HTML Download (Zip)</a>
+            - 10.2Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-ref-manual-5.7-en-html-chapter-1-20210225.noarch.rpm">HTML Download (RPM)</a>
+            - 8.9Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.man-gpl.tar.gz">Man Pages (TGZ)</a>
+            - 224.7Kb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.man-gpl.zip">Man Pages (Zip)</a>
+            - 332.6Kb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-5.7.info.gz">Info (Gzip)</a>
+            - 3.3Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-5.7.info.zip">Info (Zip)</a>
+            - 3.3Mb<br />
+                    </div>
+    </div>
+
+<a class="docs-sidebar-section" href="migrating-from-year2.html?ff=nopfpls"><span class="icon-book"></span>
+    <span class="text">Excerpts from this Manual</span></a>
+<div class="docs-sidebar-accordian">
+    <div class="text">
+                <a href="https://dev.mysql.com/doc/mysql-backup-excerpt/5.7/en/">MySQL Backup and Recovery</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-g11n-excerpt/5.7/en/">MySQL Globalization</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-infoschema-excerpt/5.7/en/">MySQL Information Schema</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-installation-excerpt/5.7/en/">MySQL Installation Guide</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-linuxunix-excerpt/5.7/en/">MySQL and Linux/Unix</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-osx-excerpt/5.7/en/">MySQL and OS X</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-partitioning-excerpt/5.7/en/">MySQL Partitioning</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-perfschema-excerpt/5.7/en/">MySQL Performance Schema</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-replication-excerpt/5.7/en/">MySQL Replication</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-repo-excerpt/5.7/en/">Using the MySQL Yum Repository</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-reslimits-excerpt/5.7/en/">MySQL Restrictions and Limitations</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-security-excerpt/5.7/en/">Security in MySQL</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-solaris-excerpt/5.7/en/">MySQL and Solaris</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-sourcebuild-excerpt/5.7/en/">Building MySQL from Source</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-startstop-excerpt/5.7/en/">Starting and Stopping MySQL</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-tutorial-excerpt/5.7/en/">MySQL Tutorial</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-windows-excerpt/5.7/en/">MySQL and Windows</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-cluster-excerpt/5.7/en/">MySQL NDB Cluster 7.5</a><br />
+            </div>
+</div>
+         </div>
+
+              </div>
+     </div>
+
+</div>
+
+<script>
+$(function() {
+    var doc = new $.doc({ 'mobile': $.browser.mobile, 'docId': 1, 'highlight': true });
+});
+</script>
+    
+
+            
+        </div>
+    </div>
+
+    <footer class="collapsed">
+        <div id="footer-bottom">
+                                    <div id="footer-collapse">
+                <a href="migrating-from-year2.html?ff=nopfpls" id="expand-footer"
+                    aria-label="Expand Footer"
+                    title="Expand Footer"><span
+                    class="icon-plus-square"></span></a>
+            </div>
+                        <div class="footer-contact">
+                <div id="footer-contact-icon" style="display: none;">
+                    <span class="icon-call-phone"></span>
+                </div>
+                <div id="footer-contact-numbers" style="display: none;">
+                    <strong>Contact MySQL Sales</strong><br/>
+                    USA/Canada: +1-866-221-0634 &nbsp;
+                    (<a href="https://www.mysql.com/about/contact/phone/">More Countries &raquo;</a>)
+                </div>
+                <div id="footer-contact-copyright" style="display: inline-block;">
+                    <a href="http://www.oracle.com/" aria-label="Oracle" title="Oracle"><span class="oracle-logo"></span></a>
+                    &nbsp; &copy; 2021, Oracle Corporation and/or its affiliates
+                </div>
+            </div>
+            <div class="social-icons">
+                <a aria-label="Join us on Facebook" title="Join us on Facebook" href="http://www.facebook.com/mysql"><span class="icon-facebook-square"></span></a>
+                <a aria-label="Follow us on Twitter" title="Follow us on Twitter" href="https://twitter.com/mysql"><span class="icon-twitter-square"></span></a>
+                <a aria-label="Follow us on LinkedIn" title="Follow us on LinkedIn" href="https://www.linkedin.com/company/mysql"><span class="icon-linkedin-square"></span></a>
+                <a aria-label="Visit our YouTube channel" title="Visit our YouTube channel" href="http://www.youtube.com/mysqlchannel"><span class="icon-youtube-square"></span></a>
+            </div>
+            <br class="clear" />
+        </div>
+        <div id="footer-links">
+
+            <div id="site-footer-links">
+                <div id="footer-nav"></div>
+
+                <div class="links">
+                    <ul>
+                        <li class="top"><a href="https://www.mysql.com/products/">Products</a></li>
+                        <li><a href="https://www.mysql.com/cloud/">MySQL Database Service</a></li>
+                        <li><a href="https://www.mysql.com/products/enterprise/">MySQL Enterprise Edition</a></li>
+                        <li><a href="https://www.mysql.com/products/standard/">MySQL Standard Edition</a></li>
+                        <li><a href="https://www.mysql.com/products/classic/">MySQL Classic Edition</a></li>
+                        <li><a href="https://www.mysql.com/products/cluster/">MySQL Cluster CGE</a></li>
+                        <li><a href="https://www.mysql.com/oem/">MySQL Embedded (OEM/ISV)</a></li>
+                    </ul>
+                </div>
+
+                <div class="links">
+                    <ul>
+                        <li class="top"><a href="https://www.mysql.com/services/">Services</a></li>
+                        <li><a href="https://www.mysql.com/training/">Training</a></li>
+                        <li><a href="https://www.mysql.com/certification/">Certification</a></li>
+                        <li><a href="https://www.mysql.com/consulting/">Consulting</a></li>
+                        <li><a href="https://www.mysql.com/support/">Support</a></li>
+                    </ul>
+                </div>
+
+                <div class="links">
+                    <ul>
+                        <li class="top"><a href="https://www.mysql.com/downloads/">Downloads</a></li>
+                        <li><a href="https://dev.mysql.com/downloads/mysql/">MySQL Community Server</a></li>
+                        <li><a href="https://dev.mysql.com/downloads/cluster/">MySQL NDB Cluster</a></li>
+                        <li><a href="https://dev.mysql.com/downloads/shell/">MySQL Shell</a></li>
+                        <li><a href="https://dev.mysql.com/downloads/router/">MySQL Router</a></li>
+                        <li><a href="https://dev.mysql.com/downloads/workbench/">MySQL Workbench</a></li>
+                    </ul>
+                </div>
+
+                <div class="links">
+                    <ul>
+                        <li class="top"><a href="https://dev.mysql.com/doc/">Documentation</a></li>
+                        <li><a href="https://dev.mysql.com/doc/refman/en/">MySQL Reference Manual</a></li>
+                        <li><a href="https://dev.mysql.com/doc/workbench/en/">MySQL Workbench</a></li>
+                        <li><a href="https://dev.mysql.com/doc/index-cluster.html">MySQL NDB Cluster</a></li>
+                        <li><a href="https://dev.mysql.com/doc/index-connectors.html">MySQL Connectors</a></li>
+                        <li><a href="https://dev.mysql.com/doc/#topic">Topic Guides</a></li>
+                    </ul>
+                </div>
+
+                <div class="links">
+                    <ul>
+                        <li class="top"><a href="https://www.mysql.com/about/">About MySQL</a></li>
+                        <li><a href="https://www.mysql.com/about/contact/">Contact Us</a></li>
+                                                                        <li><a href="https://www.mysql.com/buy-mysql/">How to Buy</a></li>
+                        <li><a href="https://www.mysql.com/partners/">Partners</a></li>
+                        <li><a href="https://www.mysql.com/about/jobs/">Job Opportunities</a></li>
+                        <li><a href="https://www.mysql.com/sitemap.html">Site Map</a></li>
+                    </ul>
+                </div>
+
+                            </div>
+
+            <div id="footer-logo">
+                <a href="http://www.oracle.com/" aria-label="Oracle" title="Oracle"><span class="oracle-logo"></span></a>
+                &nbsp; &copy; 2021, Oracle Corporation and/or its affiliates
+                <div class="footer-legal-links">
+                    <a href="https://www.mysql.com/about/legal/">Legal Policies</a> |
+                    <a href="http://www.oracle.com/us/legal/privacy/index.htm">Your Privacy Rights</a> |
+                    <a href="http://www.oracle.com/us/legal/terms/index.html">Terms of Use</a> |
+                    <a href="http://www.oracle.com/us/legal/third-party-trademarks/index.html">Trademark Policy</a> |
+                    <a href="http://www.oracle.com/technetwork/community/oca-486395.html">Contributor Agreement</a> |
+                    <div id="teconsent"></div>
+                </div>
+            </div>
+
+        </div>
+    </footer>
+</div>
+
+            <script>
+    if ((oracle.truste.api.getGdprConsentDecision().consentDecision) &&
+            (oracle.truste.api.getGdprConsentDecision().consentDecision.indexOf(0) != -1 ||
+             oracle.truste.api.getGdprConsentDecision().consentDecision.indexOf(2) != -1) )
+    {
+        document.write('<script src="https://labs.mysql.com/common/js/metrics/s_code_remote.js"><\/script>');
+        document.write('<script type="text/javascript" async src="https://c.oracleinfinity.io/acs/account/wh3g12c3gg/js/mysql/odc.js?_ora.context=analytics:production"><\/script>');
+    }
+    </script>
+
+        
+    
+</body>
+</html>

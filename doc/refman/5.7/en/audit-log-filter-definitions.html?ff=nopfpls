@@ -1,0 +1,2252 @@
+<!DOCTYPE html>
+<html lang="en" class="svg no-js">
+<head>
+    <meta charset="utf-8" />
+    <!--[if IE ]>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="Language" content="en">
+
+    <title>MySQL :: MySQL 5.7 Reference Manual :: 6.4.5.8 Writing Audit Log Filter Definitions</title>
+    <link rel="stylesheet" media="all" href="https://labs.mysql.com/common/css/main-20201221.min.css" />
+            <link rel="stylesheet" media="all" href="https://labs.mysql.com/common/css/docs-20201221.min.css" />
+    
+    
+    <link rel="stylesheet" media="print" href="https://labs.mysql.com/common/css/print-20201221.min.css" />
+
+    
+    
+    
+    
+            <link rel="contents" href="index.html" title="MySQL 5.7 Reference Manual" />
+<link rel="start" href="index.html" title="MySQL 5.7 Reference Manual" />
+<link rel="prev" href="audit-log-filtering.html" title="6.4.5.7 Audit Log Filtering" />
+<link rel="next" href="audit-log-legacy-filtering.html?ff=nopfpls" title="6.4.5.9 Legacy Mode Audit Log Filtering" />
+<link rel="up" href="audit-log.html" title="6.4.5 MySQL Enterprise Audit" />
+
+    
+    <link rel="shortcut icon" href="https://labs.mysql.com/common/themes/sakila/favicon.ico" />
+    <script async="async" type="text/javascript" src='https://consent.truste.com/notice?domain=oracle.com&c=teconsent&js=bb&noticeType=bb&text=true&cdn=1&pcookie&gtm=1' crossorigin></script>
+    <script src="https://www.oracle.com/assets/truste-oraclelib.js"></script>
+    <script>(function(H){ H.className=H.className.replace(/\bno-js\b/,'js') })(document.documentElement)</script>
+    <script src="https://labs.mysql.com/common/js/site-20200928.min.js"></script>
+
+    
+    
+    <!--[if lt IE 9]>
+        <script src="https://labs.mysql.com/common/js/polyfills/html5shiv-printshiv-3.7.2.min.js"></script>
+        <script src="https://labs.mysql.com/common/js/polyfills/respond-1.4.2.min.js"></script>
+    <![endif]-->
+        <!--[if IE 9]>
+        <style>#docs-sidebar-toc { box-sizing: content-box; }</style>
+    <![endif]-->
+    </head>
+
+<body class="no-sidebar full-page dev">
+<div class="page-wrapper">
+    <header>
+
+                        <a href="https://dev.mysql.com/" aria-label="Home" title="MySQL" id="l1-home-link"></a>
+        
+        <div id="l1-nav-container">
+            <div id="l1-line1">
+                <div id="l1-auth-links">
+                    <a href="https://www.mysql.com/about/contact/"><b>Contact MySQL</b></a>
+                    <span id="l1-contact-separator">&nbsp;|&nbsp;</span>
+                    <span id="l1-contact-separator-br"><br /></span>
+                                             <a href="https://dev.mysql.com/auth/login/?dest=https%3A%2F%2Fdev.mysql.com%2Fdoc%2Frefman%2F5.7%2Fen%2Faudit-log-filter-definitions.html%3Fff%3Dnopfpls">Login</a> &nbsp;|&nbsp;
+                         <a href="https://dev.mysql.com/auth/register/">Register</a>
+                                    </div>
+                <div id="l1-lhs">
+                    <div id="l1-slogan">
+                        The world's most popular open source database
+                    </div>
+                    <div id="l1-search-box">
+                        <form id="l1-search-form" method="get" action="https://www.oracle.com/search/results">
+                        <input type="hidden" name="cat" value="mysql" />
+                        <input type="hidden" name="Ntk" value="SI-ALL5" />
+                        <input id="l1-search-input" type="search" class="icon-search" placeholder="Search" aria-label="Search" name="Ntt" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div id="l1-line2">
+                <div class="social-icons">
+                    <a aria-label="Join us on Facebook" title="Join us on Facebook" href="http://www.facebook.com/mysql"><span class="icon-facebook"></span></a>
+                    <a aria-label="Follow us on Twitter" title="Follow us on Twitter" href="https://twitter.com/mysql"><span class="icon-twitter"></span></a>
+                    <a aria-label="Follow us on LinkedIn" title="Follow us on LinkedIn" href="https://www.linkedin.com/company/mysql"><span class="icon-linkedin"></span></a>
+                    <a aria-label="Visit our YouTube channel" title="Visit our YouTube channel" href="http://www.youtube.com/mysqlchannel"><span class="icon-youtube"></span></a>
+                </div>
+                <ul id="l1-nav">
+                    <li>
+                        <a href="https://www.mysql.com/"><!-- <span class="icon-sakila"></span>  -->MySQL.com</a>
+                    </li><li>
+                        <a href="https://www.mysql.com/downloads/"><!-- <span class="icon-download-thin"></span>  -->Downloads</a>
+                    </li><li class="active">
+                        <a href="https://dev.mysql.com/doc/"><!-- <span class="icon-books"></span>  -->Documentation</a>
+                    </li><li>
+                        <a href="https://dev.mysql.com/"><!-- <span class="icon-code"></span>  -->Developer Zone</a>
+                    </li>                </ul>
+            </div>
+        </div>
+        <div id="sub-header">
+            <div id="l2-nav-container">
+                <div id="l2-nav-toggle">
+                    <span class="icon-three-bars"></span>
+                </div>
+                                                                                        <a class="button nav-button-3" href="https://dev.mysql.com/"><span class="icon-code"></span> Developer Zone</a>
+                                                                                                                                    <a class="button nav-button-2" href="https://www.mysql.com/downloads/"><span class="icon-download-thin"></span> Downloads</a>
+                                                                                                <a class="button nav-button-1" href="https://www.mysql.com/"><span class="icon-sakila"></span> MySQL.com</a>
+                                                                        <div id="l2-search-toggle">
+                    <span class="icon-search"></span>
+                </div>
+                <div id="l2-site-icon">
+                                                                                                                                                                                                    <span class="icon-books"></span>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </div>
+                <div id="l1-section-title">
+                    <span id="l1-section-label">
+                        <a href="https://dev.mysql.com/doc/">Documentation</a>
+                    </span>
+                </div>
+                <nav>
+                    
+
+<ul id="l2-nav">
+            	<li class="active"><a class="active " href="https://dev.mysql.com/doc/refman/en/">MySQL Server</a>
+    			</li>
+	        	<li class=""><a  href="https://dev.mysql.com/doc/index-enterprise.html">MySQL Enterprise</a>
+    			</li>
+	        	<li class=""><a  href="https://dev.mysql.com/doc/workbench/en/">Workbench</a>
+    			</li>
+	        	<li class=""><a  href="https://dev.mysql.com/doc/mysql-shell/en/mysql-innodb-cluster.html">InnoDB Cluster</a>
+    			</li>
+	        	<li class=""><a  href="https://dev.mysql.com/doc/index-cluster.html">MySQL NDB Cluster</a>
+    			</li>
+	        	<li class=""><a  href="https://dev.mysql.com/doc/index-connectors.html">Connectors</a>
+    			</li>
+	        	<li class=" last"><a  href="https://dev.mysql.com/doc/index-other.html">More</a>
+    			</li>
+	                        <li class="other-section"><a href="https://www.mysql.com/">MySQL.com</a></li>
+                            <li class="other-section"><a href="https://www.mysql.com/downloads/">Downloads</a></li>
+                                        <li class="other-section"><a href="https://dev.mysql.com/">Developer Zone</a></li>
+            </ul>
+                </nav>
+            </div>
+            <div id="l3-search-container"></div>
+            <div id="top-orange"><span id="section-nav">Section Menu: &nbsp; </span></div>
+        </div>
+    </header>
+        <div id="page">
+                        <div role="main" id="main">
+
+            
+                
+            
+<div>
+    <div id="docs-sidebar-toc" class="">
+    <div id="docs-toc-inner">
+        <div class="docs-sidebar-header" id="docs-nav-header">
+            <a class="docs-show-hide-nav" id="docs-hide-nav" href="audit-log-filter-definitions.html?ff=nopfpls" title="Hide Sidebar" aria-label="Hide Sidebar"><span class="icon-arrow-small-left"></span></a>
+            <div class="docs-nav-links">
+                                    
+    <a href="audit-log-filtering.html"
+        aria-label="Previous" title="Previous: Audit Log Filtering"><span
+        class="icon-chevron-left"></span></a>
+<a href="index.html" aria-label="Start" title="Start"><span class="icon-book-open"></span></a>
+        <a aria-label="Up" href="audit-log.html" title="Up: MySQL Enterprise Audit"><span class="icon-chevron-up"></span></a>
+    <a href="audit-log-legacy-filtering.html" aria-label="Next"
+        title="Next: Legacy Mode Audit Log Filtering"><span
+        class="icon-chevron-right"></span></a>
+                            </div>
+        </div>
+                    
+<div id="docs-sidebar-search-container">
+    <div id="docs-sidebar-search-box">
+        <form method="get" action="https://dev.mysql.com/doc/search/">
+            <input type="hidden" name="d" id="d" value="12" />
+            <input type="hidden" name="p" id="p" value="1" />
+            <input type="text" name="q" id="q" title="Search this Manual"
+                value="Search this Manual"
+                style="color: #bbb;"
+                onfocus="if(this.value == 'Search this Manual') {this.value='';this.style.color='#555';}"
+                onblur="if(this.value == '') {this.value='Search this Manual';this.style.color='#bbb';}" />
+
+            <button class="docs-sidebar-search-btn" aria-label="Search" title="Search" type="submit">
+                <span class="icon-search"></span>
+            </button>
+        </form>
+    </div>
+</div>
+                <div class="docs-sidebar-nav">
+            <a class="docs-icon-home" href="https://dev.mysql.com/doc/"><span class="icon-home"></span>Documentation Home</a><hr />
+            <div class="docs-sidebar-mtitle">MySQL 5.7 Reference Manual</div>
+            <nav class="doctoc" id="doc-12">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="preface.html">Preface and Legal Notices</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="audit-log-filter-definitions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="introduction.html">General Information</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="audit-log-filter-definitions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="installing.html">Installing and Upgrading MySQL</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="audit-log-filter-definitions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="tutorial.html">Tutorial</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="audit-log-filter-definitions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="programs.html">MySQL Programs</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="audit-log-filter-definitions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="server-administration.html">MySQL Server Administration</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="audit-log-filter-definitions.html?ff=nopfpls"><span class="icon-chevron-down"></span></a></div><div class="docs-sidebar-nav-link"><a href="security.html">Security</a></div></div>                        <div class="docs-submenu">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="audit-log-filter-definitions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="general-security-issues.html">General Security Issues</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="security-guidelines.html">Security Guidelines</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="audit-log-filter-definitions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="password-security.html">Keeping Passwords Secure</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="password-security-user.html">End-User Guidelines for Password Security</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="password-security-admin.html">Administrator Guidelines for Password Security</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="password-logging.html">Passwords and Logging</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="password-hashing.html">Password Hashing in MySQL</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="security-against-attack.html">Making MySQL Secure Against Attackers</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="security-options.html">Security-Related mysqld Options and Variables</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="changing-mysql-user.html">How to Run MySQL as a Normal User</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="load-data-local-security.html">Security Considerations for LOAD DATA LOCAL</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="secure-client-programming.html">Client Programming Security Guidelines</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="audit-log-filter-definitions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="access-control.html">Access Control and Account Management</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="user-names.html">Account User Names and Passwords</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="privileges-provided.html">Privileges Provided by MySQL</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="grant-tables.html">Grant Tables</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="account-names.html">Specifying Account Names</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="connection-access.html">Access Control, Stage 1: Connection Verification</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="request-access.html">Access Control, Stage 2: Request Verification</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="creating-accounts.html">Adding Accounts, Assigning Privileges, and Dropping Accounts</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="reserved-accounts.html">Reserved Accounts</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="privilege-changes.html">When Privilege Changes Take Effect</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="assigning-passwords.html">Assigning Account Passwords</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="password-management.html">Password Management</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="expired-password-handling.html">Server Handling of Expired Passwords</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="pluggable-authentication.html">Pluggable Authentication</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="proxy-users.html">Proxy Users</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="account-locking.html">Account Locking</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="user-resources.html">Setting Account Resource Limits</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="problems-connecting.html">Troubleshooting Problems Connecting to MySQL</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="account-activity-auditing.html">SQL-Based Account Activity Auditing</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="audit-log-filter-definitions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="encrypted-connections.html">Using Encrypted Connections</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="using-encrypted-connections.html">Configuring MySQL to Use Encrypted Connections</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="encrypted-connection-protocols-ciphers.html">Encrypted Connection TLS Protocols and Ciphers</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="audit-log-filter-definitions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="creating-ssl-rsa-files.html">Creating SSL and RSA Certificates and Keys</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="creating-ssl-rsa-files-using-mysql.html">Creating SSL and RSA Certificates and Keys using MySQL</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="creating-ssl-files-using-openssl.html">Creating SSL Certificates and Keys Using openssl</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="creating-rsa-files-using-openssl.html">Creating RSA Keys Using openssl</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="ssl-libraries.html">SSL Library-Dependent Capabilities</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="windows-and-ssh.html">Connecting to MySQL Remotely from Windows with SSH</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="audit-log-filter-definitions.html?ff=nopfpls"><span class="icon-chevron-down"></span></a></div><div class="docs-sidebar-nav-link"><a href="security-plugins.html">Security Plugins</a></div></div>                        <div class="docs-submenu">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="audit-log-filter-definitions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="authentication-plugins.html">Authentication Plugins</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="native-pluggable-authentication.html">Native Pluggable Authentication</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="old-native-pluggable-authentication.html">Old Native Pluggable Authentication</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="account-upgrades.html">Migrating Away from Pre-4.1 Password Hashing and the mysql_old_password
+Plugin</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="caching-sha2-pluggable-authentication.html">Caching SHA-2 Pluggable Authentication</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="sha256-pluggable-authentication.html">SHA-256 Pluggable Authentication</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="cleartext-pluggable-authentication.html">Client-Side Cleartext Pluggable Authentication</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="pam-pluggable-authentication.html">PAM Pluggable Authentication</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="windows-pluggable-authentication.html">Windows Pluggable Authentication</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="ldap-pluggable-authentication.html">LDAP Pluggable Authentication</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="no-login-pluggable-authentication.html">No-Login Pluggable Authentication</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="socket-pluggable-authentication.html">Socket Peer-Credential Pluggable Authentication</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="test-pluggable-authentication.html">Test Pluggable Authentication</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="pluggable-authentication-system-variables.html">Pluggable Authentication System Variables</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="audit-log-filter-definitions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="connection-control.html">The Connection-Control Plugins</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="connection-control-installation.html">Connection-Control Plugin Installation</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="connection-control-variables.html">Connection-Control System and Status Variables</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="audit-log-filter-definitions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="validate-password.html">The Password Validation Plugin</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="validate-password-installation.html">Password Validation Plugin Installation</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="validate-password-options-variables.html">Password Validation Plugin Options and Variables</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="audit-log-filter-definitions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="keyring.html">The MySQL Keyring</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="keyring-installation.html">Keyring Plugin Installation</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="keyring-file-plugin.html">Using the keyring_file File-Based Plugin</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="keyring-encrypted-file-plugin.html">Using the keyring_encrypted_file Keyring Plugin</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="keyring-okv-plugin.html">Using the keyring_okv KMIP Plugin</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="keyring-aws-plugin.html">Using the keyring_aws Amazon Web Services Keyring Plugin</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="keyring-key-types.html">Supported Keyring Key Types and Lengths</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="keyring-key-migration.html">Migrating Keys Between Keyring Keystores</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="keyring-udfs-general-purpose.html">General-Purpose Keyring Key-Management Functions</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="keyring-udfs-plugin-specific.html">Plugin-Specific Keyring Key-Management Functions</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="keyring-options.html">Keyring Command Options</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="keyring-system-variables.html">Keyring System Variables</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="audit-log-filter-definitions.html?ff=nopfpls"><span class="icon-chevron-down"></span></a></div><div class="docs-sidebar-nav-link"><a href="audit-log.html">MySQL Enterprise Audit</a></div></div>                        <div class="docs-submenu">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="audit-log-elements.html">Elements of MySQL Enterprise Audit</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="audit-log-installation.html">Installing or Uninstalling MySQL Enterprise Audit</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="audit-log-security.html">MySQL Enterprise Audit Security Considerations</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="audit-log-file-formats.html">Audit Log File Formats</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="audit-log-logging-configuration.html">Configuring Audit Logging Characteristics</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="audit-log-file-reading.html">Reading Audit Log Files</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="audit-log-filtering.html">Audit Log Filtering</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link current"><a href="audit-log-filter-definitions.html">Writing Audit Log Filter Definitions</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="audit-log-legacy-filtering.html">Legacy Mode Audit Log Filtering</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="audit-log-reference.html">Audit Log Reference</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="audit-log-restrictions.html">Audit Log Restrictions</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="audit-log-filter-definitions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="firewall.html">MySQL Enterprise Firewall</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="firewall-elements.html">Elements of MySQL Enterprise Firewall</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="firewall-installation.html">Installing or Uninstalling MySQL Enterprise Firewall</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="firewall-usage.html">Using MySQL Enterprise Firewall</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="firewall-reference.html">MySQL Enterprise Firewall Reference</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="audit-log-filter-definitions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="data-masking.html">MySQL Enterprise Data Masking and De-Identification</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="data-masking-elements.html">MySQL Enterprise Data Masking and De-Identification Elements</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="data-masking-installation.html">Installing or Uninstalling MySQL Enterprise Data Masking and De-Identification</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="data-masking-usage.html">Using MySQL Enterprise Data Masking and De-Identification</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="data-masking-function-reference.html">MySQL Enterprise Data Masking and De-Identification User-Defined Function Reference</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="data-masking-functions.html">MySQL Enterprise Data Masking and De-Identification User-Defined Function Descriptions</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="audit-log-filter-definitions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="enterprise-encryption.html">MySQL Enterprise Encryption</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="enterprise-encryption-installation.html">MySQL Enterprise Encryption Installation</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="enterprise-encryption-usage.html">MySQL Enterprise Encryption Usage and Examples</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="enterprise-encryption-function-reference.html">MySQL Enterprise Encryption User-Defined Function Reference</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="enterprise-encryption-functions.html">MySQL Enterprise Encryption User-Defined Function Descriptions</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="audit-log-filter-definitions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="selinux.html">SELinux</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="selinux-checking.html">Check if SELinux is Enabled</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="selinux-mode.html">Changing the SELinux Mode</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="selinux-policies.html">MySQL Server SELinux Policies</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="selinux-file-context.html">SELinux File Context</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="audit-log-filter-definitions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="selinux-context-tcp-port.html">SELinux TCP Port Context</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="selinux-context-mysqld-tcp-port.html">Setting the TCP Port Context for mysqld</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="selinux-context-mysql-feature-ports.html">Setting the TCP Port Context for MySQL Features</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="selinux-troubleshooting.html">Troubleshooting SELinux</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="audit-log-filter-definitions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="backup-and-recovery.html">Backup and Recovery</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="audit-log-filter-definitions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="optimization.html">Optimization</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="audit-log-filter-definitions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="language-structure.html">Language Structure</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="audit-log-filter-definitions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="charset.html">Character Sets, Collations, Unicode</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="audit-log-filter-definitions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="data-types.html">Data Types</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="audit-log-filter-definitions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="functions.html">Functions and Operators</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="audit-log-filter-definitions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="sql-statements.html">SQL Statements</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="audit-log-filter-definitions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="innodb-storage-engine.html">The InnoDB Storage Engine</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="audit-log-filter-definitions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="storage-engines.html">Alternative Storage Engines</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="audit-log-filter-definitions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="replication.html">Replication</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="audit-log-filter-definitions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="group-replication.html">Group Replication</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysql-shell-userguide.html">MySQL Shell</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="audit-log-filter-definitions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="document-store.html">Using MySQL as a Document Store</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysql-innodb-cluster-introduction.html">InnoDB Cluster</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="audit-log-filter-definitions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="mysql-cluster.html">MySQL NDB Cluster 7.5 and NDB Cluster 7.6</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="audit-log-filter-definitions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="partitioning.html">Partitioning</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="audit-log-filter-definitions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="stored-objects.html">Stored Objects</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="audit-log-filter-definitions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="information-schema.html">INFORMATION_SCHEMA Tables</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="audit-log-filter-definitions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="performance-schema.html">MySQL Performance Schema</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="audit-log-filter-definitions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="sys-schema.html">MySQL sys Schema</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="audit-log-filter-definitions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="connectors-apis.html">Connectors and APIs</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="audit-log-filter-definitions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="mysql-enterprise.html">MySQL Enterprise Edition</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="workbench.html">MySQL Workbench</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="audit-log-filter-definitions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="faqs.html">MySQL 5.7 Frequently Asked Questions</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="audit-log-filter-definitions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="error-handling.html">Error Messages and Common Problems</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="audit-log-filter-definitions.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="indexes.html">Indexes</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="glossary.html">MySQL Glossary</a></div></div>                    </li>
+        </ul>
+                            </nav>
+        </div>
+
+        
+<a class="docs-sidebar-section" href="audit-log-filter-definitions.html?ff=nopfpls"><span class="icon-related"></span>
+    <span class="text">Related Documentation</span></a>
+<div class="docs-sidebar-accordian open">
+    <div class="text">
+        <a href="https://dev.mysql.com/doc/relnotes/mysql/5.7/en/">MySQL 5.7 Release Notes</a><br />
+        </div>
+</div>
+
+    <a class="docs-sidebar-section" href="audit-log-filter-definitions.html?ff=nopfpls"><span class="icon-download-thin"></span>
+        <span class="text">
+            Download
+                            this Manual
+                    </span>
+    </a>
+    <div class="docs-sidebar-accordian open">
+        <div class="text">
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.pdf">PDF (US Ltr)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.a4.pdf">PDF (A4)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-ref-manual-5.7-en-pdf-1-20210225.noarch.rpm">PDF (RPM)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.html-chapter.tar.gz">HTML Download (TGZ)</a>
+            - 10.1Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.html-chapter.zip">HTML Download (Zip)</a>
+            - 10.2Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-ref-manual-5.7-en-html-chapter-1-20210225.noarch.rpm">HTML Download (RPM)</a>
+            - 8.9Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.man-gpl.tar.gz">Man Pages (TGZ)</a>
+            - 224.7Kb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.man-gpl.zip">Man Pages (Zip)</a>
+            - 332.6Kb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-5.7.info.gz">Info (Gzip)</a>
+            - 3.3Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-5.7.info.zip">Info (Zip)</a>
+            - 3.3Mb<br />
+                    </div>
+    </div>
+
+<a class="docs-sidebar-section" href="audit-log-filter-definitions.html?ff=nopfpls"><span class="icon-book"></span>
+    <span class="text">Excerpts from this Manual</span></a>
+<div class="docs-sidebar-accordian">
+    <div class="text">
+                <a href="https://dev.mysql.com/doc/mysql-backup-excerpt/5.7/en/">MySQL Backup and Recovery</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-g11n-excerpt/5.7/en/">MySQL Globalization</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-infoschema-excerpt/5.7/en/">MySQL Information Schema</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-installation-excerpt/5.7/en/">MySQL Installation Guide</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-linuxunix-excerpt/5.7/en/">MySQL and Linux/Unix</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-osx-excerpt/5.7/en/">MySQL and OS X</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-partitioning-excerpt/5.7/en/">MySQL Partitioning</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-perfschema-excerpt/5.7/en/">MySQL Performance Schema</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-replication-excerpt/5.7/en/">MySQL Replication</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-repo-excerpt/5.7/en/">Using the MySQL Yum Repository</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-reslimits-excerpt/5.7/en/">MySQL Restrictions and Limitations</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-security-excerpt/5.7/en/">Security in MySQL</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-solaris-excerpt/5.7/en/">MySQL and Solaris</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-sourcebuild-excerpt/5.7/en/">Building MySQL from Source</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-startstop-excerpt/5.7/en/">Starting and Stopping MySQL</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-tutorial-excerpt/5.7/en/">MySQL Tutorial</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-windows-excerpt/5.7/en/">MySQL and Windows</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-cluster-excerpt/5.7/en/">MySQL NDB Cluster 7.5</a><br />
+            </div>
+</div>
+
+        <br /><span id="wkr"><br /></span>
+    </div>
+    </div>
+
+    <div id="docs-main" class="has-toc">
+    <div id="docs-main-inner">
+
+                <div class="right" id="docs-version-nav">
+            <a href="audit-log-filter-definitions.html?ff=nopfpls" id="docs-version-nav-toggle">version 5.7
+            <span class="icon-chevron-down"></span></a>
+            <div id="docs-version-list">
+                                                        <a                         href="https://dev.mysql.com/doc/refman/8.0/en/audit-log-filter-definitions.html">
+                        8.0
+                                                &nbsp;current
+                                            </a><br />
+                                                                                                                <a                         class="tooltip-left"
+                        data-tooltip="The page you are viewing does not exist in version 5.6.
+                        This link will take you to the Table of Contents."
+                                                href="https://dev.mysql.com/doc/refman/5.6/en/">
+                        5.6
+                                            </a><br />
+                                                                        <div id="docs-version-nav-lang">
+                                                                                                                                                    <a                                     class="tooltip-left"
+                                    data-tooltip="The page you are viewing does not exist in version
+                                    5.6 (JA).
+                                    This link will take you to the Table of Contents."
+                                                                        href="https://dev.mysql.com/doc/refman/5.6/ja/">
+                                    5.6&nbsp;
+                                                                            Japanese
+                                                                    </a><br />
+                                                                                            </div>
+                            </div>
+        </div>
+        
+        <div id="docs-show-nav" class="left hidden" style="margin-right: 15px;">
+            <a class="docs-show-hide-nav" href="audit-log-filter-definitions.html?ff=nopfpls" aria-label="Show Sidebar"
+                title="Show Sidebar"><span class="icon-arrow-small-right"></span></a>
+        </div>
+
+                        <div id="docs-breadcrumbs">
+            <a href="index.html">MySQL 5.7 Reference Manual</a> &nbsp;/&nbsp;
+                            <span id="breadcrumbs-link"><a href="audit-log-filter-definitions.html?ff=nopfpls" id="show-breadcrumbs">...</a> &nbsp;/&nbsp;</span>
+                <span class="hidden" id="hidden-breadcrumbs">
+                                                        <a href="security.html">Security</a> &nbsp;/&nbsp;
+                                                            <a href="security-plugins.html">Security Plugins</a> &nbsp;/&nbsp;
+                                                            <a href="audit-log.html">MySQL Enterprise Audit</a> &nbsp;/&nbsp;
+                                                                                        </span>
+                                        Writing Audit Log Filter Definitions
+                                    </div>
+        
+        <div id="docs-body">
+        
+<div class="section">
+<div class="titlepage">
+<div>
+<div>
+<h4 class="title"><a name="audit-log-filter-definitions"></a>6.4.5.8 Writing Audit Log Filter Definitions</h4>
+
+</div>
+
+</div>
+
+</div>
+<p>
+        Filter definitions are <a class="link" href="json.html" title="11.5 The JSON Data Type"><code class="literal">JSON</code></a>
+        values. For information about using
+        <a class="link" href="json.html" title="11.5 The JSON Data Type"><code class="literal">JSON</code></a> data in MySQL, see
+        <a class="xref" href="json.html" title="11.5 The JSON Data Type">Section 11.5, “The JSON Data Type”</a>.
+      </p><p>
+        Filter definitions have this form, where
+        <em class="replaceable"><code>actions</code></em> indicates how filtering takes
+        place:
+      </p><pre class="programlisting copytoclipboard line-numbers language-json one-line"><code class="language-json">{ "filter": <em class="replaceable">actions</em> }</code></pre><p>
+        The following discussion describes permitted constructs in
+        filter definitions.
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><a class="xref" href="audit-log-filter-definitions.html#audit-log-filtering-enabling-logging" title="Logging All Events">Logging All Events</a></p></li><li class="listitem"><p><a class="xref" href="audit-log-filter-definitions.html#audit-log-filtering-class-logging" title="Logging Specific Event Classes">Logging Specific Event Classes</a></p></li><li class="listitem"><p><a class="xref" href="audit-log-filter-definitions.html#audit-log-filtering-subclass-logging" title="Logging Specific Event Subclasses">Logging Specific Event Subclasses</a></p></li><li class="listitem"><p><a class="xref" href="audit-log-filter-definitions.html#audit-log-filtering-inclusive-exclusive" title="Inclusive and Exclusive Logging">Inclusive and Exclusive Logging</a></p></li><li class="listitem"><p><a class="xref" href="audit-log-filter-definitions.html#audit-log-filtering-event-fields" title="Testing Event Field Values">Testing Event Field Values</a></p></li><li class="listitem"><p><a class="xref" href="audit-log-filter-definitions.html#audit-log-filtering-blocking-events" title="Blocking Execution of Specific Events">Blocking Execution of Specific Events</a></p></li><li class="listitem"><p><a class="xref" href="audit-log-filter-definitions.html#audit-log-filtering-logical-operators" title="Logical Operators">Logical Operators</a></p></li><li class="listitem"><p><a class="xref" href="audit-log-filter-definitions.html#audit-log-filtering-predefined-variables" title="Referencing Predefined Variables">Referencing Predefined Variables</a></p></li><li class="listitem"><p><a class="xref" href="audit-log-filter-definitions.html#audit-log-filtering-predefined-functions" title="Referencing Predefined Functions">Referencing Predefined Functions</a></p></li><li class="listitem"><p><a class="xref" href="audit-log-filter-definitions.html#audit-log-filtering-filter-replacement" title="Replacing a User Filter">Replacing a User Filter</a></p></li></ul>
+</div>
+
+<div class="simplesect">
+
+<div class="titlepage">
+<div>
+
+<div class="simple">
+<h5 class="title"><a name="audit-log-filtering-enabling-logging"></a>Logging All Events</h5>
+
+</div>
+
+</div>
+
+</div>
+<p>
+          To explicitly enable or disable logging of all events, use a
+          <code class="literal">log</code> element in the filter:
+        </p><pre class="programlisting copytoclipboard line-numbers language-json"><code class="language-json">{
+  "filter": { "log": true }
+}</code></pre><p>
+          The <code class="literal">log</code> value can be either
+          <code class="literal">true</code> or <code class="literal">false</code>.
+        </p><p>
+          The preceding filter enables logging of all events. It is
+          equivalent to:
+        </p><pre class="programlisting copytoclipboard line-numbers language-json"><code class="language-json">{
+  "filter": { }
+}</code></pre><p>
+          Logging behavior depends on the <code class="literal">log</code> value
+          and whether <code class="literal">class</code> or
+          <code class="literal">event</code> items are specified:
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+              With <code class="literal">log</code> specified, its given value is
+              used.
+            </p></li><li class="listitem"><p>
+              Without <code class="literal">log</code> specified, logging is
+              <code class="literal">true</code> if no <code class="literal">class</code> or
+              <code class="literal">event</code> item is specified, and
+              <code class="literal">false</code> otherwise (in which case,
+              <code class="literal">class</code> or <code class="literal">event</code> can
+              include their own <code class="literal">log</code> item).
+</p></li></ul>
+</div>
+
+</div>
+<div class="simplesect">
+<div class="titlepage">
+<div>
+<div class="simple">
+<h5 class="title"><a name="audit-log-filtering-class-logging"></a>Logging Specific Event Classes</h5>
+
+</div>
+
+</div>
+
+</div>
+<p>
+          To log events of a specific class, use a
+          <code class="literal">class</code> element in the filter, with its
+          <code class="literal">name</code> field denoting the name of the class
+          to log:
+        </p><pre class="programlisting copytoclipboard line-numbers language-json"><code class="language-json">{
+  "filter": {
+    "class": { "name": "connection" }
+  }
+}</code></pre><p>
+          The <code class="literal">name</code> value can be
+          <code class="literal">connection</code>, <code class="literal">general</code>, or
+          <code class="literal">table_access</code> to log connection, general, or
+          table-access events, respectively.
+        </p><p>
+          The preceding filter enables logging of events in the
+          <code class="literal">connection</code> class. It is equivalent to the
+          following filter with <code class="literal">log</code> items made
+          explicit:
+        </p><pre class="programlisting copytoclipboard line-numbers language-json"><code class="language-json">{
+  "filter": {
+    "log": false,
+    "class": { "log": true,
+               "name": "connection" }
+  }
+}</code></pre><p>
+          To enable logging of multiple classes, define the
+          <code class="literal">class</code> value as a
+          <a class="link" href="json.html" title="11.5 The JSON Data Type"><code class="literal">JSON</code></a> array element that names
+          the classes:
+        </p><pre class="programlisting copytoclipboard line-numbers language-json"><code class="language-json">{
+  "filter": {
+    "class": [
+      { "name": "connection" },
+      { "name": "general" },
+      { "name": "table_access" }
+    ]
+  }
+}</code></pre>
+<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+
+<div class="admon-title">
+Note
+</div>
+<p>
+            When multiple instances of a given item appear at the same
+            level within a filter definition, the item values can be
+            combined into a single instance of that item within an array
+            value. The preceding definition can be written like this:
+          </p><pre class="programlisting copytoclipboard line-numbers language-json"><code class="language-json">{
+  "filter": {
+    "class": [
+      { "name": [ "connection", "general", "table_access" ] }
+    ]
+  }
+}</code></pre>
+</div>
+
+</div>
+<div class="simplesect">
+<div class="titlepage">
+<div>
+<div class="simple">
+<h5 class="title"><a name="audit-log-filtering-subclass-logging"></a>Logging Specific Event Subclasses</h5>
+
+</div>
+
+</div>
+
+</div>
+<p>
+          To select specific event subclasses, use an
+          <code class="literal">event</code> item containing a
+          <code class="literal">name</code> item that names the subclasses. The
+          default action for events selected by an
+          <code class="literal">event</code> item is to log them. For example,
+          this filter enables logging for the named event subclasses:
+        </p><pre class="programlisting copytoclipboard line-numbers language-json"><code class="language-json">{
+  "filter": {
+    "class": [
+      {
+        "name": "connection",
+        "event": [
+          { "name": "connect" },
+          { "name": "disconnect" }
+        ]
+      },
+      { "name": "general" },
+      {
+        "name": "table_access",
+        "event": [
+          { "name": "insert" },
+          { "name": "delete" },
+          { "name": "update" }
+        ]
+      }
+    ]
+  }
+}</code></pre><p>
+          The <code class="literal">event</code> item can also contain explicit
+          <code class="literal">log</code> items to indicate whether to log
+          qualifying events. This <code class="literal">event</code> item selects
+          multiple events and explicitly indicates logging behavior for
+          them:
+        </p><pre class="programlisting copytoclipboard line-numbers language-json"><code class="language-json">"event": [
+  { "name": "read", "log": false },
+  { "name": "insert", "log": true },
+  { "name": "delete", "log": true },
+  { "name": "update", "log": true }
+]</code></pre><p>
+          As of MySQL 5.7.20, the <code class="literal">event</code> item can also
+          indicate whether to block qualifying events, if it contains an
+          <code class="literal">abort</code> item. For details, see
+          <a class="xref" href="audit-log-filter-definitions.html#audit-log-filtering-blocking-events" title="Blocking Execution of Specific Events">Blocking Execution of Specific Events</a>.
+        </p><p>
+          <a class="xref" href="audit-log-filter-definitions.html#audit-log-event-subclass-combinations" title="Table 6.26 Event Class and Subclass Combinations">Table 6.26, “Event Class and Subclass Combinations”</a>
+          describes the permitted subclass values for each event class.
+</p>
+<div class="table">
+<a name="audit-log-event-subclass-combinations"></a><p class="title"><b>Table 6.26 Event Class and Subclass Combinations</b></p>
+<div class="table-contents">
+<table summary="Permitted combiniations of event class and subclass values."><col width="20%"><col width="20%"><col width="60%"><thead><tr>
+              <th scope="col">Event Class</th>
+              <th scope="col">Event Subclass</th>
+              <th scope="col">Description</th>
+            </tr></thead><tbody><tr>
+              <th scope="row"><code class="literal">connection</code></th>
+              <td><code class="literal">connect</code></td>
+              <td>Connection initiation (successful or unsuccessful)</td>
+            </tr><tr>
+              <th scope="row"><code class="literal">connection</code></th>
+              <td><code class="literal">change_user</code></td>
+              <td>User re-authentication with different user/password during session</td>
+            </tr><tr>
+              <th scope="row"><code class="literal">connection</code></th>
+              <td><code class="literal">disconnect</code></td>
+              <td>Connection termination</td>
+            </tr><tr>
+              <th scope="row"><code class="literal">general</code></th>
+              <td><code class="literal">status</code></td>
+              <td>General operation information</td>
+            </tr><tr>
+              <th scope="row"><code class="literal">table_access</code></th>
+              <td><code class="literal">read</code></td>
+              <td>Table read statements, such as <a class="link" href="select.html" title="13.2.9 SELECT Statement"><code class="literal">SELECT</code></a> or
+                <a class="link" href="insert-select.html" title="13.2.5.1 INSERT ... SELECT Statement"><code class="literal">INSERT
+                INTO ... SELECT</code></a></td>
+            </tr><tr>
+              <th scope="row"><code class="literal">table_access</code></th>
+              <td><code class="literal">delete</code></td>
+              <td>Table delete statements, such as <a class="link" href="delete.html" title="13.2.2 DELETE Statement"><code class="literal">DELETE</code></a>
+                or <a class="link" href="truncate-table.html" title="13.1.34 TRUNCATE TABLE Statement"><code class="literal">TRUNCATE TABLE</code></a></td>
+            </tr><tr>
+              <th scope="row"><code class="literal">table_access</code></th>
+              <td><code class="literal">insert</code></td>
+              <td>Table insert statements, such as <a class="link" href="insert.html" title="13.2.5 INSERT Statement"><code class="literal">INSERT</code></a>
+                or <a class="link" href="replace.html" title="13.2.8 REPLACE Statement"><code class="literal">REPLACE</code></a></td>
+            </tr><tr>
+              <th scope="row"><code class="literal">table_access</code></th>
+              <td><code class="literal">update</code></td>
+              <td>Table update statements, such as <a class="link" href="update.html" title="13.2.11 UPDATE Statement"><code class="literal">UPDATE</code></a></td>
+</tr></tbody></table>
+</div>
+
+</div>
+<br class="table-break"><p>
+          <a class="xref" href="audit-log-filter-definitions.html#audit-log-event-subclass-log-abort" title="Table 6.27 Log and Abort Characteristics Per Event Class and Subclass Combination">Table 6.27, “Log and Abort Characteristics Per Event Class and Subclass Combination”</a> describes
+          for each event subclass whether it can be logged or aborted.
+</p>
+<div class="table">
+<a name="audit-log-event-subclass-log-abort"></a><p class="title"><b>Table 6.27 Log and Abort Characteristics Per Event Class and Subclass Combination</b></p>
+<div class="table-contents">
+<table summary="Log and abort characteristics for event class and subclass combinations."><col width="20%"><col width="20%"><col width="30%"><col width="30%"><thead><tr>
+              <th scope="col">Event Class</th>
+              <th scope="col">Event Subclass</th>
+              <th scope="col">Can be Logged</th>
+              <th scope="col">Can be Aborted</th>
+            </tr></thead><tbody><tr>
+              <th scope="row"><code class="literal">connection</code></th>
+              <td><code class="literal">connect</code></td>
+              <td>Yes</td>
+              <td>No</td>
+            </tr><tr>
+              <th scope="row"><code class="literal">connection</code></th>
+              <td><code class="literal">change_user</code></td>
+              <td>Yes</td>
+              <td>No</td>
+            </tr><tr>
+              <th scope="row"><code class="literal">connection</code></th>
+              <td><code class="literal">disconnect</code></td>
+              <td>Yes</td>
+              <td>No</td>
+            </tr><tr>
+              <th scope="row"><code class="literal">general</code></th>
+              <td><code class="literal">status</code></td>
+              <td>Yes</td>
+              <td>No</td>
+            </tr><tr>
+              <th scope="row"><code class="literal">table_access</code></th>
+              <td><code class="literal">read</code></td>
+              <td>Yes</td>
+              <td>Yes</td>
+            </tr><tr>
+              <th scope="row"><code class="literal">table_access</code></th>
+              <td><code class="literal">delete</code></td>
+              <td>Yes</td>
+              <td>Yes</td>
+            </tr><tr>
+              <th scope="row"><code class="literal">table_access</code></th>
+              <td><code class="literal">insert</code></td>
+              <td>Yes</td>
+              <td>Yes</td>
+            </tr><tr>
+              <th scope="row"><code class="literal">table_access</code></th>
+              <td><code class="literal">update</code></td>
+              <td>Yes</td>
+              <td>Yes</td>
+</tr></tbody></table>
+</div>
+
+</div>
+<br class="table-break">
+</div>
+<div class="simplesect">
+<div class="titlepage">
+<div>
+<div class="simple">
+<h5 class="title"><a name="audit-log-filtering-inclusive-exclusive"></a>Inclusive and Exclusive Logging</h5>
+
+</div>
+
+</div>
+
+</div>
+<p>
+          A filter can be defined in inclusive or exclusive mode:
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+              Inclusive mode logs only explicitly specified items.
+            </p></li><li class="listitem"><p>
+              Exclusive mode logs everything but explicitly specified
+              items.
+</p></li></ul>
+</div>
+<p>
+          To perform inclusive logging, disable logging globally and
+          enable logging for specific classes. This filter logs
+          <code class="literal">connect</code> and <code class="literal">disconnect</code>
+          events in the <code class="literal">connection</code> class, and events
+          in the <code class="literal">general</code> class:
+        </p><pre class="programlisting copytoclipboard line-numbers language-json"><code class="language-json">{
+  "filter": {
+    "log": false,
+    "class": [
+      {
+        "name": "connection",
+        "event": [
+          { "name": "connect", "log": true },
+          { "name": "disconnect", "log": true }
+        ]
+      },
+      { "name": "general", "log": true }
+    ]
+  }
+}</code></pre><p>
+          To perform exclusive logging, enable logging globally and
+          disable logging for specific classes. This filter logs
+          everything except events in the <code class="literal">general</code>
+          class:
+        </p><pre class="programlisting copytoclipboard line-numbers language-json"><code class="language-json">{
+  "filter": {
+    "log": true,
+    "class":
+      { "name": "general", "log": false }
+  }
+}</code></pre><p>
+          This filter logs <code class="literal">change_user</code> events in the
+          <code class="literal">connection</code> class, and
+          <code class="literal">table_access</code> events, by virtue of
+          <span class="emphasis"><em>not</em></span> logging everything else:
+        </p><pre class="programlisting copytoclipboard line-numbers language-json"><code class="language-json">{
+  "filter": {
+    "log": true,
+    "class": [
+      {
+        "name": "connection",
+        "event": [
+          { "name": "connect", "log": false },
+          { "name": "disconnect", "log": false }
+        ]
+      },
+      { "name": "general", "log": false }
+    ]
+  }
+}</code></pre>
+</div>
+<div class="simplesect">
+<div class="titlepage">
+<div>
+<div class="simple">
+<h5 class="title"><a name="audit-log-filtering-event-fields"></a>Testing Event Field Values</h5>
+
+</div>
+
+</div>
+
+</div>
+<p>
+          To enable logging based on specific event field values,
+          specify a <code class="literal">field</code> item within the
+          <code class="literal">log</code> item that indicates the field name and
+          its expected value:
+        </p><pre class="programlisting copytoclipboard line-numbers language-json"><code class="language-json">{
+  "filter": {
+    "class": {
+    "name": "general",
+      "event": {
+        "name": "status",
+        "log": {
+          "field": { "name": "general_command.str", "value": "Query" }
+        }
+      }
+    }
+  }
+}</code></pre><p>
+          Each event contains event class-specific fields that can be
+          accessed from within a filter to perform custom filtering.
+        </p><p>
+          A connection event indicates when a connection-related
+          activity occurs during a session, such as a user connecting to
+          or disconnecting from the server.
+          <a class="xref" href="audit-log-filter-definitions.html#audit-log-connection-event-fields" title="Table 6.28 Connection Event Fields">Table 6.28, “Connection Event Fields”</a> indicates
+          the permitted fields for connection events.
+</p>
+<div class="table">
+<a name="audit-log-connection-event-fields"></a><p class="title"><b>Table 6.28 Connection Event Fields</b></p>
+<div class="table-contents">
+<table summary="Permitted fields for connection events."><col width="35%"><col width="20%"><col width="45%"><thead><tr>
+              <th scope="col">Field Name</th>
+              <th scope="col">Field Type</th>
+              <th scope="col">Description</th>
+            </tr></thead><tbody><tr>
+              <th scope="row"><code class="literal">status</code></th>
+              <td>integer</td>
+              <td><p class="valid-value">
+                  Event status:
+                </p><p class="valid-value">
+                  0: OK
+                </p><p class="valid-value">
+                  Otherwise: Failed
+                </p></td>
+            </tr><tr>
+              <th scope="row"><code class="literal">connection_id</code></th>
+              <td>unsigned integer</td>
+              <td>Connection ID</td>
+            </tr><tr>
+              <th scope="row"><code class="literal">user.str</code></th>
+              <td>string</td>
+              <td>User name specified during authentication</td>
+            </tr><tr>
+              <th scope="row"><code class="literal">user.length</code></th>
+              <td>unsigned integer</td>
+              <td>User name length</td>
+            </tr><tr>
+              <th scope="row"><code class="literal">priv_user.str</code></th>
+              <td>string</td>
+              <td>Authenticated user name (account user name)</td>
+            </tr><tr>
+              <th scope="row"><code class="literal">priv_user.length</code></th>
+              <td>unsigned integer</td>
+              <td>Authenticated user name length</td>
+            </tr><tr>
+              <th scope="row"><code class="literal">external_user.str</code></th>
+              <td>string</td>
+              <td>External user name (provided by third-party authentication plugin)</td>
+            </tr><tr>
+              <th scope="row"><code class="literal">external_user.length</code></th>
+              <td>unsigned integer</td>
+              <td>External user name length</td>
+            </tr><tr>
+              <th scope="row"><code class="literal">proxy_user.str</code></th>
+              <td>string</td>
+              <td>Proxy user name</td>
+            </tr><tr>
+              <th scope="row"><code class="literal">proxy_user.length</code></th>
+              <td>unsigned integer</td>
+              <td>Proxy user name length</td>
+            </tr><tr>
+              <th scope="row"><code class="literal">host.str</code></th>
+              <td>string</td>
+              <td>Connected user host</td>
+            </tr><tr>
+              <th scope="row"><code class="literal">host.length</code></th>
+              <td>unsigned integer</td>
+              <td>Connected user host length</td>
+            </tr><tr>
+              <th scope="row"><code class="literal">ip.str</code></th>
+              <td>string</td>
+              <td>Connected user IP address</td>
+            </tr><tr>
+              <th scope="row"><code class="literal">ip.length</code></th>
+              <td>unsigned integer</td>
+              <td>Connected user IP address length</td>
+            </tr><tr>
+              <th scope="row"><code class="literal">database.str</code></th>
+              <td>string</td>
+              <td>Database name specified at connect time</td>
+            </tr><tr>
+              <th scope="row"><code class="literal">database.length</code></th>
+              <td>unsigned integer</td>
+              <td>Database name length</td>
+            </tr><tr>
+              <th scope="row"><code class="literal">connection_type</code></th>
+              <td>integer</td>
+              <td><p class="valid-value">
+                  Connection type:
+                </p><p class="valid-value">
+                  or <code class="literal">"::undefined"</code>: Undefined
+                </p><p class="valid-value">
+                  or <code class="literal">"::tcp/ip"</code>: TCP/IP
+                </p><p class="valid-value">
+                  or <code class="literal">"::socket"</code>: Socket
+                </p><p class="valid-value">
+                  or <code class="literal">"::named_pipe"</code>: Named pipe
+                </p><p class="valid-value">
+                  or <code class="literal">"::ssl"</code>: TCP/IP with encryption
+                </p><p class="valid-value">
+                  or <code class="literal">"::shared_memory"</code>: Shared memory
+                </p></td>
+</tr></tbody></table>
+</div>
+
+</div>
+<br class="table-break"><p>
+          The <code class="literal">"::<em class="replaceable"><code>xxx</code></em>"</code>
+          values are symbolic pseudo-constants that may be given instead
+          of the literal numeric values. They must be quoted as strings
+          and are case-sensitive.
+        </p><p>
+          A general event indicates the status code of an operation and
+          its details. <a class="xref" href="audit-log-filter-definitions.html#audit-log-general-event-fields" title="Table 6.29 General Event Fields">Table 6.29, “General Event Fields”</a>
+          indicates the permitted fields for general events.
+</p>
+<div class="table">
+<a name="audit-log-general-event-fields"></a><p class="title"><b>Table 6.29 General Event Fields</b></p>
+<div class="table-contents">
+<table summary="Permitted field types for general events."><col width="35%"><col width="20%"><col width="45%"><thead><tr>
+              <th scope="col">Field Name</th>
+              <th scope="col">Field Type</th>
+              <th scope="col">Description</th>
+            </tr></thead><tbody><tr>
+              <th scope="row"><code class="literal">general_error_code</code></th>
+              <td>integer</td>
+              <td><p class="valid-value">
+                  Event status:
+                </p><p class="valid-value">
+                  0: OK
+                </p><p class="valid-value">
+                  Otherwise: Failed
+                </p></td>
+            </tr><tr>
+              <th scope="row"><code class="literal">general_thread_id</code></th>
+              <td>unsigned integer</td>
+              <td>Connection/thread ID</td>
+            </tr><tr>
+              <th scope="row"><code class="literal">general_user.str</code></th>
+              <td>string</td>
+              <td>User name specified during authentication</td>
+            </tr><tr>
+              <th scope="row"><code class="literal">general_user.length</code></th>
+              <td>unsigned integer</td>
+              <td>User name length</td>
+            </tr><tr>
+              <th scope="row"><code class="literal">general_command.str</code></th>
+              <td>string</td>
+              <td>Command name</td>
+            </tr><tr>
+              <th scope="row"><code class="literal">general_command.length</code></th>
+              <td>unsigned integer</td>
+              <td>Command name length</td>
+            </tr><tr>
+              <th scope="row"><code class="literal">general_query.str</code></th>
+              <td>string</td>
+              <td>SQL statement text</td>
+            </tr><tr>
+              <th scope="row"><code class="literal">general_query.length</code></th>
+              <td>unsigned integer</td>
+              <td>SQL statement text length</td>
+            </tr><tr>
+              <th scope="row"><code class="literal">general_host.str</code></th>
+              <td>string</td>
+              <td>Host name</td>
+            </tr><tr>
+              <th scope="row"><code class="literal">general_host.length</code></th>
+              <td>unsigned integer</td>
+              <td>Host name length</td>
+            </tr><tr>
+              <th scope="row"><code class="literal">general_sql_command.str</code></th>
+              <td>string</td>
+              <td>SQL command type name</td>
+            </tr><tr>
+              <th scope="row"><code class="literal">general_sql_command.length</code></th>
+              <td>unsigned integer</td>
+              <td>SQL command type name length</td>
+            </tr><tr>
+              <th scope="row"><code class="literal">general_external_user.str</code></th>
+              <td>string</td>
+              <td>External user name (provided by third-party authentication plugin)</td>
+            </tr><tr>
+              <th scope="row"><code class="literal">general_external_user.length</code></th>
+              <td>unsigned integer</td>
+              <td>External user name length</td>
+            </tr><tr>
+              <th scope="row"><code class="literal">general_ip.str</code></th>
+              <td>string</td>
+              <td>Connected user IP address</td>
+            </tr><tr>
+              <th scope="row"><code class="literal">general_ip.length</code></th>
+              <td>unsigned integer</td>
+              <td>Connection user IP address length</td>
+</tr></tbody></table>
+</div>
+
+</div>
+<br class="table-break"><p>
+          <code class="literal">general_command.str</code> indicates a command
+          name: <code class="literal">Query</code>, <code class="literal">Execute</code>,
+          <code class="literal">Quit</code>, or <code class="literal">Change user</code>.
+        </p><p>
+          A general event with the
+          <code class="literal">general_command.str</code> field set to
+          <code class="literal">Query</code> or <code class="literal">Execute</code>
+          contains <code class="literal">general_sql_command.str</code> set to a
+          value that specifies the type of SQL command:
+          <code class="literal">alter_db</code>,
+          <code class="literal">alter_db_upgrade</code>,
+          <code class="literal">admin_commands</code>, and so forth. These values
+          can be seen as the last components of the Performance Schema
+          instruments displayed by this statement:
+        </p><pre class="programlisting copytoclipboard line-numbers language-sql"><code class="language-sql">mysql&gt; SELECT NAME FROM performance_schema.setup_instruments
+       WHERE NAME LIKE 'statement/sql/%' ORDER BY NAME;
++---------------------------------------+
+| NAME                                  |
++---------------------------------------+
+| statement/sql/alter_db                |
+| statement/sql/alter_db_upgrade        |
+| statement/sql/alter_event             |
+| statement/sql/alter_function          |
+| statement/sql/alter_instance          |
+| statement/sql/alter_procedure         |
+| statement/sql/alter_server            |
+...</code></pre><p>
+          A table-access event provides information about specific table
+          accesses.
+          <a class="xref" href="audit-log-filter-definitions.html#audit-log-table-access-event-fields" title="Table 6.30 Table-Access Event Fields">Table 6.30, “Table-Access Event Fields”</a>
+          indicates the permitted fields for table-access events.
+</p>
+<div class="table">
+<a name="audit-log-table-access-event-fields"></a><p class="title"><b>Table 6.30 Table-Access Event Fields</b></p>
+<div class="table-contents">
+<table summary="Permitted fields for table-access events."><col width="35%"><col width="20%"><col width="45%"><thead><tr>
+              <th scope="col">Field Name</th>
+              <th scope="col">Field Type</th>
+              <th scope="col">Description</th>
+            </tr></thead><tbody><tr>
+              <th scope="row"><code class="literal">connection_id</code></th>
+              <td>unsigned integer</td>
+              <td>Event connection ID</td>
+            </tr><tr>
+              <th scope="row"><code class="literal">sql_command_id</code></th>
+              <td>integer</td>
+              <td>SQL command ID</td>
+            </tr><tr>
+              <th scope="row"><code class="literal">query.str</code></th>
+              <td>string</td>
+              <td>SQL statement text</td>
+            </tr><tr>
+              <th scope="row"><code class="literal">query.length</code></th>
+              <td>unsigned integer</td>
+              <td>SQL statement text length</td>
+            </tr><tr>
+              <th scope="row"><code class="literal">table_database.str</code></th>
+              <td>string</td>
+              <td>Database name associated with event</td>
+            </tr><tr>
+              <th scope="row"><code class="literal">table_database.length</code></th>
+              <td>unsigned integer</td>
+              <td>Database name length</td>
+            </tr><tr>
+              <th scope="row"><code class="literal">table_name.str</code></th>
+              <td>string</td>
+              <td>Table name associated with event</td>
+            </tr><tr>
+              <th scope="row"><code class="literal">table_name.length</code></th>
+              <td>unsigned integer</td>
+              <td>Table name length</td>
+</tr></tbody></table>
+</div>
+
+</div>
+<br class="table-break"><p>
+          The following list shows which statements produce which
+          table-access events:
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+              <code class="literal">read</code> event:
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p>
+                  <code class="literal">SELECT</code>
+                </p></li><li class="listitem"><p>
+                  <code class="literal">INSERT ... SELECT</code> (for tables
+                  referenced in <code class="literal">SELECT</code> clause)
+                </p></li><li class="listitem"><p>
+                  <code class="literal">REPLACE ... SELECT</code> (for tables
+                  referenced in <code class="literal">SELECT</code> clause)
+                </p></li><li class="listitem"><p>
+                  <code class="literal">UPDATE ... WHERE</code> (for tables
+                  referenced in <code class="literal">WHERE</code> clause)
+                </p></li><li class="listitem"><p>
+                  <code class="literal">HANDLER ... READ</code>
+</p></li></ul>
+</div>
+</li><li class="listitem"><p>
+              <code class="literal">delete</code> event:
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p>
+                  <code class="literal">DELETE</code>
+                </p></li><li class="listitem"><p>
+                  <code class="literal">TRUNCATE TABLE</code>
+</p></li></ul>
+</div>
+</li><li class="listitem"><p>
+              <code class="literal">insert</code> event:
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p>
+                  <code class="literal">INSERT</code>
+                </p></li><li class="listitem"><p>
+                  <code class="literal">INSERT ... SELECT</code> (for table
+                  referenced in <code class="literal">INSERT</code> clause)
+                </p></li><li class="listitem"><p>
+                  <code class="literal">REPLACE</code>
+                </p></li><li class="listitem"><p>
+                  <code class="literal">REPLACE ... SELECT</code> (for table
+                  referenced in <code class="literal">REPLACE</code> clause
+                </p></li><li class="listitem"><p>
+                  <code class="literal">LOAD DATA</code>
+                </p></li><li class="listitem"><p>
+                  <code class="literal">LOAD XML</code>
+</p></li></ul>
+</div>
+</li><li class="listitem"><p>
+              <code class="literal">update</code> event:
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p>
+                  <code class="literal">UPDATE</code>
+                </p></li><li class="listitem"><p>
+                  <code class="literal">UPDATE ... WHERE</code> (for tables
+                  referenced in <code class="literal">UPDATE</code> clause)
+</p></li></ul>
+</div>
+</li></ul>
+</div>
+
+</div>
+<div class="simplesect">
+<div class="titlepage">
+<div>
+<div class="simple">
+<h5 class="title"><a name="audit-log-filtering-blocking-events"></a>Blocking Execution of Specific Events</h5>
+
+</div>
+
+</div>
+
+</div>
+<p>
+          As of MySQL 5.7.20, <code class="literal">event</code> items can include
+          an <code class="literal">abort</code> item that indicates whether to
+          prevent qualifying events from executing. For example,
+          <code class="literal">abort</code> enables rules to be written that
+          block execution of specific SQL statements.
+        </p><p>
+          The <code class="literal">abort</code> item must appear within an
+          <code class="literal">event</code> item. For example:
+        </p><pre class="programlisting copytoclipboard line-numbers language-json"><code class="language-json">"event": {
+  "name": <em class="replaceable">qualifying event subclass names</em>
+  "abort": <em class="replaceable">condition</em>
+}</code></pre><p>
+          For event subclasses selected by the <code class="literal">name</code>
+          item, the <code class="literal">abort</code> action is true or false,
+          depending on <em class="replaceable"><code>condition</code></em> evaluation.
+          If the condition evaluates to true, the event is blocked.
+          Otherwise, the event continues executing.
+        </p><p>
+          The <em class="replaceable"><code>condition</code></em> specification can be
+          as simple as <code class="literal">true</code> or
+          <code class="literal">false</code>, or it can be more complex such that
+          evaluation depends on event characteristics.
+        </p><p>
+          This filter blocks <a class="link" href="insert.html" title="13.2.5 INSERT Statement"><code class="literal">INSERT</code></a>,
+          <a class="link" href="update.html" title="13.2.11 UPDATE Statement"><code class="literal">UPDATE</code></a>, and
+          <a class="link" href="delete.html" title="13.2.2 DELETE Statement"><code class="literal">DELETE</code></a> statements:
+        </p><pre class="programlisting copytoclipboard line-numbers language-json"><code class="language-json">{
+  "filter": {
+    "class": {
+      "name": "table_access",
+      "event": {
+        "name": [ "insert", "update", "delete" ],
+        "abort": true
+      }
+    }
+  }
+}</code></pre><p>
+          This more complex filter blocks the same statements, but only
+          for a specific table
+          (<code class="literal">finances.bank_account</code>):
+        </p><pre class="programlisting copytoclipboard line-numbers language-json"><code class="language-json">{
+  "filter": {
+    "class": {
+      "name": "table_access",
+      "event": {
+        "name": [ "insert", "update", "delete" ],
+        "abort": {
+          "and": [
+            { "field": { "name": "table_database.str", "value": "finances" } },
+            { "field": { "name": "table_name.str", "value": "bank_account" } }
+          ]
+        }
+      }
+    }
+  }
+}</code></pre><p>
+          Statements matched and blocked by the filter return an error
+          to the client:
+        </p><pre class="programlisting copytoclipboard line-numbers language-none one-line"><code class="language-none">ERROR 1045 (28000): Statement was aborted by an audit log filter</code></pre><p>
+          Not all events can be blocked (see
+          <a class="xref" href="audit-log-filter-definitions.html#audit-log-event-subclass-log-abort" title="Table 6.27 Log and Abort Characteristics Per Event Class and Subclass Combination">Table 6.27, “Log and Abort Characteristics Per Event Class and Subclass Combination”</a>). For an
+          event that cannot, the audit log writes a warning to the error
+          log rather than blocking it.
+        </p><p>
+          For attempts to define a filter in which the
+          <code class="literal">abort</code> item appears elsewhere than in an
+          <code class="literal">event</code> item, an error occurs.
+</p>
+</div>
+<div class="simplesect">
+<div class="titlepage">
+<div>
+<div class="simple">
+<h5 class="title"><a name="audit-log-filtering-logical-operators"></a>Logical Operators</h5>
+
+</div>
+
+</div>
+
+</div>
+<p>
+          Logical operators (<code class="literal">and</code>,
+          <code class="literal">or</code>, <code class="literal">not</code>) can be used in
+          <code class="literal">log</code> items. This permits construction of
+          more advanced filtering configurations:
+        </p><pre class="programlisting copytoclipboard line-numbers language-json"><code class="language-json">{
+  "filter": {
+    "class": {
+      "name": "general",
+      "event": {
+        "name": "status",
+        "log": {
+          "or": [
+            {
+              "and": [
+                { "field": { "name": "general_command.str",    "value": "Query" } },
+                { "field": { "name": "general_command.length", "value": 5 } }
+              ]
+            },
+            {
+              "and": [
+                { "field": { "name": "general_command.str",    "value": "Execute" } },
+                { "field": { "name": "general_command.length", "value": 7 } }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  }
+}</code></pre>
+</div>
+<div class="simplesect">
+<div class="titlepage">
+<div>
+<div class="simple">
+<h5 class="title"><a name="audit-log-filtering-predefined-variables"></a>Referencing Predefined Variables</h5>
+
+</div>
+
+</div>
+
+</div>
+<p>
+          To refer to a predefined variable in a <code class="literal">log</code>
+          condition, use a <code class="literal">variable</code> item, which tests
+          equality against a given value:
+        </p><pre class="programlisting copytoclipboard line-numbers language-json"><code class="language-json">{
+  "filter": {
+    "class": {
+      "name": "general",
+      "event": {
+        "name": "status",
+        "log": {
+          "variable": {
+            "name": "audit_log_connection_policy_value", "value": "::none"
+          }
+        }
+      }
+    }
+  }
+}</code></pre><p>
+          Each predefined variable corresponds to a system variable. By
+          writing a filter that tests a predefined variable, you can
+          modify filter operation by setting the corresponding system
+          variable, without having to redefine the filter. For example,
+          by writing a filter that tests the value of the
+          <code class="literal">audit_log_connection_policy_value</code>
+          predefined variable, you can modify filter operation by
+          changing the value of the
+          <a class="link" href="audit-log-reference.html#sysvar_audit_log_connection_policy"><code class="literal">audit_log_connection_policy</code></a>
+          system variable.
+        </p><a class="indexterm" name="idm44933568304848"></a><p>
+          The
+          <code class="literal">audit_log_<em class="replaceable"><code>xxx</code></em>_policy</code>
+          system variables are used for the legacy mode audit log (see
+          <a class="xref" href="audit-log-legacy-filtering.html" title="6.4.5.9 Legacy Mode Audit Log Filtering">Section 6.4.5.9, “Legacy Mode Audit Log Filtering”</a>). With rule-based
+          audit log filtering, those variables remain visible (for
+          example, using <a class="link" href="show-variables.html" title="13.7.5.39 SHOW VARIABLES Statement"><code class="literal">SHOW VARIABLES</code></a>),
+          but changes to them have no effect unless you write filters
+          containing constructs that refer to them.
+        </p><p>
+          The following list describes the permitted predefined
+          variables for <code class="literal">variable</code> items:
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+              <code class="literal">audit_log_connection_policy_value</code>
+            </p><p>
+              This variable corresponds to the value of the
+              <a class="link" href="audit-log-reference.html#sysvar_audit_log_connection_policy"><code class="literal">audit_log_connection_policy</code></a>
+              system variable. The value is an unsigned integer.
+              <a class="xref" href="audit-log-filter-definitions.html#audit-log-connection-policy-value-values" title="Table 6.31 audit_log_connection_policy_value Values">Table 6.31, “audit_log_connection_policy_value Values”</a>
+              shows the permitted values and the corresponding
+              <a class="link" href="audit-log-reference.html#sysvar_audit_log_connection_policy"><code class="literal">audit_log_connection_policy</code></a>
+              values.
+</p>
+<div class="table">
+<a name="audit-log-connection-policy-value-values"></a><p class="title"><b>Table 6.31 audit_log_connection_policy_value Values</b></p>
+<div class="table-contents">
+<table summary="Permitted audit_log_connection_policy_value values and the corresponding audit_log_connection_policy values."><col width="20%"><col width="80%"><thead><tr>
+                  <th>Value</th>
+                  <th>Corresponding audit_log_connection_policy Value</th>
+                </tr></thead><tbody><tr>
+                  <td><code class="literal">0</code> or <code class="literal">"::none"</code></td>
+                  <td><code class="literal">NONE</code></td>
+                </tr><tr>
+                  <td><code class="literal">1</code> or <code class="literal">"::errors"</code></td>
+                  <td><code class="literal">ERRORS</code></td>
+                </tr><tr>
+                  <td><code class="literal">2</code> or <code class="literal">"::all"</code></td>
+                  <td><code class="literal">ALL</code></td>
+</tr></tbody></table>
+</div>
+
+</div>
+<br class="table-break"><p>
+              The <code class="literal">"::<em class="replaceable"><code>xxx</code></em>"</code>
+              values are symbolic pseudo-constants that may be given
+              instead of the literal numeric values. They must be quoted
+              as strings and are case-sensitive.
+            </p></li><li class="listitem"><p>
+              <code class="literal">audit_log_policy_value</code>
+            </p><p>
+              This variable corresponds to the value of the
+              <a class="link" href="audit-log-reference.html#sysvar_audit_log_policy"><code class="literal">audit_log_policy</code></a> system
+              variable. The value is an unsigned integer.
+              <a class="xref" href="audit-log-filter-definitions.html#audit-log-policy-value-values" title="Table 6.32 audit_log_policy_value Values">Table 6.32, “audit_log_policy_value Values”</a> shows the
+              permitted values and the corresponding
+              <a class="link" href="audit-log-reference.html#sysvar_audit_log_policy"><code class="literal">audit_log_policy</code></a> values.
+</p>
+<div class="table">
+<a name="audit-log-policy-value-values"></a><p class="title"><b>Table 6.32 audit_log_policy_value Values</b></p>
+<div class="table-contents">
+<table summary="Permitted audit_log_policy_value values and the corresponding audit_log_policy values."><col width="20%"><col width="80%"><thead><tr>
+                  <th>Value</th>
+                  <th>Corresponding audit_log_policy Value</th>
+                </tr></thead><tbody><tr>
+                  <td><code class="literal">0</code> or <code class="literal">"::none"</code></td>
+                  <td><code class="literal">NONE</code></td>
+                </tr><tr>
+                  <td><code class="literal">1</code> or <code class="literal">"::logins"</code></td>
+                  <td><code class="literal">LOGINS</code></td>
+                </tr><tr>
+                  <td><code class="literal">2</code> or <code class="literal">"::all"</code></td>
+                  <td><code class="literal">ALL</code></td>
+                </tr><tr>
+                  <td><code class="literal">3</code> or <code class="literal">"::queries"</code></td>
+                  <td><code class="literal">QUERIES</code></td>
+</tr></tbody></table>
+</div>
+
+</div>
+<br class="table-break"><p>
+              The <code class="literal">"::<em class="replaceable"><code>xxx</code></em>"</code>
+              values are symbolic pseudo-constants that may be given
+              instead of the literal numeric values. They must be quoted
+              as strings and are case-sensitive.
+            </p></li><li class="listitem"><p>
+              <code class="literal">audit_log_statement_policy_value</code>
+            </p><p>
+              This variable corresponds to the value of the
+              <a class="link" href="audit-log-reference.html#sysvar_audit_log_statement_policy"><code class="literal">audit_log_statement_policy</code></a>
+              system variable. The value is an unsigned integer.
+              <a class="xref" href="audit-log-filter-definitions.html#audit-log-statement-policy-value-values" title="Table 6.33 audit_log_statement_policy_value Values">Table 6.33, “audit_log_statement_policy_value Values”</a>
+              shows the permitted values and the corresponding
+              <a class="link" href="audit-log-reference.html#sysvar_audit_log_statement_policy"><code class="literal">audit_log_statement_policy</code></a>
+              values.
+</p>
+<div class="table">
+<a name="audit-log-statement-policy-value-values"></a><p class="title"><b>Table 6.33 audit_log_statement_policy_value Values</b></p>
+<div class="table-contents">
+<table summary="Permitted audit_log_statement_policy_value values and the corresponding audit_log_statement_policy values."><col width="20%"><col width="80%"><thead><tr>
+                  <th>Value</th>
+                  <th>Corresponding audit_log_statement_policy Value</th>
+                </tr></thead><tbody><tr>
+                  <td><code class="literal">0</code> or <code class="literal">"::none"</code></td>
+                  <td><code class="literal">NONE</code></td>
+                </tr><tr>
+                  <td><code class="literal">1</code> or <code class="literal">"::errors"</code></td>
+                  <td><code class="literal">ERRORS</code></td>
+                </tr><tr>
+                  <td><code class="literal">2</code> or <code class="literal">"::all"</code></td>
+                  <td><code class="literal">ALL</code></td>
+</tr></tbody></table>
+</div>
+
+</div>
+<br class="table-break"><p>
+              The <code class="literal">"::<em class="replaceable"><code>xxx</code></em>"</code>
+              values are symbolic pseudo-constants that may be given
+              instead of the literal numeric values. They must be quoted
+              as strings and are case-sensitive.
+</p></li></ul>
+</div>
+
+</div>
+<div class="simplesect">
+<div class="titlepage">
+<div>
+<div class="simple">
+<h5 class="title"><a name="audit-log-filtering-predefined-functions"></a>Referencing Predefined Functions</h5>
+
+</div>
+
+</div>
+
+</div>
+<p>
+          To refer to a predefined function in a <code class="literal">log</code>
+          condition, use a <code class="literal">function</code> item, which takes
+          <code class="literal">name</code> and <code class="literal">args</code> values to
+          specify the function name and its arguments, respectively:
+        </p><pre class="programlisting copytoclipboard line-numbers language-json"><code class="language-json">{
+  "filter": {
+    "class": {
+      "name": "general",
+      "event": {
+        "name": "status",
+        "log": {
+          "function": {
+            "name": "find_in_include_list",
+            "args": [ { "string": [ { "field": "user.str" },
+                                    { "string": "@"},
+                                    { "field": "host.str" } ] } ]
+          }
+        }
+      }
+    }
+  }
+}</code></pre><p>
+          The function as specified in the <code class="literal">name</code> item
+          should be the function name only, without parentheses or the
+          argument list. Arguments in the <code class="literal">args</code> item,
+          if there is one, must be given in the order listed in the
+          function description. Arguments can refer to predefined
+          variables, event fields, or string or numeric constants.
+        </p><p>
+          The preceding filter determines whether to log
+          <code class="literal">general</code> class <code class="literal">status</code>
+          events depending on whether the current user is found in the
+          <a class="link" href="audit-log-reference.html#sysvar_audit_log_include_accounts"><code class="literal">audit_log_include_accounts</code></a>
+          system variable. That user is constructed using fields in the
+          event.
+        </p><p>
+          The following list describes the permitted predefined
+          functions for <code class="literal">function</code> items:
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+              <code class="literal">audit_log_exclude_accounts_is_null()</code>
+            </p><p>
+              Checks whether the
+              <a class="link" href="audit-log-reference.html#sysvar_audit_log_exclude_accounts"><code class="literal">audit_log_exclude_accounts</code></a>
+              system variable is <code class="literal">NULL</code>. This function
+              can be helpful when defining filters that correspond to
+              the legacy audit log implementation.
+            </p><p>
+              Arguments:
+            </p><p>
+              None.
+            </p></li><li class="listitem"><p>
+              <code class="literal">audit_log_include_accounts_is_null()</code>
+            </p><p>
+              Checks whether the
+              <a class="link" href="audit-log-reference.html#sysvar_audit_log_include_accounts"><code class="literal">audit_log_include_accounts</code></a>
+              system variable is <code class="literal">NULL</code>. This function
+              can be helpful when defining filters that correspond to
+              the legacy audit log implementation.
+            </p><p>
+              Arguments:
+            </p><p>
+              None.
+            </p></li><li class="listitem"><p>
+              <code class="literal">debug_sleep(millisec)</code>
+            </p><p>
+              Sleeps for the given number of milliseconds. This function
+              is used during performance measurement.
+            </p><p>
+              <code class="literal">debug_sleep()</code> is available for debug
+              builds only.
+            </p><p>
+              Arguments:
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p>
+                  <em class="replaceable"><code>millisec</code></em>: An unsigned
+                  integer that specifies the number of milliseconds to
+                  sleep.
+</p></li></ul>
+</div>
+</li><li class="listitem"><p>
+              <code class="literal">find_in_exclude_list(account)</code>
+            </p><p>
+              Checks whether an account string exists in the audit log
+              exclude list (the value of the
+              <a class="link" href="audit-log-reference.html#sysvar_audit_log_exclude_accounts"><code class="literal">audit_log_exclude_accounts</code></a>
+              system variable).
+            </p><p>
+              Arguments:
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p>
+                  <em class="replaceable"><code>account</code></em>: A string that
+                  specifies the user account name.
+</p></li></ul>
+</div>
+</li><li class="listitem"><p>
+              <code class="literal">find_in_include_list(account)</code>
+            </p><p>
+              Checks whether an account string exists in the audit log
+              include list (the value of the
+              <a class="link" href="audit-log-reference.html#sysvar_audit_log_include_accounts"><code class="literal">audit_log_include_accounts</code></a>
+              system variable).
+            </p><p>
+              Arguments:
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p>
+                  <em class="replaceable"><code>account</code></em>: A string that
+                  specifies the user account name.
+</p></li></ul>
+</div>
+</li><li class="listitem"><p>
+              <code class="literal">string_find(text, substr)</code>
+            </p><p>
+              Checks whether the <code class="literal">substr</code> value is
+              contained in the <code class="literal">text</code> value. This
+              search is case-sensitive.
+            </p><p>
+              Arguments:
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p>
+                  <em class="replaceable"><code>text</code></em>: The text string to
+                  search.
+                </p></li><li class="listitem"><p>
+                  <em class="replaceable"><code>substr</code></em>: The substring to
+                  search for in <em class="replaceable"><code>text</code></em>.
+</p></li></ul>
+</div>
+</li></ul>
+</div>
+
+</div>
+<div class="simplesect">
+<div class="titlepage">
+<div>
+<div class="simple">
+<h5 class="title"><a name="audit-log-filtering-filter-replacement"></a>Replacing a User Filter</h5>
+
+</div>
+
+</div>
+
+</div>
+<p>
+          In some cases, the filter definition can be changed
+          dynamically. To do this, define a <code class="literal">filter</code>
+          configuration within an existing <code class="literal">filter</code>.
+          For example:
+        </p><pre class="programlisting copytoclipboard line-numbers language-json"><code class="language-json">{
+  "filter": {
+    "id": "main",
+    "class": {
+      "name": "table_access",
+      "event": {
+        "name": [ "update", "delete" ],
+        "log": false,
+        "filter": {
+          "class": {
+            "name": "general",
+            "event" : { "name": "status",
+                        "filter": { "ref": "main" } }
+          },
+          "activate": {
+            "or": [
+              { "field": { "name": "table_name.str", "value": "temp_1" } },
+              { "field": { "name": "table_name.str", "value": "temp_2" } }
+            ]
+          }
+        }
+      }
+    }
+  }
+}</code></pre><p>
+          A new filter is activated when the <code class="literal">activate</code>
+          element within a subfilter evaluates to
+          <code class="literal">true</code>. Using <code class="literal">activate</code> in
+          a top-level <code class="literal">filter</code> is not permitted.
+        </p><p>
+          A new filter can be replaced with the original one by using a
+          <code class="literal">ref</code> item inside the subfilter to refer to
+          the original filter <code class="literal">id</code>.
+        </p><p>
+          The filter shown operates like this:
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+              The <code class="literal">main</code> filter waits for
+              <code class="literal">table_access</code> events, either
+              <code class="literal">update</code> or <code class="literal">delete</code>.
+            </p></li><li class="listitem"><p>
+              If the <code class="literal">update</code> or
+              <code class="literal">delete</code> <code class="literal">table_access</code>
+              event occurs on the <code class="literal">temp_1</code> or
+              <code class="literal">temp_2</code> table, the filter is replaced
+              with the internal one (without an <code class="literal">id</code>,
+              since there is no need to refer to it explicitly).
+            </p></li><li class="listitem"><p>
+              If the end of the command is signalled
+              (<code class="literal">general</code> / <code class="literal">status</code>
+              event), an entry is written to the audit log file and the
+              filter is replaced with the <code class="literal">main</code>
+              filter.
+</p></li></ul>
+</div>
+<p>
+          The filter is useful to log statements that update or delete
+          anything from the <code class="literal">temp_1</code> or
+          <code class="literal">temp_2</code> tables, such as this one:
+        </p><pre class="programlisting copytoclipboard line-numbers language-sql one-line"><code class="language-sql">UPDATE temp_1, temp_3 SET temp_1.a=21, temp_3.a=23;</code></pre><p>
+          The statement generates multiple
+          <code class="literal">table_access</code> events, but the audit log file
+          contains only <code class="literal">general</code> or
+          <code class="literal">status</code> entries.
+</p>
+<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+
+<div class="admon-title">
+Note
+</div>
+<p>
+            Any <code class="literal">id</code> values used in the definition are
+            evaluated with respect only to that definition. They have
+            nothing to do with the value of the
+            <a class="link" href="audit-log-reference.html#sysvar_audit_log_filter_id"><code class="literal">audit_log_filter_id</code></a> system
+            variable.
+</p>
+</div>
+
+</div>
+
+</div>
+
+<br />
+        </div>
+
+                <div id="docs-in-page-nav-container">
+            <div id="docs-in-page-nav">
+                
+    <a href="audit-log-filtering.html"
+        aria-label="Previous" title="Previous: Audit Log Filtering"><span
+        class="icon-chevron-left"></span> PREV</a> &nbsp;
+<a href="index.html" aria-label="Start" title="Start"> HOME</a> &nbsp;
+        <a aria-label="Up" href="audit-log.html" title="Up: MySQL Enterprise Audit"> UP</a> &nbsp;
+    <a href="audit-log-legacy-filtering.html" aria-label="Next"
+        title="Next: Legacy Mode Audit Log Filtering">NEXT <span
+        class="icon-chevron-right"></span></a>
+            </div>
+        </div>
+        
+         <div id="docs-body-extra">
+             
+<a class="docs-sidebar-section" href="audit-log-filter-definitions.html?ff=nopfpls"><span class="icon-related"></span>
+    <span class="text">Related Documentation</span></a>
+<div class="docs-sidebar-accordian">
+    <div class="text">
+        <a href="https://dev.mysql.com/doc/relnotes/mysql/5.7/en/">MySQL 5.7 Release Notes</a><br />
+        </div>
+</div>
+
+    <a class="docs-sidebar-section" href="audit-log-filter-definitions.html?ff=nopfpls"><span class="icon-download-thin"></span>
+        <span class="text">
+            Download
+                            this Manual
+                    </span>
+    </a>
+    <div class="docs-sidebar-accordian">
+        <div class="text">
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.pdf">PDF (US Ltr)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.a4.pdf">PDF (A4)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-ref-manual-5.7-en-pdf-1-20210225.noarch.rpm">PDF (RPM)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.html-chapter.tar.gz">HTML Download (TGZ)</a>
+            - 10.1Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.html-chapter.zip">HTML Download (Zip)</a>
+            - 10.2Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-ref-manual-5.7-en-html-chapter-1-20210225.noarch.rpm">HTML Download (RPM)</a>
+            - 8.9Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.man-gpl.tar.gz">Man Pages (TGZ)</a>
+            - 224.7Kb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.man-gpl.zip">Man Pages (Zip)</a>
+            - 332.6Kb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-5.7.info.gz">Info (Gzip)</a>
+            - 3.3Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-5.7.info.zip">Info (Zip)</a>
+            - 3.3Mb<br />
+                    </div>
+    </div>
+
+<a class="docs-sidebar-section" href="audit-log-filter-definitions.html?ff=nopfpls"><span class="icon-book"></span>
+    <span class="text">Excerpts from this Manual</span></a>
+<div class="docs-sidebar-accordian">
+    <div class="text">
+                <a href="https://dev.mysql.com/doc/mysql-backup-excerpt/5.7/en/">MySQL Backup and Recovery</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-g11n-excerpt/5.7/en/">MySQL Globalization</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-infoschema-excerpt/5.7/en/">MySQL Information Schema</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-installation-excerpt/5.7/en/">MySQL Installation Guide</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-linuxunix-excerpt/5.7/en/">MySQL and Linux/Unix</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-osx-excerpt/5.7/en/">MySQL and OS X</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-partitioning-excerpt/5.7/en/">MySQL Partitioning</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-perfschema-excerpt/5.7/en/">MySQL Performance Schema</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-replication-excerpt/5.7/en/">MySQL Replication</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-repo-excerpt/5.7/en/">Using the MySQL Yum Repository</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-reslimits-excerpt/5.7/en/">MySQL Restrictions and Limitations</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-security-excerpt/5.7/en/">Security in MySQL</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-solaris-excerpt/5.7/en/">MySQL and Solaris</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-sourcebuild-excerpt/5.7/en/">Building MySQL from Source</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-startstop-excerpt/5.7/en/">Starting and Stopping MySQL</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-tutorial-excerpt/5.7/en/">MySQL Tutorial</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-windows-excerpt/5.7/en/">MySQL and Windows</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-cluster-excerpt/5.7/en/">MySQL NDB Cluster 7.5</a><br />
+            </div>
+</div>
+         </div>
+
+              </div>
+     </div>
+
+</div>
+
+<script>
+$(function() {
+    var doc = new $.doc({ 'mobile': $.browser.mobile, 'docId': 1, 'highlight': true });
+});
+</script>
+    
+
+            
+        </div>
+    </div>
+
+    <footer class="collapsed">
+        <div id="footer-bottom">
+                                    <div id="footer-collapse">
+                <a href="audit-log-filter-definitions.html?ff=nopfpls" id="expand-footer"
+                    aria-label="Expand Footer"
+                    title="Expand Footer"><span
+                    class="icon-plus-square"></span></a>
+            </div>
+                        <div class="footer-contact">
+                <div id="footer-contact-icon" style="display: none;">
+                    <span class="icon-call-phone"></span>
+                </div>
+                <div id="footer-contact-numbers" style="display: none;">
+                    <strong>Contact MySQL Sales</strong><br/>
+                    USA/Canada: +1-866-221-0634 &nbsp;
+                    (<a href="https://www.mysql.com/about/contact/phone/">More Countries &raquo;</a>)
+                </div>
+                <div id="footer-contact-copyright" style="display: inline-block;">
+                    <a href="http://www.oracle.com/" aria-label="Oracle" title="Oracle"><span class="oracle-logo"></span></a>
+                    &nbsp; &copy; 2021, Oracle Corporation and/or its affiliates
+                </div>
+            </div>
+            <div class="social-icons">
+                <a aria-label="Join us on Facebook" title="Join us on Facebook" href="http://www.facebook.com/mysql"><span class="icon-facebook-square"></span></a>
+                <a aria-label="Follow us on Twitter" title="Follow us on Twitter" href="https://twitter.com/mysql"><span class="icon-twitter-square"></span></a>
+                <a aria-label="Follow us on LinkedIn" title="Follow us on LinkedIn" href="https://www.linkedin.com/company/mysql"><span class="icon-linkedin-square"></span></a>
+                <a aria-label="Visit our YouTube channel" title="Visit our YouTube channel" href="http://www.youtube.com/mysqlchannel"><span class="icon-youtube-square"></span></a>
+            </div>
+            <br class="clear" />
+        </div>
+        <div id="footer-links">
+
+            <div id="site-footer-links">
+                <div id="footer-nav"></div>
+
+                <div class="links">
+                    <ul>
+                        <li class="top"><a href="https://www.mysql.com/products/">Products</a></li>
+                        <li><a href="https://www.mysql.com/cloud/">MySQL Database Service</a></li>
+                        <li><a href="https://www.mysql.com/products/enterprise/">MySQL Enterprise Edition</a></li>
+                        <li><a href="https://www.mysql.com/products/standard/">MySQL Standard Edition</a></li>
+                        <li><a href="https://www.mysql.com/products/classic/">MySQL Classic Edition</a></li>
+                        <li><a href="https://www.mysql.com/products/cluster/">MySQL Cluster CGE</a></li>
+                        <li><a href="https://www.mysql.com/oem/">MySQL Embedded (OEM/ISV)</a></li>
+                    </ul>
+                </div>
+
+                <div class="links">
+                    <ul>
+                        <li class="top"><a href="https://www.mysql.com/services/">Services</a></li>
+                        <li><a href="https://www.mysql.com/training/">Training</a></li>
+                        <li><a href="https://www.mysql.com/certification/">Certification</a></li>
+                        <li><a href="https://www.mysql.com/consulting/">Consulting</a></li>
+                        <li><a href="https://www.mysql.com/support/">Support</a></li>
+                    </ul>
+                </div>
+
+                <div class="links">
+                    <ul>
+                        <li class="top"><a href="https://www.mysql.com/downloads/">Downloads</a></li>
+                        <li><a href="https://dev.mysql.com/downloads/mysql/">MySQL Community Server</a></li>
+                        <li><a href="https://dev.mysql.com/downloads/cluster/">MySQL NDB Cluster</a></li>
+                        <li><a href="https://dev.mysql.com/downloads/shell/">MySQL Shell</a></li>
+                        <li><a href="https://dev.mysql.com/downloads/router/">MySQL Router</a></li>
+                        <li><a href="https://dev.mysql.com/downloads/workbench/">MySQL Workbench</a></li>
+                    </ul>
+                </div>
+
+                <div class="links">
+                    <ul>
+                        <li class="top"><a href="https://dev.mysql.com/doc/">Documentation</a></li>
+                        <li><a href="https://dev.mysql.com/doc/refman/en/">MySQL Reference Manual</a></li>
+                        <li><a href="https://dev.mysql.com/doc/workbench/en/">MySQL Workbench</a></li>
+                        <li><a href="https://dev.mysql.com/doc/index-cluster.html">MySQL NDB Cluster</a></li>
+                        <li><a href="https://dev.mysql.com/doc/index-connectors.html">MySQL Connectors</a></li>
+                        <li><a href="https://dev.mysql.com/doc/#topic">Topic Guides</a></li>
+                    </ul>
+                </div>
+
+                <div class="links">
+                    <ul>
+                        <li class="top"><a href="https://www.mysql.com/about/">About MySQL</a></li>
+                        <li><a href="https://www.mysql.com/about/contact/">Contact Us</a></li>
+                                                                        <li><a href="https://www.mysql.com/buy-mysql/">How to Buy</a></li>
+                        <li><a href="https://www.mysql.com/partners/">Partners</a></li>
+                        <li><a href="https://www.mysql.com/about/jobs/">Job Opportunities</a></li>
+                        <li><a href="https://www.mysql.com/sitemap.html">Site Map</a></li>
+                    </ul>
+                </div>
+
+                            </div>
+
+            <div id="footer-logo">
+                <a href="http://www.oracle.com/" aria-label="Oracle" title="Oracle"><span class="oracle-logo"></span></a>
+                &nbsp; &copy; 2021, Oracle Corporation and/or its affiliates
+                <div class="footer-legal-links">
+                    <a href="https://www.mysql.com/about/legal/">Legal Policies</a> |
+                    <a href="http://www.oracle.com/us/legal/privacy/index.htm">Your Privacy Rights</a> |
+                    <a href="http://www.oracle.com/us/legal/terms/index.html">Terms of Use</a> |
+                    <a href="http://www.oracle.com/us/legal/third-party-trademarks/index.html">Trademark Policy</a> |
+                    <a href="http://www.oracle.com/technetwork/community/oca-486395.html">Contributor Agreement</a> |
+                    <div id="teconsent"></div>
+                </div>
+            </div>
+
+        </div>
+    </footer>
+</div>
+
+            <script>
+    if ((oracle.truste.api.getGdprConsentDecision().consentDecision) &&
+            (oracle.truste.api.getGdprConsentDecision().consentDecision.indexOf(0) != -1 ||
+             oracle.truste.api.getGdprConsentDecision().consentDecision.indexOf(2) != -1) )
+    {
+        document.write('<script src="https://labs.mysql.com/common/js/metrics/s_code_remote.js"><\/script>');
+        document.write('<script type="text/javascript" async src="https://c.oracleinfinity.io/acs/account/wh3g12c3gg/js/mysql/odc.js?_ora.context=analytics:production"><\/script>');
+    }
+    </script>
+
+        
+    
+</body>
+</html>

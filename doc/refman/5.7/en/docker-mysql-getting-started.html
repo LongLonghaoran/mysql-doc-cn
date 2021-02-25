@@ -1,0 +1,1294 @@
+<!DOCTYPE html>
+<html lang="en" class="svg no-js">
+<head>
+    <meta charset="utf-8" />
+    <!--[if IE ]>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="Language" content="en">
+
+    <title>MySQL :: MySQL 5.7 Reference Manual :: 2.5.7.1 Basic Steps for MySQL Server Deployment with Docker</title>
+    <link rel="stylesheet" media="all" href="https://labs.mysql.com/common/css/main-20201221.min.css" />
+            <link rel="stylesheet" media="all" href="https://labs.mysql.com/common/css/docs-20201221.min.css" />
+    
+    
+    <link rel="stylesheet" media="print" href="https://labs.mysql.com/common/css/print-20201221.min.css" />
+
+    
+    
+    
+    
+            <link rel="contents" href="index.html" title="MySQL 5.7 Reference Manual" />
+<link rel="start" href="index.html" title="MySQL 5.7 Reference Manual" />
+<link rel="prev" href="linux-installation-docker.html" title="2.5.7 Deploying MySQL on Linux with Docker" />
+<link rel="next" href="docker-mysql-more-topics.html?ff=nopfpls" title="2.5.7.2 More Topics on Deploying MySQL Server with Docker" />
+<link rel="up" href="linux-installation-docker.html" title="2.5.7 Deploying MySQL on Linux with Docker" />
+
+    
+    <link rel="shortcut icon" href="https://labs.mysql.com/common/themes/sakila/favicon.ico" />
+    <script async="async" type="text/javascript" src='https://consent.truste.com/notice?domain=oracle.com&c=teconsent&js=bb&noticeType=bb&text=true&cdn=1&pcookie&gtm=1' crossorigin></script>
+    <script src="https://www.oracle.com/assets/truste-oraclelib.js"></script>
+    <script>(function(H){ H.className=H.className.replace(/\bno-js\b/,'js') })(document.documentElement)</script>
+    <script src="https://labs.mysql.com/common/js/site-20200928.min.js"></script>
+
+    
+    
+    <!--[if lt IE 9]>
+        <script src="https://labs.mysql.com/common/js/polyfills/html5shiv-printshiv-3.7.2.min.js"></script>
+        <script src="https://labs.mysql.com/common/js/polyfills/respond-1.4.2.min.js"></script>
+    <![endif]-->
+        <!--[if IE 9]>
+        <style>#docs-sidebar-toc { box-sizing: content-box; }</style>
+    <![endif]-->
+    </head>
+
+<body class="no-sidebar full-page dev">
+<div class="page-wrapper">
+    <header>
+
+                        <a href="https://dev.mysql.com/" aria-label="Home" title="MySQL" id="l1-home-link"></a>
+        
+        <div id="l1-nav-container">
+            <div id="l1-line1">
+                <div id="l1-auth-links">
+                    <a href="https://www.mysql.com/about/contact/"><b>Contact MySQL</b></a>
+                    <span id="l1-contact-separator">&nbsp;|&nbsp;</span>
+                    <span id="l1-contact-separator-br"><br /></span>
+                                             <a href="https://dev.mysql.com/auth/login/?dest=https%3A%2F%2Fdev.mysql.com%2Fdoc%2Frefman%2F5.7%2Fen%2Fdocker-mysql-getting-started.html">Login</a> &nbsp;|&nbsp;
+                         <a href="https://dev.mysql.com/auth/register/">Register</a>
+                                    </div>
+                <div id="l1-lhs">
+                    <div id="l1-slogan">
+                        The world's most popular open source database
+                    </div>
+                    <div id="l1-search-box">
+                        <form id="l1-search-form" method="get" action="https://www.oracle.com/search/results">
+                        <input type="hidden" name="cat" value="mysql" />
+                        <input type="hidden" name="Ntk" value="SI-ALL5" />
+                        <input id="l1-search-input" type="search" class="icon-search" placeholder="Search" aria-label="Search" name="Ntt" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div id="l1-line2">
+                <div class="social-icons">
+                    <a aria-label="Join us on Facebook" title="Join us on Facebook" href="http://www.facebook.com/mysql"><span class="icon-facebook"></span></a>
+                    <a aria-label="Follow us on Twitter" title="Follow us on Twitter" href="https://twitter.com/mysql"><span class="icon-twitter"></span></a>
+                    <a aria-label="Follow us on LinkedIn" title="Follow us on LinkedIn" href="https://www.linkedin.com/company/mysql"><span class="icon-linkedin"></span></a>
+                    <a aria-label="Visit our YouTube channel" title="Visit our YouTube channel" href="http://www.youtube.com/mysqlchannel"><span class="icon-youtube"></span></a>
+                </div>
+                <ul id="l1-nav">
+                    <li>
+                        <a href="https://www.mysql.com/"><!-- <span class="icon-sakila"></span>  -->MySQL.com</a>
+                    </li><li>
+                        <a href="https://www.mysql.com/downloads/"><!-- <span class="icon-download-thin"></span>  -->Downloads</a>
+                    </li><li class="active">
+                        <a href="https://dev.mysql.com/doc/"><!-- <span class="icon-books"></span>  -->Documentation</a>
+                    </li><li>
+                        <a href="https://dev.mysql.com/"><!-- <span class="icon-code"></span>  -->Developer Zone</a>
+                    </li>                </ul>
+            </div>
+        </div>
+        <div id="sub-header">
+            <div id="l2-nav-container">
+                <div id="l2-nav-toggle">
+                    <span class="icon-three-bars"></span>
+                </div>
+                                                                                        <a class="button nav-button-3" href="https://dev.mysql.com/"><span class="icon-code"></span> Developer Zone</a>
+                                                                                                                                    <a class="button nav-button-2" href="https://www.mysql.com/downloads/"><span class="icon-download-thin"></span> Downloads</a>
+                                                                                                <a class="button nav-button-1" href="https://www.mysql.com/"><span class="icon-sakila"></span> MySQL.com</a>
+                                                                        <div id="l2-search-toggle">
+                    <span class="icon-search"></span>
+                </div>
+                <div id="l2-site-icon">
+                                                                                                                                                                                                    <span class="icon-books"></span>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </div>
+                <div id="l1-section-title">
+                    <span id="l1-section-label">
+                        <a href="https://dev.mysql.com/doc/">Documentation</a>
+                    </span>
+                </div>
+                <nav>
+                    
+
+<ul id="l2-nav">
+            	<li class="active"><a class="active " href="https://dev.mysql.com/doc/refman/en/">MySQL Server</a>
+    			</li>
+	        	<li class=""><a  href="https://dev.mysql.com/doc/index-enterprise.html">MySQL Enterprise</a>
+    			</li>
+	        	<li class=""><a  href="https://dev.mysql.com/doc/workbench/en/">Workbench</a>
+    			</li>
+	        	<li class=""><a  href="https://dev.mysql.com/doc/mysql-shell/en/mysql-innodb-cluster.html">InnoDB Cluster</a>
+    			</li>
+	        	<li class=""><a  href="https://dev.mysql.com/doc/index-cluster.html">MySQL NDB Cluster</a>
+    			</li>
+	        	<li class=""><a  href="https://dev.mysql.com/doc/index-connectors.html">Connectors</a>
+    			</li>
+	        	<li class=" last"><a  href="https://dev.mysql.com/doc/index-other.html">More</a>
+    			</li>
+	                        <li class="other-section"><a href="https://www.mysql.com/">MySQL.com</a></li>
+                            <li class="other-section"><a href="https://www.mysql.com/downloads/">Downloads</a></li>
+                                        <li class="other-section"><a href="https://dev.mysql.com/">Developer Zone</a></li>
+            </ul>
+                </nav>
+            </div>
+            <div id="l3-search-container"></div>
+            <div id="top-orange"><span id="section-nav">Section Menu: &nbsp; </span></div>
+        </div>
+    </header>
+        <div id="page">
+                        <div role="main" id="main">
+
+            
+                
+            
+<div>
+    <div id="docs-sidebar-toc" class="">
+    <div id="docs-toc-inner">
+        <div class="docs-sidebar-header" id="docs-nav-header">
+            <a class="docs-show-hide-nav" id="docs-hide-nav" href="docker-mysql-getting-started.html" title="Hide Sidebar" aria-label="Hide Sidebar"><span class="icon-arrow-small-left"></span></a>
+            <div class="docs-nav-links">
+                                    
+    <a href="linux-installation-docker.html"
+        aria-label="Previous" title="Previous: Deploying MySQL on Linux with Docker"><span
+        class="icon-chevron-left"></span></a>
+<a href="index.html" aria-label="Start" title="Start"><span class="icon-book-open"></span></a>
+        <a aria-label="Up" href="linux-installation-docker.html" title="Up: Deploying MySQL on Linux with Docker"><span class="icon-chevron-up"></span></a>
+    <a href="docker-mysql-more-topics.html" aria-label="Next"
+        title="Next: More Topics on Deploying MySQL Server with Docker"><span
+        class="icon-chevron-right"></span></a>
+                            </div>
+        </div>
+                    
+<div id="docs-sidebar-search-container">
+    <div id="docs-sidebar-search-box">
+        <form method="get" action="https://dev.mysql.com/doc/search/">
+            <input type="hidden" name="d" id="d" value="12" />
+            <input type="hidden" name="p" id="p" value="1" />
+            <input type="text" name="q" id="q" title="Search this Manual"
+                value="Search this Manual"
+                style="color: #bbb;"
+                onfocus="if(this.value == 'Search this Manual') {this.value='';this.style.color='#555';}"
+                onblur="if(this.value == '') {this.value='Search this Manual';this.style.color='#bbb';}" />
+
+            <button class="docs-sidebar-search-btn" aria-label="Search" title="Search" type="submit">
+                <span class="icon-search"></span>
+            </button>
+        </form>
+    </div>
+</div>
+                <div class="docs-sidebar-nav">
+            <a class="docs-icon-home" href="https://dev.mysql.com/doc/"><span class="icon-home"></span>Documentation Home</a><hr />
+            <div class="docs-sidebar-mtitle">MySQL 5.7 Reference Manual</div>
+            <nav class="doctoc" id="doc-12">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="preface.html">Preface and Legal Notices</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="docker-mysql-getting-started.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="introduction.html">General Information</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="docker-mysql-getting-started.html"><span class="icon-chevron-down"></span></a></div><div class="docs-sidebar-nav-link"><a href="installing.html">Installing and Upgrading MySQL</a></div></div>                        <div class="docs-submenu">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="docker-mysql-getting-started.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="general-installation-issues.html">General Installation Guidance</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="platform-support.html">Supported Platforms</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="which-version.html">Which MySQL Version and Distribution to Install</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="getting-mysql.html">How to Get MySQL</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="docker-mysql-getting-started.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="verifying-package-integrity.html">Verifying Package Integrity Using MD5 Checksums or GnuPG</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="verifying-md5-checksum.html">Verifying the MD5 Checksum</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="checking-gpg-signature.html">Signature Checking Using GnuPG</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="checking-gpg-signature-windows.html">Signature Checking Using Gpg4win for Windows</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="checking-rpm-signature.html">Signature Checking Using RPM</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="installation-layouts.html">Installation Layouts</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="compiler-characteristics.html">Compiler-Specific Build Characteristics</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="binary-installation.html">Installing MySQL on Unix/Linux Using Generic Binaries</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="docker-mysql-getting-started.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="windows-installation.html">Installing MySQL on Microsoft Windows</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="windows-installation-layout.html">MySQL Installation Layout on Microsoft Windows</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="windows-choosing-package.html">Choosing an Installation Package</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="docker-mysql-getting-started.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="mysql-installer.html">MySQL Installer for Windows</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysql-installer-setup.html">MySQL Installer Initial Setup</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysql-installer-change-path-proc.html">Setting Alternative Server Paths with MySQL Installer</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysql-installer-workflow.html">Installation Workflows with MySQL Installer</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysql-installer-catalog-dashboard.html">MySQL Installer Product Catalog and Dashboard</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="MySQLInstallerConsole.html">MySQLInstallerConsole Reference</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="docker-mysql-getting-started.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="windows-install-archive.html">Installing MySQL on Microsoft Windows Using a
+      noinstall ZIP Archive</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="windows-extract-archive.html">Extracting the Install Archive</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="windows-create-option-file.html">Creating an Option File</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="windows-select-server.html">Selecting a MySQL Server Type</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="windows-initialize-data-directory.html">Initializing the Data Directory</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="windows-server-first-start.html">Starting the Server for the First Time</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="windows-start-command-line.html">Starting MySQL from the Windows Command Line</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysql-installation-windows-path.html">Customizing the PATH for MySQL Tools</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="windows-start-service.html">Starting MySQL as a Windows Service</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="windows-testing.html">Testing The MySQL Installation</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="windows-troubleshooting.html">Troubleshooting a Microsoft Windows MySQL Server Installation</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="windows-postinstallation.html">Windows Postinstallation Procedures</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="windows-restrictions.html">Windows Platform Restrictions</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="docker-mysql-getting-started.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="osx-installation.html">Installing MySQL on macOS</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="osx-installation-notes.html">General Notes on Installing MySQL on macOS</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="osx-installation-pkg.html">Installing MySQL on macOS Using Native Packages</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="osx-installation-launchd.html">Installing a MySQL Launch Daemon</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="osx-installation-prefpane.html">Installing and Using the MySQL Preference Pane</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="docker-mysql-getting-started.html"><span class="icon-chevron-down"></span></a></div><div class="docs-sidebar-nav-link"><a href="linux-installation.html">Installing MySQL on Linux</a></div></div>                        <div class="docs-submenu">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="linux-installation-yum-repo.html">Installing MySQL on Linux Using the MySQL Yum Repository</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="replace-third-party-yum.html">Replacing a Third-Party Distribution of MySQL Using the MySQL Yum
+      Repository</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="linux-installation-apt-repo.html">Installing MySQL on Linux Using the MySQL APT Repository</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="linux-installation-sles-repo.html">Installing MySQL on Linux Using the MySQL SLES Repository</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="linux-installation-rpm.html">Installing MySQL on Linux Using RPM Packages from Oracle</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="linux-installation-debian.html">Installing MySQL on Linux Using Debian Packages from Oracle</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="docker-mysql-getting-started.html"><span class="icon-chevron-down"></span></a></div><div class="docs-sidebar-nav-link"><a href="linux-installation-docker.html">Deploying MySQL on Linux with Docker</a></div></div>                        <div class="docs-submenu">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link current"><a href="docker-mysql-getting-started.html">Basic Steps for MySQL Server Deployment with Docker</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="docker-mysql-more-topics.html">More Topics on Deploying MySQL Server with Docker</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="deploy-mysql-nonlinux-docker.html">Deploying MySQL on Windows and Other Non-Linux Platforms with Docker</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="linux-installation-native.html">Installing MySQL on Linux from the Native Software Repositories</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="linux-installation-juju.html">Installing MySQL on Linux with Juju</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="using-systemd.html">Managing MySQL Server with systemd</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="uln-installation.html">Installing MySQL Using Unbreakable Linux Network (ULN)</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="docker-mysql-getting-started.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="solaris-installation.html">Installing MySQL on Solaris</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="solaris-installation-pkg.html">Installing MySQL on Solaris Using a Solaris PKG</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="freebsd-installation.html">Installing MySQL on FreeBSD</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="docker-mysql-getting-started.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="source-installation.html">Installing MySQL from Source</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="source-installation-methods.html">Source Installation Methods</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="source-installation-prerequisites.html">Source Installation Prerequisites</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="source-installation-layout.html">MySQL Layout for Source Installation</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="installing-source-distribution.html">Installing MySQL Using a Standard Source Distribution</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="installing-development-tree.html">Installing MySQL Using a Development Source Tree</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="source-ssl-library-configuration.html">Configuring SSL Library Support</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="source-configuration-options.html">MySQL Source-Configuration Options</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="compilation-problems.html">Dealing with Problems Compiling MySQL</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="source-configuration-third-party.html">MySQL Configuration and Third-Party Tools</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="docker-mysql-getting-started.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="postinstallation.html">Postinstallation Setup and Testing</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="data-directory-initialization.html">Initializing the Data Directory</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="docker-mysql-getting-started.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="starting-server.html">Starting the Server</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="starting-server-troubleshooting.html">Troubleshooting Problems Starting the MySQL Server</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="testing-server.html">Testing the Server</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="default-privileges.html">Securing the Initial MySQL Account</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="automatic-start.html">Starting and Stopping MySQL Automatically</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="docker-mysql-getting-started.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="upgrading.html">Upgrading MySQL</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="upgrade-before-you-begin.html">Before You Begin</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="upgrade-paths.html">Upgrade Paths</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="upgrading-from-previous-series.html">Changes in MySQL 5.7</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="upgrade-binary-package.html">Upgrading MySQL Binary or Package-based Installations on Unix/Linux</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="updating-yum-repo.html">Upgrading MySQL with the MySQL Yum Repository</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="updating-apt-repo.html">Upgrading MySQL with the MySQL APT Repository</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="updating-sles-repo.html">Upgrading MySQL with the MySQL SLES Repository</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="windows-upgrading.html">Upgrading MySQL on Windows</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="upgrade-docker-mysql.html">Upgrading a Docker Installation of MySQL</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="updating-direct-rpms.html">Upgrading MySQL with Directly-Downloaded RPM Packages</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="upgrade-troubleshooting.html">Upgrade Troubleshooting</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="rebuilding-tables.html">Rebuilding or Repairing Tables or Indexes</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="copying-databases.html">Copying MySQL Databases to Another Machine</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="docker-mysql-getting-started.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="downgrading.html">Downgrading MySQL</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="downgrade-before-you-begin.html">Before You Begin</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="downgrade-paths.html">Downgrade Paths</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="downgrading-to-previous-series.html">Downgrade Notes</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="downgrade-binary-package.html">Downgrading Binary and Package-based Installations on Unix/Linux</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="downgrade-troubleshooting.html">Downgrade Troubleshooting</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="docker-mysql-getting-started.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="perl-support.html">Perl Installation Notes</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="perl-installation.html">Installing Perl on Unix</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="activestate-perl.html">Installing ActiveState Perl on Windows</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="perl-support-problems.html">Problems Using the Perl DBI/DBD Interface</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="docker-mysql-getting-started.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="tutorial.html">Tutorial</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="docker-mysql-getting-started.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="programs.html">MySQL Programs</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="docker-mysql-getting-started.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="server-administration.html">MySQL Server Administration</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="docker-mysql-getting-started.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="security.html">Security</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="docker-mysql-getting-started.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="backup-and-recovery.html">Backup and Recovery</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="docker-mysql-getting-started.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="optimization.html">Optimization</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="docker-mysql-getting-started.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="language-structure.html">Language Structure</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="docker-mysql-getting-started.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="charset.html">Character Sets, Collations, Unicode</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="docker-mysql-getting-started.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="data-types.html">Data Types</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="docker-mysql-getting-started.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="functions.html">Functions and Operators</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="docker-mysql-getting-started.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="sql-statements.html">SQL Statements</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="docker-mysql-getting-started.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="innodb-storage-engine.html">The InnoDB Storage Engine</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="docker-mysql-getting-started.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="storage-engines.html">Alternative Storage Engines</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="docker-mysql-getting-started.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="replication.html">Replication</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="docker-mysql-getting-started.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="group-replication.html">Group Replication</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysql-shell-userguide.html">MySQL Shell</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="docker-mysql-getting-started.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="document-store.html">Using MySQL as a Document Store</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysql-innodb-cluster-introduction.html">InnoDB Cluster</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="docker-mysql-getting-started.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="mysql-cluster.html">MySQL NDB Cluster 7.5 and NDB Cluster 7.6</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="docker-mysql-getting-started.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="partitioning.html">Partitioning</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="docker-mysql-getting-started.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="stored-objects.html">Stored Objects</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="docker-mysql-getting-started.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="information-schema.html">INFORMATION_SCHEMA Tables</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="docker-mysql-getting-started.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="performance-schema.html">MySQL Performance Schema</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="docker-mysql-getting-started.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="sys-schema.html">MySQL sys Schema</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="docker-mysql-getting-started.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="connectors-apis.html">Connectors and APIs</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="docker-mysql-getting-started.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="mysql-enterprise.html">MySQL Enterprise Edition</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="workbench.html">MySQL Workbench</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="docker-mysql-getting-started.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="faqs.html">MySQL 5.7 Frequently Asked Questions</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="docker-mysql-getting-started.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="error-handling.html">Error Messages and Common Problems</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="docker-mysql-getting-started.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="indexes.html">Indexes</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="glossary.html">MySQL Glossary</a></div></div>                    </li>
+        </ul>
+                            </nav>
+        </div>
+
+        
+<a class="docs-sidebar-section" href="docker-mysql-getting-started.html"><span class="icon-related"></span>
+    <span class="text">Related Documentation</span></a>
+<div class="docs-sidebar-accordian open">
+    <div class="text">
+        <a href="https://dev.mysql.com/doc/relnotes/mysql/5.7/en/">MySQL 5.7 Release Notes</a><br />
+        </div>
+</div>
+
+    <a class="docs-sidebar-section" href="docker-mysql-getting-started.html"><span class="icon-download-thin"></span>
+        <span class="text">
+            Download
+                            this Manual
+                    </span>
+    </a>
+    <div class="docs-sidebar-accordian open">
+        <div class="text">
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.pdf">PDF (US Ltr)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.a4.pdf">PDF (A4)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-ref-manual-5.7-en-pdf-1-20210225.noarch.rpm">PDF (RPM)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.html-chapter.tar.gz">HTML Download (TGZ)</a>
+            - 10.1Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.html-chapter.zip">HTML Download (Zip)</a>
+            - 10.2Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-ref-manual-5.7-en-html-chapter-1-20210225.noarch.rpm">HTML Download (RPM)</a>
+            - 8.9Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.man-gpl.tar.gz">Man Pages (TGZ)</a>
+            - 224.7Kb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.man-gpl.zip">Man Pages (Zip)</a>
+            - 332.6Kb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-5.7.info.gz">Info (Gzip)</a>
+            - 3.3Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-5.7.info.zip">Info (Zip)</a>
+            - 3.3Mb<br />
+                    </div>
+    </div>
+
+<a class="docs-sidebar-section" href="docker-mysql-getting-started.html"><span class="icon-book"></span>
+    <span class="text">Excerpts from this Manual</span></a>
+<div class="docs-sidebar-accordian">
+    <div class="text">
+                <a href="https://dev.mysql.com/doc/mysql-backup-excerpt/5.7/en/">MySQL Backup and Recovery</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-g11n-excerpt/5.7/en/">MySQL Globalization</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-infoschema-excerpt/5.7/en/">MySQL Information Schema</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-installation-excerpt/5.7/en/">MySQL Installation Guide</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-linuxunix-excerpt/5.7/en/">MySQL and Linux/Unix</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-osx-excerpt/5.7/en/">MySQL and OS X</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-partitioning-excerpt/5.7/en/">MySQL Partitioning</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-perfschema-excerpt/5.7/en/">MySQL Performance Schema</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-replication-excerpt/5.7/en/">MySQL Replication</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-repo-excerpt/5.7/en/">Using the MySQL Yum Repository</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-reslimits-excerpt/5.7/en/">MySQL Restrictions and Limitations</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-security-excerpt/5.7/en/">Security in MySQL</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-solaris-excerpt/5.7/en/">MySQL and Solaris</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-sourcebuild-excerpt/5.7/en/">Building MySQL from Source</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-startstop-excerpt/5.7/en/">Starting and Stopping MySQL</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-tutorial-excerpt/5.7/en/">MySQL Tutorial</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-windows-excerpt/5.7/en/">MySQL and Windows</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-cluster-excerpt/5.7/en/">MySQL NDB Cluster 7.5</a><br />
+            </div>
+</div>
+
+        <br /><span id="wkr"><br /></span>
+    </div>
+    </div>
+
+    <div id="docs-main" class="has-toc">
+    <div id="docs-main-inner">
+
+                <div class="right" id="docs-version-nav">
+            <a href="docker-mysql-getting-started.html" id="docs-version-nav-toggle">version 5.7
+            <span class="icon-chevron-down"></span></a>
+            <div id="docs-version-list">
+                                                        <a                         href="https://dev.mysql.com/doc/refman/8.0/en/docker-mysql-getting-started.html">
+                        8.0
+                                                &nbsp;current
+                                            </a><br />
+                                                                                                                <a                         href="https://dev.mysql.com/doc/refman/5.6/en/docker-mysql-getting-started.html">
+                        5.6
+                                            </a><br />
+                                                                        <div id="docs-version-nav-lang">
+                                                                                                                                                    <a                                     class="tooltip-left"
+                                    data-tooltip="The page you are viewing does not exist in version
+                                    5.6 (JA).
+                                    This link will take you to the Table of Contents."
+                                                                        href="https://dev.mysql.com/doc/refman/5.6/ja/">
+                                    5.6&nbsp;
+                                                                            Japanese
+                                                                    </a><br />
+                                                                                            </div>
+                            </div>
+        </div>
+        
+        <div id="docs-show-nav" class="left hidden" style="margin-right: 15px;">
+            <a class="docs-show-hide-nav" href="docker-mysql-getting-started.html" aria-label="Show Sidebar"
+                title="Show Sidebar"><span class="icon-arrow-small-right"></span></a>
+        </div>
+
+                        <div id="docs-breadcrumbs">
+            <a href="index.html">MySQL 5.7 Reference Manual</a> &nbsp;/&nbsp;
+                            <span id="breadcrumbs-link"><a href="docker-mysql-getting-started.html" id="show-breadcrumbs">...</a> &nbsp;/&nbsp;</span>
+                <span class="hidden" id="hidden-breadcrumbs">
+                                                        <a href="installing.html">Installing and Upgrading MySQL</a> &nbsp;/&nbsp;
+                                                            <a href="linux-installation.html">Installing MySQL on Linux</a> &nbsp;/&nbsp;
+                                                            <a href="linux-installation-docker.html">Deploying MySQL on Linux with Docker</a> &nbsp;/&nbsp;
+                                                                                        </span>
+                                        Basic Steps for MySQL Server Deployment with Docker
+                                    </div>
+        
+        <div id="docs-body">
+        
+<div class="section">
+
+<div class="titlepage">
+<div>
+<div>
+<h4 class="title"><a name="docker-mysql-getting-started"></a>2.5.7.1 Basic Steps for MySQL Server Deployment with Docker</h4>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;">
+
+<div class="admon-title">
+Warning
+</div>
+<p>
+          The MySQL Docker images maintained by the MySQL team are built
+          specifically for Linux platforms. Other platforms are not
+          supported, and users using these MySQL Docker images on them
+          are doing so at their own risk. See
+          <a class="link" href="deploy-mysql-nonlinux-docker.html" title="2.5.7.3 Deploying MySQL on Windows and Other Non-Linux Platforms with Docker">the discussion
+          here</a> for some known limitations for running these
+          containers on non-Linux operating systems.
+</p>
+</div>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><a class="xref" href="docker-mysql-getting-started.html#docker-download-image" title="Downloading a MySQL Server Docker Image">Downloading a MySQL Server Docker Image</a></p></li><li class="listitem"><p><a class="xref" href="docker-mysql-getting-started.html#docker-starting-mysql-server" title="Starting a MySQL Server Instance">Starting a MySQL Server Instance</a></p></li><li class="listitem"><p><a class="xref" href="docker-mysql-getting-started.html#docker-connecting-within-container" title="Connecting to MySQL Server from within the Container">Connecting to MySQL Server from within the Container</a></p></li><li class="listitem"><p><a class="xref" href="docker-mysql-getting-started.html#docker-shell-access" title="Container Shell Access">Container Shell Access</a></p></li><li class="listitem"><p><a class="xref" href="docker-mysql-getting-started.html#docker-stopping-deleting" title="Stopping and Deleting a MySQL Container">Stopping and Deleting a MySQL Container</a></p></li><li class="listitem"><p><a class="xref" href="docker-mysql-getting-started.html#docker-upgrading" title="Upgrading a MySQL Server Container">Upgrading a MySQL Server Container</a></p></li><li class="listitem"><p><a class="xref" href="docker-mysql-getting-started.html#docker-more-topics" title="More Topics on Deploying MySQL Server with Docker">More Topics on Deploying MySQL Server with Docker</a></p></li></ul>
+</div>
+<h5><a name="docker-download-image"></a>Downloading a MySQL Server Docker Image</h5>
+<div class="important" style="margin-left: 0.5in; margin-right: 0.5in;">
+<div class="admon-title">
+Important
+</div>
+<p>
+          <span class="emphasis"><em>For users of MySQL Enterprise Edition</em></span>: A
+          subscription is required to use the Docker images for MySQL
+          Enterprise Edition. Subscriptions work by a Bring Your Own
+          License model; see
+          <a class="ulink" href="https://www.mysql.com/buy-mysql/" target="_top">How to Buy MySQL
+          Products and Services</a> for details.
+</p>
+</div>
+<p>
+        Downloading the server image in a separate step is not strictly
+        necessary; however, performing this step before you create your
+        Docker container ensures your local image is up to date. To
+        download the MySQL Community Edition image, run this command:
+      </p><pre class="programlisting copytoclipboard line-numbers language-terminal one-line"><code class="language-terminal">docker pull mysql/mysql-server:<em class="replaceable">tag</em></code></pre><p>
+        The <em class="replaceable"><code>tag</code></em> is the label for the image
+        version you want to pull (for example, <code class="literal">5.6</code>,
+        <code class="literal">5.7</code>, <code class="literal">8.0</code>, or
+        <code class="literal">latest</code>). If
+        <strong class="userinput"><code>:<em class="replaceable"><code>tag</code></em></code></strong> is
+        omitted, the <code class="literal">latest</code> label is used, and the
+        image for the latest GA version of MySQL Community Server is
+        downloaded. Refer to the list of tags for available versions on
+        the
+        <a class="ulink" href="https://hub.docker.com/r/mysql/mysql-server/tags/" target="_top">mysql/mysql-server
+        page in the Docker Hub</a>.
+      </p><p>
+        To download the MySQL Community Edition image from the Oracle
+        Container Registry (OCR), run this command:
+      </p><pre class="programlisting copytoclipboard line-numbers language-terminal one-line"><code class="language-terminal">docker pull container-registry.oracle.com/mysql/mysql-server:<em class="replaceable">tag</em></code></pre><p>
+        To download the MySQL Enterprise Edition image from the OCR, you
+        need to first accept the license agreement on the OCR and log in
+        to the container repository with your Docker client:
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+            Visit the OCR at
+            <a class="ulink" href="https://container-registry.oracle.com/" target="_top">https://container-registry.oracle.com/</a> and
+            choose <span class="guiicon">MySQL</span>.
+          </p></li><li class="listitem"><p>
+            Under the list of MySQL repositories, choose
+            <code class="literal">enterprise-server</code>.
+          </p></li><li class="listitem"><p>
+            If you have not signed in to the OCR yet, click the
+            <span class="guibutton">Sign in</span> button on the right of the
+            page, and then enter your Oracle account credentials when
+            prompted to.
+          </p></li><li class="listitem"><p>
+            Follow the instructions on the right of the page to accept
+            the license agreement.
+          </p></li><li class="listitem"><p>
+            Log in to the OCR with your Docker client (the
+            <code class="literal">docker</code> command) using the <code class="literal">docker
+            login</code> command:
+          </p><pre class="programlisting copytoclipboard line-numbers language-terminal"><code class="language-terminal"># docker login container-registry.oracle.com 
+Username: <em class="replaceable">Oracle-Account-ID</em>
+Password: <em class="replaceable">password</em>
+Login successful.</code></pre></li></ul>
+</div>
+<p>
+        Download the Docker image for MySQL Enterprise Edition from the
+        OCR with this command:
+      </p><pre class="programlisting copytoclipboard line-numbers language-terminal one-line"><code class="language-terminal">docker pull  container-registry.oracle.com/mysql/enterprise-server:<em class="replaceable">tag</em></code></pre><p>
+        There are different choices for
+        <strong class="userinput"><code><em class="replaceable"><code>tag</code></em></code></strong>,
+        corresponding to different versions of MySQL Docker images
+        provided by the OCR:
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+            <code class="literal">8.0</code>,
+            <code class="literal">8.0.<em class="replaceable"><code>x</code></em></code>
+            (<em class="replaceable"><code>x</code></em> is the latest version number
+            in the 8.0 series), <code class="literal">latest</code>: MySQL 8.0,
+            the latest GA
+          </p></li><li class="listitem"><p>
+            <code class="literal">5.7</code>,
+            <code class="literal">5.7.<em class="replaceable"><code>y</code></em></code>
+            (<em class="replaceable"><code>y</code></em> is the latest version number
+            in the 5.7 series): MySQL 5.7
+</p></li></ul>
+</div>
+<p>
+        To download the MySQL Enterprise Edition image, visit the
+        <a class="ulink" href="https://support.oracle.com/" target="_top">My Oracle
+        Support</a> website, sign in to your Oracle account, and
+        perform these steps once you are on the landing page:
+      </p><p>
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+              Select the <span class="guimenu">Patches and Updates</span> tab.
+            </p></li><li class="listitem"><p>
+              Go to the <span class="guilabel">Patch Search</span> region and, on
+              the <span class="guilabel">Search</span> tab, switch to the
+              <span class="guilabel">Product or Family (Advanced)</span> subtab.
+            </p></li><li class="listitem"><p>
+              Enter <span class="quote">“<span class="quote">MySQL Server</span>”</span> for the
+              <span class="guimenuitem">Product</span> field, and the desired
+              version number in the <span class="guimenuitem">Release</span>
+              field.
+            </p></li><li class="listitem"><p>
+              Use the dropdowns for additional filters to select
+              <span class="guimenuitem">Description</span>—<span class="guimenuitem">contains</span>,
+              and enter <span class="quote">“<span class="quote">Docker</span>”</span> in the text field.
+            </p><p>
+              The following figure shows the search settings for a MySQL
+              Enterprise Edition image:
+</p>
+<div class="mediaobject">
+<img src="images/docker-search2.png" width="922" height="298" alt="Diagram showing search settings for MySQL Enterprise image">
+</div>
+</li><li class="listitem"><p>
+              Click the <span class="guibutton">Search</span> button and, from
+              the result list, select the version you want, and click
+              the <span class="guibutton">Download</span> button.
+            </p></li><li class="listitem"><p>
+              In the <span class="guilabel">File Download</span> dialogue box
+              that appears, click and download the
+              <code class="filename">.zip</code> file for the Docker image.
+</p></li></ul>
+</div>
+<p>
+
+        Unzip the downloaded <code class="filename">.zip</code> archive to obtain
+        the tarball inside
+        (<code class="filename">mysql-enterprise-server-<em class="replaceable"><code>version</code></em>.tar</code>),
+        and then load the image by running this command:
+      </p><pre class="programlisting copytoclipboard line-numbers language-simple one-line"><code class="language-simple">docker load -i mysql-enterprise-server-<em class="replaceable">version</em>.tar</code></pre><p>
+        You can list downloaded Docker images with this command:
+      </p><pre class="programlisting copytoclipboard line-numbers language-terminal"><code class="language-terminal">shell&gt; docker images
+REPOSITORY           TAG                 IMAGE ID            CREATED             SIZE
+mysql/mysql-server   latest              3157d7f55f8d        4 weeks ago         241MB</code></pre>
+<h5><a name="docker-starting-mysql-server"></a>Starting a MySQL Server Instance</h5>
+<p>
+        To start a new Docker container for a MySQL Server, use the
+        following command:
+      </p><pre class="programlisting copytoclipboard line-numbers language-terminal one-line"><code class="language-terminal">docker run --name=<em class="replaceable">container_name</em> -d <em class="replaceable">image_name</em>:<em class="replaceable">tag</em></code></pre><p>
+        The image name can be obtained using the <span class="command"><strong>docker
+        images</strong></span> command, as explained in
+        <a class="xref" href="docker-mysql-getting-started.html#docker-download-image" title="Downloading a MySQL Server Docker Image">Downloading a MySQL Server Docker Image</a>. The
+        <code class="option">--name</code> option, for supplying a custom name for
+        your server container, is optional; if no container name is
+        supplied, a random one is generated.
+      </p><p>
+        For example, to start a new Docker container for the MySQL
+        Community Server, use this command:
+      </p><pre class="programlisting copytoclipboard line-numbers language-terminal one-line"><code class="language-terminal">docker run --name=mysql1 -d mysql/mysql-server:5.7</code></pre><p>
+        To start a new Docker container for the MySQL Enterprise Server
+        with a Docker image downloaded from the OCR, use this command:
+      </p><pre class="programlisting copytoclipboard line-numbers language-terminal one-line"><code class="language-terminal">docker run --name=mysql1 -d container-registry.oracle.com/mysql/enterprise-server:5.7</code></pre><p>
+        To start a new Docker container for the MySQL Enterprise Server
+        with a Docker image downloaded from My Oracle Support, use this
+        command:
+      </p><pre class="programlisting copytoclipboard line-numbers language-terminal one-line"><code class="language-terminal">docker run --name=mysql1 -d mysql/enterprise-server:5.7</code></pre><p>
+        If the Docker image of the specified name and tag has not been
+        downloaded by an earlier <span class="command"><strong>docker pull</strong></span> or
+        <span class="command"><strong>docker run</strong></span> command, the image is now
+        downloaded. Initialization for the container begins, and the
+        container appears in the list of running containers when you run
+        the <span class="command"><strong>docker ps</strong></span> command. For example:
+      </p><pre class="programlisting copytoclipboard line-numbers language-terminal"><code class="language-terminal">shell&gt; docker ps
+CONTAINER ID   IMAGE                COMMAND                  CREATED             STATUS                              PORTS                NAMES
+a24888f0d6f4   mysql/mysql-server   "/entrypoint.sh my..."   14 seconds ago      Up 13 seconds (health: starting)    3306/tcp, 33060/tcp  mysql1</code></pre><p>
+        The container initialization might take some time. When the
+        server is ready for use, the <code class="literal">STATUS</code> of the
+        container in the output of the <span class="command"><strong>docker ps</strong></span>
+        command changes from <code class="literal">(health: starting)</code> to
+        <code class="literal">(healthy)</code>.
+      </p><p>
+        The <code class="option">-d</code> option used in the <span class="command"><strong>docker
+        run</strong></span> command above makes the container run in the
+        background. Use this command to monitor the output from the
+        container:
+
+</p><pre class="programlisting copytoclipboard line-numbers language-terminal one-line"><code class="language-terminal">docker logs mysql1</code></pre><p>
+      </p><p>
+        Once initialization is finished, the command's output is going
+        to contain the random password generated for the root user;
+        check the password with, for example, this command:
+
+</p><pre class="programlisting copytoclipboard line-numbers language-terminal"><code class="language-terminal">shell&gt; docker logs mysql1 2&gt;&amp;1 | grep GENERATED
+GENERATED ROOT PASSWORD: Axegh3kAJyDLaRuBemecis&amp;EShOs</code></pre><p>
+</p>
+<h5><a name="docker-connecting-within-container"></a>Connecting to MySQL Server from within the Container</h5>
+<p>
+        Once the server is ready, you can run the
+        <a class="link" href="mysql.html" title="4.5.1 mysql — The MySQL Command-Line Client"><span class="command"><strong>mysql</strong></span></a> client within the MySQL Server
+        container you just started, and connect it to the MySQL Server.
+        Use the <span class="command"><strong>docker exec -it</strong></span> command to start a
+        <a class="link" href="mysql.html" title="4.5.1 mysql — The MySQL Command-Line Client"><span class="command"><strong>mysql</strong></span></a> client inside the Docker container you
+        have started, like the following:
+
+</p><pre class="programlisting copytoclipboard line-numbers language-terminal one-line"><code class="language-terminal">docker exec -it mysql1 mysql -uroot -p</code></pre><p>
+
+        When asked, enter the generated root password (see the last step
+        in <a class="xref" href="docker-mysql-getting-started.html#docker-starting-mysql-server" title="Starting a MySQL Server Instance">Starting a MySQL Server Instance</a>
+        above on how to find the password). Because the
+        <a class="link" href="docker-mysql-more-topics.html#docker_var_mysql_onetime_password"><code class="option">MYSQL_ONETIME_PASSWORD</code></a>
+        option is true by default, after you have connected a
+        <a class="link" href="mysql.html" title="4.5.1 mysql — The MySQL Command-Line Client"><span class="command"><strong>mysql</strong></span></a> client to the server, you must reset
+        the server root password by issuing this statement:
+
+</p><pre class="programlisting copytoclipboard line-numbers language-terminal one-line"><code class="language-terminal">mysql&gt; ALTER USER 'root'@'localhost' IDENTIFIED BY '<em class="replaceable">password</em>';</code></pre><p>
+
+        Substitute <em class="replaceable"><code>password</code></em> with the password
+        of your choice. Once the password is reset, the server is ready
+        for use.
+</p>
+<h5><a name="docker-shell-access"></a>Container Shell Access</h5>
+<p>
+        To have shell access to your MySQL Server container, use the
+        <span class="command"><strong>docker exec -it</strong></span> command to start a bash shell
+        inside the container:
+      </p><pre class="programlisting copytoclipboard line-numbers language-terminal"><code class="language-terminal">shell&gt; docker exec -it mysql1 bash
+bash-4.2#</code></pre><p>
+        You can then run Linux commands inside the container. For
+        example, to view contents in the server's data directory inside
+        the container, use this command:
+      </p><pre class="programlisting copytoclipboard line-numbers language-terminal"><code class="language-terminal">bash-4.2# ls /var/lib/mysql
+auto.cnf    ca.pem	     client-key.pem  ib_logfile0  ibdata1  mysql       mysql.sock.lock	   private_key.pem  server-cert.pem  sys
+ca-key.pem  client-cert.pem  ib_buffer_pool  ib_logfile1  ibtmp1   mysql.sock  performance_schema  public_key.pem   server-key.pem</code></pre>
+<h5><a name="docker-stopping-deleting"></a>Stopping and Deleting a MySQL Container</h5>
+<p>
+        To stop the MySQL Server container we have created, use this
+        command:
+      </p><pre class="programlisting copytoclipboard line-numbers language-terminal one-line"><code class="language-terminal">docker stop mysql1</code></pre><p>
+        <span class="command"><strong>docker stop</strong></span> sends a SIGTERM signal to the
+        <a class="link" href="mysqld.html" title="4.3.1 mysqld — The MySQL Server"><span class="command"><strong>mysqld</strong></span></a> process, so that the server is shut
+        down gracefully.
+      </p><p>
+        Also notice that when the main process of a container
+        (<a class="link" href="mysqld.html" title="4.3.1 mysqld — The MySQL Server"><span class="command"><strong>mysqld</strong></span></a> in the case of a MySQL Server
+        container) is stopped, the Docker container stops automatically.
+      </p><p>
+        To start the MySQL Server container again:
+      </p><pre class="programlisting copytoclipboard line-numbers language-terminal one-line"><code class="language-terminal">docker start mysql1</code></pre><p>
+        To stop and start again the MySQL Server container with a single
+        command:
+      </p><pre class="programlisting copytoclipboard line-numbers language-terminal one-line"><code class="language-terminal">docker restart mysql1</code></pre><p>
+        To delete the MySQL container, stop it first, and then use the
+        <span class="command"><strong>docker rm</strong></span> command:
+      </p><pre class="programlisting copytoclipboard line-numbers language-terminal one-line"><code class="language-terminal">docker stop mysql1</code></pre><pre class="programlisting copytoclipboard line-numbers language-terminal one-line"><code class="language-terminal">docker rm mysql1</code></pre><p>
+        If you want the
+        <a class="link" href="docker-mysql-more-topics.html#docker-persisting-data-configuration" title="Persisting Data and Configuration Changes">Docker
+        volume for the server's data directory</a> to be deleted at
+        the same time, add the <code class="literal">-v</code> option to the
+        <span class="command"><strong>docker rm</strong></span> command.
+</p>
+<h5><a name="docker-upgrading"></a>Upgrading a MySQL Server Container</h5>
+<div class="important" style="margin-left: 0.5in; margin-right: 0.5in;">
+<div class="admon-title">
+Important
+</div>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+              Before performing any upgrade to MySQL, follow carefully
+              the instructions in <a class="xref" href="upgrading.html" title="2.11 Upgrading MySQL">Section 2.11, “Upgrading MySQL”</a>. Among
+              other instructions discussed there, it is especially
+              important to back up your database before the upgrade.
+            </p></li><li class="listitem"><p>
+              The instructions in this section require that the server's
+              data and configuration have been persisted on the host.
+              See
+              <a class="xref" href="docker-mysql-more-topics.html#docker-persisting-data-configuration" title="Persisting Data and Configuration Changes">Persisting Data and Configuration Changes</a>
+              for details.
+</p></li></ul>
+</div>
+
+</div>
+<p>
+        Follow these steps to upgrade a Docker installation of MySQL 5.6
+        to 5.7:
+
+        
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+            Stop the MySQL 5.6 server (container name is
+            <code class="literal">mysql56</code> in this example):
+          </p><pre class="programlisting copytoclipboard line-numbers language-terminal one-line"><code class="language-terminal">docker stop mysql56</code></pre></li><li class="listitem"><p>
+            Download the MySQL 5.7 Server Docker image. See instructions
+            in <a class="xref" href="docker-mysql-getting-started.html#docker-download-image" title="Downloading a MySQL Server Docker Image">Downloading a MySQL Server Docker Image</a>;
+            make sure you use the right tag for MySQL 5.7.
+          </p></li><li class="listitem"><p>
+            Start a new MySQL 5.7 Docker container (named
+            <code class="literal">mysql57</code> in this example) with the old
+            server data and configuration (with proper modifications if
+            needed—see <a class="xref" href="upgrading.html" title="2.11 Upgrading MySQL">Section 2.11, “Upgrading MySQL”</a>) that have been
+            persisted on the host (by
+            <a class="ulink" href="https://docs.docker.com/engine/reference/commandline/service_create/#add-bind-mounts-or-volumes" target="_top">bind-mounting</a>
+            in this example). For the MySQL Community Server, run this
+            command:
+          </p><pre class="programlisting copytoclipboard line-numbers language-terminal"><code class="language-terminal">docker run --name=mysql57 \
+   --mount type=bind,src=/path-on-host-machine/my.cnf,dst=/etc/my.cnf \
+   --mount type=bind,src=/path-on-host-machine/datadir,dst=/var/lib/mysql \
+   -d mysql/mysql-server:5.7</code></pre><p>
+            If needed, adjust <code class="literal">mysql/mysql-server</code> to
+            the correct image name—for example, replace it with
+            <code class="literal">container-registry.oracle.com/mysql/enterprise-server</code>
+            for MySQL Enterprise Edition images downloaded from the OCR, or
+            <code class="literal">mysql/enterprise-server</code> for MySQL Enterprise Edition images
+            downloaded from <a class="ulink" href="https://support.oracle.com/" target="_top">My
+            Oracle Support</a>.
+          </p></li><li class="listitem"><p>
+            Wait for the server to finish startup. You can check the
+            status of the server using the <span class="command"><strong>docker ps</strong></span>
+            command (see
+            <a class="xref" href="docker-mysql-getting-started.html#docker-starting-mysql-server" title="Starting a MySQL Server Instance">Starting a MySQL Server Instance</a>
+            for how to do that).
+          </p></li><li class="listitem"><p>
+            Run the <a class="link" href="mysql-upgrade.html" title="4.4.7 mysql_upgrade — Check and Upgrade MySQL Tables">mysql_upgrade</a>
+            utility in the MySQL 5.7 Server container:
+          </p><pre class="programlisting copytoclipboard line-numbers language-terminal one-line"><code class="language-terminal">docker exec -it mysql57 mysql_upgrade -uroot -p</code></pre><p>
+            When prompted, enter the root password for your old MySQL
+            5.6 Server.
+          </p></li><li class="listitem"><p>
+            Finish the upgrade by restarting the MySQL 5.7 Server
+            container:
+</p><pre class="programlisting copytoclipboard line-numbers language-terminal one-line"><code class="language-terminal">docker restart mysql57</code></pre></li></ul>
+</div>
+<h5><a name="docker-more-topics"></a>More Topics on Deploying MySQL Server with Docker</h5>
+<p>
+        For more topics on deploying MySQL Server with Docker like
+        server configuration, persisting data and configuration, server
+        error log, and container environment variables, see
+        <a class="xref" href="docker-mysql-more-topics.html" title="2.5.7.2 More Topics on Deploying MySQL Server with Docker">Section 2.5.7.2, “More Topics on Deploying MySQL Server with Docker”</a>.
+</p>
+</div>
+<br />
+        </div>
+
+                <div id="docs-in-page-nav-container">
+            <div id="docs-in-page-nav">
+                
+    <a href="linux-installation-docker.html"
+        aria-label="Previous" title="Previous: Deploying MySQL on Linux with Docker"><span
+        class="icon-chevron-left"></span> PREV</a> &nbsp;
+<a href="index.html" aria-label="Start" title="Start"> HOME</a> &nbsp;
+        <a aria-label="Up" href="linux-installation-docker.html" title="Up: Deploying MySQL on Linux with Docker"> UP</a> &nbsp;
+    <a href="docker-mysql-more-topics.html" aria-label="Next"
+        title="Next: More Topics on Deploying MySQL Server with Docker">NEXT <span
+        class="icon-chevron-right"></span></a>
+            </div>
+        </div>
+        
+         <div id="docs-body-extra">
+             
+<a class="docs-sidebar-section" href="docker-mysql-getting-started.html"><span class="icon-related"></span>
+    <span class="text">Related Documentation</span></a>
+<div class="docs-sidebar-accordian">
+    <div class="text">
+        <a href="https://dev.mysql.com/doc/relnotes/mysql/5.7/en/">MySQL 5.7 Release Notes</a><br />
+        </div>
+</div>
+
+    <a class="docs-sidebar-section" href="docker-mysql-getting-started.html"><span class="icon-download-thin"></span>
+        <span class="text">
+            Download
+                            this Manual
+                    </span>
+    </a>
+    <div class="docs-sidebar-accordian">
+        <div class="text">
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.pdf">PDF (US Ltr)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.a4.pdf">PDF (A4)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-ref-manual-5.7-en-pdf-1-20210225.noarch.rpm">PDF (RPM)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.html-chapter.tar.gz">HTML Download (TGZ)</a>
+            - 10.1Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.html-chapter.zip">HTML Download (Zip)</a>
+            - 10.2Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-ref-manual-5.7-en-html-chapter-1-20210225.noarch.rpm">HTML Download (RPM)</a>
+            - 8.9Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.man-gpl.tar.gz">Man Pages (TGZ)</a>
+            - 224.7Kb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.man-gpl.zip">Man Pages (Zip)</a>
+            - 332.6Kb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-5.7.info.gz">Info (Gzip)</a>
+            - 3.3Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-5.7.info.zip">Info (Zip)</a>
+            - 3.3Mb<br />
+                    </div>
+    </div>
+
+<a class="docs-sidebar-section" href="docker-mysql-getting-started.html"><span class="icon-book"></span>
+    <span class="text">Excerpts from this Manual</span></a>
+<div class="docs-sidebar-accordian">
+    <div class="text">
+                <a href="https://dev.mysql.com/doc/mysql-backup-excerpt/5.7/en/">MySQL Backup and Recovery</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-g11n-excerpt/5.7/en/">MySQL Globalization</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-infoschema-excerpt/5.7/en/">MySQL Information Schema</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-installation-excerpt/5.7/en/">MySQL Installation Guide</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-linuxunix-excerpt/5.7/en/">MySQL and Linux/Unix</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-osx-excerpt/5.7/en/">MySQL and OS X</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-partitioning-excerpt/5.7/en/">MySQL Partitioning</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-perfschema-excerpt/5.7/en/">MySQL Performance Schema</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-replication-excerpt/5.7/en/">MySQL Replication</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-repo-excerpt/5.7/en/">Using the MySQL Yum Repository</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-reslimits-excerpt/5.7/en/">MySQL Restrictions and Limitations</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-security-excerpt/5.7/en/">Security in MySQL</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-solaris-excerpt/5.7/en/">MySQL and Solaris</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-sourcebuild-excerpt/5.7/en/">Building MySQL from Source</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-startstop-excerpt/5.7/en/">Starting and Stopping MySQL</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-tutorial-excerpt/5.7/en/">MySQL Tutorial</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-windows-excerpt/5.7/en/">MySQL and Windows</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-cluster-excerpt/5.7/en/">MySQL NDB Cluster 7.5</a><br />
+            </div>
+</div>
+         </div>
+
+              </div>
+     </div>
+
+</div>
+
+<script>
+$(function() {
+    var doc = new $.doc({ 'mobile': $.browser.mobile, 'docId': 1, 'highlight': true });
+});
+</script>
+    
+
+            
+        </div>
+    </div>
+
+    <footer class="collapsed">
+        <div id="footer-bottom">
+                                    <div id="footer-collapse">
+                <a href="docker-mysql-getting-started.html" id="expand-footer"
+                    aria-label="Expand Footer"
+                    title="Expand Footer"><span
+                    class="icon-plus-square"></span></a>
+            </div>
+                        <div class="footer-contact">
+                <div id="footer-contact-icon" style="display: none;">
+                    <span class="icon-call-phone"></span>
+                </div>
+                <div id="footer-contact-numbers" style="display: none;">
+                    <strong>Contact MySQL Sales</strong><br/>
+                    USA/Canada: +1-866-221-0634 &nbsp;
+                    (<a href="https://www.mysql.com/about/contact/phone/">More Countries &raquo;</a>)
+                </div>
+                <div id="footer-contact-copyright" style="display: inline-block;">
+                    <a href="http://www.oracle.com/" aria-label="Oracle" title="Oracle"><span class="oracle-logo"></span></a>
+                    &nbsp; &copy; 2021, Oracle Corporation and/or its affiliates
+                </div>
+            </div>
+            <div class="social-icons">
+                <a aria-label="Join us on Facebook" title="Join us on Facebook" href="http://www.facebook.com/mysql"><span class="icon-facebook-square"></span></a>
+                <a aria-label="Follow us on Twitter" title="Follow us on Twitter" href="https://twitter.com/mysql"><span class="icon-twitter-square"></span></a>
+                <a aria-label="Follow us on LinkedIn" title="Follow us on LinkedIn" href="https://www.linkedin.com/company/mysql"><span class="icon-linkedin-square"></span></a>
+                <a aria-label="Visit our YouTube channel" title="Visit our YouTube channel" href="http://www.youtube.com/mysqlchannel"><span class="icon-youtube-square"></span></a>
+            </div>
+            <br class="clear" />
+        </div>
+        <div id="footer-links">
+
+            <div id="site-footer-links">
+                <div id="footer-nav"></div>
+
+                <div class="links">
+                    <ul>
+                        <li class="top"><a href="https://www.mysql.com/products/">Products</a></li>
+                        <li><a href="https://www.mysql.com/cloud/">MySQL Database Service</a></li>
+                        <li><a href="https://www.mysql.com/products/enterprise/">MySQL Enterprise Edition</a></li>
+                        <li><a href="https://www.mysql.com/products/standard/">MySQL Standard Edition</a></li>
+                        <li><a href="https://www.mysql.com/products/classic/">MySQL Classic Edition</a></li>
+                        <li><a href="https://www.mysql.com/products/cluster/">MySQL Cluster CGE</a></li>
+                        <li><a href="https://www.mysql.com/oem/">MySQL Embedded (OEM/ISV)</a></li>
+                    </ul>
+                </div>
+
+                <div class="links">
+                    <ul>
+                        <li class="top"><a href="https://www.mysql.com/services/">Services</a></li>
+                        <li><a href="https://www.mysql.com/training/">Training</a></li>
+                        <li><a href="https://www.mysql.com/certification/">Certification</a></li>
+                        <li><a href="https://www.mysql.com/consulting/">Consulting</a></li>
+                        <li><a href="https://www.mysql.com/support/">Support</a></li>
+                    </ul>
+                </div>
+
+                <div class="links">
+                    <ul>
+                        <li class="top"><a href="https://www.mysql.com/downloads/">Downloads</a></li>
+                        <li><a href="https://dev.mysql.com/downloads/mysql/">MySQL Community Server</a></li>
+                        <li><a href="https://dev.mysql.com/downloads/cluster/">MySQL NDB Cluster</a></li>
+                        <li><a href="https://dev.mysql.com/downloads/shell/">MySQL Shell</a></li>
+                        <li><a href="https://dev.mysql.com/downloads/router/">MySQL Router</a></li>
+                        <li><a href="https://dev.mysql.com/downloads/workbench/">MySQL Workbench</a></li>
+                    </ul>
+                </div>
+
+                <div class="links">
+                    <ul>
+                        <li class="top"><a href="https://dev.mysql.com/doc/">Documentation</a></li>
+                        <li><a href="https://dev.mysql.com/doc/refman/en/">MySQL Reference Manual</a></li>
+                        <li><a href="https://dev.mysql.com/doc/workbench/en/">MySQL Workbench</a></li>
+                        <li><a href="https://dev.mysql.com/doc/index-cluster.html">MySQL NDB Cluster</a></li>
+                        <li><a href="https://dev.mysql.com/doc/index-connectors.html">MySQL Connectors</a></li>
+                        <li><a href="https://dev.mysql.com/doc/#topic">Topic Guides</a></li>
+                    </ul>
+                </div>
+
+                <div class="links">
+                    <ul>
+                        <li class="top"><a href="https://www.mysql.com/about/">About MySQL</a></li>
+                        <li><a href="https://www.mysql.com/about/contact/">Contact Us</a></li>
+                                                                        <li><a href="https://www.mysql.com/buy-mysql/">How to Buy</a></li>
+                        <li><a href="https://www.mysql.com/partners/">Partners</a></li>
+                        <li><a href="https://www.mysql.com/about/jobs/">Job Opportunities</a></li>
+                        <li><a href="https://www.mysql.com/sitemap.html">Site Map</a></li>
+                    </ul>
+                </div>
+
+                            </div>
+
+            <div id="footer-logo">
+                <a href="http://www.oracle.com/" aria-label="Oracle" title="Oracle"><span class="oracle-logo"></span></a>
+                &nbsp; &copy; 2021, Oracle Corporation and/or its affiliates
+                <div class="footer-legal-links">
+                    <a href="https://www.mysql.com/about/legal/">Legal Policies</a> |
+                    <a href="http://www.oracle.com/us/legal/privacy/index.htm">Your Privacy Rights</a> |
+                    <a href="http://www.oracle.com/us/legal/terms/index.html">Terms of Use</a> |
+                    <a href="http://www.oracle.com/us/legal/third-party-trademarks/index.html">Trademark Policy</a> |
+                    <a href="http://www.oracle.com/technetwork/community/oca-486395.html">Contributor Agreement</a> |
+                    <div id="teconsent"></div>
+                </div>
+            </div>
+
+        </div>
+    </footer>
+</div>
+
+            <script>
+    if ((oracle.truste.api.getGdprConsentDecision().consentDecision) &&
+            (oracle.truste.api.getGdprConsentDecision().consentDecision.indexOf(0) != -1 ||
+             oracle.truste.api.getGdprConsentDecision().consentDecision.indexOf(2) != -1) )
+    {
+        document.write('<script src="https://labs.mysql.com/common/js/metrics/s_code_remote.js"><\/script>');
+        document.write('<script type="text/javascript" async src="https://c.oracleinfinity.io/acs/account/wh3g12c3gg/js/mysql/odc.js?_ora.context=analytics:production"><\/script>');
+    }
+    </script>
+
+        
+    
+</body>
+</html>

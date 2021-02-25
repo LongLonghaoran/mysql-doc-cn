@@ -1,0 +1,2426 @@
+<!DOCTYPE html>
+<html lang="en" class="svg no-js">
+<head>
+    <meta charset="utf-8" />
+    <!--[if IE ]>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="Language" content="en">
+
+    <title>MySQL :: MySQL 5.7 Reference Manual :: 4.5.6 mysqlpump — A Database Backup Program</title>
+    <link rel="stylesheet" media="all" href="https://labs.mysql.com/common/css/main-20201221.min.css" />
+            <link rel="stylesheet" media="all" href="https://labs.mysql.com/common/css/docs-20201221.min.css" />
+    
+    
+    <link rel="stylesheet" media="print" href="https://labs.mysql.com/common/css/print-20201221.min.css" />
+
+    
+    
+    
+    
+            <link rel="contents" href="index.html" title="MySQL 5.7 Reference Manual" />
+<link rel="start" href="index.html" title="MySQL 5.7 Reference Manual" />
+<link rel="prev" href="mysqlimport.html" title="4.5.5 mysqlimport &mdash; A Data Import Program" />
+<link rel="next" href="mysqlshow.html?ff=nopfpls" title="4.5.7 mysqlshow &mdash; Display Database, Table, and Column Information" />
+<link rel="up" href="programs-client.html" title="4.5 Client Programs" />
+
+    
+    <link rel="shortcut icon" href="https://labs.mysql.com/common/themes/sakila/favicon.ico" />
+    <script async="async" type="text/javascript" src='https://consent.truste.com/notice?domain=oracle.com&c=teconsent&js=bb&noticeType=bb&text=true&cdn=1&pcookie&gtm=1' crossorigin></script>
+    <script src="https://www.oracle.com/assets/truste-oraclelib.js"></script>
+    <script>(function(H){ H.className=H.className.replace(/\bno-js\b/,'js') })(document.documentElement)</script>
+    <script src="https://labs.mysql.com/common/js/site-20200928.min.js"></script>
+
+    
+    
+    <!--[if lt IE 9]>
+        <script src="https://labs.mysql.com/common/js/polyfills/html5shiv-printshiv-3.7.2.min.js"></script>
+        <script src="https://labs.mysql.com/common/js/polyfills/respond-1.4.2.min.js"></script>
+    <![endif]-->
+        <!--[if IE 9]>
+        <style>#docs-sidebar-toc { box-sizing: content-box; }</style>
+    <![endif]-->
+    </head>
+
+<body class="no-sidebar full-page dev">
+<div class="page-wrapper">
+    <header>
+
+                        <a href="https://dev.mysql.com/" aria-label="Home" title="MySQL" id="l1-home-link"></a>
+        
+        <div id="l1-nav-container">
+            <div id="l1-line1">
+                <div id="l1-auth-links">
+                    <a href="https://www.mysql.com/about/contact/"><b>Contact MySQL</b></a>
+                    <span id="l1-contact-separator">&nbsp;|&nbsp;</span>
+                    <span id="l1-contact-separator-br"><br /></span>
+                                             <a href="https://dev.mysql.com/auth/login/?dest=https%3A%2F%2Fdev.mysql.com%2Fdoc%2Frefman%2F5.7%2Fen%2Fmysqlpump.html%3Fff%3Dnopfpls">Login</a> &nbsp;|&nbsp;
+                         <a href="https://dev.mysql.com/auth/register/">Register</a>
+                                    </div>
+                <div id="l1-lhs">
+                    <div id="l1-slogan">
+                        The world's most popular open source database
+                    </div>
+                    <div id="l1-search-box">
+                        <form id="l1-search-form" method="get" action="https://www.oracle.com/search/results">
+                        <input type="hidden" name="cat" value="mysql" />
+                        <input type="hidden" name="Ntk" value="SI-ALL5" />
+                        <input id="l1-search-input" type="search" class="icon-search" placeholder="Search" aria-label="Search" name="Ntt" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div id="l1-line2">
+                <div class="social-icons">
+                    <a aria-label="Join us on Facebook" title="Join us on Facebook" href="http://www.facebook.com/mysql"><span class="icon-facebook"></span></a>
+                    <a aria-label="Follow us on Twitter" title="Follow us on Twitter" href="https://twitter.com/mysql"><span class="icon-twitter"></span></a>
+                    <a aria-label="Follow us on LinkedIn" title="Follow us on LinkedIn" href="https://www.linkedin.com/company/mysql"><span class="icon-linkedin"></span></a>
+                    <a aria-label="Visit our YouTube channel" title="Visit our YouTube channel" href="http://www.youtube.com/mysqlchannel"><span class="icon-youtube"></span></a>
+                </div>
+                <ul id="l1-nav">
+                    <li>
+                        <a href="https://www.mysql.com/"><!-- <span class="icon-sakila"></span>  -->MySQL.com</a>
+                    </li><li>
+                        <a href="https://www.mysql.com/downloads/"><!-- <span class="icon-download-thin"></span>  -->Downloads</a>
+                    </li><li class="active">
+                        <a href="https://dev.mysql.com/doc/"><!-- <span class="icon-books"></span>  -->Documentation</a>
+                    </li><li>
+                        <a href="https://dev.mysql.com/"><!-- <span class="icon-code"></span>  -->Developer Zone</a>
+                    </li>                </ul>
+            </div>
+        </div>
+        <div id="sub-header">
+            <div id="l2-nav-container">
+                <div id="l2-nav-toggle">
+                    <span class="icon-three-bars"></span>
+                </div>
+                                                                                        <a class="button nav-button-3" href="https://dev.mysql.com/"><span class="icon-code"></span> Developer Zone</a>
+                                                                                                                                    <a class="button nav-button-2" href="https://www.mysql.com/downloads/"><span class="icon-download-thin"></span> Downloads</a>
+                                                                                                <a class="button nav-button-1" href="https://www.mysql.com/"><span class="icon-sakila"></span> MySQL.com</a>
+                                                                        <div id="l2-search-toggle">
+                    <span class="icon-search"></span>
+                </div>
+                <div id="l2-site-icon">
+                                                                                                                                                                                                    <span class="icon-books"></span>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </div>
+                <div id="l1-section-title">
+                    <span id="l1-section-label">
+                        <a href="https://dev.mysql.com/doc/">Documentation</a>
+                    </span>
+                </div>
+                <nav>
+                    
+
+<ul id="l2-nav">
+            	<li class="active"><a class="active " href="https://dev.mysql.com/doc/refman/en/">MySQL Server</a>
+    			</li>
+	        	<li class=""><a  href="https://dev.mysql.com/doc/index-enterprise.html">MySQL Enterprise</a>
+    			</li>
+	        	<li class=""><a  href="https://dev.mysql.com/doc/workbench/en/">Workbench</a>
+    			</li>
+	        	<li class=""><a  href="https://dev.mysql.com/doc/mysql-shell/en/mysql-innodb-cluster.html">InnoDB Cluster</a>
+    			</li>
+	        	<li class=""><a  href="https://dev.mysql.com/doc/index-cluster.html">MySQL NDB Cluster</a>
+    			</li>
+	        	<li class=""><a  href="https://dev.mysql.com/doc/index-connectors.html">Connectors</a>
+    			</li>
+	        	<li class=" last"><a  href="https://dev.mysql.com/doc/index-other.html">More</a>
+    			</li>
+	                        <li class="other-section"><a href="https://www.mysql.com/">MySQL.com</a></li>
+                            <li class="other-section"><a href="https://www.mysql.com/downloads/">Downloads</a></li>
+                                        <li class="other-section"><a href="https://dev.mysql.com/">Developer Zone</a></li>
+            </ul>
+                </nav>
+            </div>
+            <div id="l3-search-container"></div>
+            <div id="top-orange"><span id="section-nav">Section Menu: &nbsp; </span></div>
+        </div>
+    </header>
+        <div id="page">
+                        <div role="main" id="main">
+
+            
+                
+            
+<div>
+    <div id="docs-sidebar-toc" class="">
+    <div id="docs-toc-inner">
+        <div class="docs-sidebar-header" id="docs-nav-header">
+            <a class="docs-show-hide-nav" id="docs-hide-nav" href="mysqlpump.html?ff=nopfpls" title="Hide Sidebar" aria-label="Hide Sidebar"><span class="icon-arrow-small-left"></span></a>
+            <div class="docs-nav-links">
+                                    
+    <a href="mysqlimport.html"
+        aria-label="Previous" title="Previous: mysqlimport — A Data Import Program"><span
+        class="icon-chevron-left"></span></a>
+<a href="index.html" aria-label="Start" title="Start"><span class="icon-book-open"></span></a>
+        <a aria-label="Up" href="programs-client.html" title="Up: Client Programs"><span class="icon-chevron-up"></span></a>
+    <a href="mysqlshow.html" aria-label="Next"
+        title="Next: mysqlshow — Display Database, Table, and Column Information"><span
+        class="icon-chevron-right"></span></a>
+                            </div>
+        </div>
+                    
+<div id="docs-sidebar-search-container">
+    <div id="docs-sidebar-search-box">
+        <form method="get" action="https://dev.mysql.com/doc/search/">
+            <input type="hidden" name="d" id="d" value="12" />
+            <input type="hidden" name="p" id="p" value="1" />
+            <input type="text" name="q" id="q" title="Search this Manual"
+                value="Search this Manual"
+                style="color: #bbb;"
+                onfocus="if(this.value == 'Search this Manual') {this.value='';this.style.color='#555';}"
+                onblur="if(this.value == '') {this.value='Search this Manual';this.style.color='#bbb';}" />
+
+            <button class="docs-sidebar-search-btn" aria-label="Search" title="Search" type="submit">
+                <span class="icon-search"></span>
+            </button>
+        </form>
+    </div>
+</div>
+                <div class="docs-sidebar-nav">
+            <a class="docs-icon-home" href="https://dev.mysql.com/doc/"><span class="icon-home"></span>Documentation Home</a><hr />
+            <div class="docs-sidebar-mtitle">MySQL 5.7 Reference Manual</div>
+            <nav class="doctoc" id="doc-12">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="preface.html">Preface and Legal Notices</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="mysqlpump.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="introduction.html">General Information</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="mysqlpump.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="installing.html">Installing and Upgrading MySQL</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="mysqlpump.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="tutorial.html">Tutorial</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="mysqlpump.html?ff=nopfpls"><span class="icon-chevron-down"></span></a></div><div class="docs-sidebar-nav-link"><a href="programs.html">MySQL Programs</a></div></div>                        <div class="docs-submenu">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="programs-overview.html">Overview of MySQL Programs</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="mysqlpump.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="programs-using.html">Using MySQL Programs</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="invoking-programs.html">Invoking MySQL Programs</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="mysqlpump.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="program-options.html">Specifying Program Options</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="command-line-options.html">Using Options on the Command Line</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="option-files.html">Using Option Files</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="option-file-options.html">Command-Line Options that Affect Option-File Handling</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="option-modifiers.html">Program Option Modifiers</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="program-variables.html">Using Options to Set Program Variables</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="option-defaults-equals.html">Option Defaults, Options Expecting Values, and the = Sign</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="connection-options.html">Command Options for Connecting to the Server</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="connecting.html">Connecting to the MySQL Server Using Command Options</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="transport-protocols.html">Connection Transport Protocols</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="connection-compression-control.html">Connection Compression Control</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="setting-environment-variables.html">Setting Environment Variables</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="mysqlpump.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="programs-server.html">Server and Server-Startup Programs</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysqld.html">mysqld — The MySQL Server</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysqld-safe.html">mysqld_safe — MySQL Server Startup Script</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysql-server.html">mysql.server — MySQL Server Startup Script</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysqld-multi.html">mysqld_multi — Manage Multiple MySQL Servers</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="mysqlpump.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="programs-installation.html">Installation-Related Programs</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="comp-err.html">comp_err — Compile MySQL Error Message File</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysql-install-db.html">mysql_install_db — Initialize MySQL Data Directory</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysql-plugin.html">mysql_plugin — Configure MySQL Server Plugins</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysql-secure-installation.html">mysql_secure_installation — Improve MySQL Installation Security</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysql-ssl-rsa-setup.html">mysql_ssl_rsa_setup — Create SSL/RSA Files</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysql-tzinfo-to-sql.html">mysql_tzinfo_to_sql — Load the Time Zone Tables</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysql-upgrade.html">mysql_upgrade — Check and Upgrade MySQL Tables</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="mysqlpump.html?ff=nopfpls"><span class="icon-chevron-down"></span></a></div><div class="docs-sidebar-nav-link"><a href="programs-client.html">Client Programs</a></div></div>                        <div class="docs-submenu">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="mysqlpump.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="mysql.html">mysql — The MySQL Command-Line Client</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysql-command-options.html">mysql Client Options</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysql-commands.html">mysql Client Commands</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysql-logging.html">mysql Client Logging</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysql-server-side-help.html">mysql Client Server-Side Help</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysql-batch-commands.html">Executing SQL Statements from a Text File</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysql-tips.html">mysql Client Tips</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysqladmin.html">mysqladmin — A MySQL Server Administration Program</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysqlcheck.html">mysqlcheck — A Table Maintenance Program</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysqldump.html">mysqldump — A Database Backup Program</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysqlimport.html">mysqlimport — A Data Import Program</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link current"><a href="mysqlpump.html">mysqlpump — A Database Backup Program</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysqlshow.html">mysqlshow — Display Database, Table, and Column Information</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysqlslap.html">mysqlslap — A Load Emulation Client</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="mysqlpump.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="programs-admin-utils.html">Administrative and Utility Programs</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="innochecksum.html">innochecksum — Offline InnoDB File Checksum Utility</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="myisam-ftdump.html">myisam_ftdump — Display Full-Text Index information</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="mysqlpump.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="myisamchk.html">myisamchk — MyISAM Table-Maintenance Utility</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="myisamchk-general-options.html">myisamchk General Options</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="myisamchk-check-options.html">myisamchk Check Options</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="myisamchk-repair-options.html">myisamchk Repair Options</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="myisamchk-other-options.html">Other myisamchk Options</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="myisamchk-table-info.html">Obtaining Table Information with myisamchk</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="myisamchk-memory.html">myisamchk Memory Usage</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="myisamlog.html">myisamlog — Display MyISAM Log File Contents</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="myisampack.html">myisampack — Generate Compressed, Read-Only MyISAM Tables</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysql-config-editor.html">mysql_config_editor — MySQL Configuration Utility</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="mysqlpump.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="mysqlbinlog.html">mysqlbinlog — Utility for Processing Binary Log Files</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysqlbinlog-hexdump.html">mysqlbinlog Hex Dump Format</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysqlbinlog-row-events.html">mysqlbinlog Row Event Display</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysqlbinlog-backup.html">Using mysqlbinlog to Back Up Binary Log Files</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysqlbinlog-server-id.html">Specifying the mysqlbinlog Server ID</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysqldumpslow.html">mysqldumpslow — Summarize Slow Query Log Files</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="mysqlpump.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="programs-development.html">Program Development Utilities</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysql-config.html">mysql_config — Display Options for Compiling Clients</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="my-print-defaults.html">my_print_defaults — Display Options from Option Files</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="resolve-stack-dump.html">resolve_stack_dump — Resolve Numeric Stack Trace Dump to Symbols</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="mysqlpump.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="programs-miscellaneous.html">Miscellaneous Programs</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="lz4-decompress.html">lz4_decompress — Decompress mysqlpump LZ4-Compressed Output</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="perror.html">perror — Display MySQL Error Message Information</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="replace-utility.html">replace — A String-Replacement Utility</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="resolveip.html">resolveip — Resolve Host name to IP Address or Vice
+Versa</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="zlib-decompress.html">zlib_decompress — Decompress mysqlpump ZLIB-Compressed Output</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="environment-variables.html">Environment Variables</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="unix-signal-response.html">Unix Signal Handling in MySQL</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="mysqlpump.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="server-administration.html">MySQL Server Administration</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="mysqlpump.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="security.html">Security</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="mysqlpump.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="backup-and-recovery.html">Backup and Recovery</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="mysqlpump.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="optimization.html">Optimization</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="mysqlpump.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="language-structure.html">Language Structure</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="mysqlpump.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="charset.html">Character Sets, Collations, Unicode</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="mysqlpump.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="data-types.html">Data Types</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="mysqlpump.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="functions.html">Functions and Operators</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="mysqlpump.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="sql-statements.html">SQL Statements</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="mysqlpump.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="innodb-storage-engine.html">The InnoDB Storage Engine</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="mysqlpump.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="storage-engines.html">Alternative Storage Engines</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="mysqlpump.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="replication.html">Replication</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="mysqlpump.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="group-replication.html">Group Replication</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysql-shell-userguide.html">MySQL Shell</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="mysqlpump.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="document-store.html">Using MySQL as a Document Store</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysql-innodb-cluster-introduction.html">InnoDB Cluster</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="mysqlpump.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="mysql-cluster.html">MySQL NDB Cluster 7.5 and NDB Cluster 7.6</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="mysqlpump.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="partitioning.html">Partitioning</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="mysqlpump.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="stored-objects.html">Stored Objects</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="mysqlpump.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="information-schema.html">INFORMATION_SCHEMA Tables</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="mysqlpump.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="performance-schema.html">MySQL Performance Schema</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="mysqlpump.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="sys-schema.html">MySQL sys Schema</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="mysqlpump.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="connectors-apis.html">Connectors and APIs</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="mysqlpump.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="mysql-enterprise.html">MySQL Enterprise Edition</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="workbench.html">MySQL Workbench</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="mysqlpump.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="faqs.html">MySQL 5.7 Frequently Asked Questions</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="mysqlpump.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="error-handling.html">Error Messages and Common Problems</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="mysqlpump.html?ff=nopfpls"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="indexes.html">Indexes</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="glossary.html">MySQL Glossary</a></div></div>                    </li>
+        </ul>
+                            </nav>
+        </div>
+
+        
+<a class="docs-sidebar-section" href="mysqlpump.html?ff=nopfpls"><span class="icon-related"></span>
+    <span class="text">Related Documentation</span></a>
+<div class="docs-sidebar-accordian open">
+    <div class="text">
+        <a href="https://dev.mysql.com/doc/relnotes/mysql/5.7/en/">MySQL 5.7 Release Notes</a><br />
+        </div>
+</div>
+
+    <a class="docs-sidebar-section" href="mysqlpump.html?ff=nopfpls"><span class="icon-download-thin"></span>
+        <span class="text">
+            Download
+                            this Manual
+                    </span>
+    </a>
+    <div class="docs-sidebar-accordian open">
+        <div class="text">
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.pdf">PDF (US Ltr)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.a4.pdf">PDF (A4)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-ref-manual-5.7-en-pdf-1-20210225.noarch.rpm">PDF (RPM)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.html-chapter.tar.gz">HTML Download (TGZ)</a>
+            - 10.1Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.html-chapter.zip">HTML Download (Zip)</a>
+            - 10.2Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-ref-manual-5.7-en-html-chapter-1-20210225.noarch.rpm">HTML Download (RPM)</a>
+            - 8.9Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.man-gpl.tar.gz">Man Pages (TGZ)</a>
+            - 224.7Kb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.man-gpl.zip">Man Pages (Zip)</a>
+            - 332.6Kb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-5.7.info.gz">Info (Gzip)</a>
+            - 3.3Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-5.7.info.zip">Info (Zip)</a>
+            - 3.3Mb<br />
+                    </div>
+    </div>
+
+<a class="docs-sidebar-section" href="mysqlpump.html?ff=nopfpls"><span class="icon-book"></span>
+    <span class="text">Excerpts from this Manual</span></a>
+<div class="docs-sidebar-accordian">
+    <div class="text">
+                <a href="https://dev.mysql.com/doc/mysql-backup-excerpt/5.7/en/">MySQL Backup and Recovery</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-g11n-excerpt/5.7/en/">MySQL Globalization</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-infoschema-excerpt/5.7/en/">MySQL Information Schema</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-installation-excerpt/5.7/en/">MySQL Installation Guide</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-linuxunix-excerpt/5.7/en/">MySQL and Linux/Unix</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-osx-excerpt/5.7/en/">MySQL and OS X</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-partitioning-excerpt/5.7/en/">MySQL Partitioning</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-perfschema-excerpt/5.7/en/">MySQL Performance Schema</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-replication-excerpt/5.7/en/">MySQL Replication</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-repo-excerpt/5.7/en/">Using the MySQL Yum Repository</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-reslimits-excerpt/5.7/en/">MySQL Restrictions and Limitations</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-security-excerpt/5.7/en/">Security in MySQL</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-solaris-excerpt/5.7/en/">MySQL and Solaris</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-sourcebuild-excerpt/5.7/en/">Building MySQL from Source</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-startstop-excerpt/5.7/en/">Starting and Stopping MySQL</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-tutorial-excerpt/5.7/en/">MySQL Tutorial</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-windows-excerpt/5.7/en/">MySQL and Windows</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-cluster-excerpt/5.7/en/">MySQL NDB Cluster 7.5</a><br />
+            </div>
+</div>
+
+        <br /><span id="wkr"><br /></span>
+    </div>
+    </div>
+
+    <div id="docs-main" class="has-toc">
+    <div id="docs-main-inner">
+
+                <div class="right" id="docs-version-nav">
+            <a href="mysqlpump.html?ff=nopfpls" id="docs-version-nav-toggle">version 5.7
+            <span class="icon-chevron-down"></span></a>
+            <div id="docs-version-list">
+                                                        <a                         href="https://dev.mysql.com/doc/refman/8.0/en/mysqlpump.html">
+                        8.0
+                                                &nbsp;current
+                                            </a><br />
+                                                                                                                <a                         class="tooltip-left"
+                        data-tooltip="The page you are viewing does not exist in version 5.6.
+                        This link will take you to the Table of Contents."
+                                                href="https://dev.mysql.com/doc/refman/5.6/en/">
+                        5.6
+                                            </a><br />
+                                                                        <div id="docs-version-nav-lang">
+                                                                                                                                                    <a                                     class="tooltip-left"
+                                    data-tooltip="The page you are viewing does not exist in version
+                                    5.6 (JA).
+                                    This link will take you to the Table of Contents."
+                                                                        href="https://dev.mysql.com/doc/refman/5.6/ja/">
+                                    5.6&nbsp;
+                                                                            Japanese
+                                                                    </a><br />
+                                                                                            </div>
+                            </div>
+        </div>
+        
+        <div id="docs-show-nav" class="left hidden" style="margin-right: 15px;">
+            <a class="docs-show-hide-nav" href="mysqlpump.html?ff=nopfpls" aria-label="Show Sidebar"
+                title="Show Sidebar"><span class="icon-arrow-small-right"></span></a>
+        </div>
+
+                        <div id="docs-breadcrumbs">
+            <a href="index.html">MySQL 5.7 Reference Manual</a> &nbsp;/&nbsp;
+                            <span id="breadcrumbs-link"><a href="mysqlpump.html?ff=nopfpls" id="show-breadcrumbs">...</a> &nbsp;/&nbsp;</span>
+                <span class="hidden" id="hidden-breadcrumbs">
+                                                        <a href="programs.html">MySQL Programs</a> &nbsp;/&nbsp;
+                                                            <a href="programs-client.html">Client Programs</a> &nbsp;/&nbsp;
+                                                                                        </span>
+                                        mysqlpump — A Database Backup Program
+                                    </div>
+        
+        <div id="docs-body">
+        
+<div class="section">
+
+<div class="titlepage">
+<div>
+<div>
+<h3 class="title"><a name="mysqlpump"></a>4.5.6 <span class="command"><strong>mysqlpump</strong></span> — A Database Backup Program</h3>
+
+</div>
+
+</div>
+
+</div>
+<a class="indexterm" name="idm44933623143952"></a><a class="indexterm" name="idm44933623143072"></a><a class="indexterm" name="idm44933623141808"></a><a class="indexterm" name="idm44933623140544"></a><a class="indexterm" name="idm44933623139280"></a>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><a class="xref" href="mysqlpump.html#mysqlpump-syntax" title="mysqlpump Invocation Syntax">mysqlpump Invocation Syntax</a></p></li><li class="listitem"><p><a class="xref" href="mysqlpump.html#mysqlpump-option-summary" title="mysqlpump Option Summary">mysqlpump Option Summary</a></p></li><li class="listitem"><p><a class="xref" href="mysqlpump.html#mysqlpump-options" title="mysqlpump Option Descriptions">mysqlpump Option Descriptions</a></p></li><li class="listitem"><p><a class="xref" href="mysqlpump.html#mysqlpump-filtering" title="mysqlpump Object Selection">mysqlpump Object Selection</a></p></li><li class="listitem"><p><a class="xref" href="mysqlpump.html#mysqlpump-parallelism" title="mysqlpump Parallel Processing">mysqlpump Parallel Processing</a></p></li><li class="listitem"><p><a class="xref" href="mysqlpump.html#mysqlpump-restrictions" title="mysqlpump Restrictions">mysqlpump Restrictions</a></p></li></ul>
+</div>
+<p>
+        The <a class="link" href="mysqlpump.html" title="4.5.6 mysqlpump — A Database Backup Program"><span class="command"><strong>mysqlpump</strong></span></a> client utility performs
+        <a class="link" href="glossary.html#glos_logical_backup" title="logical backup">logical backups</a>,
+        producing a set of SQL statements that can be executed to
+        reproduce the original database object definitions and table
+        data. It dumps one or more MySQL databases for backup or
+        transfer to another SQL server.
+      </p><p>
+        <a class="link" href="mysqlpump.html" title="4.5.6 mysqlpump — A Database Backup Program"><span class="command"><strong>mysqlpump</strong></span></a> features include:
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+            Parallel processing of databases, and of objects within
+            databases, to speed up the dump process
+          </p></li><li class="listitem"><p>
+            Better control over which databases and database objects
+            (tables, stored programs, user accounts) to dump
+          </p></li><li class="listitem"><p>
+            Dumping of user accounts as account-management statements
+            (<a class="link" href="create-user.html" title="13.7.1.2 CREATE USER Statement"><code class="literal">CREATE USER</code></a>,
+            <a class="link" href="grant.html" title="13.7.1.4 GRANT Statement"><code class="literal">GRANT</code></a>) rather than as inserts
+            into the <code class="literal">mysql</code> system database
+          </p></li><li class="listitem"><p>
+            Capability of creating compressed output
+          </p></li><li class="listitem"><p>
+            Progress indicator (the values are estimates)
+          </p></li><li class="listitem"><p>
+            For dump file reloading, faster secondary index creation for
+            <code class="literal">InnoDB</code> tables by adding indexes after
+            rows are inserted
+</p></li></ul>
+</div>
+<p>
+        <a class="link" href="mysqlpump.html" title="4.5.6 mysqlpump — A Database Backup Program"><span class="command"><strong>mysqlpump</strong></span></a> requires at least the
+        <a class="link" href="privileges-provided.html#priv_select"><code class="literal">SELECT</code></a> privilege for dumped
+        tables, <a class="link" href="privileges-provided.html#priv_show-view"><code class="literal">SHOW VIEW</code></a> for dumped
+        views, <a class="link" href="privileges-provided.html#priv_trigger"><code class="literal">TRIGGER</code></a> for dumped
+        triggers, and <a class="link" href="privileges-provided.html#priv_lock-tables"><code class="literal">LOCK TABLES</code></a> if the
+        <a class="link" href="mysqlpump.html#option_mysqlpump_single-transaction"><code class="option">--single-transaction</code></a> option is
+        not used. The <a class="link" href="privileges-provided.html#priv_select"><code class="literal">SELECT</code></a> privilege on
+        the <code class="literal">mysql</code> system database is required to dump
+        user definitions. Certain options might require other privileges
+        as noted in the option descriptions.
+      </p><p>
+        To reload a dump file, you must have the privileges required to
+        execute the statements that it contains, such as the appropriate
+        <code class="literal">CREATE</code> privileges for objects created by
+        those statements.
+</p>
+<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+
+<div class="admon-title">
+Note
+</div>
+<p>
+          A dump made using PowerShell on Windows with output
+          redirection creates a file that has UTF-16 encoding:
+        </p><pre class="programlisting copytoclipboard line-numbers language-terminal one-line"><code class="language-terminal">mysqlpump [options] &gt; dump.sql</code></pre><p>
+          However, UTF-16 is not permitted as a connection character set
+          (see <a class="xref" href="charset-connection.html" title="10.4 Connection Character Sets and Collations">Section 10.4, “Connection Character Sets and Collations”</a>), so the dump file
+          does not load correctly. To work around this issue, use the
+          <code class="option">--result-file</code> option, which creates the
+          output in ASCII format:
+        </p><pre class="programlisting copytoclipboard line-numbers language-terminal one-line"><code class="language-terminal">mysqlpump [options] --result-file=dump.sql</code></pre>
+</div>
+<h4><a name="mysqlpump-syntax"></a>mysqlpump Invocation Syntax</h4>
+<p>
+        By default, <a class="link" href="mysqlpump.html" title="4.5.6 mysqlpump — A Database Backup Program"><span class="command"><strong>mysqlpump</strong></span></a> dumps all databases
+        (with certain exceptions noted in
+        <a class="xref" href="mysqlpump.html#mysqlpump-restrictions" title="mysqlpump Restrictions">mysqlpump Restrictions</a>). To specify this
+        behavior explicitly, use the
+        <a class="link" href="mysqlpump.html#option_mysqlpump_all-databases"><code class="option">--all-databases</code></a> option:
+      </p><pre class="programlisting copytoclipboard line-numbers language-terminal one-line"><code class="language-terminal">mysqlpump --all-databases</code></pre><p>
+        To dump a single database, or certain tables within that
+        database, name the database on the command line, optionally
+        followed by table names:
+      </p><pre class="programlisting copytoclipboard line-numbers language-terminal"><code class="language-terminal">mysqlpump <em class="replaceable">db_name</em>
+mysqlpump <em class="replaceable">db_name tbl_name1 tbl_name2 ...</em></code></pre><p>
+        To treat all name arguments as database names, use the
+        <a class="link" href="mysqlpump.html#option_mysqlpump_databases"><code class="option">--databases</code></a> option:
+      </p><pre class="programlisting copytoclipboard line-numbers language-terminal one-line"><code class="language-terminal">mysqlpump --databases <em class="replaceable">db_name1 db_name2</em> ...</code></pre><p>
+        By default, <a class="link" href="mysqlpump.html" title="4.5.6 mysqlpump — A Database Backup Program"><span class="command"><strong>mysqlpump</strong></span></a> does not dump user
+        account definitions, even if you dump the
+        <code class="literal">mysql</code> system database that contains the grant
+        tables. To dump grant table contents as logical definitions in
+        the form of <a class="link" href="create-user.html" title="13.7.1.2 CREATE USER Statement"><code class="literal">CREATE USER</code></a> and
+        <a class="link" href="grant.html" title="13.7.1.4 GRANT Statement"><code class="literal">GRANT</code></a> statements, use the
+        <a class="link" href="mysqlpump.html#option_mysqlpump_users"><code class="option">--users</code></a> option and suppress
+        all database dumping:
+      </p><pre class="programlisting copytoclipboard line-numbers language-terminal one-line"><code class="language-terminal">mysqlpump --exclude-databases=% --users</code></pre><p>
+        In the preceding command, <code class="literal">%</code> is a wildcard
+        that matches all database names for the
+        <a class="link" href="mysqlpump.html#option_mysqlpump_exclude-databases"><code class="option">--exclude-databases</code></a> option.
+      </p><p>
+        <a class="link" href="mysqlpump.html" title="4.5.6 mysqlpump — A Database Backup Program"><span class="command"><strong>mysqlpump</strong></span></a> supports several options for
+        including or excluding databases, tables, stored programs, and
+        user definitions. See <a class="xref" href="mysqlpump.html#mysqlpump-filtering" title="mysqlpump Object Selection">mysqlpump Object Selection</a>.
+      </p><p>
+        To reload a dump file, execute the statements that it contains.
+        For example, use the <a class="link" href="mysql.html" title="4.5.1 mysql — The MySQL Command-Line Client"><span class="command"><strong>mysql</strong></span></a> client:
+      </p><pre class="programlisting copytoclipboard line-numbers language-terminal"><code class="language-terminal">mysqlpump [options] &gt; dump.sql
+mysql &lt; dump.sql</code></pre><p>
+        The following discussion provides additional
+        <a class="link" href="mysqlpump.html" title="4.5.6 mysqlpump — A Database Backup Program"><span class="command"><strong>mysqlpump</strong></span></a> usage examples.
+      </p><p>
+        To see a list of the options <a class="link" href="mysqlpump.html" title="4.5.6 mysqlpump — A Database Backup Program"><span class="command"><strong>mysqlpump</strong></span></a>
+        supports, issue the command <a class="link" href="mysqlpump.html" title="4.5.6 mysqlpump — A Database Backup Program"><span class="command"><strong>mysqlpump --help</strong></span></a>.
+</p>
+<h4><a name="mysqlpump-option-summary"></a>mysqlpump Option Summary</h4>
+<p>
+        <a class="link" href="mysqlpump.html" title="4.5.6 mysqlpump — A Database Backup Program"><span class="command"><strong>mysqlpump</strong></span></a> supports the following options,
+        which can be specified on the command line or in the
+        <code class="literal">[mysqlpump]</code> and <code class="literal">[client]</code>
+        groups of an option file. (Prior to MySQL 5.7.30,
+        <a class="link" href="mysqlpump.html" title="4.5.6 mysqlpump — A Database Backup Program"><span class="command"><strong>mysqlpump</strong></span></a> read the
+        <code class="literal">[mysql_dump]</code> group rather than
+        <code class="literal">[mysqlpump]</code>. As of 5.7.30,
+        <code class="literal">[mysql_dump]</code> is still accepted but is
+        deprecated.) For information about option files used by MySQL
+        programs, see <a class="xref" href="option-files.html" title="4.2.2.2 Using Option Files">Section 4.2.2.2, “Using Option Files”</a>.
+</p>
+<div class="table">
+<a name="idm44933623074688"></a><p class="title"><b>Table 4.17 mysqlpump Options</b></p>
+<div class="table-contents">
+<table frame="box" rules="all" summary="Command-line options available for mysqlpump."><col width="31%"><col width="56%"><col width="12%"><thead><tr><th scope="col">Option Name</th>
+<th scope="col">Description</th>
+<th scope="col">Introduced</th>
+</tr></thead><tbody><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_add-drop-database">--add-drop-database</a></th>
+<td>Add DROP DATABASE statement before each CREATE DATABASE statement</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_add-drop-table">--add-drop-table</a></th>
+<td>Add DROP TABLE statement before each CREATE TABLE statement</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_add-drop-user">--add-drop-user</a></th>
+<td>Add DROP USER statement before each CREATE USER statement</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_add-locks">--add-locks</a></th>
+<td>Surround each table dump with LOCK TABLES and UNLOCK TABLES statements</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_all-databases">--all-databases</a></th>
+<td>Dump all databases</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_bind-address">--bind-address</a></th>
+<td>Use specified network interface to connect to MySQL Server</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_character-sets-dir">--character-sets-dir</a></th>
+<td>Directory where character sets are installed</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_complete-insert">--complete-insert</a></th>
+<td>Use complete INSERT statements that include column names</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_compress">--compress</a></th>
+<td>Compress all information sent between client and server</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_compress-output">--compress-output</a></th>
+<td>Output compression algorithm</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_databases">--databases</a></th>
+<td>Interpret all name arguments as database names</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_debug">--debug</a></th>
+<td>Write debugging log</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_debug-check">--debug-check</a></th>
+<td>Print debugging information when program exits</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_debug-info">--debug-info</a></th>
+<td>Print debugging information, memory, and CPU statistics when program exits</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_default-auth">--default-auth</a></th>
+<td>Authentication plugin to use</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_default-character-set">--default-character-set</a></th>
+<td>Specify default character set</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_default-parallelism">--default-parallelism</a></th>
+<td>Default number of threads for parallel processing</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_defaults-extra-file">--defaults-extra-file</a></th>
+<td>Read named option file in addition to usual option files</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_defaults-file">--defaults-file</a></th>
+<td>Read only named option file</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_defaults-group-suffix">--defaults-group-suffix</a></th>
+<td>Option group suffix value</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_defer-table-indexes">--defer-table-indexes</a></th>
+<td>For reloading, defer index creation until after loading table rows</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_events">--events</a></th>
+<td>Dump events from dumped databases</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_exclude-databases">--exclude-databases</a></th>
+<td>Databases to exclude from dump</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_exclude-events">--exclude-events</a></th>
+<td>Events to exclude from dump</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_exclude-routines">--exclude-routines</a></th>
+<td>Routines to exclude from dump</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_exclude-tables">--exclude-tables</a></th>
+<td>Tables to exclude from dump</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_exclude-triggers">--exclude-triggers</a></th>
+<td>Triggers to exclude from dump</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_exclude-users">--exclude-users</a></th>
+<td>Users to exclude from dump</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_extended-insert">--extended-insert</a></th>
+<td>Use multiple-row INSERT syntax</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_get-server-public-key">--get-server-public-key</a></th>
+<td>Request RSA public key from server</td>
+<td>5.7.23</td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_help">--help</a></th>
+<td>Display help message and exit</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_hex-blob">--hex-blob</a></th>
+<td>Dump binary columns using hexadecimal notation</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_host">--host</a></th>
+<td>Host on which MySQL server is located</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_include-databases">--include-databases</a></th>
+<td>Databases to include in dump</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_include-events">--include-events</a></th>
+<td>Events to include in dump</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_include-routines">--include-routines</a></th>
+<td>Routines to include in dump</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_include-tables">--include-tables</a></th>
+<td>Tables to include in dump</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_include-triggers">--include-triggers</a></th>
+<td>Triggers to include in dump</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_include-users">--include-users</a></th>
+<td>Users to include in dump</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_insert-ignore">--insert-ignore</a></th>
+<td>Write INSERT IGNORE rather than INSERT statements</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_log-error-file">--log-error-file</a></th>
+<td>Append warnings and errors to named file</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_login-path">--login-path</a></th>
+<td>Read login path options from .mylogin.cnf</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_max-allowed-packet">--max-allowed-packet</a></th>
+<td>Maximum packet length to send to or receive from server</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_net-buffer-length">--net-buffer-length</a></th>
+<td>Buffer size for TCP/IP and socket communication</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_no-create-db">--no-create-db</a></th>
+<td>Do not write CREATE DATABASE statements</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_no-create-info">--no-create-info</a></th>
+<td>Do not write CREATE TABLE statements that re-create each dumped table</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_no-defaults">--no-defaults</a></th>
+<td>Read no option files</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_parallel-schemas">--parallel-schemas</a></th>
+<td>Specify schema-processing parallelism</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_password">--password</a></th>
+<td>Password to use when connecting to server</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_plugin-dir">--plugin-dir</a></th>
+<td>Directory where plugins are installed</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_port">--port</a></th>
+<td>TCP/IP port number for connection</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_print-defaults">--print-defaults</a></th>
+<td>Print default options</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_protocol">--protocol</a></th>
+<td>Transport protocol to use</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_replace">--replace</a></th>
+<td>Write REPLACE statements rather than INSERT statements</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_result-file">--result-file</a></th>
+<td>Direct output to a given file</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_routines">--routines</a></th>
+<td>Dump stored routines (procedures and functions) from dumped databases</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_secure-auth">--secure-auth</a></th>
+<td>Do not send passwords to server in old (pre-4.1) format</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_server-public-key-path">--server-public-key-path</a></th>
+<td>Path name to file containing RSA public key</td>
+<td>5.7.23</td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_set-charset">--set-charset</a></th>
+<td>Add SET NAMES default_character_set to output</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_set-gtid-purged">--set-gtid-purged</a></th>
+<td>Whether to add SET @@GLOBAL.GTID_PURGED to output</td>
+<td>5.7.18</td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_single-transaction">--single-transaction</a></th>
+<td>Dump tables within single transaction</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_skip-definer">--skip-definer</a></th>
+<td>Omit DEFINER and SQL SECURITY clauses from view and stored program CREATE statements</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_skip-dump-rows">--skip-dump-rows</a></th>
+<td>Do not dump table rows</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_socket">--socket</a></th>
+<td>Unix socket file or Windows named pipe to use</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_ssl">--ssl</a></th>
+<td>Enable connection encryption</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_ssl">--ssl-ca</a></th>
+<td>File that contains list of trusted SSL Certificate Authorities</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_ssl">--ssl-capath</a></th>
+<td>Directory that contains trusted SSL Certificate Authority certificate files</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_ssl">--ssl-cert</a></th>
+<td>File that contains X.509 certificate</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_ssl">--ssl-cipher</a></th>
+<td>Permissible ciphers for connection encryption</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_ssl">--ssl-crl</a></th>
+<td>File that contains certificate revocation lists</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_ssl">--ssl-crlpath</a></th>
+<td>Directory that contains certificate revocation-list files</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_ssl">--ssl-key</a></th>
+<td>File that contains X.509 key</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_ssl">--ssl-mode</a></th>
+<td>Desired security state of connection to server</td>
+<td>5.7.11</td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_ssl">--ssl-verify-server-cert</a></th>
+<td>Verify host name against server certificate Common Name identity</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_tls-version">--tls-version</a></th>
+<td>Permissible TLS protocols for encrypted connections</td>
+<td>5.7.10</td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_triggers">--triggers</a></th>
+<td>Dump triggers for each dumped table</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_tz-utc">--tz-utc</a></th>
+<td>Add SET TIME_ZONE='+00:00' to dump file</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_user">--user</a></th>
+<td>MySQL user name to use when connecting to server</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_users">--users</a></th>
+<td>Dump user accounts</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_version">--version</a></th>
+<td>Display version information and exit</td>
+<td></td>
+</tr><tr><th scope="row"><a class="link" href="mysqlpump.html#option_mysqlpump_watch-progress">--watch-progress</a></th>
+<td>Display progress indicator</td>
+<td></td>
+</tr></tbody></table>
+</div>
+
+</div>
+<br class="table-break">
+<h4><a name="mysqlpump-options"></a>mysqlpump Option Descriptions</h4>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><a name="option_mysqlpump_help"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_help"><code class="option">--help</code></a>,
+            <code class="option">-?</code>
+          </p><a class="indexterm" name="idm44933622769088"></a><a class="indexterm" name="idm44933622767600"></a><p>
+            Display a help message and exit.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_add-drop-database"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_add-drop-database"><code class="option">--add-drop-database</code></a>
+          </p><a class="indexterm" name="idm44933622763472"></a><a class="indexterm" name="idm44933622762016"></a><p>
+            Write a <a class="link" href="drop-database.html" title="13.1.22 DROP DATABASE Statement"><code class="literal">DROP DATABASE</code></a>
+            statement before each <a class="link" href="create-database.html" title="13.1.11 CREATE DATABASE Statement"><code class="literal">CREATE
+            DATABASE</code></a> statement.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_add-drop-table"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_add-drop-table"><code class="option">--add-drop-table</code></a>
+          </p><a class="indexterm" name="idm44933622755360"></a><a class="indexterm" name="idm44933622753872"></a><p>
+            Write a <a class="link" href="drop-table.html" title="13.1.29 DROP TABLE Statement"><code class="literal">DROP TABLE</code></a> statement
+            before each <a class="link" href="create-table.html" title="13.1.18 CREATE TABLE Statement"><code class="literal">CREATE TABLE</code></a>
+            statement.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_add-drop-user"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_add-drop-user"><code class="option">--add-drop-user</code></a>
+          </p><a class="indexterm" name="idm44933622747344"></a><a class="indexterm" name="idm44933622745856"></a><p>
+            Write a <a class="link" href="drop-user.html" title="13.7.1.3 DROP USER Statement"><code class="literal">DROP USER</code></a> statement
+            before each <a class="link" href="create-user.html" title="13.7.1.2 CREATE USER Statement"><code class="literal">CREATE USER</code></a>
+            statement.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_add-locks"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_add-locks"><code class="option">--add-locks</code></a>
+          </p><a class="indexterm" name="idm44933622739264"></a><a class="indexterm" name="idm44933622737776"></a><p>
+            Surround each table dump with <a class="link" href="lock-tables.html" title="13.3.5 LOCK TABLES and UNLOCK TABLES Statements"><code class="literal">LOCK
+            TABLES</code></a> and
+            <a class="link" href="lock-tables.html" title="13.3.5 LOCK TABLES and UNLOCK TABLES Statements"><code class="literal">UNLOCK
+            TABLES</code></a> statements. This results in faster inserts
+            when the dump file is reloaded. See
+            <a class="xref" href="insert-optimization.html" title="8.2.4.1 Optimizing INSERT Statements">Section 8.2.4.1, “Optimizing INSERT Statements”</a>.
+          </p><p>
+            This option does not work with parallelism because
+            <a class="link" href="insert.html" title="13.2.5 INSERT Statement"><code class="literal">INSERT</code></a> statements from
+            different tables can be interleaved and
+            <a class="link" href="lock-tables.html" title="13.3.5 LOCK TABLES and UNLOCK TABLES Statements"><code class="literal">UNLOCK
+            TABLES</code></a> following the end of the inserts for one
+            table could release locks on tables for which inserts
+            remain.
+          </p><p>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_add-locks"><code class="option">--add-locks</code></a> and
+            <a class="link" href="mysqlpump.html#option_mysqlpump_single-transaction"><code class="option">--single-transaction</code></a> are
+            mutually exclusive.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_all-databases"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_all-databases"><code class="option">--all-databases</code></a>,
+            <code class="option">-A</code>
+          </p><a class="indexterm" name="idm44933622724432"></a><a class="indexterm" name="idm44933622722944"></a><p>
+            Dump all databases (with certain exceptions noted in
+            <a class="xref" href="mysqlpump.html#mysqlpump-restrictions" title="mysqlpump Restrictions">mysqlpump Restrictions</a>). This is the
+            default behavior if no other is specified explicitly.
+          </p><p>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_all-databases"><code class="option">--all-databases</code></a> and
+            <a class="link" href="mysqlpump.html#option_mysqlpump_databases"><code class="option">--databases</code></a> are mutually
+            exclusive.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_bind-address"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_bind-address"><code class="option">--bind-address=<em class="replaceable"><code>ip_address</code></em></code></a>
+          </p><a class="indexterm" name="idm44933622715344"></a><a class="indexterm" name="idm44933622713856"></a><p>
+            On a computer having multiple network interfaces, use this
+            option to select which interface to use for connecting to
+            the MySQL server.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_character-sets-dir"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_character-sets-dir"><code class="option">--character-sets-dir=<em class="replaceable"><code>path</code></em></code></a>
+          </p><a class="indexterm" name="idm44933622709312"></a><a class="indexterm" name="idm44933622707856"></a><p>
+            The directory where character sets are installed. See
+            <a class="xref" href="charset-configuration.html" title="10.15 Character Set Configuration">Section 10.15, “Character Set Configuration”</a>.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_complete-insert"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_complete-insert"><code class="option">--complete-insert</code></a>
+          </p><a class="indexterm" name="idm44933622702960"></a><a class="indexterm" name="idm44933622701472"></a><p>
+            Write complete <a class="link" href="insert.html" title="13.2.5 INSERT Statement"><code class="literal">INSERT</code></a>
+            statements that include column names.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_compress"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_compress"><code class="option">--compress</code></a>,
+            <code class="option">-C</code>
+          </p><a class="indexterm" name="idm44933622695728"></a><a class="indexterm" name="idm44933622694240"></a><p>
+            Compress all information sent between the client and the
+            server if possible. See
+            <a class="xref" href="connection-compression-control.html" title="4.2.6 Connection Compression Control">Section 4.2.6, “Connection Compression Control”</a>.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_compress-output"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_compress-output"><code class="option">--compress-output=<em class="replaceable"><code>algorithm</code></em></code></a>
+          </p><a class="indexterm" name="idm44933622689056"></a><a class="indexterm" name="idm44933622687568"></a><p>
+            By default, <a class="link" href="mysqlpump.html" title="4.5.6 mysqlpump — A Database Backup Program"><span class="command"><strong>mysqlpump</strong></span></a> does not compress
+            output. This option specifies output compression using the
+            specified algorithm. Permitted algorithms are
+            <code class="literal">LZ4</code> and <code class="literal">ZLIB</code>.
+          </p><p>
+            To uncompress compressed output, you must have an
+            appropriate utility. If the system commands
+            <span class="command"><strong>lz4</strong></span> and <span class="command"><strong>openssl zlib</strong></span>
+            are not available, as of MySQL 5.7.10, MySQL distributions
+            include <a class="link" href="lz4-decompress.html" title="4.8.1 lz4_decompress — Decompress mysqlpump LZ4-Compressed Output"><span class="command"><strong>lz4_decompress</strong></span></a> and
+            <a class="link" href="zlib-decompress.html" title="4.8.5 zlib_decompress — Decompress mysqlpump ZLIB-Compressed Output"><span class="command"><strong>zlib_decompress</strong></span></a> utilities that can be
+            used to decompress <a class="link" href="mysqlpump.html" title="4.5.6 mysqlpump — A Database Backup Program"><span class="command"><strong>mysqlpump</strong></span></a> output that
+            was compressed using the
+            <a class="link" href="mysqlpump.html#option_mysqlpump_compress-output"><code class="option">--compress-output=LZ4</code></a> and
+            <a class="link" href="mysqlpump.html#option_mysqlpump_compress-output"><code class="option">--compress-output=ZLIB</code></a>
+            options. For more information, see
+            <a class="xref" href="lz4-decompress.html" title="4.8.1 lz4_decompress — Decompress mysqlpump LZ4-Compressed Output">Section 4.8.1, “<span class="command"><strong>lz4_decompress</strong></span> — Decompress mysqlpump LZ4-Compressed Output”</a>, and
+            <a class="xref" href="zlib-decompress.html" title="4.8.5 zlib_decompress — Decompress mysqlpump ZLIB-Compressed Output">Section 4.8.5, “<span class="command"><strong>zlib_decompress</strong></span> — Decompress mysqlpump ZLIB-Compressed Output”</a>.
+          </p><p>
+            Alternatives include the <span class="command"><strong>lz4</strong></span> and
+            <code class="option">openssl</code> commands, if they are installed on
+            your system. For example, <span class="command"><strong>lz4</strong></span> can
+            uncompress <code class="literal">LZ4</code> output:
+          </p><pre class="programlisting copytoclipboard line-numbers language-terminal one-line"><code class="language-terminal">lz4 -d <em class="replaceable">input_file output_file</em></code></pre><p>
+            <code class="literal">ZLIB</code> output can be uncompresed like this:
+          </p><pre class="programlisting copytoclipboard line-numbers language-terminal one-line"><code class="language-terminal">openssl zlib -d &lt; <em class="replaceable">input_file</em> &gt; <em class="replaceable">output_file</em></code></pre></li><li class="listitem"><p><a name="option_mysqlpump_databases"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_databases"><code class="option">--databases</code></a>,
+            <code class="option">-B</code>
+          </p><a class="indexterm" name="idm44933622663712"></a><a class="indexterm" name="idm44933622662224"></a><p>
+            Normally, <a class="link" href="mysqlpump.html" title="4.5.6 mysqlpump — A Database Backup Program"><span class="command"><strong>mysqlpump</strong></span></a> treats the first name
+            argument on the command line as a database name and any
+            following names as table names. With this option, it treats
+            all name arguments as database names.
+            <a class="link" href="create-database.html" title="13.1.11 CREATE DATABASE Statement"><code class="literal">CREATE DATABASE</code></a> statements
+            are included in the output before each new database.
+          </p><p>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_all-databases"><code class="option">--all-databases</code></a> and
+            <a class="link" href="mysqlpump.html#option_mysqlpump_databases"><code class="option">--databases</code></a> are mutually
+            exclusive.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_debug"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_debug"><code class="option">--debug[=<em class="replaceable"><code>debug_options</code></em>]</code></a>,
+            <code class="option">-#
+            [<em class="replaceable"><code>debug_options</code></em>]</code>
+          </p><a class="indexterm" name="idm44933622651888"></a><a class="indexterm" name="idm44933622650400"></a><p>
+            Write a debugging log. A typical
+            <em class="replaceable"><code>debug_options</code></em> string is
+            <code class="literal">d:t:o,<em class="replaceable"><code>file_name</code></em></code>.
+            The default is
+            <code class="literal">d:t:O,/tmp/mysqlpump.trace</code>.
+          </p><p>
+            This option is available only if MySQL was built using
+            <a class="link" href="source-configuration-options.html#option_cmake_with_debug"><code class="option">WITH_DEBUG</code></a>. MySQL release
+            binaries provided by Oracle are <span class="emphasis"><em>not</em></span>
+            built using this option.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_debug-check"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_debug-check"><code class="option">--debug-check</code></a>
+          </p><a class="indexterm" name="idm44933622642112"></a><a class="indexterm" name="idm44933622640624"></a><p>
+            Print some debugging information when the program exits.
+          </p><p>
+            This option is available only if MySQL was built using
+            <a class="link" href="source-configuration-options.html#option_cmake_with_debug"><code class="option">WITH_DEBUG</code></a>. MySQL release
+            binaries provided by Oracle are <span class="emphasis"><em>not</em></span>
+            built using this option.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_debug-info"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_debug-info"><code class="option">--debug-info</code></a>,
+            <code class="option">-T</code>
+          </p><a class="indexterm" name="idm44933622634176"></a><a class="indexterm" name="idm44933622632688"></a><p>
+            Print debugging information and memory and CPU usage
+            statistics when the program exits.
+          </p><p>
+            This option is available only if MySQL was built using
+            <a class="link" href="source-configuration-options.html#option_cmake_with_debug"><code class="option">WITH_DEBUG</code></a>. MySQL release
+            binaries provided by Oracle are <span class="emphasis"><em>not</em></span>
+            built using this option.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_default-auth"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_default-auth"><code class="option">--default-auth=<em class="replaceable"><code>plugin</code></em></code></a>
+          </p><a class="indexterm" name="idm44933622626256"></a><a class="indexterm" name="idm44933622624768"></a><p>
+            A hint about which client-side authentication plugin to use.
+            See <a class="xref" href="pluggable-authentication.html" title="6.2.13 Pluggable Authentication">Section 6.2.13, “Pluggable Authentication”</a>.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_default-character-set"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_default-character-set"><code class="option">--default-character-set=<em class="replaceable"><code>charset_name</code></em></code></a>
+          </p><a class="indexterm" name="idm44933622619632"></a><a class="indexterm" name="idm44933622618128"></a><p>
+            Use <em class="replaceable"><code>charset_name</code></em> as the default
+            character set. See <a class="xref" href="charset-configuration.html" title="10.15 Character Set Configuration">Section 10.15, “Character Set Configuration”</a>.
+            If no character set is specified,
+            <a class="link" href="mysqlpump.html" title="4.5.6 mysqlpump — A Database Backup Program"><span class="command"><strong>mysqlpump</strong></span></a> uses <code class="literal">utf8</code>.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_default-parallelism"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_default-parallelism"><code class="option">--default-parallelism=<em class="replaceable"><code>N</code></em></code></a>
+          </p><a class="indexterm" name="idm44933622610560"></a><a class="indexterm" name="idm44933622609104"></a><p>
+            The default number of threads for each parallel processing
+            queue. The default is 2.
+          </p><p>
+            The <a class="link" href="mysqlpump.html#option_mysqlpump_parallel-schemas"><code class="option">--parallel-schemas</code></a>
+            option also affects parallelism and can be used to override
+            the default number of threads. For more information, see
+            <a class="xref" href="mysqlpump.html#mysqlpump-parallelism" title="mysqlpump Parallel Processing">mysqlpump Parallel Processing</a>.
+          </p><p>
+            With
+            <a class="link" href="mysqlpump.html#option_mysqlpump_default-parallelism"><code class="option">--default-parallelism=0</code></a>
+            and no <a class="link" href="mysqlpump.html#option_mysqlpump_parallel-schemas"><code class="option">--parallel-schemas</code></a>
+            options, <a class="link" href="mysqlpump.html" title="4.5.6 mysqlpump — A Database Backup Program"><span class="command"><strong>mysqlpump</strong></span></a> runs as a
+            single-threaded process and creates no queues.
+          </p><p>
+            With parallelism enabled, it is possible for output from
+            different databases to be interleaved.
+</p>
+<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+
+<div class="admon-title">
+Note
+</div>
+<p>
+              Before MySQL 5.7.11, use of the
+              <a class="link" href="mysqlpump.html#option_mysqlpump_single-transaction"><code class="option">--single-transaction</code></a>
+              option is mutually exclusive with parallelism. To use
+              <a class="link" href="mysqlpump.html#option_mysqlpump_single-transaction"><code class="option">--single-transaction</code></a>,
+              disable parallelism by setting
+              <a class="link" href="mysqlpump.html#option_mysqlpump_default-parallelism"><code class="option">--default-parallelism</code></a> to
+              0 and not using any instances of
+              <a class="link" href="mysqlpump.html#option_mysqlpump_parallel-schemas"><code class="option">--parallel-schemas</code></a>:
+            </p><pre class="programlisting copytoclipboard line-numbers language-terminal one-line"><code class="language-terminal">mysqlpump --single-transaction --default-parallelism=0</code></pre>
+</div>
+</li><li class="listitem"><p><a name="option_mysqlpump_defaults-extra-file"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_defaults-extra-file"><code class="option">--defaults-extra-file=<em class="replaceable"><code>file_name</code></em></code></a>
+          </p><a class="indexterm" name="idm44933622592192"></a><a class="indexterm" name="idm44933622590736"></a><p>
+            Read this option file after the global option file but (on
+            Unix) before the user option file. If the file does not
+            exist or is otherwise inaccessible, an error occurs. If
+            <em class="replaceable"><code>file_name</code></em> is not an absolute path
+            name, it is interpreted relative to the current directory.
+          </p><p>
+            For additional information about this and other option-file
+            options, see <a class="xref" href="option-file-options.html" title="4.2.2.3 Command-Line Options that Affect Option-File Handling">Section 4.2.2.3, “Command-Line Options that Affect Option-File Handling”</a>.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_defaults-file"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_defaults-file"><code class="option">--defaults-file=<em class="replaceable"><code>file_name</code></em></code></a>
+          </p><a class="indexterm" name="idm44933622584368"></a><a class="indexterm" name="idm44933622582880"></a><p>
+            Use only the given option file. If the file does not exist
+            or is otherwise inaccessible, an error occurs. If
+            <em class="replaceable"><code>file_name</code></em> is not an absolute path
+            name, it is interpreted relative to the current directory.
+          </p><p>
+            Exception: Even with
+            <a class="link" href="option-file-options.html#option_general_defaults-file"><code class="option">--defaults-file</code></a>, client
+            programs read <code class="filename">.mylogin.cnf</code>.
+          </p><p>
+            For additional information about this and other option-file
+            options, see <a class="xref" href="option-file-options.html" title="4.2.2.3 Command-Line Options that Affect Option-File Handling">Section 4.2.2.3, “Command-Line Options that Affect Option-File Handling”</a>.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_defaults-group-suffix"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_defaults-group-suffix"><code class="option">--defaults-group-suffix=<em class="replaceable"><code>str</code></em></code></a>
+          </p><a class="indexterm" name="idm44933622574608"></a><a class="indexterm" name="idm44933622573104"></a><p>
+            Read not only the usual option groups, but also groups with
+            the usual names and a suffix of
+            <em class="replaceable"><code>str</code></em>. For example,
+            <a class="link" href="mysqlpump.html" title="4.5.6 mysqlpump — A Database Backup Program"><span class="command"><strong>mysqlpump</strong></span></a> normally reads the
+            <code class="literal">[client]</code> and
+            <code class="literal">[mysqlpump]</code> groups. If this option is
+            given as
+            <a class="link" href="mysqlpump.html#option_mysqlpump_defaults-group-suffix"><code class="option">--defaults-group-suffix=_other</code></a>,
+            <a class="link" href="mysqlpump.html" title="4.5.6 mysqlpump — A Database Backup Program"><span class="command"><strong>mysqlpump</strong></span></a> also reads the
+            <code class="literal">[client_other]</code> and
+            <code class="literal">[mysqlpump_other]</code> groups.
+          </p><p>
+            For additional information about this and other option-file
+            options, see <a class="xref" href="option-file-options.html" title="4.2.2.3 Command-Line Options that Affect Option-File Handling">Section 4.2.2.3, “Command-Line Options that Affect Option-File Handling”</a>.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_defer-table-indexes"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_defer-table-indexes"><code class="option">--defer-table-indexes</code></a>
+          </p><a class="indexterm" name="idm44933622560864"></a><a class="indexterm" name="idm44933622559408"></a><p>
+            In the dump output, defer index creation for each table
+            until after its rows have been loaded. This works for all
+            storage engines, but for <code class="literal">InnoDB</code> applies
+            only for secondary indexes.
+          </p><p>
+            This option is enabled by default; use
+            <a class="link" href="mysqlpump.html#option_mysqlpump_defer-table-indexes"><code class="option">--skip-defer-table-indexes</code></a>
+            to disable it.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_events"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_events"><code class="option">--events</code></a>
+          </p><a class="indexterm" name="idm44933622553008"></a><a class="indexterm" name="idm44933622551520"></a><p>
+            Include Event Scheduler events for the dumped databases in
+            the output. Event dumping requires the
+            <a class="link" href="privileges-provided.html#priv_event"><code class="literal">EVENT</code></a> privileges for those
+            databases.
+          </p><p>
+            The output generated by using
+            <a class="link" href="mysqlpump.html#option_mysqlpump_events"><code class="option">--events</code></a> contains
+            <a class="link" href="create-event.html" title="13.1.12 CREATE EVENT Statement"><code class="literal">CREATE EVENT</code></a> statements to
+            create the events. However, these statements do not include
+            attributes such as the event creation and modification
+            timestamps, so when the events are reloaded, they are
+            created with timestamps equal to the reload time.
+          </p><p>
+            If you require events to be created with their original
+            timestamp attributes, do not use
+            <a class="link" href="mysqlpump.html#option_mysqlpump_events"><code class="option">--events</code></a>. Instead, dump
+            and reload the contents of the
+            <code class="literal">mysql.event</code> table directly, using a MySQL
+            account that has appropriate privileges for the
+            <code class="literal">mysql</code> database.
+          </p><p>
+            This option is enabled by default; use
+            <a class="link" href="mysqlpump.html#option_mysqlpump_events"><code class="option">--skip-events</code></a>
+            to disable it.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_exclude-databases"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_exclude-databases"><code class="option">--exclude-databases=<em class="replaceable"><code>db_list</code></em></code></a>
+          </p><a class="indexterm" name="idm44933622538368"></a><a class="indexterm" name="idm44933622536912"></a><p>
+            Do not dump the databases in
+            <em class="replaceable"><code>db_list</code></em>, which is a list of one
+            or more comma-separated database names. Multiple instances
+            of this option are additive. For more information, see
+            <a class="xref" href="mysqlpump.html#mysqlpump-filtering" title="mysqlpump Object Selection">mysqlpump Object Selection</a>.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_exclude-events"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_exclude-events"><code class="option">--exclude-events=<em class="replaceable"><code>event_list</code></em></code></a>
+          </p><a class="indexterm" name="idm44933622531216"></a><a class="indexterm" name="idm44933622529728"></a><p>
+            Do not dump the databases in
+            <em class="replaceable"><code>event_list</code></em>, which is a list of
+            one or more comma-separated event names. Multiple instances
+            of this option are additive. For more information, see
+            <a class="xref" href="mysqlpump.html#mysqlpump-filtering" title="mysqlpump Object Selection">mysqlpump Object Selection</a>.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_exclude-routines"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_exclude-routines"><code class="option">--exclude-routines=<em class="replaceable"><code>routine_list</code></em></code></a>
+          </p><a class="indexterm" name="idm44933622524096"></a><a class="indexterm" name="idm44933622522608"></a><p>
+            Do not dump the events in
+            <em class="replaceable"><code>routine_list</code></em>, which is a list of
+            one or more comma-separated routine (stored procedure or
+            function) names. Multiple instances of this option are
+            additive. For more information, see
+            <a class="xref" href="mysqlpump.html#mysqlpump-filtering" title="mysqlpump Object Selection">mysqlpump Object Selection</a>.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_exclude-tables"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_exclude-tables"><code class="option">--exclude-tables=<em class="replaceable"><code>table_list</code></em></code></a>
+          </p><a class="indexterm" name="idm44933622516928"></a><a class="indexterm" name="idm44933622515440"></a><p>
+            Do not dump the tables in
+            <em class="replaceable"><code>table_list</code></em>, which is a list of
+            one or more comma-separated table names. Multiple instances
+            of this option are additive. For more information, see
+            <a class="xref" href="mysqlpump.html#mysqlpump-filtering" title="mysqlpump Object Selection">mysqlpump Object Selection</a>.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_exclude-triggers"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_exclude-triggers"><code class="option">--exclude-triggers=<em class="replaceable"><code>trigger_list</code></em></code></a>
+          </p><a class="indexterm" name="idm44933622509808"></a><a class="indexterm" name="idm44933622508320"></a><p>
+            Do not dump the triggers in
+            <em class="replaceable"><code>trigger_list</code></em>, which is a list of
+            one or more comma-separated trigger names. Multiple
+            instances of this option are additive. For more information,
+            see <a class="xref" href="mysqlpump.html#mysqlpump-filtering" title="mysqlpump Object Selection">mysqlpump Object Selection</a>.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_exclude-users"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_exclude-users"><code class="option">--exclude-users=<em class="replaceable"><code>user_list</code></em></code></a>
+          </p><a class="indexterm" name="idm44933622502624"></a><a class="indexterm" name="idm44933622501136"></a><p>
+            Do not dump the user accounts in
+            <em class="replaceable"><code>user_list</code></em>, which is a list of one
+            or more comma-separated account names. Multiple instances of
+            this option are additive. For more information, see
+            <a class="xref" href="mysqlpump.html#mysqlpump-filtering" title="mysqlpump Object Selection">mysqlpump Object Selection</a>.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_extended-insert"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_extended-insert"><code class="option">--extended-insert=<em class="replaceable"><code>N</code></em></code></a>
+          </p><a class="indexterm" name="idm44933622495456"></a><a class="indexterm" name="idm44933622493968"></a><p>
+            Write <a class="link" href="insert.html" title="13.2.5 INSERT Statement"><code class="literal">INSERT</code></a> statements using
+            multiple-row syntax that includes several
+            <code class="literal">VALUES</code> lists. This results in a smaller
+            dump file and speeds up inserts when the file is reloaded.
+          </p><p>
+            The option value indicates the number of rows to include in
+            each <a class="link" href="insert.html" title="13.2.5 INSERT Statement"><code class="literal">INSERT</code></a> statement. The
+            default is 250. A value of 1 produces one
+            <a class="link" href="insert.html" title="13.2.5 INSERT Statement"><code class="literal">INSERT</code></a> statement per table
+            row.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_get-server-public-key"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_get-server-public-key"><code class="option">--get-server-public-key</code></a>
+          </p><a class="indexterm" name="idm44933622484704"></a><a class="indexterm" name="idm44933622483248"></a><p>
+            Request from the server the public key required for RSA key
+            pair-based password exchange. This option applies to clients
+            that authenticate with the
+            <code class="literal">caching_sha2_password</code> authentication
+            plugin. For that plugin, the server does not send the public
+            key unless requested. This option is ignored for accounts
+            that do not authenticate with that plugin. It is also
+            ignored if RSA-based password exchange is not used, as is
+            the case when the client connects to the server using a
+            secure connection.
+          </p><p>
+            If
+            <a class="link" href="mysqlpump.html#option_mysqlpump_server-public-key-path"><code class="option">--server-public-key-path=<em class="replaceable"><code>file_name</code></em></code></a>
+            is given and specifies a valid public key file, it takes
+            precedence over
+            <a class="link" href="mysqlpump.html#option_mysqlpump_get-server-public-key"><code class="option">--get-server-public-key</code></a>.
+          </p><p>
+            For information about the
+            <code class="literal">caching_sha2_password</code> plugin, see
+            <a class="xref" href="caching-sha2-pluggable-authentication.html" title="6.4.1.4 Caching SHA-2 Pluggable Authentication">Section 6.4.1.4, “Caching SHA-2 Pluggable Authentication”</a>.
+          </p><p>
+            The
+            <a class="link" href="mysqlpump.html#option_mysqlpump_get-server-public-key"><code class="option">--get-server-public-key</code></a>
+            option was added in MySQL 5.7.23.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_hex-blob"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_hex-blob"><code class="option">--hex-blob</code></a>
+          </p><a class="indexterm" name="idm44933622471632"></a><a class="indexterm" name="idm44933622470144"></a><p>
+            Dump binary columns using hexadecimal notation (for example,
+            <code class="literal">'abc'</code> becomes
+            <code class="literal">0x616263</code>). The affected data types are
+            <a class="link" href="binary-varbinary.html" title="11.3.3 The BINARY and VARBINARY Types"><code class="literal">BINARY</code></a>,
+            <a class="link" href="binary-varbinary.html" title="11.3.3 The BINARY and VARBINARY Types"><code class="literal">VARBINARY</code></a>,
+            <a class="link" href="blob.html" title="11.3.4 The BLOB and TEXT Types"><code class="literal">BLOB</code></a> types,
+            <a class="link" href="bit-type.html" title="11.1.5 Bit-Value Type - BIT"><code class="literal">BIT</code></a>, all spatial data types,
+            and other non-binary data types when used with the
+            <a class="link" href="charset-binary-set.html" title="10.10.8 The Binary Character Set"><code class="literal">binary</code>
+            character set</a>.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_host"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_host"><code class="option">--host=<em class="replaceable"><code>host_name</code></em></code></a>,
+            <code class="option">-h <em class="replaceable"><code>host_name</code></em></code>
+          </p><a class="indexterm" name="idm44933622457248"></a><a class="indexterm" name="idm44933622455760"></a><p>
+            Dump data from the MySQL server on the given host.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_include-databases"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_include-databases"><code class="option">--include-databases=<em class="replaceable"><code>db_list</code></em></code></a>
+          </p><a class="indexterm" name="idm44933622451328"></a><a class="indexterm" name="idm44933622449872"></a><p>
+            Dump the databases in <em class="replaceable"><code>db_list</code></em>,
+            which is a list of one or more comma-separated database
+            names. The dump includes all objects in the named databases.
+            Multiple instances of this option are additive. For more
+            information, see <a class="xref" href="mysqlpump.html#mysqlpump-filtering" title="mysqlpump Object Selection">mysqlpump Object Selection</a>.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_include-events"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_include-events"><code class="option">--include-events=<em class="replaceable"><code>event_list</code></em></code></a>
+          </p><a class="indexterm" name="idm44933622444064"></a><a class="indexterm" name="idm44933622442576"></a><p>
+            Dump the events in <em class="replaceable"><code>event_list</code></em>,
+            which is a list of one or more comma-separated event names.
+            Multiple instances of this option are additive. For more
+            information, see <a class="xref" href="mysqlpump.html#mysqlpump-filtering" title="mysqlpump Object Selection">mysqlpump Object Selection</a>.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_include-routines"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_include-routines"><code class="option">--include-routines=<em class="replaceable"><code>routine_list</code></em></code></a>
+          </p><a class="indexterm" name="idm44933622436960"></a><a class="indexterm" name="idm44933622435472"></a><p>
+            Dump the routines in
+            <em class="replaceable"><code>routine_list</code></em>, which is a list of
+            one or more comma-separated routine (stored procedure or
+            function) names. Multiple instances of this option are
+            additive. For more information, see
+            <a class="xref" href="mysqlpump.html#mysqlpump-filtering" title="mysqlpump Object Selection">mysqlpump Object Selection</a>.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_include-tables"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_include-tables"><code class="option">--include-tables=<em class="replaceable"><code>table_list</code></em></code></a>
+          </p><a class="indexterm" name="idm44933622429728"></a><a class="indexterm" name="idm44933622428240"></a><p>
+            Dump the tables in <em class="replaceable"><code>table_list</code></em>,
+            which is a list of one or more comma-separated table names.
+            Multiple instances of this option are additive. For more
+            information, see <a class="xref" href="mysqlpump.html#mysqlpump-filtering" title="mysqlpump Object Selection">mysqlpump Object Selection</a>.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_include-triggers"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_include-triggers"><code class="option">--include-triggers=<em class="replaceable"><code>trigger_list</code></em></code></a>
+          </p><a class="indexterm" name="idm44933622422624"></a><a class="indexterm" name="idm44933622421136"></a><p>
+            Dump the triggers in
+            <em class="replaceable"><code>trigger_list</code></em>, which is a list of
+            one or more comma-separated trigger names. Multiple
+            instances of this option are additive. For more information,
+            see <a class="xref" href="mysqlpump.html#mysqlpump-filtering" title="mysqlpump Object Selection">mysqlpump Object Selection</a>.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_include-users"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_include-users"><code class="option">--include-users=<em class="replaceable"><code>user_list</code></em></code></a>
+          </p><a class="indexterm" name="idm44933622415504"></a><a class="indexterm" name="idm44933622414016"></a><p>
+            Dump the user accounts in
+            <em class="replaceable"><code>user_list</code></em>, which is a list of one
+            or more comma-separated user names. Multiple instances of
+            this option are additive. For more information, see
+            <a class="xref" href="mysqlpump.html#mysqlpump-filtering" title="mysqlpump Object Selection">mysqlpump Object Selection</a>.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_insert-ignore"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_insert-ignore"><code class="option">--insert-ignore</code></a>
+          </p><a class="indexterm" name="idm44933622408608"></a><a class="indexterm" name="idm44933622407120"></a><p>
+            Write <a class="link" href="insert.html" title="13.2.5 INSERT Statement"><code class="literal">INSERT
+            IGNORE</code></a> statements rather than
+            <a class="link" href="insert.html" title="13.2.5 INSERT Statement"><code class="literal">INSERT</code></a> statements.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_log-error-file"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_log-error-file"><code class="option">--log-error-file=<em class="replaceable"><code>file_name</code></em></code></a>
+          </p><a class="indexterm" name="idm44933622400240"></a><a class="indexterm" name="idm44933622398752"></a><p>
+            Log warnings and errors by appending them to the named file.
+            If this option is not given, <a class="link" href="mysqlpump.html" title="4.5.6 mysqlpump — A Database Backup Program"><span class="command"><strong>mysqlpump</strong></span></a>
+            writes warnings and errors to the standard error output.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_login-path"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_login-path"><code class="option">--login-path=<em class="replaceable"><code>name</code></em></code></a>
+          </p><a class="indexterm" name="idm44933622393040"></a><a class="indexterm" name="idm44933622391552"></a><p>
+            Read options from the named login path in the
+            <code class="filename">.mylogin.cnf</code> login path file. A
+            <span class="quote">“<span class="quote">login path</span>”</span> is an option group containing
+            options that specify which MySQL server to connect to and
+            which account to authenticate as. To create or modify a
+            login path file, use the
+            <a class="link" href="mysql-config-editor.html" title="4.6.6 mysql_config_editor — MySQL Configuration Utility"><span class="command"><strong>mysql_config_editor</strong></span></a> utility. See
+            <a class="xref" href="mysql-config-editor.html" title="4.6.6 mysql_config_editor — MySQL Configuration Utility">Section 4.6.6, “<span class="command"><strong>mysql_config_editor</strong></span> — MySQL Configuration Utility”</a>.
+          </p><p>
+            For additional information about this and other option-file
+            options, see <a class="xref" href="option-file-options.html" title="4.2.2.3 Command-Line Options that Affect Option-File Handling">Section 4.2.2.3, “Command-Line Options that Affect Option-File Handling”</a>.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_max-allowed-packet"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_max-allowed-packet"><code class="option">--max-allowed-packet=<em class="replaceable"><code>N</code></em></code></a>
+          </p><a class="indexterm" name="idm44933622382736"></a><a class="indexterm" name="idm44933622381280"></a><p>
+            The maximum size of the buffer for client/server
+            communication. The default is 24MB, the maximum is 1GB.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_net-buffer-length"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_net-buffer-length"><code class="option">--net-buffer-length=<em class="replaceable"><code>N</code></em></code></a>
+          </p><a class="indexterm" name="idm44933622376736"></a><a class="indexterm" name="idm44933622375280"></a><p>
+            The initial size of the buffer for client/server
+            communication. When creating multiple-row
+            <a class="link" href="insert.html" title="13.2.5 INSERT Statement"><code class="literal">INSERT</code></a> statements (as with
+            the <a class="link" href="mysqlpump.html#option_mysqlpump_extended-insert"><code class="option">--extended-insert</code></a>
+            option), <a class="link" href="mysqlpump.html" title="4.5.6 mysqlpump — A Database Backup Program"><span class="command"><strong>mysqlpump</strong></span></a> creates rows up to
+            <em class="replaceable"><code>N</code></em> bytes long. If you use this
+            option to increase the value, ensure that the MySQL server
+            <a class="link" href="server-system-variables.html#sysvar_net_buffer_length"><code class="literal">net_buffer_length</code></a> system
+            variable has a value at least this large.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_no-create-db"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_no-create-db"><code class="option">--no-create-db</code></a>
+          </p><a class="indexterm" name="idm44933622365680"></a><a class="indexterm" name="idm44933622364192"></a><p>
+            Suppress any <a class="link" href="create-database.html" title="13.1.11 CREATE DATABASE Statement"><code class="literal">CREATE DATABASE</code></a>
+            statements that might otherwise be included in the output.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_no-create-info"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_no-create-info"><code class="option">--no-create-info</code></a>,
+            <code class="option">-t</code>
+          </p><a class="indexterm" name="idm44933622358432"></a><a class="indexterm" name="idm44933622356944"></a><p>
+            Do not write <a class="link" href="create-table.html" title="13.1.18 CREATE TABLE Statement"><code class="literal">CREATE TABLE</code></a>
+            statements that create each dumped table.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_no-defaults"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_no-defaults"><code class="option">--no-defaults</code></a>
+          </p><a class="indexterm" name="idm44933622351616"></a><a class="indexterm" name="idm44933622350128"></a><p>
+            Do not read any option files. If program startup fails due
+            to reading unknown options from an option file,
+            <a class="link" href="mysqlpump.html#option_mysqlpump_no-defaults"><code class="option">--no-defaults</code></a> can be used
+            to prevent them from being read.
+          </p><p>
+            The exception is that the <code class="filename">.mylogin.cnf</code>
+            file is read in all cases, if it exists. This permits
+            passwords to be specified in a safer way than on the command
+            line even when
+            <a class="link" href="mysqlpump.html#option_mysqlpump_no-defaults"><code class="option">--no-defaults</code></a> is used. To
+            create <code class="filename">.mylogin.cnf</code>, use the
+            <a class="link" href="mysql-config-editor.html" title="4.6.6 mysql_config_editor — MySQL Configuration Utility"><span class="command"><strong>mysql_config_editor</strong></span></a> utility. See
+            <a class="xref" href="mysql-config-editor.html" title="4.6.6 mysql_config_editor — MySQL Configuration Utility">Section 4.6.6, “<span class="command"><strong>mysql_config_editor</strong></span> — MySQL Configuration Utility”</a>.
+          </p><p>
+            For additional information about this and other option-file
+            options, see <a class="xref" href="option-file-options.html" title="4.2.2.3 Command-Line Options that Affect Option-File Handling">Section 4.2.2.3, “Command-Line Options that Affect Option-File Handling”</a>.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_parallel-schemas"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_parallel-schemas"><code class="option">--parallel-schemas=[<em class="replaceable"><code>N</code></em>:]<em class="replaceable"><code>db_list</code></em></code></a>
+          </p><a class="indexterm" name="idm44933622338064"></a><a class="indexterm" name="idm44933622336576"></a><p>
+            Create a queue for processing the databases in
+            <em class="replaceable"><code>db_list</code></em>, which is a list of one
+            or more comma-separated database names. If
+            <em class="replaceable"><code>N</code></em> is given, the queue uses
+            <em class="replaceable"><code>N</code></em> threads. If
+            <em class="replaceable"><code>N</code></em> is not given, the
+            <a class="link" href="mysqlpump.html#option_mysqlpump_default-parallelism"><code class="option">--default-parallelism</code></a>
+            option determines the number of queue threads.
+          </p><p>
+            Multiple instances of this option create multiple queues.
+            <a class="link" href="mysqlpump.html" title="4.5.6 mysqlpump — A Database Backup Program"><span class="command"><strong>mysqlpump</strong></span></a> also creates a default queue to
+            use for databases not named in any
+            <a class="link" href="mysqlpump.html#option_mysqlpump_parallel-schemas"><code class="option">--parallel-schemas</code></a> option,
+            and for dumping user definitions if command options select
+            them. For more information, see
+            <a class="xref" href="mysqlpump.html#mysqlpump-parallelism" title="mysqlpump Parallel Processing">mysqlpump Parallel Processing</a>.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_password"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_password"><code class="option">--password[=<em class="replaceable"><code>password</code></em>]</code></a>,
+            <code class="option">-p[<em class="replaceable"><code>password</code></em>]</code>
+          </p><a class="indexterm" name="idm44933622324672"></a><a class="indexterm" name="idm44933622323184"></a><p>
+            The password of the MySQL account used for connecting to the
+            server. The password value is optional. If not given,
+            <a class="link" href="mysqlpump.html" title="4.5.6 mysqlpump — A Database Backup Program"><span class="command"><strong>mysqlpump</strong></span></a> prompts for one. If given,
+            there must be <span class="emphasis"><em>no space</em></span> between
+            <a class="link" href="mysqlpump.html#option_mysqlpump_password"><code class="option">--password=</code></a> or
+            <code class="option">-p</code> and the password following it. If no
+            password option is specified, the default is to send no
+            password.
+          </p><p>
+            Specifying a password on the command line should be
+            considered insecure. To avoid giving the password on the
+            command line, use an option file. See
+            <a class="xref" href="password-security-user.html" title="6.1.2.1 End-User Guidelines for Password Security">Section 6.1.2.1, “End-User Guidelines for Password Security”</a>.
+          </p><p>
+            To explicitly specify that there is no password and that
+            <a class="link" href="mysqlpump.html" title="4.5.6 mysqlpump — A Database Backup Program"><span class="command"><strong>mysqlpump</strong></span></a> should not prompt for one, use
+            the
+            <a class="link" href="mysqlpump.html#option_mysqlpump_password"><code class="option">--skip-password</code></a>
+            option.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_plugin-dir"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_plugin-dir"><code class="option">--plugin-dir=<em class="replaceable"><code>dir_name</code></em></code></a>
+          </p><a class="indexterm" name="idm44933622311376"></a><a class="indexterm" name="idm44933622309888"></a><p>
+            The directory in which to look for plugins. Specify this
+            option if the
+            <a class="link" href="mysqlpump.html#option_mysqlpump_default-auth"><code class="option">--default-auth</code></a> option is
+            used to specify an authentication plugin but
+            <a class="link" href="mysqlpump.html" title="4.5.6 mysqlpump — A Database Backup Program"><span class="command"><strong>mysqlpump</strong></span></a> does not find it. See
+            <a class="xref" href="pluggable-authentication.html" title="6.2.13 Pluggable Authentication">Section 6.2.13, “Pluggable Authentication”</a>.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_port"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_port"><code class="option">--port=<em class="replaceable"><code>port_num</code></em></code></a>,
+            <code class="option">-P <em class="replaceable"><code>port_num</code></em></code>
+          </p><a class="indexterm" name="idm44933622301872"></a><a class="indexterm" name="idm44933622300384"></a><p>
+            For TCP/IP connections, the port number to use.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_print-defaults"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_print-defaults"><code class="option">--print-defaults</code></a>
+          </p><a class="indexterm" name="idm44933622296256"></a><a class="indexterm" name="idm44933622294768"></a><p>
+            Print the program name and all options that it gets from
+            option files.
+          </p><p>
+            For additional information about this and other option-file
+            options, see <a class="xref" href="option-file-options.html" title="4.2.2.3 Command-Line Options that Affect Option-File Handling">Section 4.2.2.3, “Command-Line Options that Affect Option-File Handling”</a>.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_protocol"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_protocol"><code class="option">--protocol={TCP|SOCKET|PIPE|MEMORY}</code></a>
+          </p><a class="indexterm" name="idm44933622289504"></a><a class="indexterm" name="idm44933622288016"></a><p>
+            The transport protocol to use for connecting to the server.
+            It is useful when the other connection parameters normally
+            result in use of a protocol other than the one you want. For
+            details on the permissible values, see
+            <a class="xref" href="transport-protocols.html" title="4.2.5 Connection Transport Protocols">Section 4.2.5, “Connection Transport Protocols”</a>.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_replace"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_replace"><code class="option">--replace</code></a>
+          </p><a class="indexterm" name="idm44933622282992"></a><a class="indexterm" name="idm44933622281504"></a><p>
+            Write <a class="link" href="replace.html" title="13.2.8 REPLACE Statement"><code class="literal">REPLACE</code></a> statements
+            rather than <a class="link" href="insert.html" title="13.2.5 INSERT Statement"><code class="literal">INSERT</code></a>
+            statements.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_result-file"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_result-file"><code class="option">--result-file=<em class="replaceable"><code>file_name</code></em></code></a>
+          </p><a class="indexterm" name="idm44933622274688"></a><a class="indexterm" name="idm44933622273200"></a><p>
+            Direct output to the named file. The result file is created
+            and its previous contents overwritten, even if an error
+            occurs while generating the dump.
+          </p><p>
+            This option should be used on Windows to prevent newline
+            <code class="literal">\n</code> characters from being converted to
+            <code class="literal">\r\n</code> carriage return/newline sequences.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_routines"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_routines"><code class="option">--routines</code></a>
+          </p><a class="indexterm" name="idm44933622267040"></a><a class="indexterm" name="idm44933622265552"></a><p>
+            Include stored routines (procedures and functions) for the
+            dumped databases in the output. This option requires the
+            <a class="link" href="privileges-provided.html#priv_select"><code class="literal">SELECT</code></a> privilege for the
+            <code class="literal">mysql.proc</code> table.
+          </p><p>
+            The output generated by using
+            <a class="link" href="mysqlpump.html#option_mysqlpump_routines"><code class="option">--routines</code></a> contains
+            <a class="link" href="create-procedure.html" title="13.1.16 CREATE PROCEDURE and CREATE FUNCTION Statements"><code class="literal">CREATE PROCEDURE</code></a> and
+            <a class="link" href="create-function.html" title="13.1.13 CREATE FUNCTION Statement"><code class="literal">CREATE FUNCTION</code></a> statements to
+            create the routines. However, these statements do not
+            include attributes such as the routine creation and
+            modification timestamps, so when the routines are reloaded,
+            they are created with timestamps equal to the reload time.
+          </p><p>
+            If you require routines to be created with their original
+            timestamp attributes, do not use
+            <a class="link" href="mysqlpump.html#option_mysqlpump_routines"><code class="option">--routines</code></a>. Instead, dump
+            and reload the contents of the <code class="literal">mysql.proc</code>
+            table directly, using a MySQL account that has appropriate
+            privileges for the <code class="literal">mysql</code> database.
+          </p><p>
+            This option is enabled by default; use
+            <a class="link" href="mysqlpump.html#option_mysqlpump_routines"><code class="option">--skip-routines</code></a>
+            to disable it.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_secure-auth"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_secure-auth"><code class="option">--secure-auth</code></a>
+          </p><a class="indexterm" name="idm44933622250592"></a><a class="indexterm" name="idm44933622249104"></a><p>
+            Do not send passwords to the server in old (pre-4.1) format.
+            This prevents connections except for servers that use the
+            newer password format.
+          </p><p>
+            This option is deprecated; expect it to be removed in a
+            future MySQL release. It is always enabled and attempting to
+            disable it
+            (<a class="link" href="mysqlpump.html#option_mysqlpump_secure-auth"><code class="option">--skip-secure-auth</code></a>,
+            <a class="link" href="mysqlpump.html#option_mysqlpump_secure-auth"><code class="option">--secure-auth=0</code></a>) produces
+            an error.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_server-public-key-path"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_server-public-key-path"><code class="option">--server-public-key-path=<em class="replaceable"><code>file_name</code></em></code></a>
+          </p><a class="indexterm" name="idm44933622241984"></a><a class="indexterm" name="idm44933622240480"></a><p>
+            The path name to a file in PEM format containing a
+            client-side copy of the public key required by the server
+            for RSA key pair-based password exchange. This option
+            applies to clients that authenticate with the
+            <code class="literal">sha256_password</code> or
+            <code class="literal">caching_sha2_password</code> authentication
+            plugin. This option is ignored for accounts that do not
+            authenticate with one of those plugins. It is also ignored
+            if RSA-based password exchange is not used, as is the case
+            when the client connects to the server using a secure
+            connection.
+          </p><p>
+            If
+            <a class="link" href="mysqlpump.html#option_mysqlpump_server-public-key-path"><code class="option">--server-public-key-path=<em class="replaceable"><code>file_name</code></em></code></a>
+            is given and specifies a valid public key file, it takes
+            precedence over
+            <a class="link" href="mysqlpump.html#option_mysqlpump_get-server-public-key"><code class="option">--get-server-public-key</code></a>.
+          </p><p>
+            For <code class="literal">sha256_password</code>, this option applies
+            only if MySQL was built using OpenSSL.
+          </p><p>
+            For information about the <code class="literal">sha256_password</code>
+            and <code class="literal">caching_sha2_password</code> plugins, see
+            <a class="xref" href="sha256-pluggable-authentication.html" title="6.4.1.5 SHA-256 Pluggable Authentication">Section 6.4.1.5, “SHA-256 Pluggable Authentication”</a>, and
+            <a class="xref" href="caching-sha2-pluggable-authentication.html" title="6.4.1.4 Caching SHA-2 Pluggable Authentication">Section 6.4.1.4, “Caching SHA-2 Pluggable Authentication”</a>.
+          </p><p>
+            The
+            <a class="link" href="mysqlpump.html#option_mysqlpump_server-public-key-path"><code class="option">--server-public-key-path</code></a>
+            option was added in MySQL 5.7.23.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_set-charset"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_set-charset"><code class="option">--set-charset</code></a>
+          </p><a class="indexterm" name="idm44933622225584"></a><a class="indexterm" name="idm44933622224096"></a><p>
+            Write <a class="link" href="set-names.html" title="13.7.4.3 SET NAMES Statement"><code class="literal">SET NAMES
+            <em class="replaceable"><code>default_character_set</code></em></code></a>
+            to the output.
+          </p><p>
+            This option is enabled by default. To disable it and
+            suppress the <a class="link" href="set-names.html" title="13.7.4.3 SET NAMES Statement"><code class="literal">SET NAMES</code></a>
+            statement, use
+            <a class="link" href="mysqlpump.html#option_mysqlpump_set-charset"><code class="option">--skip-set-charset</code></a>.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_set-gtid-purged"></a>
+            <code class="option">--set-gtid-purged=<em class="replaceable"><code>value</code></em></code>
+          </p><a class="indexterm" name="idm44933622216032"></a><a class="indexterm" name="idm44933622214544"></a><p>
+            This option enables control over global transaction ID
+            (GTID) information written to the dump file, by indicating
+            whether to add a
+            <a class="link" href="set-variable.html" title="13.7.4.1 SET Syntax for Variable Assignment"><code class="literal">SET
+            @@GLOBAL.gtid_purged</code></a> statement to the output. This
+            option may also cause a statement to be written to the
+            output that disables binary logging while the dump file is
+            being reloaded.
+          </p><p>
+            The following table shows the permitted option values. The
+            default value is <code class="literal">AUTO</code>.
+</p>
+<div class="informaltable">
+<table summary="Permitted option values for the mysqlpump --set-gtid-purged option."><col width="10%"><col width="90%"><thead><tr>
+                <th>Value</th>
+                <th>Meaning</th>
+              </tr></thead><tbody><tr>
+                <td><code class="literal">OFF</code></td>
+                <td>Add no <code class="literal">SET</code> statement to the output.</td>
+              </tr><tr>
+                <td><code class="literal">ON</code></td>
+                <td>Add a <code class="literal">SET</code> statement to the output. An error occurs if
+                  GTIDs are not enabled on the server.</td>
+              </tr><tr>
+                <td><code class="literal">AUTO</code></td>
+                <td>Add a <code class="literal">SET</code> statement to the output if GTIDs are
+                  enabled on the server.</td>
+</tr></tbody></table>
+</div>
+<p>
+            The <code class="option">--set-gtid-purged</code> option has the
+            following effect on binary logging when the dump file is
+            reloaded:
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p>
+                <code class="option">--set-gtid-purged=OFF</code>: <code class="literal">SET
+                @@SESSION.SQL_LOG_BIN=0;</code> is not added to the
+                output.
+              </p></li><li class="listitem"><p>
+                <code class="option">--set-gtid-purged=ON</code>: <code class="literal">SET
+                @@SESSION.SQL_LOG_BIN=0;</code> is added to the
+                output.
+              </p></li><li class="listitem"><p>
+                <code class="option">--set-gtid-purged=AUTO</code>: <code class="literal">SET
+                @@SESSION.SQL_LOG_BIN=0;</code> is added to the
+                output if GTIDs are enabled on the server you are
+                backing up (that is, if <code class="literal">AUTO</code>
+                evaluates to <code class="literal">ON</code>).
+</p></li></ul>
+</div>
+<p>
+            This option was added in MySQL 5.7.18.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_single-transaction"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_single-transaction"><code class="option">--single-transaction</code></a>
+          </p><a class="indexterm" name="idm44933622183456"></a><a class="indexterm" name="idm44933622182000"></a><p>
+            This option sets the transaction isolation mode to
+            <a class="link" href="innodb-transaction-isolation-levels.html#isolevel_repeatable-read"><code class="literal">REPEATABLE READ</code></a> and sends
+            a <a class="link" href="commit.html" title="13.3.1 START TRANSACTION, COMMIT, and ROLLBACK Statements"><code class="literal">START
+            TRANSACTION</code></a> SQL statement to the server before
+            dumping data. It is useful only with transactional tables
+            such as <code class="literal">InnoDB</code>, because then it dumps the
+            consistent state of the database at the time when
+            <a class="link" href="commit.html" title="13.3.1 START TRANSACTION, COMMIT, and ROLLBACK Statements"><code class="literal">START
+            TRANSACTION</code></a> was issued without blocking any
+            applications.
+          </p><p>
+            When using this option, you should keep in mind that only
+            <code class="literal">InnoDB</code> tables are dumped in a consistent
+            state. For example, any <code class="literal">MyISAM</code> or
+            <code class="literal">MEMORY</code> tables dumped while using this
+            option may still change state.
+          </p><p>
+            While a
+            <a class="link" href="mysqlpump.html#option_mysqlpump_single-transaction"><code class="option">--single-transaction</code></a> dump
+            is in process, to ensure a valid dump file (correct table
+            contents and binary log coordinates), no other connection
+            should use the following statements:
+            <a class="link" href="alter-table.html" title="13.1.8 ALTER TABLE Statement"><code class="literal">ALTER TABLE</code></a>,
+            <a class="link" href="create-table.html" title="13.1.18 CREATE TABLE Statement"><code class="literal">CREATE TABLE</code></a>,
+            <a class="link" href="drop-table.html" title="13.1.29 DROP TABLE Statement"><code class="literal">DROP TABLE</code></a>,
+            <a class="link" href="rename-table.html" title="13.1.33 RENAME TABLE Statement"><code class="literal">RENAME TABLE</code></a>,
+            <a class="link" href="truncate-table.html" title="13.1.34 TRUNCATE TABLE Statement"><code class="literal">TRUNCATE TABLE</code></a>. A consistent
+            read is not isolated from those statements, so use of them
+            on a table to be dumped can cause the
+            <a class="link" href="select.html" title="13.2.9 SELECT Statement"><code class="literal">SELECT</code></a> that is performed by
+            <a class="link" href="mysqlpump.html" title="4.5.6 mysqlpump — A Database Backup Program"><span class="command"><strong>mysqlpump</strong></span></a> to retrieve the table contents
+            to obtain incorrect contents or fail.
+          </p><p>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_add-locks"><code class="option">--add-locks</code></a> and
+            <a class="link" href="mysqlpump.html#option_mysqlpump_single-transaction"><code class="option">--single-transaction</code></a> are
+            mutually exclusive.
+</p>
+<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+
+<div class="admon-title">
+Note
+</div>
+<p>
+              Before MySQL 5.7.11, use of the
+              <a class="link" href="mysqlpump.html#option_mysqlpump_single-transaction"><code class="option">--single-transaction</code></a>
+              option is mutually exclusive with parallelism. To use
+              <a class="link" href="mysqlpump.html#option_mysqlpump_single-transaction"><code class="option">--single-transaction</code></a>,
+              disable parallelism by setting
+              <a class="link" href="mysqlpump.html#option_mysqlpump_default-parallelism"><code class="option">--default-parallelism</code></a> to
+              0 and not using any instances of
+              <a class="link" href="mysqlpump.html#option_mysqlpump_parallel-schemas"><code class="option">--parallel-schemas</code></a>:
+            </p><pre class="programlisting copytoclipboard line-numbers language-terminal one-line"><code class="language-terminal">mysqlpump --single-transaction --default-parallelism=0</code></pre>
+</div>
+</li><li class="listitem"><p><a name="option_mysqlpump_skip-definer"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_skip-definer"><code class="option">--skip-definer</code></a>
+          </p><a class="indexterm" name="idm44933622151456"></a><a class="indexterm" name="idm44933622149968"></a><p>
+            Omit <code class="literal">DEFINER</code> and <code class="literal">SQL
+            SECURITY</code> clauses from the
+            <code class="literal">CREATE</code> statements for views and stored
+            programs. The dump file, when reloaded, creates objects that
+            use the default <code class="literal">DEFINER</code> and <code class="literal">SQL
+            SECURITY</code> values. See
+            <a class="xref" href="stored-objects-security.html" title="23.6 Stored Object Access Control">Section 23.6, “Stored Object Access Control”</a>.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_skip-dump-rows"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_skip-dump-rows"><code class="option">--skip-dump-rows</code></a>,
+            <code class="option">-d</code>
+          </p><a class="indexterm" name="idm44933622140832"></a><a class="indexterm" name="idm44933622139344"></a><p>
+            Do not dump table rows.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_socket"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_socket"><code class="option">--socket=<em class="replaceable"><code>path</code></em></code></a>,
+            <code class="option">-S <em class="replaceable"><code>path</code></em></code>
+          </p><a class="indexterm" name="idm44933622134400"></a><a class="indexterm" name="idm44933622132912"></a><p>
+            For connections to <code class="literal">localhost</code>, the Unix
+            socket file to use, or, on Windows, the name of the named
+            pipe to use.
+          </p><p>
+            On Windows, this option applies only if the server was
+            started with the <a class="link" href="server-system-variables.html#sysvar_named_pipe"><code class="literal">named_pipe</code></a>
+            system variable enabled to support named-pipe connections.
+            In addition, the user making the connection must be a member
+            of the Windows group specified by the
+            <a class="link" href="server-system-variables.html#sysvar_named_pipe_full_access_group"><code class="literal">named_pipe_full_access_group</code></a>
+            system variable.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_ssl"></a>
+            <code class="option">--ssl*</code>
+          </p><a class="indexterm" name="idm44933622125392"></a><a class="indexterm" name="idm44933622123904"></a><p>
+            Options that begin with <code class="option">--ssl</code> specify
+            whether to connect to the server using encryption and
+            indicate where to find SSL keys and certificates. See
+            <a class="xref" href="connection-options.html#encrypted-connection-options" title="Command Options for Encrypted Connections">Command Options for Encrypted Connections</a>.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_tls-version"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_tls-version"><code class="option">--tls-version=<em class="replaceable"><code>protocol_list</code></em></code></a>
+          </p><a class="indexterm" name="idm44933622118224"></a><a class="indexterm" name="idm44933622116736"></a><p>
+            The permissible TLS protocols for encrypted connections. The
+            value is a list of one or more comma-separated protocol
+            names. The protocols that can be named for this option
+            depend on the SSL library used to compile MySQL. For
+            details, see
+            <a class="xref" href="encrypted-connection-protocols-ciphers.html" title="6.3.2 Encrypted Connection TLS Protocols and Ciphers">Section 6.3.2, “Encrypted Connection TLS Protocols and Ciphers”</a>.
+          </p><p>
+            This option was added in MySQL 5.7.10.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_triggers"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_triggers"><code class="option">--triggers</code></a>
+          </p><a class="indexterm" name="idm44933622111184"></a><a class="indexterm" name="idm44933622109696"></a><p>
+            Include triggers for each dumped table in the output.
+          </p><p>
+            This option is enabled by default; use
+            <a class="link" href="mysqlpump.html#option_mysqlpump_triggers"><code class="option">--skip-triggers</code></a>
+            to disable it.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_tz-utc"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_tz-utc"><code class="option">--tz-utc</code></a>
+          </p><a class="indexterm" name="idm44933622104240"></a><a class="indexterm" name="idm44933622102752"></a><p>
+            This option enables <a class="link" href="datetime.html" title="11.2.2 The DATE, DATETIME, and TIMESTAMP Types"><code class="literal">TIMESTAMP</code></a>
+            columns to be dumped and reloaded between servers in
+            different time zones. <a class="link" href="mysqlpump.html" title="4.5.6 mysqlpump — A Database Backup Program"><span class="command"><strong>mysqlpump</strong></span></a> sets its
+            connection time zone to UTC and adds <code class="literal">SET
+            TIME_ZONE='+00:00'</code> to the dump file. Without this
+            option, <a class="link" href="datetime.html" title="11.2.2 The DATE, DATETIME, and TIMESTAMP Types"><code class="literal">TIMESTAMP</code></a> columns are
+            dumped and reloaded in the time zones local to the source
+            and destination servers, which can cause the values to
+            change if the servers are in different time zones.
+            <a class="link" href="mysqlpump.html#option_mysqlpump_tz-utc"><code class="option">--tz-utc</code></a> also protects
+            against changes due to daylight saving time.
+          </p><p>
+            This option is enabled by default; use
+            <a class="link" href="mysqlpump.html#option_mysqlpump_tz-utc"><code class="option">--skip-tz-utc</code></a>
+            to disable it.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_user"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_user"><code class="option">--user=<em class="replaceable"><code>user_name</code></em></code></a>,
+            <code class="option">-u <em class="replaceable"><code>user_name</code></em></code>
+          </p><a class="indexterm" name="idm44933622090512"></a><a class="indexterm" name="idm44933622089024"></a><p>
+            The user name of the MySQL account to use for connecting to
+            the server.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_users"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_users"><code class="option">--users</code></a>
+          </p><a class="indexterm" name="idm44933622084896"></a><a class="indexterm" name="idm44933622083408"></a><p>
+            Dump user accounts as logical definitions in the form of
+            <a class="link" href="create-user.html" title="13.7.1.2 CREATE USER Statement"><code class="literal">CREATE USER</code></a> and
+            <a class="link" href="grant.html" title="13.7.1.4 GRANT Statement"><code class="literal">GRANT</code></a> statements.
+          </p><p>
+            User definitions are stored in the grant tables in the
+            <code class="literal">mysql</code> system database. By default,
+            <a class="link" href="mysqlpump.html" title="4.5.6 mysqlpump — A Database Backup Program"><span class="command"><strong>mysqlpump</strong></span></a> does not include the grant
+            tables in <code class="literal">mysql</code> database dumps. To dump
+            the contents of the grant tables as logical definitions, use
+            the <a class="link" href="mysqlpump.html#option_mysqlpump_users"><code class="option">--users</code></a> option and
+            suppress all database dumping:
+          </p><pre class="programlisting copytoclipboard line-numbers language-terminal one-line"><code class="language-terminal">mysqlpump --exclude-databases=% --users</code></pre></li><li class="listitem"><p><a name="option_mysqlpump_version"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_version"><code class="option">--version</code></a>,
+            <code class="option">-V</code>
+          </p><a class="indexterm" name="idm44933622071008"></a><a class="indexterm" name="idm44933622069520"></a><p>
+            Display version information and exit.
+          </p></li><li class="listitem"><p><a name="option_mysqlpump_watch-progress"></a>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_watch-progress"><code class="option">--watch-progress</code></a>
+          </p><a class="indexterm" name="idm44933622065440"></a><a class="indexterm" name="idm44933622063952"></a><p>
+            Periodically display a progress indicator that provides
+            information about the completed and total number of tables,
+            rows, and other objects.
+          </p><p>
+            This option is enabled by default; use
+            <a class="link" href="mysqlpump.html#option_mysqlpump_watch-progress"><code class="option">--skip-watch-progress</code></a>
+            to disable it.
+</p></li></ul>
+</div>
+<h4><a name="mysqlpump-filtering"></a>mysqlpump Object Selection</h4>
+<a class="indexterm" name="idm44933622059008"></a><p>
+        <a class="link" href="mysqlpump.html" title="4.5.6 mysqlpump — A Database Backup Program"><span class="command"><strong>mysqlpump</strong></span></a> has a set of inclusion and
+        exclusion options that enable filtering of several object types
+        and provide flexible control over which objects to dump:
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_include-databases"><code class="option">--include-databases</code></a> and
+            <a class="link" href="mysqlpump.html#option_mysqlpump_exclude-databases"><code class="option">--exclude-databases</code></a> apply
+            to databases and all objects within them.
+          </p></li><li class="listitem"><p>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_include-tables"><code class="option">--include-tables</code></a> and
+            <a class="link" href="mysqlpump.html#option_mysqlpump_exclude-tables"><code class="option">--exclude-tables</code></a> apply to
+            tables. These options also affect triggers associated with
+            tables unless the trigger-specific options are given.
+          </p></li><li class="listitem"><p>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_include-triggers"><code class="option">--include-triggers</code></a> and
+            <a class="link" href="mysqlpump.html#option_mysqlpump_exclude-triggers"><code class="option">--exclude-triggers</code></a> apply
+            to triggers.
+          </p></li><li class="listitem"><p>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_include-routines"><code class="option">--include-routines</code></a> and
+            <a class="link" href="mysqlpump.html#option_mysqlpump_exclude-routines"><code class="option">--exclude-routines</code></a> apply
+            to stored procedures and functions. If a routine option
+            matches a stored procedure name, it also matches a stored
+            function of the same name.
+          </p></li><li class="listitem"><p>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_include-events"><code class="option">--include-events</code></a> and
+            <a class="link" href="mysqlpump.html#option_mysqlpump_exclude-events"><code class="option">--exclude-events</code></a> apply to
+            Event Scheduler events.
+          </p></li><li class="listitem"><p>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_include-users"><code class="option">--include-users</code></a> and
+            <a class="link" href="mysqlpump.html#option_mysqlpump_exclude-users"><code class="option">--exclude-users</code></a> apply to
+            user accounts.
+</p></li></ul>
+</div>
+<p>
+        Any inclusion or exclusion option may be given multiple times.
+        The effect is additive. Order of these options does not matter.
+      </p><p>
+        The value of each inclusion and exclusion option is a list of
+        comma-separated names of the appropriate object type. For
+        example:
+      </p><pre class="programlisting copytoclipboard line-numbers language-terminal"><code class="language-terminal">--exclude-databases=test,world
+--include-tables=customer,invoice</code></pre><p>
+        Wildcard characters are permitted in the object names:
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+            <code class="literal">%</code> matches any sequence of zero or more
+            characters.
+          </p></li><li class="listitem"><p>
+            <code class="literal">_</code> matches any single character.
+</p></li></ul>
+</div>
+<p>
+        For example,
+        <a class="link" href="mysqlpump.html#option_mysqlpump_include-tables"><code class="option">--include-tables=t%,__tmp</code></a>
+        matches all table names that begin with <code class="literal">t</code> and
+        all five-character table names that end with
+        <code class="literal">tmp</code>.
+      </p><p>
+        For users, a name specified without a host part is interpreted
+        with an implied host of <code class="literal">%</code>. For example,
+        <code class="literal">u1</code> and <code class="literal">u1@%</code> are
+        equivalent. This is the same equivalence that applies in MySQL
+        generally (see <a class="xref" href="account-names.html" title="6.2.4 Specifying Account Names">Section 6.2.4, “Specifying Account Names”</a>).
+      </p><p>
+        Inclusion and exclusion options interact as follows:
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+            By default, with no inclusion or exclusion options,
+            <a class="link" href="mysqlpump.html" title="4.5.6 mysqlpump — A Database Backup Program"><span class="command"><strong>mysqlpump</strong></span></a> dumps all databases (with
+            certain exceptions noted in
+            <a class="xref" href="mysqlpump.html#mysqlpump-restrictions" title="mysqlpump Restrictions">mysqlpump Restrictions</a>).
+          </p></li><li class="listitem"><p>
+            If inclusion options are given in the absence of exclusion
+            options, only the objects named as included are dumped.
+          </p></li><li class="listitem"><p>
+            If exclusion options are given in the absence of inclusion
+            options, all objects are dumped except those named as
+            excluded.
+          </p></li><li class="listitem"><p>
+            If inclusion and exclusion options are given, all objects
+            named as excluded and not named as included are not dumped.
+            All other objects are dumped.
+</p></li></ul>
+</div>
+<p>
+        If multiple databases are being dumped, it is possible to name
+        tables, triggers, and routines in a specific database by
+        qualifying the object names with the database name. The
+        following command dumps databases <code class="literal">db1</code> and
+        <code class="literal">db2</code>, but excludes tables
+        <code class="literal">db1.t1</code> and <code class="literal">db2.t2</code>:
+
+</p><pre class="programlisting copytoclipboard line-numbers language-terminal one-line"><code class="language-terminal">mysqlpump --include-databases=db1,db2 --exclude-tables=db1.t1,db2.t2</code></pre><p>
+      </p><p>
+        The following options provide alternative ways to specify which
+        databases to dump:
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+            The <a class="link" href="mysqlpump.html#option_mysqlpump_all-databases"><code class="option">--all-databases</code></a> option
+            dumps all databases (with certain exceptions noted in
+            <a class="xref" href="mysqlpump.html#mysqlpump-restrictions" title="mysqlpump Restrictions">mysqlpump Restrictions</a>). It is equivalent
+            to specifying no object options at all (the default
+            <a class="link" href="mysqlpump.html" title="4.5.6 mysqlpump — A Database Backup Program"><span class="command"><strong>mysqlpump</strong></span></a> action is to dump everything).
+          </p><p>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_include-databases"><code class="option">--include-databases=%</code></a> is
+            similar to
+            <a class="link" href="mysqlpump.html#option_mysqlpump_all-databases"><code class="option">--all-databases</code></a>, but
+            selects all databases for dumping, even those that are
+            exceptions for
+            <a class="link" href="mysqlpump.html#option_mysqlpump_all-databases"><code class="option">--all-databases</code></a>.
+          </p></li><li class="listitem"><p>
+            The <a class="link" href="mysqlpump.html#option_mysqlpump_databases"><code class="option">--databases</code></a> option
+            causes <a class="link" href="mysqlpump.html" title="4.5.6 mysqlpump — A Database Backup Program"><span class="command"><strong>mysqlpump</strong></span></a> to treat all name
+            arguments as names of databases to dump. It is equivalent to
+            an <a class="link" href="mysqlpump.html#option_mysqlpump_include-databases"><code class="option">--include-databases</code></a>
+            option that names the same databases.
+</p></li></ul>
+</div>
+<h4><a name="mysqlpump-parallelism"></a>mysqlpump Parallel Processing</h4>
+<a class="indexterm" name="idm44933622001312"></a><p>
+        <a class="link" href="mysqlpump.html" title="4.5.6 mysqlpump — A Database Backup Program"><span class="command"><strong>mysqlpump</strong></span></a> can use parallelism to achieve
+        concurrent processing. You can select concurrency between
+        databases (to dump multiple databases simultaneously) and within
+        databases (to dump multiple objects from a given database
+        simultaneously).
+      </p><p>
+        By default, <a class="link" href="mysqlpump.html" title="4.5.6 mysqlpump — A Database Backup Program"><span class="command"><strong>mysqlpump</strong></span></a> sets up one queue with
+        two threads. You can create additional queues and control the
+        number of threads assigned to each one, including the default
+        queue:
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_default-parallelism"><code class="option">--default-parallelism=<em class="replaceable"><code>N</code></em></code></a>
+            specifies the default number of threads used for each queue.
+            In the absence of this option, <em class="replaceable"><code>N</code></em>
+            is 2.
+          </p><p>
+            The default queue always uses the default number of threads.
+            Additional queues use the default number of threads unless
+            you specify otherwise.
+          </p></li><li class="listitem"><p>
+            <a class="link" href="mysqlpump.html#option_mysqlpump_parallel-schemas"><code class="option">--parallel-schemas=[<em class="replaceable"><code>N</code></em>:]<em class="replaceable"><code>db_list</code></em></code></a>
+            sets up a processing queue for dumping the databases named
+            in <em class="replaceable"><code>db_list</code></em> and optionally
+            specifies how many threads the queue uses.
+            <em class="replaceable"><code>db_list</code></em> is a list of
+            comma-separated database names. If the option argument
+            begins with
+            <code class="literal"><em class="replaceable"><code>N</code></em>:</code>, the queue
+            uses <em class="replaceable"><code>N</code></em> threads. Otherwise, the
+            <a class="link" href="mysqlpump.html#option_mysqlpump_default-parallelism"><code class="option">--default-parallelism</code></a>
+            option determines the number of queue threads.
+          </p><p>
+            Multiple instances of the
+            <a class="link" href="mysqlpump.html#option_mysqlpump_parallel-schemas"><code class="option">--parallel-schemas</code></a> option
+            create multiple queues.
+          </p><p>
+            Names in the database list are permitted to contain the same
+            <code class="literal">%</code> and <code class="literal">_</code> wildcard
+            characters supported for filtering options (see
+            <a class="xref" href="mysqlpump.html#mysqlpump-filtering" title="mysqlpump Object Selection">mysqlpump Object Selection</a>).
+</p></li></ul>
+</div>
+<p>
+        <a class="link" href="mysqlpump.html" title="4.5.6 mysqlpump — A Database Backup Program"><span class="command"><strong>mysqlpump</strong></span></a> uses the default queue for
+        processing any databases not named explicitly with a
+        <a class="link" href="mysqlpump.html#option_mysqlpump_parallel-schemas"><code class="option">--parallel-schemas</code></a> option, and
+        for dumping user definitions if command options select them.
+      </p><p>
+        In general, with multiple queues, <a class="link" href="mysqlpump.html" title="4.5.6 mysqlpump — A Database Backup Program"><span class="command"><strong>mysqlpump</strong></span></a>
+        uses parallelism between the sets of databases processed by the
+        queues, to dump multiple databases simultaneously. For a queue
+        that uses multiple threads, <a class="link" href="mysqlpump.html" title="4.5.6 mysqlpump — A Database Backup Program"><span class="command"><strong>mysqlpump</strong></span></a> uses
+        parallelism within databases, to dump multiple objects from a
+        given database simultaneously. Exceptions can occur; for
+        example, <a class="link" href="mysqlpump.html" title="4.5.6 mysqlpump — A Database Backup Program"><span class="command"><strong>mysqlpump</strong></span></a> may block queues while it
+        obtains from the server lists of objects in databases.
+      </p><p>
+        With parallelism enabled, it is possible for output from
+        different databases to be interleaved. For example,
+        <a class="link" href="insert.html" title="13.2.5 INSERT Statement"><code class="literal">INSERT</code></a> statements from multiple
+        tables dumped in parallel can be interleaved; the statements are
+        not written in any particular order. This does not affect
+        reloading because output statements qualify object names with
+        database names or are preceded by
+        <a class="link" href="use.html" title="13.8.4 USE Statement"><code class="literal">USE</code></a> statements as required.
+      </p><p>
+        The granularity for parallelism is a single database object. For
+        example, a single table cannot be dumped in parallel using
+        multiple threads.
+      </p><p>
+        Examples:
+      </p><pre class="programlisting copytoclipboard line-numbers language-terminal one-line"><code class="language-terminal">mysqlpump --parallel-schemas=db1,db2 --parallel-schemas=db3</code></pre><p>
+        <a class="link" href="mysqlpump.html" title="4.5.6 mysqlpump — A Database Backup Program"><span class="command"><strong>mysqlpump</strong></span></a> sets up a queue to process
+        <code class="literal">db1</code> and <code class="literal">db2</code>, another queue
+        to process <code class="literal">db3</code>, and a default queue to
+        process all other databases. All queues use two threads.
+      </p><pre class="programlisting copytoclipboard line-numbers language-terminal"><code class="language-terminal">mysqlpump --parallel-schemas=db1,db2 --parallel-schemas=db3
+          --default-parallelism=4</code></pre><p>
+        This is the same as the previous example except that all queues
+        use four threads.
+      </p><pre class="programlisting copytoclipboard line-numbers language-terminal one-line"><code class="language-terminal">mysqlpump --parallel-schemas=5:db1,db2 --parallel-schemas=3:db3</code></pre><p>
+        The queue for <code class="literal">db1</code> and <code class="literal">db2</code>
+        uses five threads, the queue for <code class="literal">db3</code> uses
+        three threads, and the default queue uses the default of two
+        threads.
+      </p><p>
+        As a special case, with
+        <a class="link" href="mysqlpump.html#option_mysqlpump_default-parallelism"><code class="option">--default-parallelism=0</code></a> and no
+        <a class="link" href="mysqlpump.html#option_mysqlpump_parallel-schemas"><code class="option">--parallel-schemas</code></a> options,
+        <a class="link" href="mysqlpump.html" title="4.5.6 mysqlpump — A Database Backup Program"><span class="command"><strong>mysqlpump</strong></span></a> runs as a single-threaded process
+        and creates no queues.
+</p>
+<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+
+<div class="admon-title">
+Note
+</div>
+<p>
+          Before MySQL 5.7.11, use of the
+          <a class="link" href="mysqlpump.html#option_mysqlpump_single-transaction"><code class="option">--single-transaction</code></a> option
+          is mutually exclusive with parallelism. To use
+          <a class="link" href="mysqlpump.html#option_mysqlpump_single-transaction"><code class="option">--single-transaction</code></a>,
+          disable parallelism by setting
+          <a class="link" href="mysqlpump.html#option_mysqlpump_default-parallelism"><code class="option">--default-parallelism</code></a> to 0
+          and not using any instances of
+          <a class="link" href="mysqlpump.html#option_mysqlpump_parallel-schemas"><code class="option">--parallel-schemas</code></a>:
+        </p><pre class="programlisting copytoclipboard line-numbers language-terminal one-line"><code class="language-terminal">mysqlpump --single-transaction --default-parallelism=0</code></pre>
+</div>
+<h4><a name="mysqlpump-restrictions"></a>mysqlpump Restrictions</h4>
+<a class="indexterm" name="idm44933621950304"></a><p>
+        <a class="link" href="mysqlpump.html" title="4.5.6 mysqlpump — A Database Backup Program"><span class="command"><strong>mysqlpump</strong></span></a> does not dump the
+        <code class="literal">INFORMATION_SCHEMA</code>,
+        <code class="literal">performance_schema</code>,
+        <code class="literal">ndbinfo</code>, or <code class="literal">sys</code> schema by
+        default. To dump any of these, name them explicitly on the
+        command line. You can also name them with the
+        <a class="link" href="mysqlpump.html#option_mysqlpump_databases"><code class="option">--databases</code></a> or
+        <a class="link" href="mysqlpump.html#option_mysqlpump_include-databases"><code class="option">--include-databases</code></a> option.
+      </p><p>
+        <a class="link" href="mysqlpump.html" title="4.5.6 mysqlpump — A Database Backup Program"><span class="command"><strong>mysqlpump</strong></span></a> does not dump
+        <code class="literal">InnoDB</code> <a class="link" href="create-tablespace.html" title="13.1.19 CREATE TABLESPACE Statement"><code class="literal">CREATE
+        TABLESPACE</code></a> statements.
+      </p><p>
+        <a class="link" href="mysqlpump.html" title="4.5.6 mysqlpump — A Database Backup Program"><span class="command"><strong>mysqlpump</strong></span></a> dumps user accounts in logical form
+        using <a class="link" href="create-user.html" title="13.7.1.2 CREATE USER Statement"><code class="literal">CREATE USER</code></a> and
+        <a class="link" href="grant.html" title="13.7.1.4 GRANT Statement"><code class="literal">GRANT</code></a> statements (for example,
+        when you use the
+        <a class="link" href="mysqlpump.html#option_mysqlpump_include-users"><code class="option">--include-users</code></a> or
+        <a class="link" href="mysqlpump.html#option_mysqlpump_users"><code class="option">--users</code></a> option). For this
+        reason, dumps of the <code class="literal">mysql</code> system database do
+        not by default include the grant tables that contain user
+        definitions: <code class="literal">user</code>, <code class="literal">db</code>,
+        <code class="literal">tables_priv</code>, <code class="literal">columns_priv</code>,
+        <code class="literal">procs_priv</code>, or
+        <code class="literal">proxies_priv</code>. To dump any of the grant
+        tables, name the <code class="literal">mysql</code> database followed by
+        the table names:
+      </p><pre class="programlisting copytoclipboard line-numbers language-terminal one-line"><code class="language-terminal">mysqlpump mysql user db ...</code></pre>
+</div>
+<br />
+        </div>
+
+                <div id="docs-in-page-nav-container">
+            <div id="docs-in-page-nav">
+                
+    <a href="mysqlimport.html"
+        aria-label="Previous" title="Previous: mysqlimport — A Data Import Program"><span
+        class="icon-chevron-left"></span> PREV</a> &nbsp;
+<a href="index.html" aria-label="Start" title="Start"> HOME</a> &nbsp;
+        <a aria-label="Up" href="programs-client.html" title="Up: Client Programs"> UP</a> &nbsp;
+    <a href="mysqlshow.html" aria-label="Next"
+        title="Next: mysqlshow — Display Database, Table, and Column Information">NEXT <span
+        class="icon-chevron-right"></span></a>
+            </div>
+        </div>
+        
+         <div id="docs-body-extra">
+             
+<a class="docs-sidebar-section" href="mysqlpump.html?ff=nopfpls"><span class="icon-related"></span>
+    <span class="text">Related Documentation</span></a>
+<div class="docs-sidebar-accordian">
+    <div class="text">
+        <a href="https://dev.mysql.com/doc/relnotes/mysql/5.7/en/">MySQL 5.7 Release Notes</a><br />
+        </div>
+</div>
+
+    <a class="docs-sidebar-section" href="mysqlpump.html?ff=nopfpls"><span class="icon-download-thin"></span>
+        <span class="text">
+            Download
+                            this Manual
+                    </span>
+    </a>
+    <div class="docs-sidebar-accordian">
+        <div class="text">
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.pdf">PDF (US Ltr)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.a4.pdf">PDF (A4)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-ref-manual-5.7-en-pdf-1-20210225.noarch.rpm">PDF (RPM)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.html-chapter.tar.gz">HTML Download (TGZ)</a>
+            - 10.1Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.html-chapter.zip">HTML Download (Zip)</a>
+            - 10.2Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-ref-manual-5.7-en-html-chapter-1-20210225.noarch.rpm">HTML Download (RPM)</a>
+            - 8.9Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.man-gpl.tar.gz">Man Pages (TGZ)</a>
+            - 224.7Kb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.man-gpl.zip">Man Pages (Zip)</a>
+            - 332.6Kb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-5.7.info.gz">Info (Gzip)</a>
+            - 3.3Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-5.7.info.zip">Info (Zip)</a>
+            - 3.3Mb<br />
+                    </div>
+    </div>
+
+<a class="docs-sidebar-section" href="mysqlpump.html?ff=nopfpls"><span class="icon-book"></span>
+    <span class="text">Excerpts from this Manual</span></a>
+<div class="docs-sidebar-accordian">
+    <div class="text">
+                <a href="https://dev.mysql.com/doc/mysql-backup-excerpt/5.7/en/">MySQL Backup and Recovery</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-g11n-excerpt/5.7/en/">MySQL Globalization</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-infoschema-excerpt/5.7/en/">MySQL Information Schema</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-installation-excerpt/5.7/en/">MySQL Installation Guide</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-linuxunix-excerpt/5.7/en/">MySQL and Linux/Unix</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-osx-excerpt/5.7/en/">MySQL and OS X</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-partitioning-excerpt/5.7/en/">MySQL Partitioning</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-perfschema-excerpt/5.7/en/">MySQL Performance Schema</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-replication-excerpt/5.7/en/">MySQL Replication</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-repo-excerpt/5.7/en/">Using the MySQL Yum Repository</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-reslimits-excerpt/5.7/en/">MySQL Restrictions and Limitations</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-security-excerpt/5.7/en/">Security in MySQL</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-solaris-excerpt/5.7/en/">MySQL and Solaris</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-sourcebuild-excerpt/5.7/en/">Building MySQL from Source</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-startstop-excerpt/5.7/en/">Starting and Stopping MySQL</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-tutorial-excerpt/5.7/en/">MySQL Tutorial</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-windows-excerpt/5.7/en/">MySQL and Windows</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-cluster-excerpt/5.7/en/">MySQL NDB Cluster 7.5</a><br />
+            </div>
+</div>
+         </div>
+
+              </div>
+     </div>
+
+</div>
+
+<script>
+$(function() {
+    var doc = new $.doc({ 'mobile': $.browser.mobile, 'docId': 1, 'highlight': true });
+});
+</script>
+    
+
+            
+        </div>
+    </div>
+
+    <footer class="collapsed">
+        <div id="footer-bottom">
+                                    <div id="footer-collapse">
+                <a href="mysqlpump.html?ff=nopfpls" id="expand-footer"
+                    aria-label="Expand Footer"
+                    title="Expand Footer"><span
+                    class="icon-plus-square"></span></a>
+            </div>
+                        <div class="footer-contact">
+                <div id="footer-contact-icon" style="display: none;">
+                    <span class="icon-call-phone"></span>
+                </div>
+                <div id="footer-contact-numbers" style="display: none;">
+                    <strong>Contact MySQL Sales</strong><br/>
+                    USA/Canada: +1-866-221-0634 &nbsp;
+                    (<a href="https://www.mysql.com/about/contact/phone/">More Countries &raquo;</a>)
+                </div>
+                <div id="footer-contact-copyright" style="display: inline-block;">
+                    <a href="http://www.oracle.com/" aria-label="Oracle" title="Oracle"><span class="oracle-logo"></span></a>
+                    &nbsp; &copy; 2021, Oracle Corporation and/or its affiliates
+                </div>
+            </div>
+            <div class="social-icons">
+                <a aria-label="Join us on Facebook" title="Join us on Facebook" href="http://www.facebook.com/mysql"><span class="icon-facebook-square"></span></a>
+                <a aria-label="Follow us on Twitter" title="Follow us on Twitter" href="https://twitter.com/mysql"><span class="icon-twitter-square"></span></a>
+                <a aria-label="Follow us on LinkedIn" title="Follow us on LinkedIn" href="https://www.linkedin.com/company/mysql"><span class="icon-linkedin-square"></span></a>
+                <a aria-label="Visit our YouTube channel" title="Visit our YouTube channel" href="http://www.youtube.com/mysqlchannel"><span class="icon-youtube-square"></span></a>
+            </div>
+            <br class="clear" />
+        </div>
+        <div id="footer-links">
+
+            <div id="site-footer-links">
+                <div id="footer-nav"></div>
+
+                <div class="links">
+                    <ul>
+                        <li class="top"><a href="https://www.mysql.com/products/">Products</a></li>
+                        <li><a href="https://www.mysql.com/cloud/">MySQL Database Service</a></li>
+                        <li><a href="https://www.mysql.com/products/enterprise/">MySQL Enterprise Edition</a></li>
+                        <li><a href="https://www.mysql.com/products/standard/">MySQL Standard Edition</a></li>
+                        <li><a href="https://www.mysql.com/products/classic/">MySQL Classic Edition</a></li>
+                        <li><a href="https://www.mysql.com/products/cluster/">MySQL Cluster CGE</a></li>
+                        <li><a href="https://www.mysql.com/oem/">MySQL Embedded (OEM/ISV)</a></li>
+                    </ul>
+                </div>
+
+                <div class="links">
+                    <ul>
+                        <li class="top"><a href="https://www.mysql.com/services/">Services</a></li>
+                        <li><a href="https://www.mysql.com/training/">Training</a></li>
+                        <li><a href="https://www.mysql.com/certification/">Certification</a></li>
+                        <li><a href="https://www.mysql.com/consulting/">Consulting</a></li>
+                        <li><a href="https://www.mysql.com/support/">Support</a></li>
+                    </ul>
+                </div>
+
+                <div class="links">
+                    <ul>
+                        <li class="top"><a href="https://www.mysql.com/downloads/">Downloads</a></li>
+                        <li><a href="https://dev.mysql.com/downloads/mysql/">MySQL Community Server</a></li>
+                        <li><a href="https://dev.mysql.com/downloads/cluster/">MySQL NDB Cluster</a></li>
+                        <li><a href="https://dev.mysql.com/downloads/shell/">MySQL Shell</a></li>
+                        <li><a href="https://dev.mysql.com/downloads/router/">MySQL Router</a></li>
+                        <li><a href="https://dev.mysql.com/downloads/workbench/">MySQL Workbench</a></li>
+                    </ul>
+                </div>
+
+                <div class="links">
+                    <ul>
+                        <li class="top"><a href="https://dev.mysql.com/doc/">Documentation</a></li>
+                        <li><a href="https://dev.mysql.com/doc/refman/en/">MySQL Reference Manual</a></li>
+                        <li><a href="https://dev.mysql.com/doc/workbench/en/">MySQL Workbench</a></li>
+                        <li><a href="https://dev.mysql.com/doc/index-cluster.html">MySQL NDB Cluster</a></li>
+                        <li><a href="https://dev.mysql.com/doc/index-connectors.html">MySQL Connectors</a></li>
+                        <li><a href="https://dev.mysql.com/doc/#topic">Topic Guides</a></li>
+                    </ul>
+                </div>
+
+                <div class="links">
+                    <ul>
+                        <li class="top"><a href="https://www.mysql.com/about/">About MySQL</a></li>
+                        <li><a href="https://www.mysql.com/about/contact/">Contact Us</a></li>
+                                                                        <li><a href="https://www.mysql.com/buy-mysql/">How to Buy</a></li>
+                        <li><a href="https://www.mysql.com/partners/">Partners</a></li>
+                        <li><a href="https://www.mysql.com/about/jobs/">Job Opportunities</a></li>
+                        <li><a href="https://www.mysql.com/sitemap.html">Site Map</a></li>
+                    </ul>
+                </div>
+
+                            </div>
+
+            <div id="footer-logo">
+                <a href="http://www.oracle.com/" aria-label="Oracle" title="Oracle"><span class="oracle-logo"></span></a>
+                &nbsp; &copy; 2021, Oracle Corporation and/or its affiliates
+                <div class="footer-legal-links">
+                    <a href="https://www.mysql.com/about/legal/">Legal Policies</a> |
+                    <a href="http://www.oracle.com/us/legal/privacy/index.htm">Your Privacy Rights</a> |
+                    <a href="http://www.oracle.com/us/legal/terms/index.html">Terms of Use</a> |
+                    <a href="http://www.oracle.com/us/legal/third-party-trademarks/index.html">Trademark Policy</a> |
+                    <a href="http://www.oracle.com/technetwork/community/oca-486395.html">Contributor Agreement</a> |
+                    <div id="teconsent"></div>
+                </div>
+            </div>
+
+        </div>
+    </footer>
+</div>
+
+            <script>
+    if ((oracle.truste.api.getGdprConsentDecision().consentDecision) &&
+            (oracle.truste.api.getGdprConsentDecision().consentDecision.indexOf(0) != -1 ||
+             oracle.truste.api.getGdprConsentDecision().consentDecision.indexOf(2) != -1) )
+    {
+        document.write('<script src="https://labs.mysql.com/common/js/metrics/s_code_remote.js"><\/script>');
+        document.write('<script type="text/javascript" async src="https://c.oracleinfinity.io/acs/account/wh3g12c3gg/js/mysql/odc.js?_ora.context=analytics:production"><\/script>');
+    }
+    </script>
+
+        
+    
+</body>
+</html>

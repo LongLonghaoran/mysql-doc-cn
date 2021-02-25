@@ -1,0 +1,2156 @@
+<!DOCTYPE html>
+<html lang="en" class="svg no-js">
+<head>
+    <meta charset="utf-8" />
+    <!--[if IE ]>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="Language" content="en">
+
+    <title>MySQL :: MySQL 5.7 Reference Manual :: 1.4 Server and Status Variables and Options Added, Deprecated, or Removed in
+    MySQL 5.7</title>
+    <link rel="stylesheet" media="all" href="https://labs.mysql.com/common/css/main-20201221.min.css" />
+            <link rel="stylesheet" media="all" href="https://labs.mysql.com/common/css/docs-20201221.min.css" />
+    
+    
+    <link rel="stylesheet" media="print" href="https://labs.mysql.com/common/css/print-20201221.min.css" />
+
+    
+    
+    
+    
+            <link rel="contents" href="index.html" title="MySQL 5.7 Reference Manual" />
+<link rel="start" href="index.html" title="MySQL 5.7 Reference Manual" />
+<link rel="prev" href="mysql-nutshell.html" title="1.3 What Is New in MySQL 5.7" />
+<link rel="next" href="information-sources.html?ff=nopfpls" title="1.5 MySQL Information Sources" />
+<link rel="up" href="introduction.html" title="1 General Information" />
+
+    
+    <link rel="shortcut icon" href="https://labs.mysql.com/common/themes/sakila/favicon.ico" />
+    <script async="async" type="text/javascript" src='https://consent.truste.com/notice?domain=oracle.com&c=teconsent&js=bb&noticeType=bb&text=true&cdn=1&pcookie&gtm=1' crossorigin></script>
+    <script src="https://www.oracle.com/assets/truste-oraclelib.js"></script>
+    <script>(function(H){ H.className=H.className.replace(/\bno-js\b/,'js') })(document.documentElement)</script>
+    <script src="https://labs.mysql.com/common/js/site-20200928.min.js"></script>
+
+    
+    
+    <!--[if lt IE 9]>
+        <script src="https://labs.mysql.com/common/js/polyfills/html5shiv-printshiv-3.7.2.min.js"></script>
+        <script src="https://labs.mysql.com/common/js/polyfills/respond-1.4.2.min.js"></script>
+    <![endif]-->
+        <!--[if IE 9]>
+        <style>#docs-sidebar-toc { box-sizing: content-box; }</style>
+    <![endif]-->
+    </head>
+
+<body class="no-sidebar full-page dev">
+<div class="page-wrapper">
+    <header>
+
+                        <a href="https://dev.mysql.com/" aria-label="Home" title="MySQL" id="l1-home-link"></a>
+        
+        <div id="l1-nav-container">
+            <div id="l1-line1">
+                <div id="l1-auth-links">
+                    <a href="https://www.mysql.com/about/contact/"><b>Contact MySQL</b></a>
+                    <span id="l1-contact-separator">&nbsp;|&nbsp;</span>
+                    <span id="l1-contact-separator-br"><br /></span>
+                                             <a href="https://dev.mysql.com/auth/login/?dest=https%3A%2F%2Fdev.mysql.com%2Fdoc%2Frefman%2F5.7%2Fen%2Fadded-deprecated-removed.html">Login</a> &nbsp;|&nbsp;
+                         <a href="https://dev.mysql.com/auth/register/">Register</a>
+                                    </div>
+                <div id="l1-lhs">
+                    <div id="l1-slogan">
+                        The world's most popular open source database
+                    </div>
+                    <div id="l1-search-box">
+                        <form id="l1-search-form" method="get" action="https://www.oracle.com/search/results">
+                        <input type="hidden" name="cat" value="mysql" />
+                        <input type="hidden" name="Ntk" value="SI-ALL5" />
+                        <input id="l1-search-input" type="search" class="icon-search" placeholder="Search" aria-label="Search" name="Ntt" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div id="l1-line2">
+                <div class="social-icons">
+                    <a aria-label="Join us on Facebook" title="Join us on Facebook" href="http://www.facebook.com/mysql"><span class="icon-facebook"></span></a>
+                    <a aria-label="Follow us on Twitter" title="Follow us on Twitter" href="https://twitter.com/mysql"><span class="icon-twitter"></span></a>
+                    <a aria-label="Follow us on LinkedIn" title="Follow us on LinkedIn" href="https://www.linkedin.com/company/mysql"><span class="icon-linkedin"></span></a>
+                    <a aria-label="Visit our YouTube channel" title="Visit our YouTube channel" href="http://www.youtube.com/mysqlchannel"><span class="icon-youtube"></span></a>
+                </div>
+                <ul id="l1-nav">
+                    <li>
+                        <a href="https://www.mysql.com/"><!-- <span class="icon-sakila"></span>  -->MySQL.com</a>
+                    </li><li>
+                        <a href="https://www.mysql.com/downloads/"><!-- <span class="icon-download-thin"></span>  -->Downloads</a>
+                    </li><li class="active">
+                        <a href="https://dev.mysql.com/doc/"><!-- <span class="icon-books"></span>  -->Documentation</a>
+                    </li><li>
+                        <a href="https://dev.mysql.com/"><!-- <span class="icon-code"></span>  -->Developer Zone</a>
+                    </li>                </ul>
+            </div>
+        </div>
+        <div id="sub-header">
+            <div id="l2-nav-container">
+                <div id="l2-nav-toggle">
+                    <span class="icon-three-bars"></span>
+                </div>
+                                                                                        <a class="button nav-button-3" href="https://dev.mysql.com/"><span class="icon-code"></span> Developer Zone</a>
+                                                                                                                                    <a class="button nav-button-2" href="https://www.mysql.com/downloads/"><span class="icon-download-thin"></span> Downloads</a>
+                                                                                                <a class="button nav-button-1" href="https://www.mysql.com/"><span class="icon-sakila"></span> MySQL.com</a>
+                                                                        <div id="l2-search-toggle">
+                    <span class="icon-search"></span>
+                </div>
+                <div id="l2-site-icon">
+                                                                                                                                                                                                    <span class="icon-books"></span>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </div>
+                <div id="l1-section-title">
+                    <span id="l1-section-label">
+                        <a href="https://dev.mysql.com/doc/">Documentation</a>
+                    </span>
+                </div>
+                <nav>
+                    
+
+<ul id="l2-nav">
+            	<li class="active"><a class="active " href="https://dev.mysql.com/doc/refman/en/">MySQL Server</a>
+    			</li>
+	        	<li class=""><a  href="https://dev.mysql.com/doc/index-enterprise.html">MySQL Enterprise</a>
+    			</li>
+	        	<li class=""><a  href="https://dev.mysql.com/doc/workbench/en/">Workbench</a>
+    			</li>
+	        	<li class=""><a  href="https://dev.mysql.com/doc/mysql-shell/en/mysql-innodb-cluster.html">InnoDB Cluster</a>
+    			</li>
+	        	<li class=""><a  href="https://dev.mysql.com/doc/index-cluster.html">MySQL NDB Cluster</a>
+    			</li>
+	        	<li class=""><a  href="https://dev.mysql.com/doc/index-connectors.html">Connectors</a>
+    			</li>
+	        	<li class=" last"><a  href="https://dev.mysql.com/doc/index-other.html">More</a>
+    			</li>
+	                        <li class="other-section"><a href="https://www.mysql.com/">MySQL.com</a></li>
+                            <li class="other-section"><a href="https://www.mysql.com/downloads/">Downloads</a></li>
+                                        <li class="other-section"><a href="https://dev.mysql.com/">Developer Zone</a></li>
+            </ul>
+                </nav>
+            </div>
+            <div id="l3-search-container"></div>
+            <div id="top-orange"><span id="section-nav">Section Menu: &nbsp; </span></div>
+        </div>
+    </header>
+        <div id="page">
+                        <div role="main" id="main">
+
+            
+                
+            
+<div>
+    <div id="docs-sidebar-toc" class="">
+    <div id="docs-toc-inner">
+        <div class="docs-sidebar-header" id="docs-nav-header">
+            <a class="docs-show-hide-nav" id="docs-hide-nav" href="added-deprecated-removed.html" title="Hide Sidebar" aria-label="Hide Sidebar"><span class="icon-arrow-small-left"></span></a>
+            <div class="docs-nav-links">
+                                    
+    <a href="mysql-nutshell.html"
+        aria-label="Previous" title="Previous: What Is New in MySQL 5.7"><span
+        class="icon-chevron-left"></span></a>
+<a href="index.html" aria-label="Start" title="Start"><span class="icon-book-open"></span></a>
+        <a aria-label="Up" href="introduction.html" title="Up: General Information"><span class="icon-chevron-up"></span></a>
+    <a href="information-sources.html" aria-label="Next"
+        title="Next: MySQL Information Sources"><span
+        class="icon-chevron-right"></span></a>
+                            </div>
+        </div>
+                    
+<div id="docs-sidebar-search-container">
+    <div id="docs-sidebar-search-box">
+        <form method="get" action="https://dev.mysql.com/doc/search/">
+            <input type="hidden" name="d" id="d" value="12" />
+            <input type="hidden" name="p" id="p" value="1" />
+            <input type="text" name="q" id="q" title="Search this Manual"
+                value="Search this Manual"
+                style="color: #bbb;"
+                onfocus="if(this.value == 'Search this Manual') {this.value='';this.style.color='#555';}"
+                onblur="if(this.value == '') {this.value='Search this Manual';this.style.color='#bbb';}" />
+
+            <button class="docs-sidebar-search-btn" aria-label="Search" title="Search" type="submit">
+                <span class="icon-search"></span>
+            </button>
+        </form>
+    </div>
+</div>
+                <div class="docs-sidebar-nav">
+            <a class="docs-icon-home" href="https://dev.mysql.com/doc/"><span class="icon-home"></span>Documentation Home</a><hr />
+            <div class="docs-sidebar-mtitle">MySQL 5.7 Reference Manual</div>
+            <nav class="doctoc" id="doc-12">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="preface.html">Preface and Legal Notices</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="added-deprecated-removed.html"><span class="icon-chevron-down"></span></a></div><div class="docs-sidebar-nav-link"><a href="introduction.html">General Information</a></div></div>                        <div class="docs-submenu">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="manual-info.html">About This Manual</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="added-deprecated-removed.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="what-is.html">Overview of the MySQL Database Management System</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="what-is-mysql.html">What is MySQL?</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="features.html">The Main Features of MySQL</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="history.html">History of MySQL</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysql-nutshell.html">What Is New in MySQL 5.7</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link current"><a href="added-deprecated-removed.html">Server and Status Variables and Options Added, Deprecated, or Removed in
+    MySQL 5.7</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="information-sources.html">MySQL Information Sources</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="bug-reports.html">How to Report Bugs or Problems</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="added-deprecated-removed.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="compatibility.html">MySQL Standards Compliance</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="extensions-to-ansi.html">MySQL Extensions to Standard SQL</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="added-deprecated-removed.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="differences-from-ansi.html">MySQL Differences from Standard SQL</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="ansi-diff-select-into-table.html">SELECT INTO TABLE Differences</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="ansi-diff-update.html">UPDATE Differences</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="ansi-diff-foreign-keys.html">FOREIGN KEY Constraint Differences</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="ansi-diff-comments.html">&#039;--&#039; as the Start of a Comment</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="added-deprecated-removed.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="constraints.html">How MySQL Deals with Constraints</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="constraint-primary-key.html">PRIMARY KEY and UNIQUE Index Constraints</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="constraint-foreign-key.html">FOREIGN KEY Constraints</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="constraint-invalid-data.html">Constraints on Invalid Data</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="constraint-enum.html">ENUM and SET Constraints</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="added-deprecated-removed.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="credits.html">Credits</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="contributors.html">Contributors to MySQL</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="documenters-translators.html">Documenters and translators</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="packages.html">Packages that support MySQL</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="tools-used-to-create-mysql.html">Tools that were used to create MySQL</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="supporters.html">Supporters of MySQL</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="added-deprecated-removed.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="installing.html">Installing and Upgrading MySQL</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="added-deprecated-removed.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="tutorial.html">Tutorial</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="added-deprecated-removed.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="programs.html">MySQL Programs</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="added-deprecated-removed.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="server-administration.html">MySQL Server Administration</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="added-deprecated-removed.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="security.html">Security</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="added-deprecated-removed.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="backup-and-recovery.html">Backup and Recovery</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="added-deprecated-removed.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="optimization.html">Optimization</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="added-deprecated-removed.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="language-structure.html">Language Structure</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="added-deprecated-removed.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="charset.html">Character Sets, Collations, Unicode</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="added-deprecated-removed.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="data-types.html">Data Types</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="added-deprecated-removed.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="functions.html">Functions and Operators</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="added-deprecated-removed.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="sql-statements.html">SQL Statements</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="added-deprecated-removed.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="innodb-storage-engine.html">The InnoDB Storage Engine</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="added-deprecated-removed.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="storage-engines.html">Alternative Storage Engines</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="added-deprecated-removed.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="replication.html">Replication</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="added-deprecated-removed.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="group-replication.html">Group Replication</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysql-shell-userguide.html">MySQL Shell</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="added-deprecated-removed.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="document-store.html">Using MySQL as a Document Store</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysql-innodb-cluster-introduction.html">InnoDB Cluster</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="added-deprecated-removed.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="mysql-cluster.html">MySQL NDB Cluster 7.5 and NDB Cluster 7.6</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="added-deprecated-removed.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="partitioning.html">Partitioning</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="added-deprecated-removed.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="stored-objects.html">Stored Objects</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="added-deprecated-removed.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="information-schema.html">INFORMATION_SCHEMA Tables</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="added-deprecated-removed.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="performance-schema.html">MySQL Performance Schema</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="added-deprecated-removed.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="sys-schema.html">MySQL sys Schema</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="added-deprecated-removed.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="connectors-apis.html">Connectors and APIs</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="added-deprecated-removed.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="mysql-enterprise.html">MySQL Enterprise Edition</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="workbench.html">MySQL Workbench</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="added-deprecated-removed.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="faqs.html">MySQL 5.7 Frequently Asked Questions</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="added-deprecated-removed.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="error-handling.html">Error Messages and Common Problems</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="added-deprecated-removed.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="indexes.html">Indexes</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="glossary.html">MySQL Glossary</a></div></div>                    </li>
+        </ul>
+                            </nav>
+        </div>
+
+        
+<a class="docs-sidebar-section" href="added-deprecated-removed.html"><span class="icon-related"></span>
+    <span class="text">Related Documentation</span></a>
+<div class="docs-sidebar-accordian open">
+    <div class="text">
+        <a href="https://dev.mysql.com/doc/relnotes/mysql/5.7/en/">MySQL 5.7 Release Notes</a><br />
+        </div>
+</div>
+
+    <a class="docs-sidebar-section" href="added-deprecated-removed.html"><span class="icon-download-thin"></span>
+        <span class="text">
+            Download
+                            this Manual
+                    </span>
+    </a>
+    <div class="docs-sidebar-accordian open">
+        <div class="text">
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.pdf">PDF (US Ltr)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.a4.pdf">PDF (A4)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-ref-manual-5.7-en-pdf-1-20210225.noarch.rpm">PDF (RPM)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.html-chapter.tar.gz">HTML Download (TGZ)</a>
+            - 10.1Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.html-chapter.zip">HTML Download (Zip)</a>
+            - 10.2Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-ref-manual-5.7-en-html-chapter-1-20210225.noarch.rpm">HTML Download (RPM)</a>
+            - 8.9Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.man-gpl.tar.gz">Man Pages (TGZ)</a>
+            - 224.7Kb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.man-gpl.zip">Man Pages (Zip)</a>
+            - 332.6Kb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-5.7.info.gz">Info (Gzip)</a>
+            - 3.3Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-5.7.info.zip">Info (Zip)</a>
+            - 3.3Mb<br />
+                    </div>
+    </div>
+
+<a class="docs-sidebar-section" href="added-deprecated-removed.html"><span class="icon-book"></span>
+    <span class="text">Excerpts from this Manual</span></a>
+<div class="docs-sidebar-accordian">
+    <div class="text">
+                <a href="https://dev.mysql.com/doc/mysql-backup-excerpt/5.7/en/">MySQL Backup and Recovery</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-g11n-excerpt/5.7/en/">MySQL Globalization</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-infoschema-excerpt/5.7/en/">MySQL Information Schema</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-installation-excerpt/5.7/en/">MySQL Installation Guide</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-linuxunix-excerpt/5.7/en/">MySQL and Linux/Unix</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-osx-excerpt/5.7/en/">MySQL and OS X</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-partitioning-excerpt/5.7/en/">MySQL Partitioning</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-perfschema-excerpt/5.7/en/">MySQL Performance Schema</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-replication-excerpt/5.7/en/">MySQL Replication</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-repo-excerpt/5.7/en/">Using the MySQL Yum Repository</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-reslimits-excerpt/5.7/en/">MySQL Restrictions and Limitations</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-security-excerpt/5.7/en/">Security in MySQL</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-solaris-excerpt/5.7/en/">MySQL and Solaris</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-sourcebuild-excerpt/5.7/en/">Building MySQL from Source</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-startstop-excerpt/5.7/en/">Starting and Stopping MySQL</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-tutorial-excerpt/5.7/en/">MySQL Tutorial</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-windows-excerpt/5.7/en/">MySQL and Windows</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-cluster-excerpt/5.7/en/">MySQL NDB Cluster 7.5</a><br />
+            </div>
+</div>
+
+        <br /><span id="wkr"><br /></span>
+    </div>
+    </div>
+
+    <div id="docs-main" class="has-toc">
+    <div id="docs-main-inner">
+
+                <div class="right" id="docs-version-nav">
+            <a href="added-deprecated-removed.html" id="docs-version-nav-toggle">version 5.7
+            <span class="icon-chevron-down"></span></a>
+            <div id="docs-version-list">
+                                                        <a                         href="https://dev.mysql.com/doc/refman/8.0/en/added-deprecated-removed.html">
+                        8.0
+                                                &nbsp;current
+                                            </a><br />
+                                                                                                                <a                         href="https://dev.mysql.com/doc/refman/5.6/en/added-deprecated-removed.html">
+                        5.6
+                                            </a><br />
+                                                                        <div id="docs-version-nav-lang">
+                                                                                                                                                    <a                                     class="tooltip-left"
+                                    data-tooltip="The page you are viewing does not exist in version
+                                    5.6 (JA).
+                                    This link will take you to the Table of Contents."
+                                                                        href="https://dev.mysql.com/doc/refman/5.6/ja/">
+                                    5.6&nbsp;
+                                                                            Japanese
+                                                                    </a><br />
+                                                                                            </div>
+                            </div>
+        </div>
+        
+        <div id="docs-show-nav" class="left hidden" style="margin-right: 15px;">
+            <a class="docs-show-hide-nav" href="added-deprecated-removed.html" aria-label="Show Sidebar"
+                title="Show Sidebar"><span class="icon-arrow-small-right"></span></a>
+        </div>
+
+                        <div id="docs-breadcrumbs">
+            <a href="index.html">MySQL 5.7 Reference Manual</a> &nbsp;/&nbsp;
+                                                        <a href="introduction.html">General Information</a> &nbsp;/&nbsp;
+                                                                                    Server and Status Variables and Options Added, Deprecated, or Removed in
+    MySQL 5.7
+                                    </div>
+        
+        <div id="docs-body">
+        
+<div class="section">
+<div class="titlepage">
+<div>
+<div>
+<h2 class="title"><a name="added-deprecated-removed"></a>1.4 Server and Status Variables and Options Added, Deprecated, or Removed in
+MySQL 5.7</h2>
+
+</div>
+
+</div>
+
+</div>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><a class="xref" href="added-deprecated-removed.html#optvars-added" title="Options and Variables Introduced in MySQL 5.7">Options and Variables Introduced in MySQL 5.7</a></p></li><li class="listitem"><p><a class="xref" href="added-deprecated-removed.html#optvars-deprecated" title="Options and Variables Deprecated in MySQL 5.7">Options and Variables Deprecated in MySQL 5.7</a></p></li><li class="listitem"><p><a class="xref" href="added-deprecated-removed.html#optvars-removed" title="Options and Variables Removed in MySQL 5.7">Options and Variables Removed in MySQL 5.7</a></p></li></ul>
+</div>
+<p>
+    This section lists server variables, status variables, and options
+    that were added for the first time, have been deprecated, or have
+    been removed in MySQL 5.7.
+</p>
+<div class="simplesect">
+
+<div class="titlepage">
+<div>
+
+<div class="simple">
+<h3 class="title"><a name="optvars-added"></a>Options and Variables Introduced in MySQL 5.7</h3>
+</div>
+</div>
+</div>
+<p>
+      The following system variables, status variables, and server
+      options have been added in MySQL 5.7.
+</p>
+<div class="itemizedlist">
+<a name="optvars-added-list"></a><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+          <code class="literal"><a class="link" href="audit-log-reference.html#statvar_Audit_log_current_size">Audit_log_current_size</a></code>:
+          Audit log file current size. Added in MySQL 5.7.9.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="audit-log-reference.html#statvar_Audit_log_event_max_drop_size">Audit_log_event_max_drop_size</a></code>:
+          Size of largest dropped audited event. Added in MySQL 5.7.9.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="audit-log-reference.html#statvar_Audit_log_events">Audit_log_events</a></code>:
+          Number of handled audited events. Added in MySQL 5.7.9.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="audit-log-reference.html#statvar_Audit_log_events_filtered">Audit_log_events_filtered</a></code>:
+          Number of filtered audited events. Added in MySQL 5.7.9.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="audit-log-reference.html#statvar_Audit_log_events_lost">Audit_log_events_lost</a></code>:
+          Number of dropped audited events. Added in MySQL 5.7.9.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="audit-log-reference.html#statvar_Audit_log_events_written">Audit_log_events_written</a></code>:
+          Number of written audited events. Added in MySQL 5.7.9.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="audit-log-reference.html#statvar_Audit_log_total_size">Audit_log_total_size</a></code>:
+          Combined size of written audited events. Added in MySQL 5.7.9.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="audit-log-reference.html#statvar_Audit_log_write_waits">Audit_log_write_waits</a></code>:
+          Number of write-delayed audited events. Added in MySQL 5.7.9.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-status-variables.html#statvar_Com_xxx">Com_change_repl_filter</a></code>:
+          Count of CHANGE REPLICATION FILTER statements. Added in MySQL
+          5.7.3.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-status-variables.html#statvar_Com_xxx">Com_explain_other</a></code>:
+          Count of EXPLAIN FOR CONNECTION statements. Added in MySQL
+          5.7.2.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-status-variables.html#statvar_Com_xxx">Com_group_replication_start</a></code>:
+          Count of START GROUP_REPLICATION statements. Added in MySQL
+          5.7.6.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-status-variables.html#statvar_Com_xxx">Com_group_replication_stop</a></code>:
+          Count of STOP GROUP_REPLICATION statements. Added in MySQL
+          5.7.6.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-status-variables.html#statvar_Com_xxx">Com_show_create_user</a></code>:
+          Count of SHOW CREATE USER statements. Added in MySQL 5.7.6.
+        </p></li><li class="listitem"><p>
+          <code class="literal">Com_show_slave_status_nonblocking</code>: Count of
+          SHOW REPLICA | SLAVE STATUS NONBLOCKING statements. Added in
+          MySQL 5.7.0.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-status-variables.html#statvar_Com_xxx">Com_shutdown</a></code>:
+          Count of SHUTDOWN statements. Added in MySQL 5.7.9.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="connection-control-variables.html#statvar_Connection_control_delay_generated">Connection_control_delay_generated</a></code>:
+          How many times server delayed connection request. Added in
+          MySQL 5.7.17.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="firewall-reference.html#statvar_Firewall_access_denied">Firewall_access_denied</a></code>:
+          Number of statements rejected by MySQL Enterprise Firewall.
+          Added in MySQL 5.7.9.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="firewall-reference.html#statvar_Firewall_access_granted">Firewall_access_granted</a></code>:
+          Number of statements accepted by MySQL Enterprise Firewall.
+          Added in MySQL 5.7.9.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="firewall-reference.html#statvar_Firewall_cached_entries">Firewall_cached_entries</a></code>:
+          Number of statements recorded by MySQL Enterprise Firewall.
+          Added in MySQL 5.7.9.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-status-variables.html#statvar_Innodb_buffer_pool_resize_status">Innodb_buffer_pool_resize_status</a></code>:
+          Status of dynamic buffer pool resizing operation. Added in
+          MySQL 5.7.5.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-status-variables.html#statvar_Locked_connects">Locked_connects</a></code>:
+          Number of attempts to connect to locked accounts. Added in
+          MySQL 5.7.6.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-status-variables.html#statvar_Max_execution_time_exceeded">Max_execution_time_exceeded</a></code>:
+          Number of statements that exceeded execution timeout value.
+          Added in MySQL 5.7.8.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-status-variables.html#statvar_Max_execution_time_set">Max_execution_time_set</a></code>:
+          Number of statements for which execution timeout was set.
+          Added in MySQL 5.7.8.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-status-variables.html#statvar_Max_execution_time_set_failed">Max_execution_time_set_failed</a></code>:
+          Number of statements for which execution timeout setting
+          failed. Added in MySQL 5.7.8.
+        </p></li><li class="listitem"><p>
+          <code class="literal">Max_statement_time_exceeded</code>: Number of
+          statements that exceeded execution timeout value. Added in
+          MySQL 5.7.4.
+        </p></li><li class="listitem"><p>
+          <code class="literal">Max_statement_time_set</code>: Number of
+          statements for which execution timeout was set. Added in MySQL
+          5.7.4.
+        </p></li><li class="listitem"><p>
+          <code class="literal">Max_statement_time_set_failed</code>: Number of
+          statements for which execution timeout setting failed. Added
+          in MySQL 5.7.4.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-status-variables.html#statvar_Max_used_connections_time">Max_used_connections_time</a></code>:
+          Time at which Max_used_connections reached its current value.
+          Added in MySQL 5.7.5.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="performance-schema-status-variables.html#statvar_Performance_schema_index_stat_lost">Performance_schema_index_stat_lost</a></code>:
+          Number of indexes for which statistics were lost. Added in
+          MySQL 5.7.6.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="performance-schema-status-variables.html#statvar_Performance_schema_memory_classes_lost">Performance_schema_memory_classes_lost</a></code>:
+          How many memory instruments could not be loaded. Added in
+          MySQL 5.7.2.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="performance-schema-status-variables.html#statvar_Performance_schema_metadata_lock_lost">Performance_schema_metadata_lock_lost</a></code>:
+          Number of metadata locks that could not be recorded. Added in
+          MySQL 5.7.3.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="performance-schema-status-variables.html#statvar_Performance_schema_nested_statement_lost">Performance_schema_nested_statement_lost</a></code>:
+          Number of stored program statements for which statistics were
+          lost. Added in MySQL 5.7.2.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="performance-schema-status-variables.html#statvar_Performance_schema_prepared_statements_lost">Performance_schema_prepared_statements_lost</a></code>:
+          Number of prepared statements that could not be instrumented.
+          Added in MySQL 5.7.4.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="performance-schema-status-variables.html#statvar_Performance_schema_program_lost">Performance_schema_program_lost</a></code>:
+          Number of stored programs for which statistics were lost.
+          Added in MySQL 5.7.2.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="performance-schema-status-variables.html#statvar_Performance_schema_table_lock_stat_lost">Performance_schema_table_lock_stat_lost</a></code>:
+          Number of tables for which lock statistics were lost. Added in
+          MySQL 5.7.6.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="rewriter-query-rewrite-plugin-reference.html#statvar_Rewriter_number_loaded_rules">Rewriter_number_loaded_rules</a></code>:
+          Number of rewrite rules successfully loaded into memory. Added
+          in MySQL 5.7.6.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="rewriter-query-rewrite-plugin-reference.html#statvar_Rewriter_number_reloads">Rewriter_number_reloads</a></code>:
+          Number of reloads of rules table into memory. Added in MySQL
+          5.7.6.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="rewriter-query-rewrite-plugin-reference.html#statvar_Rewriter_number_rewritten_queries">Rewriter_number_rewritten_queries</a></code>:
+          Number of queries rewritten since plugin was loaded. Added in
+          MySQL 5.7.6.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="rewriter-query-rewrite-plugin-reference.html#statvar_Rewriter_reload_error">Rewriter_reload_error</a></code>:
+          Whether error occurred when last loading rewriting rules into
+          memory. Added in MySQL 5.7.6.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="audit-log-reference.html#option_mysqld_audit-log">audit-log</a></code>:
+          Whether to activate audit log plugin. Added in MySQL 5.7.9.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="audit-log-reference.html#sysvar_audit_log_buffer_size">audit_log_buffer_size</a></code>:
+          Size of audit log buffer. Added in MySQL 5.7.9.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="audit-log-reference.html#sysvar_audit_log_compression">audit_log_compression</a></code>:
+          Audit log file compression method. Added in MySQL 5.7.21.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="audit-log-reference.html#sysvar_audit_log_connection_policy">audit_log_connection_policy</a></code>:
+          Audit logging policy for connection-related events. Added in
+          MySQL 5.7.9.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="audit-log-reference.html#sysvar_audit_log_current_session">audit_log_current_session</a></code>:
+          Whether to audit current session. Added in MySQL 5.7.9.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="audit-log-reference.html#sysvar_audit_log_encryption">audit_log_encryption</a></code>:
+          Audit log file encryption method. Added in MySQL 5.7.21.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="audit-log-reference.html#sysvar_audit_log_exclude_accounts">audit_log_exclude_accounts</a></code>:
+          Accounts not to audit. Added in MySQL 5.7.9.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="audit-log-reference.html#sysvar_audit_log_file">audit_log_file</a></code>:
+          Name of audit log file. Added in MySQL 5.7.9.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="audit-log-reference.html#sysvar_audit_log_filter_id">audit_log_filter_id</a></code>:
+          ID of current audit log filter. Added in MySQL 5.7.13.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="audit-log-reference.html#sysvar_audit_log_flush">audit_log_flush</a></code>:
+          Close and reopen audit log file. Added in MySQL 5.7.9.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="audit-log-reference.html#sysvar_audit_log_format">audit_log_format</a></code>:
+          Audit log file format. Added in MySQL 5.7.9.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="audit-log-reference.html#sysvar_audit_log_include_accounts">audit_log_include_accounts</a></code>:
+          Accounts to audit. Added in MySQL 5.7.9.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="audit-log-reference.html#sysvar_audit_log_policy">audit_log_policy</a></code>:
+          Audit logging policy. Added in MySQL 5.7.9.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="audit-log-reference.html#sysvar_audit_log_read_buffer_size">audit_log_read_buffer_size</a></code>:
+          Audit log file read buffer size. Added in MySQL 5.7.21.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="audit-log-reference.html#sysvar_audit_log_rotate_on_size">audit_log_rotate_on_size</a></code>:
+          Close and reopen audit log file at this size. Added in MySQL
+          5.7.9.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="audit-log-reference.html#sysvar_audit_log_statement_policy">audit_log_statement_policy</a></code>:
+          Audit logging policy for statement-related events. Added in
+          MySQL 5.7.9.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="audit-log-reference.html#sysvar_audit_log_strategy">audit_log_strategy</a></code>:
+          Audit logging strategy. Added in MySQL 5.7.9.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="pluggable-authentication-system-variables.html#sysvar_authentication_ldap_sasl_auth_method_name">authentication_ldap_sasl_auth_method_name</a></code>:
+          Authentication method name. Added in MySQL 5.7.19.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="pluggable-authentication-system-variables.html#sysvar_authentication_ldap_sasl_bind_base_dn">authentication_ldap_sasl_bind_base_dn</a></code>:
+          LDAP server base distinguished name. Added in MySQL 5.7.19.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="pluggable-authentication-system-variables.html#sysvar_authentication_ldap_sasl_bind_root_dn">authentication_ldap_sasl_bind_root_dn</a></code>:
+          LDAP server root distinguished name. Added in MySQL 5.7.19.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="pluggable-authentication-system-variables.html#sysvar_authentication_ldap_sasl_bind_root_pwd">authentication_ldap_sasl_bind_root_pwd</a></code>:
+          LDAP server root bind password. Added in MySQL 5.7.19.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="pluggable-authentication-system-variables.html#sysvar_authentication_ldap_sasl_ca_path">authentication_ldap_sasl_ca_path</a></code>:
+          LDAP server certificate authority file name. Added in MySQL
+          5.7.19.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="pluggable-authentication-system-variables.html#sysvar_authentication_ldap_sasl_group_search_attr">authentication_ldap_sasl_group_search_attr</a></code>:
+          LDAP server group search attribute. Added in MySQL 5.7.19.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="pluggable-authentication-system-variables.html#sysvar_authentication_ldap_sasl_group_search_filter">authentication_ldap_sasl_group_search_filter</a></code>:
+          LDAP custom group search filter. Added in MySQL 5.7.21.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="pluggable-authentication-system-variables.html#sysvar_authentication_ldap_sasl_init_pool_size">authentication_ldap_sasl_init_pool_size</a></code>:
+          LDAP server initial connection pool size. Added in MySQL
+          5.7.19.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="pluggable-authentication-system-variables.html#sysvar_authentication_ldap_sasl_log_status">authentication_ldap_sasl_log_status</a></code>:
+          LDAP server log level. Added in MySQL 5.7.19.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="pluggable-authentication-system-variables.html#sysvar_authentication_ldap_sasl_max_pool_size">authentication_ldap_sasl_max_pool_size</a></code>:
+          LDAP server maximum connection pool size. Added in MySQL
+          5.7.19.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="pluggable-authentication-system-variables.html#sysvar_authentication_ldap_sasl_server_host">authentication_ldap_sasl_server_host</a></code>:
+          LDAP server host name or IP address. Added in MySQL 5.7.19.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="pluggable-authentication-system-variables.html#sysvar_authentication_ldap_sasl_server_port">authentication_ldap_sasl_server_port</a></code>:
+          LDAP server port number. Added in MySQL 5.7.19.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="pluggable-authentication-system-variables.html#sysvar_authentication_ldap_sasl_tls">authentication_ldap_sasl_tls</a></code>:
+          Whether to use encrypted connections to LDAP server. Added in
+          MySQL 5.7.19.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="pluggable-authentication-system-variables.html#sysvar_authentication_ldap_sasl_user_search_attr">authentication_ldap_sasl_user_search_attr</a></code>:
+          LDAP server user search attribute. Added in MySQL 5.7.19.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="pluggable-authentication-system-variables.html#sysvar_authentication_ldap_simple_auth_method_name">authentication_ldap_simple_auth_method_name</a></code>:
+          Authentication method name. Added in MySQL 5.7.19.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="pluggable-authentication-system-variables.html#sysvar_authentication_ldap_simple_bind_base_dn">authentication_ldap_simple_bind_base_dn</a></code>:
+          LDAP server base distinguished name. Added in MySQL 5.7.19.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="pluggable-authentication-system-variables.html#sysvar_authentication_ldap_simple_bind_root_dn">authentication_ldap_simple_bind_root_dn</a></code>:
+          LDAP server root distinguished name. Added in MySQL 5.7.19.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="pluggable-authentication-system-variables.html#sysvar_authentication_ldap_simple_bind_root_pwd">authentication_ldap_simple_bind_root_pwd</a></code>:
+          LDAP server root bind password. Added in MySQL 5.7.19.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="pluggable-authentication-system-variables.html#sysvar_authentication_ldap_simple_ca_path">authentication_ldap_simple_ca_path</a></code>:
+          LDAP server certificate authority file name. Added in MySQL
+          5.7.19.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="pluggable-authentication-system-variables.html#sysvar_authentication_ldap_simple_group_search_attr">authentication_ldap_simple_group_search_attr</a></code>:
+          LDAP server group search attribute. Added in MySQL 5.7.19.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="pluggable-authentication-system-variables.html#sysvar_authentication_ldap_simple_group_search_filter">authentication_ldap_simple_group_search_filter</a></code>:
+          LDAP custom group search filter. Added in MySQL 5.7.21.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="pluggable-authentication-system-variables.html#sysvar_authentication_ldap_simple_init_pool_size">authentication_ldap_simple_init_pool_size</a></code>:
+          LDAP server initial connection pool size. Added in MySQL
+          5.7.19.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="pluggable-authentication-system-variables.html#sysvar_authentication_ldap_simple_log_status">authentication_ldap_simple_log_status</a></code>:
+          LDAP server log level. Added in MySQL 5.7.19.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="pluggable-authentication-system-variables.html#sysvar_authentication_ldap_simple_max_pool_size">authentication_ldap_simple_max_pool_size</a></code>:
+          LDAP server maximum connection pool size. Added in MySQL
+          5.7.19.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="pluggable-authentication-system-variables.html#sysvar_authentication_ldap_simple_server_host">authentication_ldap_simple_server_host</a></code>:
+          LDAP server host name or IP address. Added in MySQL 5.7.19.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="pluggable-authentication-system-variables.html#sysvar_authentication_ldap_simple_server_port">authentication_ldap_simple_server_port</a></code>:
+          LDAP server port number. Added in MySQL 5.7.19.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="pluggable-authentication-system-variables.html#sysvar_authentication_ldap_simple_tls">authentication_ldap_simple_tls</a></code>:
+          Whether to use encrypted connections to LDAP server. Added in
+          MySQL 5.7.19.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="pluggable-authentication-system-variables.html#sysvar_authentication_ldap_simple_user_search_attr">authentication_ldap_simple_user_search_attr</a></code>:
+          LDAP server user search attribute. Added in MySQL 5.7.19.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_authentication_windows_log_level">authentication_windows_log_level</a></code>:
+          Windows authentication plugin logging level. Added in MySQL
+          5.7.9.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_authentication_windows_use_principal_name">authentication_windows_use_principal_name</a></code>:
+          Whether to use Windows authentication plugin principal name.
+          Added in MySQL 5.7.9.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_auto_generate_certs">auto_generate_certs</a></code>:
+          Whether to autogenerate SSL key and certificate files. Added
+          in MySQL 5.7.5.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_avoid_temporal_upgrade">avoid_temporal_upgrade</a></code>:
+          Whether ALTER TABLE should upgrade pre-5.6.4 temporal columns.
+          Added in MySQL 5.7.6.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="replication-options-binary-log.html#sysvar_binlog_error_action">binlog_error_action</a></code>:
+          Controls what happens when server cannot write to binary log.
+          Added in MySQL 5.7.6.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="replication-options-binary-log.html#sysvar_binlog_group_commit_sync_delay">binlog_group_commit_sync_delay</a></code>:
+          Sets number of microseconds to wait before synchronizing
+          transactions to disk. Added in MySQL 5.7.5.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="replication-options-binary-log.html#sysvar_binlog_group_commit_sync_no_delay_count">binlog_group_commit_sync_no_delay_count</a></code>:
+          Sets maximum number of transactions to wait for before
+          aborting current delay specified by
+          binlog_group_commit_sync_delay. Added in MySQL 5.7.5.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="replication-options-gtids.html#sysvar_binlog_gtid_simple_recovery">binlog_gtid_simple_recovery</a></code>:
+          Controls how binary logs are iterated during GTID recovery.
+          Added in MySQL 5.7.6.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="replication-options-binary-log.html#sysvar_binlog_transaction_dependency_history_size">binlog_transaction_dependency_history_size</a></code>:
+          Number of row hashes kept for looking up transaction that last
+          updated some row. Added in MySQL 5.7.22.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="replication-options-binary-log.html#sysvar_binlog_transaction_dependency_tracking">binlog_transaction_dependency_tracking</a></code>:
+          Source of dependency information (commit timestamps or
+          transaction write sets) from which to assess which
+          transactions can be executed in parallel by replica's
+          multithreaded applier. Added in MySQL 5.7.22.
+        </p></li><li class="listitem"><p>
+          <code class="literal">binlogging_impossible_mode</code>: Deprecated and
+          later removed. Use binlog_error_action instead. Added in MySQL
+          5.7.5.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_block_encryption_mode">block_encryption_mode</a></code>:
+          Mode for block-based encryption algorithms. Added in MySQL
+          5.7.4.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_check_proxy_users">check_proxy_users</a></code>:
+          Whether built-in authentication plugins do proxying. Added in
+          MySQL 5.7.7.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="connection-control-variables.html#sysvar_connection_control_failed_connections_threshold">connection_control_failed_connections_threshold</a></code>:
+          Consecutive failed connection attempts before delays occur.
+          Added in MySQL 5.7.17.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="connection-control-variables.html#sysvar_connection_control_max_connection_delay">connection_control_max_connection_delay</a></code>:
+          Maximum delay (milliseconds) for server response to failed
+          connection attempts. Added in MySQL 5.7.17.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="connection-control-variables.html#sysvar_connection_control_min_connection_delay">connection_control_min_connection_delay</a></code>:
+          Minimum delay (milliseconds) for server response to failed
+          connection attempts. Added in MySQL 5.7.17.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-options.html#option_mysqld_daemonize">daemonize</a></code>:
+          Run as System V daemon. Added in MySQL 5.7.6.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_default_authentication_plugin">default_authentication_plugin</a></code>:
+          Default authentication plugin. Added in MySQL 5.7.2.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_default_password_lifetime">default_password_lifetime</a></code>:
+          Age in days when passwords effectively expire. Added in MySQL
+          5.7.4.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-options.html#option_mysqld_disable-partition-engine-check">disable-partition-engine-check</a></code>:
+          Whether to disable startup check for tables without native
+          partitioning. Added in MySQL 5.7.17.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_disabled_storage_engines">disabled_storage_engines</a></code>:
+          Storage engines that cannot be used to create tables. Added in
+          MySQL 5.7.8.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_disconnect_on_expired_password">disconnect_on_expired_password</a></code>:
+          Whether server disconnects clients with expired passwords if
+          clients cannot handle such accounts. Added in MySQL 5.7.1.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-options.html#option_mysqld_early-plugin-load">early-plugin-load</a></code>:
+          Specify plugins to load before loading mandatory built-in
+          plugins and before storage engine initialization. Added in
+          MySQL 5.7.11.
+        </p></li><li class="listitem"><p>
+          <code class="literal">executed_gtids_compression_period</code>: Renamed
+          to gtid_executed_compression_period. Added in MySQL 5.7.5.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="group-replication-options.html#sysvar_group_replication_allow_local_disjoint_gtids_join">group_replication_allow_local_disjoint_gtids_join</a></code>:
+          Allow current server to join group even if it has transactions
+          not present in group. Added in MySQL 5.7.17.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="group-replication-options.html#sysvar_group_replication_allow_local_lower_version_join">group_replication_allow_local_lower_version_join</a></code>:
+          Allow current server to join group even if it has lower plugin
+          version than group. Added in MySQL 5.7.17.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="group-replication-options.html#sysvar_group_replication_auto_increment_increment">group_replication_auto_increment_increment</a></code>:
+          Determines interval between successive column values for
+          transactions executing on this server. Added in MySQL 5.7.17.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="group-replication-options.html#sysvar_group_replication_bootstrap_group">group_replication_bootstrap_group</a></code>:
+          Configure this server to bootstrap group. Added in MySQL
+          5.7.17.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="group-replication-options.html#sysvar_group_replication_components_stop_timeout">group_replication_components_stop_timeout</a></code>:
+          Timeout, in seconds, that plugin waits for each component when
+          shutting down. Added in MySQL 5.7.17.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="group-replication-options.html#sysvar_group_replication_compression_threshold">group_replication_compression_threshold</a></code>:
+          Value in bytes above which (LZ4) compression is enforced; when
+          set to zero, deactivates compression. Added in MySQL 5.7.17.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="group-replication-options.html#sysvar_group_replication_enforce_update_everywhere_checks">group_replication_enforce_update_everywhere_checks</a></code>:
+          Enable or disable strict consistency checks for multi-source
+          update everywhere. Added in MySQL 5.7.17.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="group-replication-options.html#sysvar_group_replication_exit_state_action">group_replication_exit_state_action</a></code>:
+          How instance behaves when it leaves group involuntarily. Added
+          in MySQL 5.7.24.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="group-replication-options.html#sysvar_group_replication_flow_control_applier_threshold">group_replication_flow_control_applier_threshold</a></code>:
+          Number of waiting transactions in applier queue which trigger
+          flow control. Added in MySQL 5.7.17.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="group-replication-options.html#sysvar_group_replication_flow_control_certifier_threshold">group_replication_flow_control_certifier_threshold</a></code>:
+          Number of waiting transactions in certifier queue that trigger
+          flow control. Added in MySQL 5.7.17.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="group-replication-options.html#sysvar_group_replication_flow_control_mode">group_replication_flow_control_mode</a></code>:
+          Mode used for flow control. Added in MySQL 5.7.17.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="group-replication-options.html#sysvar_group_replication_force_members">group_replication_force_members</a></code>:
+          Comma separated list of peer addresses, such as
+          host1:port1,host2:port2. Added in MySQL 5.7.17.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="group-replication-options.html#sysvar_group_replication_group_name">group_replication_group_name</a></code>:
+          Name of group. Added in MySQL 5.7.17.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="group-replication-options.html#sysvar_group_replication_group_seeds">group_replication_group_seeds</a></code>:
+          List of peer addresses, comma separated list such as
+          host1:port1,host2:port2. Added in MySQL 5.7.17.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="group-replication-options.html#sysvar_group_replication_gtid_assignment_block_size">group_replication_gtid_assignment_block_size</a></code>:
+          Number of consecutive GTIDs that are reserved for each member;
+          each member consumes its blocks and reserves more when needed.
+          Added in MySQL 5.7.17.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="group-replication-options.html#sysvar_group_replication_ip_whitelist">group_replication_ip_whitelist</a></code>:
+          List of hosts permitted to connect to group. Added in MySQL
+          5.7.17.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="group-replication-options.html#sysvar_group_replication_local_address">group_replication_local_address</a></code>:
+          Local address in host:port format. Added in MySQL 5.7.17.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="group-replication-options.html#sysvar_group_replication_member_weight">group_replication_member_weight</a></code>:
+          Chance of this member being elected as primary. Added in MySQL
+          5.7.20.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="group-replication-options.html#sysvar_group_replication_poll_spin_loops">group_replication_poll_spin_loops</a></code>:
+          Number of times group communication thread waits. Added in
+          MySQL 5.7.17.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="group-replication-options.html#sysvar_group_replication_recovery_complete_at">group_replication_recovery_complete_at</a></code>:
+          Recovery policies when handling cached transactions after
+          state transfer. Added in MySQL 5.7.17.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="group-replication-options.html#sysvar_group_replication_recovery_reconnect_interval">group_replication_recovery_reconnect_interval</a></code>:
+          Sleep time, in seconds, between reconnection attempts when no
+          donor was found in group. Added in MySQL 5.7.17.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="group-replication-options.html#sysvar_group_replication_recovery_retry_count">group_replication_recovery_retry_count</a></code>:
+          Number of times that joining member tries to connect to
+          available donors before giving up. Added in MySQL 5.7.17.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="group-replication-options.html#sysvar_group_replication_recovery_ssl_ca">group_replication_recovery_ssl_ca</a></code>:
+          File that contains list of trusted SSL Certificate
+          Authorities. Added in MySQL 5.7.17.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="group-replication-options.html#sysvar_group_replication_recovery_ssl_capath">group_replication_recovery_ssl_capath</a></code>:
+          Directory that contains trusted SSL Certificate Authority
+          certificate files. Added in MySQL 5.7.17.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="group-replication-options.html#sysvar_group_replication_recovery_ssl_cert">group_replication_recovery_ssl_cert</a></code>:
+          Name of SSL certificate file to use for establishing encrypted
+          connection. Added in MySQL 5.7.17.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="group-replication-options.html#sysvar_group_replication_recovery_ssl_cipher">group_replication_recovery_ssl_cipher</a></code>:
+          Permissible ciphers for SSL encryption. Added in MySQL 5.7.17.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="group-replication-options.html#sysvar_group_replication_recovery_ssl_crl">group_replication_recovery_ssl_crl</a></code>:
+          File that contains certificate revocation lists. Added in
+          MySQL 5.7.17.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="group-replication-options.html#sysvar_group_replication_recovery_ssl_crlpath">group_replication_recovery_ssl_crlpath</a></code>:
+          Directory that contains certificate revocation-list files.
+          Added in MySQL 5.7.17.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="group-replication-options.html#sysvar_group_replication_recovery_ssl_key">group_replication_recovery_ssl_key</a></code>:
+          Name of SSL key file to use for establishing encrypted
+          connection. Added in MySQL 5.7.17.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="group-replication-options.html#sysvar_group_replication_recovery_ssl_verify_server_cert">group_replication_recovery_ssl_verify_server_cert</a></code>:
+          Make recovery process check server Common Name value in
+          certificate sent by donor. Added in MySQL 5.7.17.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="group-replication-options.html#sysvar_group_replication_recovery_use_ssl">group_replication_recovery_use_ssl</a></code>:
+          Whether Group Replication recovery connection should use SSL.
+          Added in MySQL 5.7.17.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="group-replication-options.html#sysvar_group_replication_single_primary_mode">group_replication_single_primary_mode</a></code>:
+          Instructs group to use single server for read/write workload.
+          Added in MySQL 5.7.17.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="group-replication-options.html#sysvar_group_replication_ssl_mode">group_replication_ssl_mode</a></code>:
+          Desired security state of connection between Group Replication
+          members. Added in MySQL 5.7.17.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="group-replication-options.html#sysvar_group_replication_start_on_boot">group_replication_start_on_boot</a></code>:
+          Whether server should start Group Replication during server
+          startup. Added in MySQL 5.7.17.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="group-replication-options.html#sysvar_group_replication_transaction_size_limit">group_replication_transaction_size_limit</a></code>:
+          Sets maximum size of transaction in bytes which group accepts.
+          Added in MySQL 5.7.19.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="group-replication-options.html#sysvar_group_replication_unreachable_majority_timeout">group_replication_unreachable_majority_timeout</a></code>:
+          How long to wait for network partitions that result in
+          minority to leave group. Added in MySQL 5.7.19.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="replication-options-gtids.html#sysvar_gtid_executed_compression_period">gtid_executed_compression_period</a></code>:
+          Compress gtid_executed table each time this many transactions
+          have occurred. 0 means never compress this table. Applies only
+          when binary logging is disabled. Added in MySQL 5.7.6.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_have_statement_timeout">have_statement_timeout</a></code>:
+          Whether statement execution timeout is available. Added in
+          MySQL 5.7.4.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-options.html#option_mysqld_initialize">initialize</a></code>:
+          Whether to run in initialization mode (secure). Added in MySQL
+          5.7.6.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-options.html#option_mysqld_initialize-insecure">initialize-insecure</a></code>:
+          Whether to run in initialization mode (insecure). Added in
+          MySQL 5.7.6.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="innodb-parameters.html#sysvar_innodb_adaptive_hash_index_parts">innodb_adaptive_hash_index_parts</a></code>:
+          Partitions adaptive hash index search system into n
+          partitions, with each partition protected by separate latch.
+          Each index is bound to specific partition based on space ID
+          and index ID attributes. Added in MySQL 5.7.8.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="innodb-parameters.html#sysvar_innodb_background_drop_list_empty">innodb_background_drop_list_empty</a></code>:
+          Delays table creation until background drop list is empty
+          (debug). Added in MySQL 5.7.10.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="innodb-parameters.html#sysvar_innodb_buffer_pool_chunk_size">innodb_buffer_pool_chunk_size</a></code>:
+          Chunk size used when resizing buffer pool. Added in MySQL
+          5.7.5.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="innodb-parameters.html#sysvar_innodb_buffer_pool_dump_pct">innodb_buffer_pool_dump_pct</a></code>:
+          Percentage of most recently used pages for each buffer pool to
+          read out and dump. Added in MySQL 5.7.2.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="innodb-parameters.html#sysvar_innodb_compress_debug">innodb_compress_debug</a></code>:
+          Compresses all tables using specified compression algorithm.
+          Added in MySQL 5.7.8.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="innodb-parameters.html#sysvar_innodb_deadlock_detect">innodb_deadlock_detect</a></code>:
+          Enables or disables deadlock detection. Added in MySQL 5.7.15.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="innodb-parameters.html#sysvar_innodb_default_row_format">innodb_default_row_format</a></code>:
+          Default row format for InnoDB tables. Added in MySQL 5.7.9.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="innodb-parameters.html#sysvar_innodb_disable_resize_buffer_pool_debug">innodb_disable_resize_buffer_pool_debug</a></code>:
+          Disables resizing of InnoDB buffer pool. Added in MySQL 5.7.6.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="innodb-parameters.html#sysvar_innodb_fill_factor">innodb_fill_factor</a></code>:
+          Percentage for B-tree leaf and non-leaf page space to be
+          filled with data. Remaining space is reserved for future
+          growth. Added in MySQL 5.7.5.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="innodb-parameters.html#sysvar_innodb_flush_sync">innodb_flush_sync</a></code>:
+          Enable innodb_flush_sync to ignore innodb_io_capacity setting
+          for bursts of I/O activity that occur at checkpoints. Disable
+          innodb_flush_sync to adhere to limit on I/O activity defined
+          by innodb_io_capacity setting. Added in MySQL 5.7.8.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="innodb-parameters.html#sysvar_innodb_ft_result_cache_limit">innodb_ft_result_cache_limit</a></code>:
+          InnoDB FULLTEXT search query result cache limit. Added in
+          MySQL 5.7.2.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="innodb-parameters.html#sysvar_innodb_ft_total_cache_size">innodb_ft_total_cache_size</a></code>:
+          Total memory allocated for InnoDB FULLTEXT search index cache.
+          Added in MySQL 5.7.2.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="innodb-parameters.html#sysvar_innodb_log_checkpoint_now">innodb_log_checkpoint_now</a></code>:
+          Debug option that forces InnoDB to write checkpoint. Added in
+          MySQL 5.7.2.
+        </p></li><li class="listitem"><p>
+          <code class="literal">innodb_log_checksum_algorithm</code>: Specifies
+          how to generate and verify checksum stored in each redo log
+          disk block. Added in MySQL 5.7.8.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="innodb-parameters.html#sysvar_innodb_log_checksums">innodb_log_checksums</a></code>:
+          Enables or disables checksums for redo log pages. Added in
+          MySQL 5.7.9.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="innodb-parameters.html#sysvar_innodb_log_write_ahead_size">innodb_log_write_ahead_size</a></code>:
+          Redo log write-ahead block size. Added in MySQL 5.7.4.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="innodb-parameters.html#sysvar_innodb_max_undo_log_size">innodb_max_undo_log_size</a></code>:
+          Sets threshold for truncating InnoDB undo log. Added in MySQL
+          5.7.5.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="innodb-parameters.html#sysvar_innodb_merge_threshold_set_all_debug">innodb_merge_threshold_set_all_debug</a></code>:
+          Overrides current MERGE_THRESHOLD setting with specified value
+          for all indexes that are currently in dictionary cache. Added
+          in MySQL 5.7.6.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="innodb-parameters.html#sysvar_innodb_numa_interleave">innodb_numa_interleave</a></code>:
+          Enables NUMA MPOL_INTERLEAVE memory policy for allocation of
+          InnoDB buffer pool. Added in MySQL 5.7.9.
+        </p></li><li class="listitem"><p>
+          <code class="literal">innodb_optimize_point_storage</code>: Enable this
+          option to store POINT data as fixed-length data rather than
+          variable-length data. Added in MySQL 5.7.5.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="innodb-parameters.html#sysvar_innodb_page_cleaners">innodb_page_cleaners</a></code>:
+          Number of page cleaner threads. Added in MySQL 5.7.4.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="innodb-parameters.html#sysvar_innodb_purge_rseg_truncate_frequency">innodb_purge_rseg_truncate_frequency</a></code>:
+          Rate at which undo log purge should be invoked as part of
+          purge action. Value = n invokes undo log purge on every nth
+          iteration of purge invocation. Added in MySQL 5.7.5.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="innodb-parameters.html#sysvar_innodb_stats_include_delete_marked">innodb_stats_include_delete_marked</a></code>:
+          Include delete-marked records when calculating persistent
+          InnoDB statistics. Added in MySQL 5.7.17.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="innodb-parameters.html#sysvar_innodb_status_output">innodb_status_output</a></code>:
+          Used to enable or disable periodic output for standard InnoDB
+          Monitor. Also used in combination with
+          innodb_status_output_locks to enable and disable periodic
+          output for InnoDB Lock Monitor. Added in MySQL 5.7.4.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="innodb-parameters.html#sysvar_innodb_status_output_locks">innodb_status_output_locks</a></code>:
+          Used to enable or disable periodic output for standard InnoDB
+          Lock Monitor. innodb_status_output must also be enabled to
+          produce periodic output for InnoDB Lock Monitor. Added in
+          MySQL 5.7.4.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="innodb-parameters.html#sysvar_innodb_sync_debug">innodb_sync_debug</a></code>:
+          Enables InnoDB sync debug checking. Added in MySQL 5.7.8.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="innodb-parameters.html#sysvar_innodb_temp_data_file_path">innodb_temp_data_file_path</a></code>:
+          Path to temporary tablespace data files and their sizes. Added
+          in MySQL 5.7.1.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="innodb-parameters.html#sysvar_innodb_tmpdir">innodb_tmpdir</a></code>:
+          Directory location for temporary table files created during
+          online ALTER TABLE operations. Added in MySQL 5.7.11.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="innodb-parameters.html#sysvar_innodb_undo_log_truncate">innodb_undo_log_truncate</a></code>:
+          Enable this option to mark InnoDB undo tablespace for
+          truncation. Added in MySQL 5.7.5.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_internal_tmp_disk_storage_engine">internal_tmp_disk_storage_engine</a></code>:
+          Storage engine for internal temporary tables. Added in MySQL
+          5.7.5.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="keyring-options.html#option_mysqld_keyring-migration-destination">keyring-migration-destination</a></code>:
+          Key migration destination keyring plugin. Added in MySQL
+          5.7.21.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="keyring-options.html#option_mysqld_keyring-migration-host">keyring-migration-host</a></code>:
+          Host name for connecting to running server for key migration.
+          Added in MySQL 5.7.21.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="keyring-options.html#option_mysqld_keyring-migration-password">keyring-migration-password</a></code>:
+          Password for connecting to running server for key migration.
+          Added in MySQL 5.7.21.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="keyring-options.html#option_mysqld_keyring-migration-port">keyring-migration-port</a></code>:
+          TCP/IP port number for connecting to running server for key
+          migration. Added in MySQL 5.7.21.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="keyring-options.html#option_mysqld_keyring-migration-socket">keyring-migration-socket</a></code>:
+          Unix socket file or Windows named pipe for connecting to
+          running server for key migration. Added in MySQL 5.7.21.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="keyring-options.html#option_mysqld_keyring-migration-source">keyring-migration-source</a></code>:
+          Key migration source keyring plugin. Added in MySQL 5.7.21.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="keyring-options.html#option_mysqld_keyring-migration-user">keyring-migration-user</a></code>:
+          User name for connecting to running server for key migration.
+          Added in MySQL 5.7.21.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="keyring-system-variables.html#sysvar_keyring_aws_cmk_id">keyring_aws_cmk_id</a></code>:
+          AWS keyring plugin customer master key ID value. Added in
+          MySQL 5.7.19.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="keyring-system-variables.html#sysvar_keyring_aws_conf_file">keyring_aws_conf_file</a></code>:
+          AWS keyring plugin configuration file location. Added in MySQL
+          5.7.19.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="keyring-system-variables.html#sysvar_keyring_aws_data_file">keyring_aws_data_file</a></code>:
+          AWS keyring plugin storage file location. Added in MySQL
+          5.7.19.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="keyring-system-variables.html#sysvar_keyring_aws_region">keyring_aws_region</a></code>:
+          AWS keyring plugin region. Added in MySQL 5.7.19.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="keyring-system-variables.html#sysvar_keyring_encrypted_file_data">keyring_encrypted_file_data</a></code>:
+          keyring_encrypted_file plugin data file. Added in MySQL
+          5.7.21.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="keyring-system-variables.html#sysvar_keyring_encrypted_file_password">keyring_encrypted_file_password</a></code>:
+          keyring_encrypted_file plugin password. Added in MySQL 5.7.21.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="keyring-system-variables.html#sysvar_keyring_file_data">keyring_file_data</a></code>:
+          keyring_file plugin data file. Added in MySQL 5.7.11.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="keyring-system-variables.html#sysvar_keyring_okv_conf_dir">keyring_okv_conf_dir</a></code>:
+          Oracle Key Vault keyring plugin configuration directory. Added
+          in MySQL 5.7.12.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="keyring-system-variables.html#sysvar_keyring_operations">keyring_operations</a></code>:
+          Whether keyring operations are enabled. Added in MySQL 5.7.21.
+        </p></li><li class="listitem"><p>
+          <code class="literal">log_backward_compatible_user_definitions</code>:
+          Whether to log CREATE/ALTER USER, GRANT in backward-compatible
+          fashion. Added in MySQL 5.7.6.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="replication-options-binary-log.html#sysvar_log_builtin_as_identified_by_password">log_builtin_as_identified_by_password</a></code>:
+          Whether to log CREATE/ALTER USER, GRANT in backward-compatible
+          fashion. Added in MySQL 5.7.9.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_log_error_verbosity">log_error_verbosity</a></code>:
+          Error logging verbosity level. Added in MySQL 5.7.2.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_log_slow_admin_statements">log_slow_admin_statements</a></code>:
+          Log slow OPTIMIZE, ANALYZE, ALTER and other administrative
+          statements to slow query log if it is open. Added in MySQL
+          5.7.1.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="replication-options-replica.html#sysvar_log_slow_slave_statements">log_slow_slave_statements</a></code>:
+          Cause slow statements as executed by replica to be written to
+          slow query log. Added in MySQL 5.7.1.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="replication-options-binary-log.html#sysvar_log_statements_unsafe_for_binlog">log_statements_unsafe_for_binlog</a></code>:
+          Disables error 1592 warnings being written to error log. Added
+          in MySQL 5.7.11.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_log_syslog">log_syslog</a></code>:
+          Whether to write error log to syslog. Added in MySQL 5.7.5.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_log_syslog_facility">log_syslog_facility</a></code>:
+          Facility for syslog messages. Added in MySQL 5.7.5.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_log_syslog_include_pid">log_syslog_include_pid</a></code>:
+          Whether to include server PID in syslog messages. Added in
+          MySQL 5.7.5.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_log_syslog_tag">log_syslog_tag</a></code>:
+          Tag for server identifier in syslog messages. Added in MySQL
+          5.7.5.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_log_timestamps">log_timestamps</a></code>:
+          Log timestamp format. Added in MySQL 5.7.2.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_max_digest_length">max_digest_length</a></code>:
+          Maximum digest size in bytes. Added in MySQL 5.7.6.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_max_execution_time">max_execution_time</a></code>:
+          Statement execution timeout value. Added in MySQL 5.7.8.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_max_points_in_geometry">max_points_in_geometry</a></code>:
+          Maximum number of points in geometry values for
+          ST_Buffer_Strategy(). Added in MySQL 5.7.8.
+        </p></li><li class="listitem"><p>
+          <code class="literal">max_statement_time</code>: Statement execution
+          timeout value. Added in MySQL 5.7.4.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-status-variables.html#statvar_mecab_charset">mecab_charset</a></code>:
+          Character set currently used by MeCab full-text parser plugin.
+          Added in MySQL 5.7.6.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_mecab_rc_file">mecab_rc_file</a></code>:
+          Path to mecabrc configuration file for MeCab parser for
+          full-text search. Added in MySQL 5.7.6.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="firewall-reference.html#sysvar_mysql_firewall_mode">mysql_firewall_mode</a></code>:
+          Whether MySQL Enterprise Firewall is operational. Added in
+          MySQL 5.7.9.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="firewall-reference.html#sysvar_mysql_firewall_trace">mysql_firewall_trace</a></code>:
+          Whether to enable firewall trace. Added in MySQL 5.7.9.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_mysql_native_password_proxy_users">mysql_native_password_proxy_users</a></code>:
+          Whether mysql_native_password authentication plugin does
+          proxying. Added in MySQL 5.7.7.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="x-plugin-options-system-variables.html#option_mysqld_mysqlx">mysqlx</a></code>:
+          Whether X Plugin is initialized. Added in MySQL 5.7.12.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="x-plugin-options-system-variables.html#sysvar_mysqlx_bind_address">mysqlx_bind_address</a></code>:
+          Network address X Plugin uses for connections. Added in MySQL
+          5.7.17.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="x-plugin-options-system-variables.html#sysvar_mysqlx_connect_timeout">mysqlx_connect_timeout</a></code>:
+          Maximum permitted waiting time in seconds for a connection to
+          set up a session. Added in MySQL 5.7.12.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="x-plugin-options-system-variables.html#sysvar_mysqlx_idle_worker_thread_timeout">mysqlx_idle_worker_thread_timeout</a></code>:
+          Time in seconds after which idle worker threads are
+          terminated. Added in MySQL 5.7.12.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="x-plugin-options-system-variables.html#sysvar_mysqlx_max_allowed_packet">mysqlx_max_allowed_packet</a></code>:
+          Maximum size of network packets that can be received by X
+          Plugin. Added in MySQL 5.7.12.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="x-plugin-options-system-variables.html#sysvar_mysqlx_max_connections">mysqlx_max_connections</a></code>:
+          Maximum number of concurrent client connections X Plugin can
+          accept. Added in MySQL 5.7.12.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="x-plugin-options-system-variables.html#sysvar_mysqlx_min_worker_threads">mysqlx_min_worker_threads</a></code>:
+          Minimum number of worker threads used for handling client
+          requests. Added in MySQL 5.7.12.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="x-plugin-options-system-variables.html#sysvar_mysqlx_port">mysqlx_port</a></code>:
+          Port number on which X Plugin accepts TCP/IP connections.
+          Added in MySQL 5.7.12.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="x-plugin-options-system-variables.html#sysvar_mysqlx_port_open_timeout">mysqlx_port_open_timeout</a></code>:
+          Time which X Plugin waits when accepting connections. Added in
+          MySQL 5.7.17.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="x-plugin-options-system-variables.html#sysvar_mysqlx_socket">mysqlx_socket</a></code>:
+          Path to socket where X Plugin listens for connections. Added
+          in MySQL 5.7.15.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="x-plugin-options-system-variables.html#sysvar_mysqlx_ssl_ca">mysqlx_ssl_ca</a></code>:
+          File that contains list of trusted SSL Certificate
+          Authorities. Added in MySQL 5.7.12.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="x-plugin-options-system-variables.html#sysvar_mysqlx_ssl_capath">mysqlx_ssl_capath</a></code>:
+          Directory that contains trusted SSL Certificate Authority
+          certificate files. Added in MySQL 5.7.12.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="x-plugin-options-system-variables.html#sysvar_mysqlx_ssl_cert">mysqlx_ssl_cert</a></code>:
+          File that contains X.509 certificate. Added in MySQL 5.7.12.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="x-plugin-options-system-variables.html#sysvar_mysqlx_ssl_cipher">mysqlx_ssl_cipher</a></code>:
+          Permissible ciphers for connection encryption. Added in MySQL
+          5.7.12.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="x-plugin-options-system-variables.html#sysvar_mysqlx_ssl_crl">mysqlx_ssl_crl</a></code>:
+          File that contains certificate revocation lists. Added in
+          MySQL 5.7.12.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="x-plugin-options-system-variables.html#sysvar_mysqlx_ssl_crlpath">mysqlx_ssl_crlpath</a></code>:
+          Directory that contains certificate revocation list files.
+          Added in MySQL 5.7.12.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="x-plugin-options-system-variables.html#sysvar_mysqlx_ssl_key">mysqlx_ssl_key</a></code>:
+          File that contains X.509 key. Added in MySQL 5.7.12.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_named_pipe_full_access_group">named_pipe_full_access_group</a></code>:
+          Name of Windows group granted full access to named pipe. Added
+          in MySQL 5.7.25.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_ngram_token_size">ngram_token_size</a></code>:
+          Defines n-gram token size for full-text search ngram parser.
+          Added in MySQL 5.7.6.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_offline_mode">offline_mode</a></code>:
+          Whether server is offline. Added in MySQL 5.7.5.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_parser_max_mem_size">parser_max_mem_size</a></code>:
+          Maximum amount of memory available to parser. Added in MySQL
+          5.7.12.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="performance-schema-options.html#option_mysqld_performance-schema-consumer-events-transactions-current">performance-schema-consumer-events-transactions-current</a></code>:
+          Configure events-transactions-current consumer. Added in MySQL
+          5.7.3.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="performance-schema-options.html#option_mysqld_performance-schema-consumer-events-transactions-history">performance-schema-consumer-events-transactions-history</a></code>:
+          Configure events-transactions-history consumer. Added in MySQL
+          5.7.3.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="performance-schema-options.html#option_mysqld_performance-schema-consumer-events-transactions-history-long">performance-schema-consumer-events-transactions-history-long</a></code>:
+          Configure events-transactions-history-long consumer. Added in
+          MySQL 5.7.3.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="performance-schema-system-variables.html#sysvar_performance_schema_events_transactions_history_long_size">performance_schema_events_transactions_history_long_size</a></code>:
+          Number of rows in events_transactions_history_long table.
+          Added in MySQL 5.7.3.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="performance-schema-system-variables.html#sysvar_performance_schema_events_transactions_history_size">performance_schema_events_transactions_history_size</a></code>:
+          Number of rows per thread in events_transactions_history
+          table. Added in MySQL 5.7.3.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="performance-schema-system-variables.html#sysvar_performance_schema_max_digest_length">performance_schema_max_digest_length</a></code>:
+          Maximum Performance Schema digest size in bytes. Added in
+          MySQL 5.7.8.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="performance-schema-system-variables.html#sysvar_performance_schema_max_index_stat">performance_schema_max_index_stat</a></code>:
+          Maximum number of indexes to keep statistics for. Added in
+          MySQL 5.7.6.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="performance-schema-system-variables.html#sysvar_performance_schema_max_memory_classes">performance_schema_max_memory_classes</a></code>:
+          Maximum number of memory instruments. Added in MySQL 5.7.2.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="performance-schema-system-variables.html#sysvar_performance_schema_max_metadata_locks">performance_schema_max_metadata_locks</a></code>:
+          Maximum number of metadata locks to track. Added in MySQL
+          5.7.3.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="performance-schema-system-variables.html#sysvar_performance_schema_max_prepared_statements_instances">performance_schema_max_prepared_statements_instances</a></code>:
+          Number of rows in prepared_statements_instances table. Added
+          in MySQL 5.7.4.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="performance-schema-system-variables.html#sysvar_performance_schema_max_program_instances">performance_schema_max_program_instances</a></code>:
+          Maximum number of stored programs for statistics. Added in
+          MySQL 5.7.2.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="performance-schema-system-variables.html#sysvar_performance_schema_max_sql_text_length">performance_schema_max_sql_text_length</a></code>:
+          Maximum number of bytes stored from SQL statements. Added in
+          MySQL 5.7.6.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="performance-schema-system-variables.html#sysvar_performance_schema_max_statement_stack">performance_schema_max_statement_stack</a></code>:
+          Maximum stored program nesting for statistics. Added in MySQL
+          5.7.2.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="performance-schema-system-variables.html#sysvar_performance_schema_max_table_lock_stat">performance_schema_max_table_lock_stat</a></code>:
+          Maximum number of tables to keep lock statistics for. Added in
+          MySQL 5.7.6.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_range_optimizer_max_mem_size">range_optimizer_max_mem_size</a></code>:
+          Limit on range optimizer memory consumption. Added in MySQL
+          5.7.9.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_rbr_exec_mode">rbr_exec_mode</a></code>:
+          Allows for switching server between IDEMPOTENT mode (key and
+          some other errors suppressed) and STRICT mode; STRICT mode is
+          default. Added in MySQL 5.7.1.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="replication-options-replica.html#sysvar_replication_optimize_for_static_plugin_config">replication_optimize_for_static_plugin_config</a></code>:
+          Shared locks for semisynchronous replication. Added in MySQL
+          5.7.33.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="replication-options-replica.html#sysvar_replication_sender_observe_commit_only">replication_sender_observe_commit_only</a></code>:
+          Limited callbacks for semisynchronous replication. Added in
+          MySQL 5.7.33.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_require_secure_transport">require_secure_transport</a></code>:
+          Whether client connections must use secure transport. Added in
+          MySQL 5.7.8.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="rewriter-query-rewrite-plugin-reference.html#sysvar_rewriter_enabled">rewriter_enabled</a></code>:
+          Whether example query rewrite plugin is enabled. Added in
+          MySQL 5.7.6.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="rewriter-query-rewrite-plugin-reference.html#sysvar_rewriter_verbose">rewriter_verbose</a></code>:
+          For internal use. Added in MySQL 5.7.6.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="replication-options-source.html#sysvar_rpl_semi_sync_master_wait_for_slave_count">rpl_semi_sync_master_wait_for_slave_count</a></code>:
+          Number of replica acknowledgments source must receive per
+          transaction before proceeding. Added in MySQL 5.7.3.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="replication-options-source.html#sysvar_rpl_semi_sync_master_wait_point">rpl_semi_sync_master_wait_point</a></code>:
+          Wait point for replica transaction receipt acknowledgment.
+          Added in MySQL 5.7.2.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="replication-options-replica.html#sysvar_rpl_stop_slave_timeout">rpl_stop_slave_timeout</a></code>:
+          Number of seconds that STOP REPLICA or STOP SLAVE waits before
+          timing out. Added in MySQL 5.7.2.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_session_track_gtids">session_track_gtids</a></code>:
+          Enables tracker which can be set to track different GTIDs.
+          Added in MySQL 5.7.6.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_session_track_schema">session_track_schema</a></code>:
+          Whether to track schema changes. Added in MySQL 5.7.4.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_session_track_state_change">session_track_state_change</a></code>:
+          Whether to track session state changes. Added in MySQL 5.7.4.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_session_track_system_variables">session_track_system_variables</a></code>:
+          Session variables to track changes for. Added in MySQL 5.7.4.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_session_track_transaction_info">session_track_transaction_info</a></code>:
+          How to perform transaction tracking. Added in MySQL 5.7.8.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_sha256_password_auto_generate_rsa_keys">sha256_password_auto_generate_rsa_keys</a></code>:
+          Whether to generate RSA key-pair files automatically. Added in
+          MySQL 5.7.5.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_sha256_password_proxy_users">sha256_password_proxy_users</a></code>:
+          Whether sha256_password authentication plugin does proxying.
+          Added in MySQL 5.7.7.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_show_compatibility_56">show_compatibility_56</a></code>:
+          Compatibility for SHOW STATUS/VARIABLES. Added in MySQL 5.7.6.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_show_create_table_verbosity">show_create_table_verbosity</a></code>:
+          Whether to display ROW_FORMAT in SHOW CREATE TABLE even if it
+          has default value. Added in MySQL 5.7.22.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_show_old_temporals">show_old_temporals</a></code>:
+          Whether SHOW CREATE TABLE should indicate pre-5.6.4 temporal
+          columns. Added in MySQL 5.7.6.
+        </p></li><li class="listitem"><p>
+          <code class="literal">simplified_binlog_gtid_recovery</code>: Renamed to
+          binlog_gtid_simple_recovery. Added in MySQL 5.7.5.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="replication-options-replica.html#sysvar_slave_parallel_type">slave_parallel_type</a></code>:
+          Tells replica to use timestamp information (LOGICAL_CLOCK) or
+          database partioning (DATABASE) to parallelize transactions.
+          Added in MySQL 5.7.2.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="replication-options-replica.html#sysvar_slave_preserve_commit_order">slave_preserve_commit_order</a></code>:
+          Ensures that all commits by replica workers happen in same
+          order as on source to maintain consistency when using parallel
+          applier threads. Added in MySQL 5.7.5.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_super_read_only">super_read_only</a></code>:
+          Whether to ignore SUPER exceptions to read-only mode. Added in
+          MySQL 5.7.8.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_thread_pool_algorithm">thread_pool_algorithm</a></code>:
+          Thread pool algorithm. Added in MySQL 5.7.9.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_thread_pool_high_priority_connection">thread_pool_high_priority_connection</a></code>:
+          Whether current session is high priority. Added in MySQL
+          5.7.9.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_thread_pool_max_unused_threads">thread_pool_max_unused_threads</a></code>:
+          Maximum permissible number of unused threads. Added in MySQL
+          5.7.9.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_thread_pool_prio_kickup_timer">thread_pool_prio_kickup_timer</a></code>:
+          How long before statement is moved to high-priority execution.
+          Added in MySQL 5.7.9.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_thread_pool_size">thread_pool_size</a></code>:
+          Number of thread groups in thread pool. Added in MySQL 5.7.9.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_thread_pool_stall_limit">thread_pool_stall_limit</a></code>:
+          How long before statement is defined as stalled. Added in
+          MySQL 5.7.9.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_tls_version">tls_version</a></code>:
+          Permissible TLS protocols for encrypted connections. Added in
+          MySQL 5.7.10.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="replication-options-binary-log.html#sysvar_transaction_write_set_extraction">transaction_write_set_extraction</a></code>:
+          Defines algorithm used to hash writes extracted during
+          transaction. Added in MySQL 5.7.6.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="validate-password-options-variables.html#sysvar_validate_password_check_user_name">validate_password_check_user_name</a></code>:
+          Whether to check passwords against user name. Added in MySQL
+          5.7.15.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="validate-password-options-variables.html#statvar_validate_password_dictionary_file_last_parsed">validate_password_dictionary_file_last_parsed</a></code>:
+          When dictionary file was last parsed. Added in MySQL 5.7.8.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="validate-password-options-variables.html#statvar_validate_password_dictionary_file_words_count">validate_password_dictionary_file_words_count</a></code>:
+          Number of words in dictionary file. Added in MySQL 5.7.8.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="version-tokens-reference.html#sysvar_version_tokens_session">version_tokens_session</a></code>:
+          Client token list for Version Tokens. Added in MySQL 5.7.8.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="version-tokens-reference.html#sysvar_version_tokens_session_number">version_tokens_session_number</a></code>:
+          For internal use. Added in MySQL 5.7.8.
+</p></li></ul>
+</div>
+
+</div>
+<div class="simplesect">
+<div class="titlepage">
+<div>
+<div class="simple">
+<h3 class="title"><a name="optvars-deprecated"></a>Options and Variables Deprecated in MySQL 5.7</h3>
+
+</div>
+
+</div>
+
+</div>
+<p>
+      The following system variables, status variables, and options have
+      been deprecated in MySQL 5.7.
+</p>
+<div class="itemizedlist">
+<a name="optvars-deprecated-list"></a><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-status-variables.html#statvar_Innodb_available_undo_logs">Innodb_available_undo_logs</a></code>:
+          Total number of InnoDB rollback segments; different from
+          innodb_rollback_segments, which displays number of active
+          rollback segments. Deprecated in MySQL 5.7.19.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-status-variables.html#statvar_Qcache_free_blocks">Qcache_free_blocks</a></code>:
+          Number of free memory blocks in query cache. Deprecated in
+          MySQL 5.7.20.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-status-variables.html#statvar_Qcache_free_memory">Qcache_free_memory</a></code>:
+          Amount of free memory for query cache. Deprecated in MySQL
+          5.7.20.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-status-variables.html#statvar_Qcache_hits">Qcache_hits</a></code>:
+          Number of query cache hits. Deprecated in MySQL 5.7.20.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-status-variables.html#statvar_Qcache_inserts">Qcache_inserts</a></code>:
+          Number of query cache inserts. Deprecated in MySQL 5.7.20.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-status-variables.html#statvar_Qcache_lowmem_prunes">Qcache_lowmem_prunes</a></code>:
+          Number of queries which were deleted from query cache due to
+          lack of free memory in cache. Deprecated in MySQL 5.7.20.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-status-variables.html#statvar_Qcache_not_cached">Qcache_not_cached</a></code>:
+          Number of noncached queries (not cacheable, or not cached due
+          to query_cache_type setting). Deprecated in MySQL 5.7.20.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-status-variables.html#statvar_Qcache_queries_in_cache">Qcache_queries_in_cache</a></code>:
+          Number of queries registered in query cache. Deprecated in
+          MySQL 5.7.20.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-status-variables.html#statvar_Qcache_total_blocks">Qcache_total_blocks</a></code>:
+          Total number of blocks in query cache. Deprecated in MySQL
+          5.7.20.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-status-variables.html#statvar_Slave_heartbeat_period">Slave_heartbeat_period</a></code>:
+          Replica's replication heartbeat interval, in seconds.
+          Deprecated in MySQL 5.7.6.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-status-variables.html#statvar_Slave_last_heartbeat">Slave_last_heartbeat</a></code>:
+          Shows when latest heartbeat signal was received, in TIMESTAMP
+          format. Deprecated in MySQL 5.7.6.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-status-variables.html#statvar_Slave_received_heartbeats">Slave_received_heartbeats</a></code>:
+          Number of heartbeats received by replica since previous reset.
+          Deprecated in MySQL 5.7.6.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-status-variables.html#statvar_Slave_retried_transactions">Slave_retried_transactions</a></code>:
+          Total number of times since startup that replication SQL
+          thread has retried transactions. Deprecated in MySQL 5.7.6.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-status-variables.html#statvar_Slave_running">Slave_running</a></code>:
+          State of this server as replica (replication I/O thread
+          status). Deprecated in MySQL 5.7.6.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_avoid_temporal_upgrade">avoid_temporal_upgrade</a></code>:
+          Whether ALTER TABLE should upgrade pre-5.6.4 temporal columns.
+          Deprecated in MySQL 5.7.6.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="replication-options-binary-log.html#sysvar_binlog_max_flush_queue_time">binlog_max_flush_queue_time</a></code>:
+          How long to read transactions before flushing to binary log.
+          Deprecated in MySQL 5.7.9.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-options.html#option_mysqld_bootstrap">bootstrap</a></code>:
+          Used by mysql installation scripts. Deprecated in MySQL 5.7.6.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-options.html#option_mysqld_des-key-file">des-key-file</a></code>:
+          Load keys for des_encrypt() and des_encrypt from given file.
+          Deprecated in MySQL 5.7.6.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-options.html#option_mysqld_disable-partition-engine-check">disable-partition-engine-check</a></code>:
+          Whether to disable startup check for tables without native
+          partitioning. Deprecated in MySQL 5.7.17.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="group-replication-options.html#sysvar_group_replication_allow_local_disjoint_gtids_join">group_replication_allow_local_disjoint_gtids_join</a></code>:
+          Allow current server to join group even if it has transactions
+          not present in group. Deprecated in MySQL 5.7.21.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_have_crypt">have_crypt</a></code>:
+          Availability of crypt() system call. Deprecated in MySQL
+          5.7.6.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_have_query_cache">have_query_cache</a></code>:
+          Whether mysqld supports query cache. Deprecated in MySQL
+          5.7.20.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-options.html#option_mysqld_ignore-db-dir">ignore-db-dir</a></code>:
+          Treat directory as nondatabase directory. Deprecated in MySQL
+          5.7.16.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_ignore_db_dirs">ignore_db_dirs</a></code>:
+          Directories treated as nondatabase directories. Deprecated in
+          MySQL 5.7.16.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="innodb-parameters.html#option_mysqld_innodb">innodb</a></code>:
+          Enable InnoDB (if this version of MySQL supports it).
+          Deprecated in MySQL 5.7.5.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="innodb-parameters.html#sysvar_innodb_file_format">innodb_file_format</a></code>:
+          Format for new InnoDB tables. Deprecated in MySQL 5.7.7.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="innodb-parameters.html#sysvar_innodb_file_format_check">innodb_file_format_check</a></code>:
+          Whether InnoDB performs file format compatibility checking.
+          Deprecated in MySQL 5.7.7.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="innodb-parameters.html#sysvar_innodb_file_format_max">innodb_file_format_max</a></code>:
+          File format tag in shared tablespace. Deprecated in MySQL
+          5.7.7.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="innodb-parameters.html#sysvar_innodb_large_prefix">innodb_large_prefix</a></code>:
+          Enables longer keys for column prefix indexes. Deprecated in
+          MySQL 5.7.7.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="innodb-parameters.html#sysvar_innodb_support_xa">innodb_support_xa</a></code>:
+          Enable InnoDB support for XA two-phase commit. Deprecated in
+          MySQL 5.7.10.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="innodb-parameters.html#sysvar_innodb_undo_logs">innodb_undo_logs</a></code>:
+          Number of undo logs (rollback segments) used by InnoDB; alias
+          for innodb_rollback_segments. Deprecated in MySQL 5.7.19.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="innodb-parameters.html#sysvar_innodb_undo_tablespaces">innodb_undo_tablespaces</a></code>:
+          Number of tablespace files that rollback segments are divided
+          between. Deprecated in MySQL 5.7.21.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-options.html#option_mysqld_log-warnings">log-warnings</a></code>:
+          Write some noncritical warnings to log file. Deprecated in
+          MySQL 5.7.2.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_metadata_locks_cache_size">metadata_locks_cache_size</a></code>:
+          Size of metadata locks cache. Deprecated in MySQL 5.7.4.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_metadata_locks_hash_instances">metadata_locks_hash_instances</a></code>:
+          Number of metadata lock hashes. Deprecated in MySQL 5.7.4.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_old_passwords">old_passwords</a></code>:
+          Selects password hashing method for PASSWORD(). Deprecated in
+          MySQL 5.7.6.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-options.html#option_mysqld_partition">partition</a></code>:
+          Enable (or disable) partitioning support. Deprecated in MySQL
+          5.7.16.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_query_cache_limit">query_cache_limit</a></code>:
+          Do not cache results that are bigger than this. Deprecated in
+          MySQL 5.7.20.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_query_cache_min_res_unit">query_cache_min_res_unit</a></code>:
+          Minimal size of unit in which space for results is allocated
+          (last unit is trimmed after writing all result data).
+          Deprecated in MySQL 5.7.20.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_query_cache_size">query_cache_size</a></code>:
+          Memory allocated to store results from old queries. Deprecated
+          in MySQL 5.7.20.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_query_cache_type">query_cache_type</a></code>:
+          Query cache type. Deprecated in MySQL 5.7.20.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_query_cache_wlock_invalidate">query_cache_wlock_invalidate</a></code>:
+          Invalidate queries in query cache on LOCK for write.
+          Deprecated in MySQL 5.7.20.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_secure_auth">secure_auth</a></code>:
+          Disallow authentication for accounts that have old (pre-4.1)
+          passwords. Deprecated in MySQL 5.7.5.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_show_compatibility_56">show_compatibility_56</a></code>:
+          Compatibility for SHOW STATUS/VARIABLES. Deprecated in MySQL
+          5.7.6.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_show_old_temporals">show_old_temporals</a></code>:
+          Whether SHOW CREATE TABLE should indicate pre-5.6.4 temporal
+          columns. Deprecated in MySQL 5.7.6.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-options.html#option_mysqld_skip-partition">skip-partition</a></code>:
+          Do not enable user-defined partitioning. Deprecated in MySQL
+          5.7.16.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_sync_frm">sync_frm</a></code>:
+          Sync .frm to disk on create. Enabled by default. Deprecated in
+          MySQL 5.7.6.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-options.html#option_mysqld_temp-pool">temp-pool</a></code>:
+          Using this option causes most temporary files created to use
+          small set of names, rather than unique name for each new file.
+          Deprecated in MySQL 5.7.18.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_tx_isolation">tx_isolation</a></code>:
+          Default transaction isolation level. Deprecated in MySQL
+          5.7.20.
+        </p></li><li class="listitem"><p>
+          <code class="literal"><a class="link" href="server-system-variables.html#sysvar_tx_read_only">tx_read_only</a></code>:
+          Default transaction access mode. Deprecated in MySQL 5.7.20.
+</p></li></ul>
+</div>
+
+</div>
+<div class="simplesect">
+<div class="titlepage">
+<div>
+<div class="simple">
+<h3 class="title"><a name="optvars-removed"></a>Options and Variables Removed in MySQL 5.7</h3>
+
+</div>
+
+</div>
+
+</div>
+<p>
+      The following system variables, status variables, and options have
+      been removed in MySQL 5.7.
+</p>
+<div class="itemizedlist">
+<a name="optvars-removed-list"></a><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+          <code class="literal">Com_show_slave_status_nonblocking</code>: Count of
+          SHOW REPLICA | SLAVE STATUS NONBLOCKING statements. Removed in
+          MySQL 5.7.6.
+        </p></li><li class="listitem"><p>
+          <code class="literal">Max_statement_time_exceeded</code>: Number of
+          statements that exceeded execution timeout value. Removed in
+          MySQL 5.7.8.
+        </p></li><li class="listitem"><p>
+          <code class="literal">Max_statement_time_set</code>: Number of
+          statements for which execution timeout was set. Removed in
+          MySQL 5.7.8.
+        </p></li><li class="listitem"><p>
+          <code class="literal">Max_statement_time_set_failed</code>: Number of
+          statements for which execution timeout setting failed. Removed
+          in MySQL 5.7.8.
+        </p></li><li class="listitem"><p>
+          <code class="literal">binlogging_impossible_mode</code>: Deprecated and
+          later removed. Use binlog_error_action instead. Removed in
+          MySQL 5.7.6.
+        </p></li><li class="listitem"><p>
+          <code class="literal">default-authentication-plugin</code>: Default
+          authentication plugin. Removed in MySQL 5.7.2.
+        </p></li><li class="listitem"><p>
+          <code class="literal">executed_gtids_compression_period</code>: Renamed
+          to gtid_executed_compression_period. Removed in MySQL 5.7.6.
+        </p></li><li class="listitem"><p>
+          <code class="literal">innodb_additional_mem_pool_size</code>: Size of
+          memory pool InnoDB uses to store data dictionary information
+          and other internal data structures. Removed in MySQL 5.7.4.
+        </p></li><li class="listitem"><p>
+          <code class="literal">innodb_log_checksum_algorithm</code>: Specifies
+          how to generate and verify checksum stored in each redo log
+          disk block. Removed in MySQL 5.7.9.
+        </p></li><li class="listitem"><p>
+          <code class="literal">innodb_optimize_point_storage</code>: Enable this
+          option to store POINT data as fixed-length data rather than
+          variable-length data. Removed in MySQL 5.7.6.
+        </p></li><li class="listitem"><p>
+          <code class="literal">innodb_use_sys_malloc</code>: Whether InnoDB uses
+          OS or own memory allocator. Removed in MySQL 5.7.4.
+        </p></li><li class="listitem"><p>
+          <code class="literal">log-slow-admin-statements</code>: Log slow
+          OPTIMIZE, ANALYZE, ALTER and other administrative statements
+          to slow query log if it is open. Removed in MySQL 5.7.1.
+        </p></li><li class="listitem"><p>
+          <code class="literal">log-slow-slave-statements</code>: Cause slow
+          statements as executed by replica to be written to slow query
+          log. Removed in MySQL 5.7.1.
+        </p></li><li class="listitem"><p>
+          <code class="literal">log_backward_compatible_user_definitions</code>:
+          Whether to log CREATE/ALTER USER, GRANT in backward-compatible
+          fashion. Removed in MySQL 5.7.9.
+        </p></li><li class="listitem"><p>
+          <code class="literal">max_statement_time</code>: Statement execution
+          timeout value. Removed in MySQL 5.7.8.
+        </p></li><li class="listitem"><p>
+          <code class="literal">simplified_binlog_gtid_recovery</code>: Renamed to
+          binlog_gtid_simple_recovery. Removed in MySQL 5.7.6.
+        </p></li><li class="listitem"><p>
+          <code class="literal">storage_engine</code>: Default storage engine.
+          Removed in MySQL 5.7.5.
+        </p></li><li class="listitem"><p>
+          <code class="literal">thread_concurrency</code>: Permits application to
+          provide hint to threads system for desired number of threads
+          which should be run at one time. Removed in MySQL 5.7.2.
+        </p></li><li class="listitem"><p>
+          <code class="literal">timed_mutexes</code>: Specify whether to time
+          mutexes (only InnoDB mutexes are currently supported). Removed
+          in MySQL 5.7.5.
+</p></li></ul>
+</div>
+
+</div>
+
+</div>
+<br />
+        </div>
+
+                <div id="docs-in-page-nav-container">
+            <div id="docs-in-page-nav">
+                
+    <a href="mysql-nutshell.html"
+        aria-label="Previous" title="Previous: What Is New in MySQL 5.7"><span
+        class="icon-chevron-left"></span> PREV</a> &nbsp;
+<a href="index.html" aria-label="Start" title="Start"> HOME</a> &nbsp;
+        <a aria-label="Up" href="introduction.html" title="Up: General Information"> UP</a> &nbsp;
+    <a href="information-sources.html" aria-label="Next"
+        title="Next: MySQL Information Sources">NEXT <span
+        class="icon-chevron-right"></span></a>
+            </div>
+        </div>
+        
+         <div id="docs-body-extra">
+             
+<a class="docs-sidebar-section" href="added-deprecated-removed.html"><span class="icon-related"></span>
+    <span class="text">Related Documentation</span></a>
+<div class="docs-sidebar-accordian">
+    <div class="text">
+        <a href="https://dev.mysql.com/doc/relnotes/mysql/5.7/en/">MySQL 5.7 Release Notes</a><br />
+        </div>
+</div>
+
+    <a class="docs-sidebar-section" href="added-deprecated-removed.html"><span class="icon-download-thin"></span>
+        <span class="text">
+            Download
+                            this Manual
+                    </span>
+    </a>
+    <div class="docs-sidebar-accordian">
+        <div class="text">
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.pdf">PDF (US Ltr)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.a4.pdf">PDF (A4)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-ref-manual-5.7-en-pdf-1-20210225.noarch.rpm">PDF (RPM)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.html-chapter.tar.gz">HTML Download (TGZ)</a>
+            - 10.1Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.html-chapter.zip">HTML Download (Zip)</a>
+            - 10.2Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-ref-manual-5.7-en-html-chapter-1-20210225.noarch.rpm">HTML Download (RPM)</a>
+            - 8.9Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.man-gpl.tar.gz">Man Pages (TGZ)</a>
+            - 224.7Kb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.man-gpl.zip">Man Pages (Zip)</a>
+            - 332.6Kb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-5.7.info.gz">Info (Gzip)</a>
+            - 3.3Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-5.7.info.zip">Info (Zip)</a>
+            - 3.3Mb<br />
+                    </div>
+    </div>
+
+<a class="docs-sidebar-section" href="added-deprecated-removed.html"><span class="icon-book"></span>
+    <span class="text">Excerpts from this Manual</span></a>
+<div class="docs-sidebar-accordian">
+    <div class="text">
+                <a href="https://dev.mysql.com/doc/mysql-backup-excerpt/5.7/en/">MySQL Backup and Recovery</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-g11n-excerpt/5.7/en/">MySQL Globalization</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-infoschema-excerpt/5.7/en/">MySQL Information Schema</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-installation-excerpt/5.7/en/">MySQL Installation Guide</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-linuxunix-excerpt/5.7/en/">MySQL and Linux/Unix</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-osx-excerpt/5.7/en/">MySQL and OS X</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-partitioning-excerpt/5.7/en/">MySQL Partitioning</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-perfschema-excerpt/5.7/en/">MySQL Performance Schema</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-replication-excerpt/5.7/en/">MySQL Replication</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-repo-excerpt/5.7/en/">Using the MySQL Yum Repository</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-reslimits-excerpt/5.7/en/">MySQL Restrictions and Limitations</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-security-excerpt/5.7/en/">Security in MySQL</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-solaris-excerpt/5.7/en/">MySQL and Solaris</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-sourcebuild-excerpt/5.7/en/">Building MySQL from Source</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-startstop-excerpt/5.7/en/">Starting and Stopping MySQL</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-tutorial-excerpt/5.7/en/">MySQL Tutorial</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-windows-excerpt/5.7/en/">MySQL and Windows</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-cluster-excerpt/5.7/en/">MySQL NDB Cluster 7.5</a><br />
+            </div>
+</div>
+         </div>
+
+              </div>
+     </div>
+
+</div>
+
+<script>
+$(function() {
+    var doc = new $.doc({ 'mobile': $.browser.mobile, 'docId': 1, 'highlight': true });
+});
+</script>
+    
+
+            
+        </div>
+    </div>
+
+    <footer class="collapsed">
+        <div id="footer-bottom">
+                                    <div id="footer-collapse">
+                <a href="added-deprecated-removed.html" id="expand-footer"
+                    aria-label="Expand Footer"
+                    title="Expand Footer"><span
+                    class="icon-plus-square"></span></a>
+            </div>
+                        <div class="footer-contact">
+                <div id="footer-contact-icon" style="display: none;">
+                    <span class="icon-call-phone"></span>
+                </div>
+                <div id="footer-contact-numbers" style="display: none;">
+                    <strong>Contact MySQL Sales</strong><br/>
+                    USA/Canada: +1-866-221-0634 &nbsp;
+                    (<a href="https://www.mysql.com/about/contact/phone/">More Countries &raquo;</a>)
+                </div>
+                <div id="footer-contact-copyright" style="display: inline-block;">
+                    <a href="http://www.oracle.com/" aria-label="Oracle" title="Oracle"><span class="oracle-logo"></span></a>
+                    &nbsp; &copy; 2021, Oracle Corporation and/or its affiliates
+                </div>
+            </div>
+            <div class="social-icons">
+                <a aria-label="Join us on Facebook" title="Join us on Facebook" href="http://www.facebook.com/mysql"><span class="icon-facebook-square"></span></a>
+                <a aria-label="Follow us on Twitter" title="Follow us on Twitter" href="https://twitter.com/mysql"><span class="icon-twitter-square"></span></a>
+                <a aria-label="Follow us on LinkedIn" title="Follow us on LinkedIn" href="https://www.linkedin.com/company/mysql"><span class="icon-linkedin-square"></span></a>
+                <a aria-label="Visit our YouTube channel" title="Visit our YouTube channel" href="http://www.youtube.com/mysqlchannel"><span class="icon-youtube-square"></span></a>
+            </div>
+            <br class="clear" />
+        </div>
+        <div id="footer-links">
+
+            <div id="site-footer-links">
+                <div id="footer-nav"></div>
+
+                <div class="links">
+                    <ul>
+                        <li class="top"><a href="https://www.mysql.com/products/">Products</a></li>
+                        <li><a href="https://www.mysql.com/cloud/">MySQL Database Service</a></li>
+                        <li><a href="https://www.mysql.com/products/enterprise/">MySQL Enterprise Edition</a></li>
+                        <li><a href="https://www.mysql.com/products/standard/">MySQL Standard Edition</a></li>
+                        <li><a href="https://www.mysql.com/products/classic/">MySQL Classic Edition</a></li>
+                        <li><a href="https://www.mysql.com/products/cluster/">MySQL Cluster CGE</a></li>
+                        <li><a href="https://www.mysql.com/oem/">MySQL Embedded (OEM/ISV)</a></li>
+                    </ul>
+                </div>
+
+                <div class="links">
+                    <ul>
+                        <li class="top"><a href="https://www.mysql.com/services/">Services</a></li>
+                        <li><a href="https://www.mysql.com/training/">Training</a></li>
+                        <li><a href="https://www.mysql.com/certification/">Certification</a></li>
+                        <li><a href="https://www.mysql.com/consulting/">Consulting</a></li>
+                        <li><a href="https://www.mysql.com/support/">Support</a></li>
+                    </ul>
+                </div>
+
+                <div class="links">
+                    <ul>
+                        <li class="top"><a href="https://www.mysql.com/downloads/">Downloads</a></li>
+                        <li><a href="https://dev.mysql.com/downloads/mysql/">MySQL Community Server</a></li>
+                        <li><a href="https://dev.mysql.com/downloads/cluster/">MySQL NDB Cluster</a></li>
+                        <li><a href="https://dev.mysql.com/downloads/shell/">MySQL Shell</a></li>
+                        <li><a href="https://dev.mysql.com/downloads/router/">MySQL Router</a></li>
+                        <li><a href="https://dev.mysql.com/downloads/workbench/">MySQL Workbench</a></li>
+                    </ul>
+                </div>
+
+                <div class="links">
+                    <ul>
+                        <li class="top"><a href="https://dev.mysql.com/doc/">Documentation</a></li>
+                        <li><a href="https://dev.mysql.com/doc/refman/en/">MySQL Reference Manual</a></li>
+                        <li><a href="https://dev.mysql.com/doc/workbench/en/">MySQL Workbench</a></li>
+                        <li><a href="https://dev.mysql.com/doc/index-cluster.html">MySQL NDB Cluster</a></li>
+                        <li><a href="https://dev.mysql.com/doc/index-connectors.html">MySQL Connectors</a></li>
+                        <li><a href="https://dev.mysql.com/doc/#topic">Topic Guides</a></li>
+                    </ul>
+                </div>
+
+                <div class="links">
+                    <ul>
+                        <li class="top"><a href="https://www.mysql.com/about/">About MySQL</a></li>
+                        <li><a href="https://www.mysql.com/about/contact/">Contact Us</a></li>
+                                                                        <li><a href="https://www.mysql.com/buy-mysql/">How to Buy</a></li>
+                        <li><a href="https://www.mysql.com/partners/">Partners</a></li>
+                        <li><a href="https://www.mysql.com/about/jobs/">Job Opportunities</a></li>
+                        <li><a href="https://www.mysql.com/sitemap.html">Site Map</a></li>
+                    </ul>
+                </div>
+
+                            </div>
+
+            <div id="footer-logo">
+                <a href="http://www.oracle.com/" aria-label="Oracle" title="Oracle"><span class="oracle-logo"></span></a>
+                &nbsp; &copy; 2021, Oracle Corporation and/or its affiliates
+                <div class="footer-legal-links">
+                    <a href="https://www.mysql.com/about/legal/">Legal Policies</a> |
+                    <a href="http://www.oracle.com/us/legal/privacy/index.htm">Your Privacy Rights</a> |
+                    <a href="http://www.oracle.com/us/legal/terms/index.html">Terms of Use</a> |
+                    <a href="http://www.oracle.com/us/legal/third-party-trademarks/index.html">Trademark Policy</a> |
+                    <a href="http://www.oracle.com/technetwork/community/oca-486395.html">Contributor Agreement</a> |
+                    <div id="teconsent"></div>
+                </div>
+            </div>
+
+        </div>
+    </footer>
+</div>
+
+            <script>
+    if ((oracle.truste.api.getGdprConsentDecision().consentDecision) &&
+            (oracle.truste.api.getGdprConsentDecision().consentDecision.indexOf(0) != -1 ||
+             oracle.truste.api.getGdprConsentDecision().consentDecision.indexOf(2) != -1) )
+    {
+        document.write('<script src="https://labs.mysql.com/common/js/metrics/s_code_remote.js"><\/script>');
+        document.write('<script type="text/javascript" async src="https://c.oracleinfinity.io/acs/account/wh3g12c3gg/js/mysql/odc.js?_ora.context=analytics:production"><\/script>');
+    }
+    </script>
+
+        
+    
+</body>
+</html>

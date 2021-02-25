@@ -1,0 +1,1596 @@
+<!DOCTYPE html>
+<html lang="en" class="svg no-js">
+<head>
+    <meta charset="utf-8" />
+    <!--[if IE ]>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="Language" content="en">
+
+    <title>MySQL :: MySQL 5.7 Reference Manual :: 6.4.5.5 Configuring Audit Logging Characteristics</title>
+    <link rel="stylesheet" media="all" href="https://labs.mysql.com/common/css/main-20201221.min.css" />
+            <link rel="stylesheet" media="all" href="https://labs.mysql.com/common/css/docs-20201221.min.css" />
+    
+    
+    <link rel="stylesheet" media="print" href="https://labs.mysql.com/common/css/print-20201221.min.css" />
+
+    
+    
+    
+    
+            <link rel="contents" href="index.html" title="MySQL 5.7 Reference Manual" />
+<link rel="start" href="index.html" title="MySQL 5.7 Reference Manual" />
+<link rel="prev" href="audit-log-file-formats.html" title="6.4.5.4 Audit Log File Formats" />
+<link rel="next" href="audit-log-file-reading.html?ff=nopfpls" title="6.4.5.6 Reading Audit Log Files" />
+<link rel="up" href="audit-log.html" title="6.4.5 MySQL Enterprise Audit" />
+
+    
+    <link rel="shortcut icon" href="https://labs.mysql.com/common/themes/sakila/favicon.ico" />
+    <script async="async" type="text/javascript" src='https://consent.truste.com/notice?domain=oracle.com&c=teconsent&js=bb&noticeType=bb&text=true&cdn=1&pcookie&gtm=1' crossorigin></script>
+    <script src="https://www.oracle.com/assets/truste-oraclelib.js"></script>
+    <script>(function(H){ H.className=H.className.replace(/\bno-js\b/,'js') })(document.documentElement)</script>
+    <script src="https://labs.mysql.com/common/js/site-20200928.min.js"></script>
+
+    
+    
+    <!--[if lt IE 9]>
+        <script src="https://labs.mysql.com/common/js/polyfills/html5shiv-printshiv-3.7.2.min.js"></script>
+        <script src="https://labs.mysql.com/common/js/polyfills/respond-1.4.2.min.js"></script>
+    <![endif]-->
+        <!--[if IE 9]>
+        <style>#docs-sidebar-toc { box-sizing: content-box; }</style>
+    <![endif]-->
+    </head>
+
+<body class="no-sidebar full-page dev">
+<div class="page-wrapper">
+    <header>
+
+                        <a href="https://dev.mysql.com/" aria-label="Home" title="MySQL" id="l1-home-link"></a>
+        
+        <div id="l1-nav-container">
+            <div id="l1-line1">
+                <div id="l1-auth-links">
+                    <a href="https://www.mysql.com/about/contact/"><b>Contact MySQL</b></a>
+                    <span id="l1-contact-separator">&nbsp;|&nbsp;</span>
+                    <span id="l1-contact-separator-br"><br /></span>
+                                             <a href="https://dev.mysql.com/auth/login/?dest=https%3A%2F%2Fdev.mysql.com%2Fdoc%2Frefman%2F5.7%2Fen%2Faudit-log-logging-configuration.html">Login</a> &nbsp;|&nbsp;
+                         <a href="https://dev.mysql.com/auth/register/">Register</a>
+                                    </div>
+                <div id="l1-lhs">
+                    <div id="l1-slogan">
+                        The world's most popular open source database
+                    </div>
+                    <div id="l1-search-box">
+                        <form id="l1-search-form" method="get" action="https://www.oracle.com/search/results">
+                        <input type="hidden" name="cat" value="mysql" />
+                        <input type="hidden" name="Ntk" value="SI-ALL5" />
+                        <input id="l1-search-input" type="search" class="icon-search" placeholder="Search" aria-label="Search" name="Ntt" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div id="l1-line2">
+                <div class="social-icons">
+                    <a aria-label="Join us on Facebook" title="Join us on Facebook" href="http://www.facebook.com/mysql"><span class="icon-facebook"></span></a>
+                    <a aria-label="Follow us on Twitter" title="Follow us on Twitter" href="https://twitter.com/mysql"><span class="icon-twitter"></span></a>
+                    <a aria-label="Follow us on LinkedIn" title="Follow us on LinkedIn" href="https://www.linkedin.com/company/mysql"><span class="icon-linkedin"></span></a>
+                    <a aria-label="Visit our YouTube channel" title="Visit our YouTube channel" href="http://www.youtube.com/mysqlchannel"><span class="icon-youtube"></span></a>
+                </div>
+                <ul id="l1-nav">
+                    <li>
+                        <a href="https://www.mysql.com/"><!-- <span class="icon-sakila"></span>  -->MySQL.com</a>
+                    </li><li>
+                        <a href="https://www.mysql.com/downloads/"><!-- <span class="icon-download-thin"></span>  -->Downloads</a>
+                    </li><li class="active">
+                        <a href="https://dev.mysql.com/doc/"><!-- <span class="icon-books"></span>  -->Documentation</a>
+                    </li><li>
+                        <a href="https://dev.mysql.com/"><!-- <span class="icon-code"></span>  -->Developer Zone</a>
+                    </li>                </ul>
+            </div>
+        </div>
+        <div id="sub-header">
+            <div id="l2-nav-container">
+                <div id="l2-nav-toggle">
+                    <span class="icon-three-bars"></span>
+                </div>
+                                                                                        <a class="button nav-button-3" href="https://dev.mysql.com/"><span class="icon-code"></span> Developer Zone</a>
+                                                                                                                                    <a class="button nav-button-2" href="https://www.mysql.com/downloads/"><span class="icon-download-thin"></span> Downloads</a>
+                                                                                                <a class="button nav-button-1" href="https://www.mysql.com/"><span class="icon-sakila"></span> MySQL.com</a>
+                                                                        <div id="l2-search-toggle">
+                    <span class="icon-search"></span>
+                </div>
+                <div id="l2-site-icon">
+                                                                                                                                                                                                    <span class="icon-books"></span>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </div>
+                <div id="l1-section-title">
+                    <span id="l1-section-label">
+                        <a href="https://dev.mysql.com/doc/">Documentation</a>
+                    </span>
+                </div>
+                <nav>
+                    
+
+<ul id="l2-nav">
+            	<li class="active"><a class="active " href="https://dev.mysql.com/doc/refman/en/">MySQL Server</a>
+    			</li>
+	        	<li class=""><a  href="https://dev.mysql.com/doc/index-enterprise.html">MySQL Enterprise</a>
+    			</li>
+	        	<li class=""><a  href="https://dev.mysql.com/doc/workbench/en/">Workbench</a>
+    			</li>
+	        	<li class=""><a  href="https://dev.mysql.com/doc/mysql-shell/en/mysql-innodb-cluster.html">InnoDB Cluster</a>
+    			</li>
+	        	<li class=""><a  href="https://dev.mysql.com/doc/index-cluster.html">MySQL NDB Cluster</a>
+    			</li>
+	        	<li class=""><a  href="https://dev.mysql.com/doc/index-connectors.html">Connectors</a>
+    			</li>
+	        	<li class=" last"><a  href="https://dev.mysql.com/doc/index-other.html">More</a>
+    			</li>
+	                        <li class="other-section"><a href="https://www.mysql.com/">MySQL.com</a></li>
+                            <li class="other-section"><a href="https://www.mysql.com/downloads/">Downloads</a></li>
+                                        <li class="other-section"><a href="https://dev.mysql.com/">Developer Zone</a></li>
+            </ul>
+                </nav>
+            </div>
+            <div id="l3-search-container"></div>
+            <div id="top-orange"><span id="section-nav">Section Menu: &nbsp; </span></div>
+        </div>
+    </header>
+        <div id="page">
+                        <div role="main" id="main">
+
+            
+                
+            
+<div>
+    <div id="docs-sidebar-toc" class="">
+    <div id="docs-toc-inner">
+        <div class="docs-sidebar-header" id="docs-nav-header">
+            <a class="docs-show-hide-nav" id="docs-hide-nav" href="audit-log-logging-configuration.html" title="Hide Sidebar" aria-label="Hide Sidebar"><span class="icon-arrow-small-left"></span></a>
+            <div class="docs-nav-links">
+                                    
+    <a href="audit-log-file-formats.html"
+        aria-label="Previous" title="Previous: Audit Log File Formats"><span
+        class="icon-chevron-left"></span></a>
+<a href="index.html" aria-label="Start" title="Start"><span class="icon-book-open"></span></a>
+        <a aria-label="Up" href="audit-log.html" title="Up: MySQL Enterprise Audit"><span class="icon-chevron-up"></span></a>
+    <a href="audit-log-file-reading.html" aria-label="Next"
+        title="Next: Reading Audit Log Files"><span
+        class="icon-chevron-right"></span></a>
+                            </div>
+        </div>
+                    
+<div id="docs-sidebar-search-container">
+    <div id="docs-sidebar-search-box">
+        <form method="get" action="https://dev.mysql.com/doc/search/">
+            <input type="hidden" name="d" id="d" value="12" />
+            <input type="hidden" name="p" id="p" value="1" />
+            <input type="text" name="q" id="q" title="Search this Manual"
+                value="Search this Manual"
+                style="color: #bbb;"
+                onfocus="if(this.value == 'Search this Manual') {this.value='';this.style.color='#555';}"
+                onblur="if(this.value == '') {this.value='Search this Manual';this.style.color='#bbb';}" />
+
+            <button class="docs-sidebar-search-btn" aria-label="Search" title="Search" type="submit">
+                <span class="icon-search"></span>
+            </button>
+        </form>
+    </div>
+</div>
+                <div class="docs-sidebar-nav">
+            <a class="docs-icon-home" href="https://dev.mysql.com/doc/"><span class="icon-home"></span>Documentation Home</a><hr />
+            <div class="docs-sidebar-mtitle">MySQL 5.7 Reference Manual</div>
+            <nav class="doctoc" id="doc-12">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="preface.html">Preface and Legal Notices</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="audit-log-logging-configuration.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="introduction.html">General Information</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="audit-log-logging-configuration.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="installing.html">Installing and Upgrading MySQL</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="audit-log-logging-configuration.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="tutorial.html">Tutorial</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="audit-log-logging-configuration.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="programs.html">MySQL Programs</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="audit-log-logging-configuration.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="server-administration.html">MySQL Server Administration</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="audit-log-logging-configuration.html"><span class="icon-chevron-down"></span></a></div><div class="docs-sidebar-nav-link"><a href="security.html">Security</a></div></div>                        <div class="docs-submenu">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="audit-log-logging-configuration.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="general-security-issues.html">General Security Issues</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="security-guidelines.html">Security Guidelines</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="audit-log-logging-configuration.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="password-security.html">Keeping Passwords Secure</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="password-security-user.html">End-User Guidelines for Password Security</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="password-security-admin.html">Administrator Guidelines for Password Security</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="password-logging.html">Passwords and Logging</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="password-hashing.html">Password Hashing in MySQL</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="security-against-attack.html">Making MySQL Secure Against Attackers</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="security-options.html">Security-Related mysqld Options and Variables</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="changing-mysql-user.html">How to Run MySQL as a Normal User</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="load-data-local-security.html">Security Considerations for LOAD DATA LOCAL</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="secure-client-programming.html">Client Programming Security Guidelines</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="audit-log-logging-configuration.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="access-control.html">Access Control and Account Management</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="user-names.html">Account User Names and Passwords</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="privileges-provided.html">Privileges Provided by MySQL</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="grant-tables.html">Grant Tables</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="account-names.html">Specifying Account Names</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="connection-access.html">Access Control, Stage 1: Connection Verification</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="request-access.html">Access Control, Stage 2: Request Verification</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="creating-accounts.html">Adding Accounts, Assigning Privileges, and Dropping Accounts</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="reserved-accounts.html">Reserved Accounts</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="privilege-changes.html">When Privilege Changes Take Effect</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="assigning-passwords.html">Assigning Account Passwords</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="password-management.html">Password Management</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="expired-password-handling.html">Server Handling of Expired Passwords</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="pluggable-authentication.html">Pluggable Authentication</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="proxy-users.html">Proxy Users</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="account-locking.html">Account Locking</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="user-resources.html">Setting Account Resource Limits</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="problems-connecting.html">Troubleshooting Problems Connecting to MySQL</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="account-activity-auditing.html">SQL-Based Account Activity Auditing</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="audit-log-logging-configuration.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="encrypted-connections.html">Using Encrypted Connections</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="using-encrypted-connections.html">Configuring MySQL to Use Encrypted Connections</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="encrypted-connection-protocols-ciphers.html">Encrypted Connection TLS Protocols and Ciphers</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="audit-log-logging-configuration.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="creating-ssl-rsa-files.html">Creating SSL and RSA Certificates and Keys</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="creating-ssl-rsa-files-using-mysql.html">Creating SSL and RSA Certificates and Keys using MySQL</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="creating-ssl-files-using-openssl.html">Creating SSL Certificates and Keys Using openssl</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="creating-rsa-files-using-openssl.html">Creating RSA Keys Using openssl</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="ssl-libraries.html">SSL Library-Dependent Capabilities</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="windows-and-ssh.html">Connecting to MySQL Remotely from Windows with SSH</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="audit-log-logging-configuration.html"><span class="icon-chevron-down"></span></a></div><div class="docs-sidebar-nav-link"><a href="security-plugins.html">Security Plugins</a></div></div>                        <div class="docs-submenu">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="audit-log-logging-configuration.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="authentication-plugins.html">Authentication Plugins</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="native-pluggable-authentication.html">Native Pluggable Authentication</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="old-native-pluggable-authentication.html">Old Native Pluggable Authentication</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="account-upgrades.html">Migrating Away from Pre-4.1 Password Hashing and the mysql_old_password
+Plugin</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="caching-sha2-pluggable-authentication.html">Caching SHA-2 Pluggable Authentication</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="sha256-pluggable-authentication.html">SHA-256 Pluggable Authentication</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="cleartext-pluggable-authentication.html">Client-Side Cleartext Pluggable Authentication</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="pam-pluggable-authentication.html">PAM Pluggable Authentication</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="windows-pluggable-authentication.html">Windows Pluggable Authentication</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="ldap-pluggable-authentication.html">LDAP Pluggable Authentication</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="no-login-pluggable-authentication.html">No-Login Pluggable Authentication</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="socket-pluggable-authentication.html">Socket Peer-Credential Pluggable Authentication</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="test-pluggable-authentication.html">Test Pluggable Authentication</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="pluggable-authentication-system-variables.html">Pluggable Authentication System Variables</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="audit-log-logging-configuration.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="connection-control.html">The Connection-Control Plugins</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="connection-control-installation.html">Connection-Control Plugin Installation</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="connection-control-variables.html">Connection-Control System and Status Variables</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="audit-log-logging-configuration.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="validate-password.html">The Password Validation Plugin</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="validate-password-installation.html">Password Validation Plugin Installation</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="validate-password-options-variables.html">Password Validation Plugin Options and Variables</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="audit-log-logging-configuration.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="keyring.html">The MySQL Keyring</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="keyring-installation.html">Keyring Plugin Installation</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="keyring-file-plugin.html">Using the keyring_file File-Based Plugin</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="keyring-encrypted-file-plugin.html">Using the keyring_encrypted_file Keyring Plugin</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="keyring-okv-plugin.html">Using the keyring_okv KMIP Plugin</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="keyring-aws-plugin.html">Using the keyring_aws Amazon Web Services Keyring Plugin</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="keyring-key-types.html">Supported Keyring Key Types and Lengths</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="keyring-key-migration.html">Migrating Keys Between Keyring Keystores</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="keyring-udfs-general-purpose.html">General-Purpose Keyring Key-Management Functions</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="keyring-udfs-plugin-specific.html">Plugin-Specific Keyring Key-Management Functions</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="keyring-options.html">Keyring Command Options</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="keyring-system-variables.html">Keyring System Variables</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="audit-log-logging-configuration.html"><span class="icon-chevron-down"></span></a></div><div class="docs-sidebar-nav-link"><a href="audit-log.html">MySQL Enterprise Audit</a></div></div>                        <div class="docs-submenu">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="audit-log-elements.html">Elements of MySQL Enterprise Audit</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="audit-log-installation.html">Installing or Uninstalling MySQL Enterprise Audit</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="audit-log-security.html">MySQL Enterprise Audit Security Considerations</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="audit-log-file-formats.html">Audit Log File Formats</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link current"><a href="audit-log-logging-configuration.html">Configuring Audit Logging Characteristics</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="audit-log-file-reading.html">Reading Audit Log Files</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="audit-log-filtering.html">Audit Log Filtering</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="audit-log-filter-definitions.html">Writing Audit Log Filter Definitions</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="audit-log-legacy-filtering.html">Legacy Mode Audit Log Filtering</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="audit-log-reference.html">Audit Log Reference</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="audit-log-restrictions.html">Audit Log Restrictions</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="audit-log-logging-configuration.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="firewall.html">MySQL Enterprise Firewall</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="firewall-elements.html">Elements of MySQL Enterprise Firewall</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="firewall-installation.html">Installing or Uninstalling MySQL Enterprise Firewall</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="firewall-usage.html">Using MySQL Enterprise Firewall</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="firewall-reference.html">MySQL Enterprise Firewall Reference</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="audit-log-logging-configuration.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="data-masking.html">MySQL Enterprise Data Masking and De-Identification</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="data-masking-elements.html">MySQL Enterprise Data Masking and De-Identification Elements</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="data-masking-installation.html">Installing or Uninstalling MySQL Enterprise Data Masking and De-Identification</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="data-masking-usage.html">Using MySQL Enterprise Data Masking and De-Identification</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="data-masking-function-reference.html">MySQL Enterprise Data Masking and De-Identification User-Defined Function Reference</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="data-masking-functions.html">MySQL Enterprise Data Masking and De-Identification User-Defined Function Descriptions</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="audit-log-logging-configuration.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="enterprise-encryption.html">MySQL Enterprise Encryption</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="enterprise-encryption-installation.html">MySQL Enterprise Encryption Installation</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="enterprise-encryption-usage.html">MySQL Enterprise Encryption Usage and Examples</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="enterprise-encryption-function-reference.html">MySQL Enterprise Encryption User-Defined Function Reference</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="enterprise-encryption-functions.html">MySQL Enterprise Encryption User-Defined Function Descriptions</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="audit-log-logging-configuration.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="selinux.html">SELinux</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="selinux-checking.html">Check if SELinux is Enabled</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="selinux-mode.html">Changing the SELinux Mode</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="selinux-policies.html">MySQL Server SELinux Policies</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="selinux-file-context.html">SELinux File Context</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable  loaded" aria-label="Subnav" href="audit-log-logging-configuration.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="selinux-context-tcp-port.html">SELinux TCP Port Context</a></div></div>                        <div class="docs-submenu hidden">
+                                    
+    <ul>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="selinux-context-mysqld-tcp-port.html">Setting the TCP Port Context for mysqld</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="selinux-context-mysql-feature-ports.html">Setting the TCP Port Context for MySQL Features</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="selinux-troubleshooting.html">Troubleshooting SELinux</a></div></div>                    </li>
+        </ul>
+                            </div>
+                    </li>
+        </ul>
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="audit-log-logging-configuration.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="backup-and-recovery.html">Backup and Recovery</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="audit-log-logging-configuration.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="optimization.html">Optimization</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="audit-log-logging-configuration.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="language-structure.html">Language Structure</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="audit-log-logging-configuration.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="charset.html">Character Sets, Collations, Unicode</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="audit-log-logging-configuration.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="data-types.html">Data Types</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="audit-log-logging-configuration.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="functions.html">Functions and Operators</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="audit-log-logging-configuration.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="sql-statements.html">SQL Statements</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="audit-log-logging-configuration.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="innodb-storage-engine.html">The InnoDB Storage Engine</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="audit-log-logging-configuration.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="storage-engines.html">Alternative Storage Engines</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="audit-log-logging-configuration.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="replication.html">Replication</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="audit-log-logging-configuration.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="group-replication.html">Group Replication</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysql-shell-userguide.html">MySQL Shell</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="audit-log-logging-configuration.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="document-store.html">Using MySQL as a Document Store</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="mysql-innodb-cluster-introduction.html">InnoDB Cluster</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="audit-log-logging-configuration.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="mysql-cluster.html">MySQL NDB Cluster 7.5 and NDB Cluster 7.6</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="audit-log-logging-configuration.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="partitioning.html">Partitioning</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="audit-log-logging-configuration.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="stored-objects.html">Stored Objects</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="audit-log-logging-configuration.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="information-schema.html">INFORMATION_SCHEMA Tables</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="audit-log-logging-configuration.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="performance-schema.html">MySQL Performance Schema</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="audit-log-logging-configuration.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="sys-schema.html">MySQL sys Schema</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="audit-log-logging-configuration.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="connectors-apis.html">Connectors and APIs</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="audit-log-logging-configuration.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="mysql-enterprise.html">MySQL Enterprise Edition</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="workbench.html">MySQL Workbench</a></div></div>                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="audit-log-logging-configuration.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="faqs.html">MySQL 5.7 Frequently Asked Questions</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="audit-log-logging-configuration.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="error-handling.html">Error Messages and Common Problems</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><a class="expandable " aria-label="Subnav" href="audit-log-logging-configuration.html"><span class="icon-chevron-right"></span></a></div><div class="docs-sidebar-nav-link"><a href="indexes.html">Indexes</a></div></div>                        <div class="docs-submenu hidden">
+                            </div>
+                    </li>
+            <li>
+            <div><div class="docs-sidebar-nav-icon"><span class="icon-dot"></span></div><div class="docs-sidebar-nav-link"><a href="glossary.html">MySQL Glossary</a></div></div>                    </li>
+        </ul>
+                            </nav>
+        </div>
+
+        
+<a class="docs-sidebar-section" href="audit-log-logging-configuration.html"><span class="icon-related"></span>
+    <span class="text">Related Documentation</span></a>
+<div class="docs-sidebar-accordian open">
+    <div class="text">
+        <a href="https://dev.mysql.com/doc/relnotes/mysql/5.7/en/">MySQL 5.7 Release Notes</a><br />
+        </div>
+</div>
+
+    <a class="docs-sidebar-section" href="audit-log-logging-configuration.html"><span class="icon-download-thin"></span>
+        <span class="text">
+            Download
+                            this Manual
+                    </span>
+    </a>
+    <div class="docs-sidebar-accordian open">
+        <div class="text">
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.pdf">PDF (US Ltr)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.a4.pdf">PDF (A4)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-ref-manual-5.7-en-pdf-1-20210225.noarch.rpm">PDF (RPM)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.html-chapter.tar.gz">HTML Download (TGZ)</a>
+            - 10.1Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.html-chapter.zip">HTML Download (Zip)</a>
+            - 10.2Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-ref-manual-5.7-en-html-chapter-1-20210225.noarch.rpm">HTML Download (RPM)</a>
+            - 8.9Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.man-gpl.tar.gz">Man Pages (TGZ)</a>
+            - 224.7Kb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.man-gpl.zip">Man Pages (Zip)</a>
+            - 332.6Kb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-5.7.info.gz">Info (Gzip)</a>
+            - 3.3Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-5.7.info.zip">Info (Zip)</a>
+            - 3.3Mb<br />
+                    </div>
+    </div>
+
+<a class="docs-sidebar-section" href="audit-log-logging-configuration.html"><span class="icon-book"></span>
+    <span class="text">Excerpts from this Manual</span></a>
+<div class="docs-sidebar-accordian">
+    <div class="text">
+                <a href="https://dev.mysql.com/doc/mysql-backup-excerpt/5.7/en/">MySQL Backup and Recovery</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-g11n-excerpt/5.7/en/">MySQL Globalization</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-infoschema-excerpt/5.7/en/">MySQL Information Schema</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-installation-excerpt/5.7/en/">MySQL Installation Guide</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-linuxunix-excerpt/5.7/en/">MySQL and Linux/Unix</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-osx-excerpt/5.7/en/">MySQL and OS X</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-partitioning-excerpt/5.7/en/">MySQL Partitioning</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-perfschema-excerpt/5.7/en/">MySQL Performance Schema</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-replication-excerpt/5.7/en/">MySQL Replication</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-repo-excerpt/5.7/en/">Using the MySQL Yum Repository</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-reslimits-excerpt/5.7/en/">MySQL Restrictions and Limitations</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-security-excerpt/5.7/en/">Security in MySQL</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-solaris-excerpt/5.7/en/">MySQL and Solaris</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-sourcebuild-excerpt/5.7/en/">Building MySQL from Source</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-startstop-excerpt/5.7/en/">Starting and Stopping MySQL</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-tutorial-excerpt/5.7/en/">MySQL Tutorial</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-windows-excerpt/5.7/en/">MySQL and Windows</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-cluster-excerpt/5.7/en/">MySQL NDB Cluster 7.5</a><br />
+            </div>
+</div>
+
+        <br /><span id="wkr"><br /></span>
+    </div>
+    </div>
+
+    <div id="docs-main" class="has-toc">
+    <div id="docs-main-inner">
+
+                <div class="right" id="docs-version-nav">
+            <a href="audit-log-logging-configuration.html" id="docs-version-nav-toggle">version 5.7
+            <span class="icon-chevron-down"></span></a>
+            <div id="docs-version-list">
+                                                        <a                         href="https://dev.mysql.com/doc/refman/8.0/en/audit-log-logging-configuration.html">
+                        8.0
+                                                &nbsp;current
+                                            </a><br />
+                                                                                                                <a                         class="tooltip-left"
+                        data-tooltip="The page you are viewing does not exist in version 5.6.
+                        This link will take you to the Table of Contents."
+                                                href="https://dev.mysql.com/doc/refman/5.6/en/">
+                        5.6
+                                            </a><br />
+                                                                        <div id="docs-version-nav-lang">
+                                                                                                                                                    <a                                     class="tooltip-left"
+                                    data-tooltip="The page you are viewing does not exist in version
+                                    5.6 (JA).
+                                    This link will take you to the Table of Contents."
+                                                                        href="https://dev.mysql.com/doc/refman/5.6/ja/">
+                                    5.6&nbsp;
+                                                                            Japanese
+                                                                    </a><br />
+                                                                                            </div>
+                            </div>
+        </div>
+        
+        <div id="docs-show-nav" class="left hidden" style="margin-right: 15px;">
+            <a class="docs-show-hide-nav" href="audit-log-logging-configuration.html" aria-label="Show Sidebar"
+                title="Show Sidebar"><span class="icon-arrow-small-right"></span></a>
+        </div>
+
+                        <div id="docs-breadcrumbs">
+            <a href="index.html">MySQL 5.7 Reference Manual</a> &nbsp;/&nbsp;
+                            <span id="breadcrumbs-link"><a href="audit-log-logging-configuration.html" id="show-breadcrumbs">...</a> &nbsp;/&nbsp;</span>
+                <span class="hidden" id="hidden-breadcrumbs">
+                                                        <a href="security.html">Security</a> &nbsp;/&nbsp;
+                                                            <a href="security-plugins.html">Security Plugins</a> &nbsp;/&nbsp;
+                                                            <a href="audit-log.html">MySQL Enterprise Audit</a> &nbsp;/&nbsp;
+                                                                                        </span>
+                                        Configuring Audit Logging Characteristics
+                                    </div>
+        
+        <div id="docs-body">
+        
+<div class="section">
+<div class="titlepage">
+<div>
+<div>
+<h4 class="title"><a name="audit-log-logging-configuration"></a>6.4.5.5 Configuring Audit Logging Characteristics</h4>
+
+</div>
+
+</div>
+
+</div>
+<p>
+        This section describes how to configure audit logging
+        characteristics, such as the file to which the audit log plugin
+        writes events, the format of written events, and whether to
+        enable log file compression and encryption.
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><a class="xref" href="audit-log-logging-configuration.html#audit-log-file-name" title="Naming Conventions for Audit Log Files">Naming Conventions for Audit Log Files</a></p></li><li class="listitem"><p><a class="xref" href="audit-log-logging-configuration.html#audit-log-file-format" title="Selecting Audit Log File Format">Selecting Audit Log File Format</a></p></li><li class="listitem"><p><a class="xref" href="audit-log-logging-configuration.html#audit-log-file-compression" title="Compressing Audit Log Files">Compressing Audit Log Files</a></p></li><li class="listitem"><p><a class="xref" href="audit-log-logging-configuration.html#audit-log-file-encryption" title="Encrypting Audit Log Files">Encrypting Audit Log Files</a></p></li><li class="listitem"><p><a class="xref" href="audit-log-logging-configuration.html#audit-log-file-uncompression-decryption" title="Manually Uncompressing and Decrypting Audit Log Files">Manually Uncompressing and Decrypting Audit Log Files</a></p></li><li class="listitem"><p><a class="xref" href="audit-log-logging-configuration.html#audit-log-space-management" title="Space Management of Audit Log Files">Space Management of Audit Log Files</a></p></li><li class="listitem"><p><a class="xref" href="audit-log-logging-configuration.html#audit-log-strategy" title="Write Strategies for Audit Logging">Write Strategies for Audit Logging</a></p></li></ul>
+</div>
+<p>
+        For additional information about the user-defined functions and
+        system variables that affect audit logging, see
+        <a class="xref" href="audit-log-reference.html#audit-log-routines" title="Audit Log Functions">Audit Log Functions</a>, and
+        <a class="xref" href="audit-log-reference.html#audit-log-options-variables" title="Audit Log Options and Variables">Audit Log Options and Variables</a>.
+      </p><p>
+        The audit log plugin can also control which audited events are
+        written to the audit log file, based on event content or the
+        account from which events originate. See
+        <a class="xref" href="audit-log-filtering.html" title="6.4.5.7 Audit Log Filtering">Section 6.4.5.7, “Audit Log Filtering”</a>.
+</p>
+<div class="simplesect">
+
+<div class="titlepage">
+<div>
+
+<div class="simple">
+<h5 class="title"><a name="audit-log-file-name"></a>Naming Conventions for Audit Log Files</h5>
+</div>
+</div>
+</div>
+<p>
+          To configure the audit log file name, set the
+          <a class="link" href="audit-log-reference.html#sysvar_audit_log_file"><code class="literal">audit_log_file</code></a> system
+          variable at server startup. The default name is
+          <code class="filename">audit.log</code> in the server data directory.
+          For best security, write the audit log to a directory
+          accessible only to the MySQL server and to users with a
+          legitimate reason to view the log.
+        </p><p>
+          As of MySQL 5.7.21, the plugin interprets the
+          <a class="link" href="audit-log-reference.html#sysvar_audit_log_file"><code class="literal">audit_log_file</code></a> value as
+          composed of an optional leading directory name, a base name,
+          and an optional suffix. If compression or encryption are
+          enabled, the effective file name (the name actually used to
+          create the log file) differs from the configured file name
+          because it has additional suffixes:
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+              If compression is enabled, the plugin adds a suffix of
+              <code class="filename">.gz</code>.
+            </p></li><li class="listitem"><p>
+              If encryption is enabled, the plugin adds a suffix of
+              <code class="filename">.enc</code>. The audit log plugin stores the
+              encryption password in the keyring (see
+              <a class="xref" href="audit-log-logging-configuration.html#audit-log-file-encryption" title="Encrypting Audit Log Files">Encrypting Audit Log Files</a>.
+</p></li></ul>
+</div>
+<p>
+          The effective audit log file name is the name resulting from
+          the addition of applicable compression and encryption suffixes
+          to the configured file name. For example, if the configured
+          <a class="link" href="audit-log-reference.html#sysvar_audit_log_file"><code class="literal">audit_log_file</code></a> value is
+          <code class="filename">audit.log</code>, the effective file name is one
+          of the values shown in the following table.
+</p>
+<div class="informaltable">
+<table summary="audit_log effective file names for various combinations of the compression and encryption features."><col width="50%"><col width="50%"><thead><tr>
+              <th>Enabled Features</th>
+              <th>Effective File Name</th>
+            </tr></thead><tbody><tr>
+              <td>No compression or encryption</td>
+              <td><code class="filename">audit.log</code></td>
+            </tr><tr>
+              <td>Compression</td>
+              <td><code class="filename">audit.log.gz</code></td>
+            </tr><tr>
+              <td>Encryption</td>
+              <td><code class="filename">audit.log.enc</code></td>
+            </tr><tr>
+              <td>Compression, encryption</td>
+              <td><code class="filename">audit.log.gz.enc</code></td>
+</tr></tbody></table>
+</div>
+<p>
+          Prior to MySQL 5.7.21, the configured and effective log file
+          names are the same. For example, if the configured
+          <a class="link" href="audit-log-reference.html#sysvar_audit_log_file"><code class="literal">audit_log_file</code></a> value is
+          <code class="filename">audit.log</code>, the audit log plugin writes to
+          <code class="filename">audit.log</code>.
+        </p><p>
+          The audit log plugin performs certain actions during
+          initialization and termination based on the effective audit
+          log file name:
+        </p><p>
+          As of MySQL 5.7.21:
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+              During initialization, the plugin checks whether a file
+              with the audit log file name already exists and renames it
+              if so. (In this case, the plugin assumes that the previous
+              server invocation exited unexpectedly with the audit log
+              plugin running.) The plugin then writes to a new empty
+              audit log file.
+            </p></li><li class="listitem"><p>
+              During termination, the plugin renames the audit log file.
+            </p></li><li class="listitem"><p>
+              File renaming (whether during plugin initialization or
+              termination) occurs according to the usual rules for
+              automatic size-based log file rotation; see
+              <a class="xref" href="audit-log-logging-configuration.html#audit-log-size-based-rotation" title="Size-Based Audit Log File Rotation">Size-Based Audit Log File Rotation</a>.
+</p></li></ul>
+</div>
+<p>
+          Prior to MySQL 5.7.21, only the XML log formats are available
+          and the plugin performs rudimentary integrity checking:
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+              During initialization, the plugin checks whether the file
+              ends with an <code class="literal">&lt;/AUDIT&gt;</code> tag and
+              truncates the tag before writing any
+              <code class="literal">&lt;AUDIT_RECORD&gt;</code> elements. If the
+              log file exists but does not end with
+              <code class="literal">&lt;/AUDIT&gt;</code> or the
+              <code class="literal">&lt;/AUDIT&gt;</code> tag cannot be truncated,
+              the plugin considers the file malformed and renames it.
+              (Such renaming can occur if the server exits unexpectedly
+              with the audit log plugin running.) The plugin then writes
+              to a new empty audit log file.
+            </p></li><li class="listitem"><p>
+              At termination, no file renaming occurs.
+            </p></li><li class="listitem"><p>
+              When renaming occurs at plugin initialization, the renamed
+              file has <code class="filename">.corrupted</code>, a timestamp, and
+              <code class="filename">.xml</code> added to the end. For example,
+              if the file name is <code class="filename">audit.log</code>, the
+              plugin renames it to a value such as
+              <code class="filename">audit.log.corrupted.15081807937726520.xml</code>.
+              The timestamp value is similar to a Unix timestamp, with
+              the last 7 digits representing the fractional second part.
+              For information about interpreting the timestamp, see
+              <a class="xref" href="audit-log-logging-configuration.html#audit-log-space-management" title="Space Management of Audit Log Files">Space Management of Audit Log Files</a>.
+</p></li></ul>
+</div>
+
+</div>
+<div class="simplesect">
+<div class="titlepage">
+<div>
+<div class="simple">
+<h5 class="title"><a name="audit-log-file-format"></a>Selecting Audit Log File Format</h5>
+
+</div>
+
+</div>
+
+</div>
+<p>
+          To configure the audit log file format, set the
+          <a class="link" href="audit-log-reference.html#sysvar_audit_log_format"><code class="literal">audit_log_format</code></a> system
+          variable at server startup. By default, the format is
+          <code class="literal">NEW</code> (new-style XML format). For details
+          about each format, see
+          <a class="xref" href="audit-log-file-formats.html" title="6.4.5.4 Audit Log File Formats">Section 6.4.5.4, “Audit Log File Formats”</a>.
+        </p><p>
+          If you change
+          <a class="link" href="audit-log-reference.html#sysvar_audit_log_format"><code class="literal">audit_log_format</code></a>, it is
+          recommended that you also change
+          <a class="link" href="audit-log-reference.html#sysvar_audit_log_file"><code class="literal">audit_log_file</code></a>. Otherwise,
+          there are two sets of log files with the same base name but
+          different formats.
+</p>
+<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+
+<div class="admon-title">
+Note
+</div>
+<p>
+            Prior to MySQL 5.7.21, changing the value of
+            <a class="link" href="audit-log-reference.html#sysvar_audit_log_format"><code class="literal">audit_log_format</code></a> can result
+            in writing log entries in one format to an existing log file
+            that contains entries in a different format. To avoid this
+            issue, use the following procedure:
+</p>
+<div class="orderedlist">
+<ol class="orderedlist" type="1"><li class="listitem"><p>
+                Stop the server.
+              </p></li><li class="listitem"><p>
+                Either change the value of the
+                <a class="link" href="audit-log-reference.html#sysvar_audit_log_file"><code class="literal">audit_log_file</code></a> system
+                variable so the plugin writes to a different file, or
+                rename the current audit log file manually.
+              </p></li><li class="listitem"><p>
+                Restart the server with the new value of
+                <a class="link" href="audit-log-reference.html#sysvar_audit_log_format"><code class="literal">audit_log_format</code></a>. The
+                audit log plugin creates a new log file and writes
+                entries to it in the selected format.
+</p></li></ol>
+</div>
+
+</div>
+
+</div>
+<div class="simplesect">
+<div class="titlepage">
+<div>
+<div class="simple">
+<h5 class="title"><a name="audit-log-file-compression"></a>Compressing Audit Log Files</h5>
+
+</div>
+
+</div>
+
+</div>
+<p>
+          Audit log file compression is available as of MySQL 5.7.21.
+          Compression can be enabled for any log format.
+        </p><p>
+          To configure audit log file compression, set the
+          <a class="link" href="audit-log-reference.html#sysvar_audit_log_compression"><code class="literal">audit_log_compression</code></a> system
+          variable at server startup. Permitted values are
+          <code class="literal">NONE</code> (no compression; the default) and
+          <code class="literal">GZIP</code> (GNU Zip compression).
+        </p><p>
+          If both compression and encryption are enabled, compression
+          occurs before encryption. To recover the original file
+          manually, first decrypt it, then uncompress it. See
+          <a class="xref" href="audit-log-logging-configuration.html#audit-log-file-uncompression-decryption" title="Manually Uncompressing and Decrypting Audit Log Files">Manually Uncompressing and Decrypting Audit Log Files</a>.
+</p>
+</div>
+<div class="simplesect">
+<div class="titlepage">
+<div>
+<div class="simple">
+<h5 class="title"><a name="audit-log-file-encryption"></a>Encrypting Audit Log Files</h5>
+
+</div>
+
+</div>
+
+</div>
+<p>
+          Audit log file encryption is available as of MySQL 5.7.21.
+          Encryption can be enabled for any log format. Encryption is
+          based on a user-defined password (with the exception of the
+          initial password, which the audit log plugin generates). To
+          use this feature, the MySQL keyring must be enabled because
+          audit logging uses it for password storage. Any keyring plugin
+          can be used; for instructions, see <a class="xref" href="keyring.html" title="6.4.4 The MySQL Keyring">Section 6.4.4, “The MySQL Keyring”</a>.
+        </p><p>
+          To configure audit log file encryption, set the
+          <a class="link" href="audit-log-reference.html#sysvar_audit_log_encryption"><code class="literal">audit_log_encryption</code></a> system
+          variable at server startup. Permitted values are
+          <code class="literal">NONE</code> (no encryption; the default) and
+          <code class="literal">AES</code> (AES-256-CBC cipher encryption).
+        </p><p>
+          To set or get an encryption password at runtime, use these
+          user-defined functions (UDFs):
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+              To set the current encryption password, invoke
+              <a class="link" href="audit-log-reference.html#udf_audit-log-encryption-password-set"><code class="literal">audit_log_encryption_password_set()</code></a>.
+              This function stores the new password in the keyring. If
+              encryption is enabled, it also performs a log file
+              rotation operation that renames the current log file, and
+              begins a new log file encrypted with the password. File
+              renaming occurs according to the usual rules for automatic
+              size-based log file rotation; see
+              <a class="xref" href="audit-log-logging-configuration.html#audit-log-size-based-rotation" title="Size-Based Audit Log File Rotation">Size-Based Audit Log File Rotation</a>.
+            </p><p>
+              Previously written audit log files are not re-encrypted
+              with the new password. Keep a record of the previous
+              password should you need to decrypt those files manually.
+            </p><a class="indexterm" name="idm44933569157344"></a><a class="indexterm" name="idm44933569156224"></a></li><li class="listitem"><p>
+              To get the current encryption password, invoke
+              <a class="link" href="audit-log-reference.html#udf_audit-log-encryption-password-get"><code class="literal">audit_log_encryption_password_get()</code></a>,
+              which retrieves the password from the keyring.
+</p><a class="indexterm" name="idm44933569152368"></a><a class="indexterm" name="idm44933569151248"></a></li></ul>
+</div>
+<p>
+          For additional information about audit log encryption UDFs,
+          see <a class="xref" href="audit-log-reference.html#audit-log-routines" title="Audit Log Functions">Audit Log Functions</a>.
+        </p><p>
+          When the audit log plugin initializes, if it finds that log
+          file encryption is enabled, it checks whether the keyring
+          contains an audit log encryption password. If not, the plugin
+          automatically generates a random initial encryption password
+          and stores it in the keyring. To discover this password,
+          invoke
+          <a class="link" href="audit-log-reference.html#udf_audit-log-encryption-password-get"><code class="literal">audit_log_encryption_password_get()</code></a>.
+        </p><p>
+          If both compression and encryption are enabled, compression
+          occurs before encryption. To recover the original file
+          manually, first decrypt it, then uncompress it. See
+          <a class="xref" href="audit-log-logging-configuration.html#audit-log-file-uncompression-decryption" title="Manually Uncompressing and Decrypting Audit Log Files">Manually Uncompressing and Decrypting Audit Log Files</a>.
+</p>
+</div>
+<div class="simplesect">
+<div class="titlepage">
+<div>
+<div class="simple">
+<h5 class="title"><a name="audit-log-file-uncompression-decryption"></a>Manually Uncompressing and Decrypting Audit Log Files</h5>
+
+</div>
+
+</div>
+
+</div>
+<p>
+          Audit log files can be uncompressed and decrypted using
+          standard tools. This should be done only for log files that
+          have been closed (archived) and are no longer in use, not for
+          the log file that the audit log plugin is currently writing.
+          You can recognize archived log files because they have been
+          renamed by the audit log plugin to include a timestamp in the
+          file name just after the base name.
+        </p><p>
+          For this discussion, assume that
+          <a class="link" href="audit-log-reference.html#sysvar_audit_log_file"><code class="literal">audit_log_file</code></a> is set to
+          <code class="filename">audit.log</code>. In that case, an archived
+          audit log file has one of the names shown in the following
+          table.
+</p>
+<div class="informaltable">
+<table summary="audit_log archived file names for various combinations of the compression and encryption features."><col width="50%"><col width="50%"><thead><tr>
+              <th>Enabled Features</th>
+              <th>Archived File Name</th>
+            </tr></thead><tbody><tr>
+              <td>No compression or encryption</td>
+              <td><code class="filename">audit.<em class="replaceable"><code>timestamp</code></em>.log</code></td>
+            </tr><tr>
+              <td>Compression</td>
+              <td><code class="filename">audit.<em class="replaceable"><code>timestamp</code></em>.log.gz</code></td>
+            </tr><tr>
+              <td>Encryption</td>
+              <td><code class="filename">audit.<em class="replaceable"><code>timestamp</code></em>.log.enc</code></td>
+            </tr><tr>
+              <td>Compression, encryption</td>
+              <td><code class="filename">audit.<em class="replaceable"><code>timestamp</code></em>.log.gz.enc</code></td>
+</tr></tbody></table>
+</div>
+<p>
+          To uncompress a compressed log file manually, use
+          <span class="command"><strong>gunzip</strong></span>, <span class="command"><strong>gzip -d</strong></span>, or
+          equivalent command. For example:
+        </p><pre class="programlisting copytoclipboard line-numbers language-terminal one-line"><code class="language-terminal">gunzip -c audit.<em class="replaceable">timestamp</em>.log.gz &gt; audit.<em class="replaceable">timestamp</em>.log</code></pre><p>
+          To decrypt an encrypted log file manually, use the
+          <span class="command"><strong>openssl</strong></span> command. For example:
+        </p><pre class="programlisting copytoclipboard line-numbers language-terminal"><code class="language-terminal">openssl enc -d -aes-256-cbc -pass pass:<em class="replaceable">password</em> -md sha256
+    -in audit.<em class="replaceable">timestamp</em>.log.enc
+    -out audit.<em class="replaceable">timestamp</em>.log</code></pre><p>
+          If both compression and encryption are enabled for audit
+          logging, compression occurs before encryption. In this case,
+          the file name has <code class="filename">.gz</code> and
+          <code class="filename">.enc</code> suffixes added, corresponding to the
+          order in which those operations occur. To recover the original
+          file manually, perform the operations in reverse. That is,
+          first decrypt the file, then uncompress it:
+        </p><pre class="programlisting copytoclipboard line-numbers language-terminal"><code class="language-terminal">openssl enc -d -aes-256-cbc -pass pass:<em class="replaceable">password</em> -md sha256
+    -in audit.<em class="replaceable">timestamp</em>.log.gz.enc
+    -out audit.<em class="replaceable">timestamp</em>.log.gz
+gunzip -c audit.<em class="replaceable">timestamp</em>.log.gz &gt; audit.<em class="replaceable">timestamp</em>.log</code></pre>
+</div>
+<div class="simplesect">
+<div class="titlepage">
+<div>
+<div class="simple">
+<h5 class="title"><a name="audit-log-space-management"></a>Space Management of Audit Log Files</h5>
+
+</div>
+
+</div>
+
+</div>
+<p>
+          The audit log file has the potential to grow quite large and
+          consume a great deal of disk space. To enable management of
+          the space used by its log files, the audit log plugin provides
+          for log file rotation, either manually or automatically based
+          on file size. Audit log file space-management capabilities use
+          the <a class="link" href="audit-log-reference.html#sysvar_audit_log_rotate_on_size"><code class="literal">audit_log_rotate_on_size</code></a>
+          and <a class="link" href="audit-log-reference.html#sysvar_audit_log_flush"><code class="literal">audit_log_flush</code></a> system
+          variables, which have a combined effect as follows:
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+              If
+              <a class="link" href="audit-log-reference.html#sysvar_audit_log_rotate_on_size"><code class="literal">audit_log_rotate_on_size</code></a>
+              is 0 (the default):
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p>
+                  Automatic log file rotation is disabled. No rotation
+                  occurs unless performed manually.
+                </p></li><li class="listitem"><p>
+                  Use <a class="link" href="audit-log-reference.html#sysvar_audit_log_flush"><code class="literal">audit_log_flush</code></a>
+                  to close and reopen the current log file after
+                  manually renaming it.
+</p></li></ul>
+</div>
+</li><li class="listitem"><p>
+              If
+              <a class="link" href="audit-log-reference.html#sysvar_audit_log_rotate_on_size"><code class="literal">audit_log_rotate_on_size</code></a>
+              is greater than 0:
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p>
+                  Automatic rotation occurs when a write to the current
+                  log file causes its size to exceed this value. The
+                  audit log plugin closes the file, renames it, and
+                  opens a new log file.
+                </p></li><li class="listitem"><p>
+                  With automatic rotation enabled,
+                  <a class="link" href="audit-log-reference.html#sysvar_audit_log_flush"><code class="literal">audit_log_flush</code></a> has
+                  no effect.
+</p></li></ul>
+</div>
+</li><li class="listitem"><p>
+              Automatic size-based rotation also occurs under several
+              other conditions, described later.
+</p></li></ul>
+</div>
+<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<div class="admon-title">
+Note
+</div>
+<p>
+            Renamed log files are not removed automatically. For
+            example, with size-based log file rotation, renamed log
+            files do not rotate off the end of the name sequence.
+            Instead, they have unique names and accumulate indefinitely.
+            To avoid excessive space use, remove old files periodically,
+            backing them up first as necessary.
+</p>
+</div>
+<p>
+          The following sections describe log file rotation in greater
+          detail.
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><a class="xref" href="audit-log-logging-configuration.html#audit-log-manual-rotation" title="Manual Audit Log File Rotation">Manual Audit Log File Rotation</a></p></li><li class="listitem"><p><a class="xref" href="audit-log-logging-configuration.html#audit-log-size-based-rotation" title="Size-Based Audit Log File Rotation">Size-Based Audit Log File Rotation</a></p></li></ul>
+</div>
+<h6><a name="audit-log-manual-rotation"></a>Manual Audit Log File Rotation</h6><p>
+          If <a class="link" href="audit-log-reference.html#sysvar_audit_log_rotate_on_size"><code class="literal">audit_log_rotate_on_size</code></a>
+          is 0 (the default), no log rotation occurs unless performed
+          manually. In this case, the audit log plugin closes and
+          reopens the log file when the
+          <a class="link" href="audit-log-reference.html#sysvar_audit_log_flush"><code class="literal">audit_log_flush</code></a> value changes
+          from disabled to enabled. Log file renaming must be done
+          externally to the server. Suppose that the log file name is
+          <code class="filename">audit.log</code> and you want to maintain the
+          three most recent log files, cycling through the names
+          <code class="filename">audit.log.1</code> through
+          <code class="filename">audit.log.3</code>. On Unix, perform rotation
+          manually like this:
+</p>
+<div class="orderedlist">
+<ol class="orderedlist" type="1"><li class="listitem"><p>
+              From the command line, rename the current log files:
+            </p><pre class="programlisting copytoclipboard line-numbers language-terminal"><code class="language-terminal">mv audit.log.2 audit.log.3
+mv audit.log.1 audit.log.2
+mv audit.log audit.log.1</code></pre><p>
+              This strategy overwrites the current
+              <code class="filename">audit.log.3</code> contents, placing a bound
+              on the number of archived log files and the space they
+              use.
+            </p></li><li class="listitem"><p>
+              At this point, the plugin is still writing to the current
+              log file, which has been renamed to
+              <code class="filename">audit.log.1</code>. Connect to the server
+              and flush the log file so the plugin closes it and reopens
+              a new <code class="filename">audit.log</code> file:
+            </p><pre class="programlisting copytoclipboard line-numbers language-sql one-line"><code class="language-sql">SET GLOBAL audit_log_flush = ON;</code></pre><p>
+              <a class="link" href="audit-log-reference.html#sysvar_audit_log_flush"><code class="literal">audit_log_flush</code></a> is
+              special in that its value remains <code class="literal">OFF</code>
+              so that you need not disable it explicitly before enabling
+              it again to perform another flush.
+</p></li></ol>
+</div>
+<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<div class="admon-title">
+Note
+</div>
+<p>
+            For JSON-format logging, renaming audit log files manually
+            makes them unavailable to the log-reading functions because
+            the audit log plugin no longer can determine that they are
+            part of the log file sequence (see
+            <a class="xref" href="audit-log-file-reading.html" title="6.4.5.6 Reading Audit Log Files">Section 6.4.5.6, “Reading Audit Log Files”</a>). Consider setting
+            <a class="link" href="audit-log-reference.html#sysvar_audit_log_rotate_on_size"><code class="literal">audit_log_rotate_on_size</code></a>
+            greater than 0 to use size-based rotation instead.
+</p>
+</div>
+<h6><a name="audit-log-size-based-rotation"></a>Size-Based Audit Log File Rotation</h6><p>
+          If <a class="link" href="audit-log-reference.html#sysvar_audit_log_rotate_on_size"><code class="literal">audit_log_rotate_on_size</code></a>
+          is greater than 0, setting
+          <a class="link" href="audit-log-reference.html#sysvar_audit_log_flush"><code class="literal">audit_log_flush</code></a> has no
+          effect. Instead, whenever a write to the current log file
+          causes its size to exceed the
+          <a class="link" href="audit-log-reference.html#sysvar_audit_log_rotate_on_size"><code class="literal">audit_log_rotate_on_size</code></a>
+          value, the audit log plugin automatically closes the file,
+          renames it, and opens a new log file.
+        </p><p>
+          Automatic size-based rotation also occurs under these
+          conditions:
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+              During plugin initialization, if a file with the audit log
+              file name already exists (see
+              <a class="xref" href="audit-log-logging-configuration.html#audit-log-file-name" title="Naming Conventions for Audit Log Files">Naming Conventions for Audit Log Files</a>).
+            </p></li><li class="listitem"><p>
+              During plugin termination.
+            </p></li><li class="listitem"><p>
+              When the
+              <a class="link" href="audit-log-reference.html#udf_audit-log-encryption-password-set"><code class="literal">audit_log_encryption_password_set()</code></a>
+              function is called to set the encryption password.
+</p></li></ul>
+</div>
+<p>
+          The plugin renames the original file as follows:
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+              As of MySQL 5.7.21, the renamed file has a timestamp
+              inserted after its base name and before its suffix. For
+              example, if the file name is
+              <code class="filename">audit.log</code>, the plugin renames it to a
+              value such as
+              <code class="filename">audit.20180115T140633.log</code>. The
+              timestamp is a UTC value in
+              <code class="literal"><em class="replaceable"><code>YYYYMMDD</code></em>T<em class="replaceable"><code>hhmmss</code></em></code>
+              format. The timestamp indicates rotation time for XML
+              logging, and the timestamp of the last event written to
+              the file for JSON logging.
+            </p></li><li class="listitem"><p>
+              Prior to MySQL 5.7.21, the renamed file has a timestamp
+              and <code class="filename">.xml</code> added to the end. For
+              example, if the file name is
+              <code class="filename">audit.log</code>, the plugin renames it to a
+              value such as
+              <code class="filename">audit.log.15159344437726520.xml</code>. The
+              timestamp value is similar to a Unix timestamp, with the
+              last 7 digits representing the fractional second part. By
+              inserting a decimal point, the value can be interpreted
+              using the <a class="link" href="date-and-time-functions.html#function_from-unixtime"><code class="literal">FROM_UNIXTIME()</code></a>
+              function:
+            </p><pre class="programlisting copytoclipboard line-numbers language-sql"><code class="language-sql">mysql&gt; SELECT FROM_UNIXTIME(1515934443.7726520);
++-----------------------------------+
+| FROM_UNIXTIME(1515934443.7726520) |
++-----------------------------------+
+| 2018-01-14 06:54:03.772652        |
++-----------------------------------+</code></pre></li></ul>
+</div>
+
+</div>
+<div class="simplesect">
+<div class="titlepage">
+<div>
+<div class="simple">
+<h5 class="title"><a name="audit-log-strategy"></a>Write Strategies for Audit Logging</h5>
+
+</div>
+
+</div>
+
+</div>
+<p>
+          The audit log plugin can use any of several strategies for log
+          writes. Regardless of strategy, logging occurs on a
+          best-effort basis, with no guarantee of consistency.
+        </p><p>
+          To specify a write strategy, set the
+          <a class="link" href="audit-log-reference.html#sysvar_audit_log_strategy"><code class="literal">audit_log_strategy</code></a> system
+          variable at server startup. By default, the strategy value is
+          <code class="literal">ASYNCHRONOUS</code> and the plugin logs
+          asynchronously to a buffer, waiting if the buffer is full.
+          It's possible to tell the plugin not to wait
+          (<code class="literal">PERFORMANCE</code>) or to log synchronously,
+          either using file system caching
+          (<code class="literal">SEMISYNCHRONOUS</code>) or forcing output with a
+          <code class="literal">sync()</code> call after each write request
+          (<code class="literal">SYNCHRONOUS</code>).
+        </p><p>
+          For asynchronous write strategy, the
+          <a class="link" href="audit-log-reference.html#sysvar_audit_log_buffer_size"><code class="literal">audit_log_buffer_size</code></a> system
+          variable is the buffer size in bytes. Set this variable at
+          server startup to change the buffer size. The plugin uses a
+          single buffer, which it allocates when it initializes and
+          removes when it terminates. The plugin does not allocate this
+          buffer for nonasynchronous write strategies.
+        </p><p>
+          Asynchronous logging strategy has these characteristics:
+</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+              Minimal impact on server performance and scalability.
+            </p></li><li class="listitem"><p>
+              Blocking of threads that generate audit events for the
+              shortest possible time; that is, time to allocate the
+              buffer plus time to copy the event to the buffer.
+            </p></li><li class="listitem"><p>
+              Output goes to the buffer. A separate thread handles
+              writes from the buffer to the log file.
+</p></li></ul>
+</div>
+<p>
+          With asynchronous logging, the integrity of the log file may
+          be compromised if a problem occurs during a write to the file
+          or if the plugin does not shut down cleanly (for example, in
+          the event that the server host exits unexpectedly). To reduce
+          this risk, set
+          <a class="link" href="audit-log-reference.html#sysvar_audit_log_strategy"><code class="literal">audit_log_strategy</code></a> to use
+          synchronous logging.
+        </p><p>
+          A disadvantage of <code class="literal">PERFORMANCE</code> strategy is
+          that it drops events when the buffer is full. For a heavily
+          loaded server, the audit log may have events missing.
+</p>
+</div>
+
+</div>
+<br />
+        </div>
+
+                <div id="docs-in-page-nav-container">
+            <div id="docs-in-page-nav">
+                
+    <a href="audit-log-file-formats.html"
+        aria-label="Previous" title="Previous: Audit Log File Formats"><span
+        class="icon-chevron-left"></span> PREV</a> &nbsp;
+<a href="index.html" aria-label="Start" title="Start"> HOME</a> &nbsp;
+        <a aria-label="Up" href="audit-log.html" title="Up: MySQL Enterprise Audit"> UP</a> &nbsp;
+    <a href="audit-log-file-reading.html" aria-label="Next"
+        title="Next: Reading Audit Log Files">NEXT <span
+        class="icon-chevron-right"></span></a>
+            </div>
+        </div>
+        
+         <div id="docs-body-extra">
+             
+<a class="docs-sidebar-section" href="audit-log-logging-configuration.html"><span class="icon-related"></span>
+    <span class="text">Related Documentation</span></a>
+<div class="docs-sidebar-accordian">
+    <div class="text">
+        <a href="https://dev.mysql.com/doc/relnotes/mysql/5.7/en/">MySQL 5.7 Release Notes</a><br />
+        </div>
+</div>
+
+    <a class="docs-sidebar-section" href="audit-log-logging-configuration.html"><span class="icon-download-thin"></span>
+        <span class="text">
+            Download
+                            this Manual
+                    </span>
+    </a>
+    <div class="docs-sidebar-accordian">
+        <div class="text">
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.pdf">PDF (US Ltr)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.a4.pdf">PDF (A4)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-ref-manual-5.7-en-pdf-1-20210225.noarch.rpm">PDF (RPM)</a>
+            - 36.4Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.html-chapter.tar.gz">HTML Download (TGZ)</a>
+            - 10.1Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.html-chapter.zip">HTML Download (Zip)</a>
+            - 10.2Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-ref-manual-5.7-en-html-chapter-1-20210225.noarch.rpm">HTML Download (RPM)</a>
+            - 8.9Mb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.man-gpl.tar.gz">Man Pages (TGZ)</a>
+            - 224.7Kb<br />
+                        <a href="https://downloads.mysql.com/docs/refman-5.7-en.man-gpl.zip">Man Pages (Zip)</a>
+            - 332.6Kb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-5.7.info.gz">Info (Gzip)</a>
+            - 3.3Mb<br />
+                        <a href="https://downloads.mysql.com/docs/mysql-5.7.info.zip">Info (Zip)</a>
+            - 3.3Mb<br />
+                    </div>
+    </div>
+
+<a class="docs-sidebar-section" href="audit-log-logging-configuration.html"><span class="icon-book"></span>
+    <span class="text">Excerpts from this Manual</span></a>
+<div class="docs-sidebar-accordian">
+    <div class="text">
+                <a href="https://dev.mysql.com/doc/mysql-backup-excerpt/5.7/en/">MySQL Backup and Recovery</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-g11n-excerpt/5.7/en/">MySQL Globalization</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-infoschema-excerpt/5.7/en/">MySQL Information Schema</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-installation-excerpt/5.7/en/">MySQL Installation Guide</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-linuxunix-excerpt/5.7/en/">MySQL and Linux/Unix</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-osx-excerpt/5.7/en/">MySQL and OS X</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-partitioning-excerpt/5.7/en/">MySQL Partitioning</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-perfschema-excerpt/5.7/en/">MySQL Performance Schema</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-replication-excerpt/5.7/en/">MySQL Replication</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-repo-excerpt/5.7/en/">Using the MySQL Yum Repository</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-reslimits-excerpt/5.7/en/">MySQL Restrictions and Limitations</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-security-excerpt/5.7/en/">Security in MySQL</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-solaris-excerpt/5.7/en/">MySQL and Solaris</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-sourcebuild-excerpt/5.7/en/">Building MySQL from Source</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-startstop-excerpt/5.7/en/">Starting and Stopping MySQL</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-tutorial-excerpt/5.7/en/">MySQL Tutorial</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-windows-excerpt/5.7/en/">MySQL and Windows</a><br />
+                <a href="https://dev.mysql.com/doc/mysql-cluster-excerpt/5.7/en/">MySQL NDB Cluster 7.5</a><br />
+            </div>
+</div>
+         </div>
+
+              </div>
+     </div>
+
+</div>
+
+<script>
+$(function() {
+    var doc = new $.doc({ 'mobile': $.browser.mobile, 'docId': 1, 'highlight': true });
+});
+</script>
+    
+
+            
+        </div>
+    </div>
+
+    <footer class="collapsed">
+        <div id="footer-bottom">
+                                    <div id="footer-collapse">
+                <a href="audit-log-logging-configuration.html" id="expand-footer"
+                    aria-label="Expand Footer"
+                    title="Expand Footer"><span
+                    class="icon-plus-square"></span></a>
+            </div>
+                        <div class="footer-contact">
+                <div id="footer-contact-icon" style="display: none;">
+                    <span class="icon-call-phone"></span>
+                </div>
+                <div id="footer-contact-numbers" style="display: none;">
+                    <strong>Contact MySQL Sales</strong><br/>
+                    USA/Canada: +1-866-221-0634 &nbsp;
+                    (<a href="https://www.mysql.com/about/contact/phone/">More Countries &raquo;</a>)
+                </div>
+                <div id="footer-contact-copyright" style="display: inline-block;">
+                    <a href="http://www.oracle.com/" aria-label="Oracle" title="Oracle"><span class="oracle-logo"></span></a>
+                    &nbsp; &copy; 2021, Oracle Corporation and/or its affiliates
+                </div>
+            </div>
+            <div class="social-icons">
+                <a aria-label="Join us on Facebook" title="Join us on Facebook" href="http://www.facebook.com/mysql"><span class="icon-facebook-square"></span></a>
+                <a aria-label="Follow us on Twitter" title="Follow us on Twitter" href="https://twitter.com/mysql"><span class="icon-twitter-square"></span></a>
+                <a aria-label="Follow us on LinkedIn" title="Follow us on LinkedIn" href="https://www.linkedin.com/company/mysql"><span class="icon-linkedin-square"></span></a>
+                <a aria-label="Visit our YouTube channel" title="Visit our YouTube channel" href="http://www.youtube.com/mysqlchannel"><span class="icon-youtube-square"></span></a>
+            </div>
+            <br class="clear" />
+        </div>
+        <div id="footer-links">
+
+            <div id="site-footer-links">
+                <div id="footer-nav"></div>
+
+                <div class="links">
+                    <ul>
+                        <li class="top"><a href="https://www.mysql.com/products/">Products</a></li>
+                        <li><a href="https://www.mysql.com/cloud/">MySQL Database Service</a></li>
+                        <li><a href="https://www.mysql.com/products/enterprise/">MySQL Enterprise Edition</a></li>
+                        <li><a href="https://www.mysql.com/products/standard/">MySQL Standard Edition</a></li>
+                        <li><a href="https://www.mysql.com/products/classic/">MySQL Classic Edition</a></li>
+                        <li><a href="https://www.mysql.com/products/cluster/">MySQL Cluster CGE</a></li>
+                        <li><a href="https://www.mysql.com/oem/">MySQL Embedded (OEM/ISV)</a></li>
+                    </ul>
+                </div>
+
+                <div class="links">
+                    <ul>
+                        <li class="top"><a href="https://www.mysql.com/services/">Services</a></li>
+                        <li><a href="https://www.mysql.com/training/">Training</a></li>
+                        <li><a href="https://www.mysql.com/certification/">Certification</a></li>
+                        <li><a href="https://www.mysql.com/consulting/">Consulting</a></li>
+                        <li><a href="https://www.mysql.com/support/">Support</a></li>
+                    </ul>
+                </div>
+
+                <div class="links">
+                    <ul>
+                        <li class="top"><a href="https://www.mysql.com/downloads/">Downloads</a></li>
+                        <li><a href="https://dev.mysql.com/downloads/mysql/">MySQL Community Server</a></li>
+                        <li><a href="https://dev.mysql.com/downloads/cluster/">MySQL NDB Cluster</a></li>
+                        <li><a href="https://dev.mysql.com/downloads/shell/">MySQL Shell</a></li>
+                        <li><a href="https://dev.mysql.com/downloads/router/">MySQL Router</a></li>
+                        <li><a href="https://dev.mysql.com/downloads/workbench/">MySQL Workbench</a></li>
+                    </ul>
+                </div>
+
+                <div class="links">
+                    <ul>
+                        <li class="top"><a href="https://dev.mysql.com/doc/">Documentation</a></li>
+                        <li><a href="https://dev.mysql.com/doc/refman/en/">MySQL Reference Manual</a></li>
+                        <li><a href="https://dev.mysql.com/doc/workbench/en/">MySQL Workbench</a></li>
+                        <li><a href="https://dev.mysql.com/doc/index-cluster.html">MySQL NDB Cluster</a></li>
+                        <li><a href="https://dev.mysql.com/doc/index-connectors.html">MySQL Connectors</a></li>
+                        <li><a href="https://dev.mysql.com/doc/#topic">Topic Guides</a></li>
+                    </ul>
+                </div>
+
+                <div class="links">
+                    <ul>
+                        <li class="top"><a href="https://www.mysql.com/about/">About MySQL</a></li>
+                        <li><a href="https://www.mysql.com/about/contact/">Contact Us</a></li>
+                                                                        <li><a href="https://www.mysql.com/buy-mysql/">How to Buy</a></li>
+                        <li><a href="https://www.mysql.com/partners/">Partners</a></li>
+                        <li><a href="https://www.mysql.com/about/jobs/">Job Opportunities</a></li>
+                        <li><a href="https://www.mysql.com/sitemap.html">Site Map</a></li>
+                    </ul>
+                </div>
+
+                            </div>
+
+            <div id="footer-logo">
+                <a href="http://www.oracle.com/" aria-label="Oracle" title="Oracle"><span class="oracle-logo"></span></a>
+                &nbsp; &copy; 2021, Oracle Corporation and/or its affiliates
+                <div class="footer-legal-links">
+                    <a href="https://www.mysql.com/about/legal/">Legal Policies</a> |
+                    <a href="http://www.oracle.com/us/legal/privacy/index.htm">Your Privacy Rights</a> |
+                    <a href="http://www.oracle.com/us/legal/terms/index.html">Terms of Use</a> |
+                    <a href="http://www.oracle.com/us/legal/third-party-trademarks/index.html">Trademark Policy</a> |
+                    <a href="http://www.oracle.com/technetwork/community/oca-486395.html">Contributor Agreement</a> |
+                    <div id="teconsent"></div>
+                </div>
+            </div>
+
+        </div>
+    </footer>
+</div>
+
+            <script>
+    if ((oracle.truste.api.getGdprConsentDecision().consentDecision) &&
+            (oracle.truste.api.getGdprConsentDecision().consentDecision.indexOf(0) != -1 ||
+             oracle.truste.api.getGdprConsentDecision().consentDecision.indexOf(2) != -1) )
+    {
+        document.write('<script src="https://labs.mysql.com/common/js/metrics/s_code_remote.js"><\/script>');
+        document.write('<script type="text/javascript" async src="https://c.oracleinfinity.io/acs/account/wh3g12c3gg/js/mysql/odc.js?_ora.context=analytics:production"><\/script>');
+    }
+    </script>
+
+        
+    
+</body>
+</html>
